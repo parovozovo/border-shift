@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v2.14";
+  const BUILD_VERSION = "v3.0";
   let confirmResetArmed = false;
 
   // Fallback for older Safari lacking CanvasRenderingContext2D.roundRect
@@ -32,7 +32,35 @@
   const SHYTOMYR_SAVE_KEY = "border_shift_shytomyr_v1";
   const STATS_SAVE_KEY = "border_shift_stats_v1";
   const CAMPAIGN_CHECKPOINTS_KEY = "border_shift_campaign_checkpoints_v1";
+  const AGENCY_BADGES_KEY = "border_shift_agency_badges_v1";
   const USD_UAH_RATE = 41;
+
+  const AGENCY_BADGE_DEFS = [
+    {
+      id: "SBK_SHIELD",
+      icon: "🛡️",
+      title: L("Медаль СБК «Чистий Рубіж»", "SBK Medal 'Clean Frontier'"),
+      desc: L("Затримай 3+ шпигунів або контрабандистів — назавжди +200 🪙 до премії СБК за кожен арешт!", "Detain 3+ spies/smugglers — permanently +200 🪙 per SBK arrest!")
+    },
+    {
+      id: "GUR_FALCON",
+      icon: "🦅",
+      title: L("Відзнака ГУР-М «Сокіл»", "GUR-M 'Falcon' Distinction"),
+      desc: L("Допоможи спецбортам ГУР-М або впіймай шпигуна ФСМ — пес «Бавовна» працює на 2с швидше!", "Assist GUR-M or catch an FSM spy — Sniffer Dog is 2s faster!")
+    },
+    {
+      id: "VSP_GUARD",
+      icon: "🎖️",
+      title: L("Подяка ВСП «Залізна Варта»", "VSP 'Iron Guard' Commendation"),
+      desc: L("Викрий та затримай порушника з подвійним громадянством — +500 🪙 за затримання ухилянтів!", "Catch a dual-citizen evader — +500 🪙 bounty on evader arrests!")
+    },
+    {
+      id: "NABK_CLEAN",
+      icon: "🕵️",
+      title: L("Імунітет НАБК «Чисті Руки»", "NABK 'Clean Hands' Immunity"),
+      desc: L("Заверши зміну без хабарів у ДПСК — щодня знижує ризик НАБК на -5%!", "Finish a shift bribe-free — reduces daily NABK risk by -5%!")
+    }
+  ];
 
   // Discrepancy catalog — factual findings only (no button-press spoilers!)
   const DISCREPANCY = {
@@ -335,6 +363,40 @@
       requireVehicleDecl: true,
       wantedHint: L("Перевіряйте QR-код «Облік+» у всіх військовозобов'язаних чоловіків!", "Verify 'Oblik+' QR status on all eligible males!"),
       bossCut: 350,
+      hasSiren: true
+    },
+    {
+      dayNumber: 6,
+      dateLabel: L("День 6 • Осінь 2024", "Day 6 • Autumn 2024"),
+      headline: L("ОПЕРАЦІЯ КОНТРНАСТУП І ПОЛЮВАННЯ НА ВТІКАЧІВ", "COUNTEROFFENSIVE & FUGITIVE HUNT"),
+      radioNews: L("Радіо «Хвиля Kraina»: Військова Поліція (ВСП) та ГУР-М проводять спільний рейд на західних КПП: викривають ухилянтів із подвійним громадянством та агентів ФСМ.", "Radio Kraina Wave: VSP Military Police & GUR-M launch joint checkpoint sweeps targeting dual-citizenship evaders & FSM spies."),
+      bossBriefing: L("Пал Палич: «Сьогодні через пост рвуться топові втікачі й подвійні громадяни! Іноземців пропускаємо, але якщо є прихований паспорт Kraina — клич ВСП (🚨 АРЕШТ)!»", "Pal Palych: 'High-profile fugitives & dual citizens incoming! Clean foreigners pass, hidden Kraina passport — call Military Police (🚨 DETAIN)!'"),
+      rulesList: [
+        L("1. Іноземці (Франція-Люкс, Поландія, Британіка...) без паспорта Kraina — ПРОПУСК.", "1. Pure foreign citizens without Kraina citizenship — APPROVE."),
+        L("2. Подвійне громадянство у чоловіка 18–60 або шпигун ФСМ — 🚨 АРЕШТ / ВСП.", "2. Dual citizenship on male 18–60 or FSM spy — 🚨 DETAIN / VSP."),
+        L("3. Обов'язковий QR «Облік+» і звірка транспорту.", "3. Oblik+ QR & vehicle declaration mandatory.")
+      ],
+      requireOblikQr: true,
+      requireVehicleDecl: true,
+      wantedHint: L("Стежте за подвійним громадянством та терміновими дзвінками по рації!", "Watch for hidden dual citizenship and urgent radio dispatches!"),
+      bossCut: 420,
+      hasSiren: true
+    },
+    {
+      dayNumber: 7,
+      dateLabel: L("День 7 • Зима 2025", "Day 7 • Winter 2025"),
+      headline: L("ФІНАЛЬНИЙ РУБІЖ: ВІЙНА І ЗМІНИ", "FINAL FRONTIER: WAR & SHIFTS"),
+      radioNews: L("Радіо «Хвиля Kraina»: Завершується вирішальний тиждень на КПП. ГУР-М, СБК та НАБК підбивають підсумки твоєї служби за всі 7 днів.", "Radio Kraina Wave: The decisive week concludes. GUR-M, SBK & NABK compile your 7-day service dossier."),
+      bossBriefing: L("Пал Палич: «Остання вахта Кампанії! Усе, що ти зробив за ці дні — кого пропустив, кого затримав і чи брав конверти — сьогодні вирішить твою долю!»", "Pal Palych: 'Final Campaign shift! Every call you made this week shapes your fate tonight!'"),
+      rulesList: [
+        L("1. Повний контроль: паспорт, фото, підстава 18–60, «Облік+», авто й багажник.", "1. Full inspection: ID, photo, 18–60 permit, Oblik+, transport & trunk."),
+        L("2. Реагуйте на термінові орієнтування по рації СБК.", "2. Act on urgent SBK radio dispatches."),
+        L("3. Після зміни підіб'ємо підсумки 7 днів або перейдемо у Вільну Кар'єру.", "3. After shift: claim Campaign Dossier or continue into Open Career.")
+      ],
+      requireOblikQr: true,
+      requireVehicleDecl: true,
+      wantedHint: L("Вирішальна зміна — кожна дрібниця має значення!", "Crucial shift — every detail counts!"),
+      bossCut: 500,
       hasSiren: true
     }
   ];
@@ -749,6 +811,29 @@
         localStorage.setItem(SHYTOMYR_SAVE_KEY, JSON.stringify(current));
       }
       return current;
+    } catch (_) {
+      return [];
+    }
+  }
+
+  function loadAgencyBadges() {
+    try {
+      const raw = localStorage.getItem(AGENCY_BADGES_KEY);
+      const arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr : [];
+    } catch (_) {
+      return [];
+    }
+  }
+
+  function unlockAgencyBadge(id) {
+    try {
+      const cur = loadAgencyBadges();
+      if (!cur.includes(id)) {
+        cur.push(id);
+        localStorage.setItem(AGENCY_BADGES_KEY, JSON.stringify(cur));
+      }
+      return cur;
     } catch (_) {
       return [];
     }
@@ -1650,6 +1735,7 @@
       fullName: cfg.fullName,
       age: cfg.age,
       gender: cfg.gender,
+      direction: cfg.direction || (JSON.stringify(cfg.passportFields || []).includes("В'ЇЗД") ? "ENTRY" : "EXIT"),
       portrait: cfg.portrait,
       passportPortrait: cfg.passportPortrait || cfg.portrait,
       transportShape: trMeta.shape,
@@ -2270,19 +2356,47 @@
     L("«Доброго дня! Їду до сестри у Варшавку з гостинцями, документи перевіряла двічі.»", "'Good day! Heading to my sister in Varshavka with gifts, papers checked twice.'"),
     L("«Привіт, інспекторе! Повертаюся додому в %CITY%, скучила за рідними!»", "'Hi inspector! Returning home to %CITY%, missed my family!'"),
     L("«Добрий день! Везу дитячі речі та медикаменти, ось мої папери.»", "'Hello! Carrying kids' clothes and medicine, here are my papers.'"),
-    L("«Вітаю! Е-ех, і черга сьогодні на кордоні... Ось мій паспорт!»", "'Greetings! What a long border line today... Here is my passport!'")
+    L("«Вітаю! Везу рудого кота до ветеринара в Поландії — він уже весь салон подряпав!»", "'Greetings! Taking my orange cat to a vet in Polandia!'"),
+    L("«Добрий вечір! Їдемо з оркестром на благодійний концерт, у багажнику контрабас!»", "'Good evening! Orchestra heading to a charity concert, double bass in the trunk!'"),
+    L("«Ой, тримайте папери! Поспішаю на весілля племінниці — там триповерховий торт на задньому сидінні!»", "'Here are my papers! Rushing to a wedding with a 3-tier cake in back!'"),
+    L("«Повертаюся з Польщі додому в %CITY%, везу гуманітарні павербанки та турнікети!»", "'Returning home to %CITY%, bringing powerbanks & tourniquets!'"),
+    L("«Вітаю! Їду забирати маму з вокзалу в Поландії, ось усі документи!»", "'Hello! Picking up mom at the station, all documents ready!'")
   ];
   const HONEST_GREETINGS_M = [
     L("«Бажаю здоров'я! Усі довідки оформлені офіційно через ЦНАП м. %CITY%.»", "'Greetings! Official exemption issued in %CITY%.'"),
     L("«Добрий день, командире! Робочий рейс до Варшавки, усе в порядку.»", "'Good day! Business trip toward Varshavka, all clean.'"),
-    L("«Вітаю! Везу волонтерський генератор хлопцям під Слобожанськ.»", "'Hello! Hauling a volunteer generator toward Slobozhansk.'")
+    L("«Вітаю! Везу волонтерський генератор хлопцям під Слобожанськ.»", "'Hello! Hauling a volunteer generator toward Slobozhansk.'"),
+    L("«Добрий вечір! Повертаюся з рейсу додому в %CITY%, везу запчастини на трактор!»", "'Good evening! Returning home to %CITY% with tractor spare parts!'"),
+    L("«Їду на міжнародну виставку в Унію, багатодітний батько — усі 3 свідоцтва маю!»", "'Heading to an expo in Unia — father of 3, all papers ready!'"),
+    L("«Супроводжую батька на лікування до Карпатії, ось офіційний висновок ЛКК.»", "'Escorting my father for treatment in Karpatia, official medical papers here.'"),
+    L("«Повертаюсь із-за кордону, везу старлінки та спальники для громади!»", "'Returning from abroad with Starlinks and sleeping bags for our town!'"),
+    L("«Бажаю спокійної зміни! Везу насіння та саджанці яблунь додому в %CITY%.»", "'Quiet shift to you! Bringing apple tree saplings home to %CITY%.'")
   ];
   const HONEST_CARGOS = [
     L("Особисті валізи, термос, плед", "Personal suitcases, thermos & blanket"),
     L("Домашні закрутки, ноутбук, наплечник", "Homemade pickles, laptop, backpack"),
     L("Медична аптечка та дитячі іграшки", "First-aid kit & children's toys"),
     L("Бензопила, спальник і 2 павербанки", "Chainsaw, sleeping bag & 2 powerbanks"),
-    L("Мед у трьохлітрових банках та рушники", "Honey jars & embroidered towels")
+    L("Мед у трьохлітрових банках та рушники", "Honey jars & embroidered towels"),
+    L("Генератор 3 кВт, подовжувачі, ліхтарики", "3kW generator, cables & flashlights"),
+    L("Скрипка, контрабас та сценічні костюми", "Violin, double bass & stage outfits"),
+    L("Переноска з рудим котом, корм, ветпаспорт", "Cat carrier, pet food & vet passport"),
+    L("Бабусине сало в банках (20 шт.) та часник", "20 jars of homemade salo & garlic"),
+    L("Весільна сукня та триповерховий торт", "Wedding dress & 3-tier cake"),
+    L("Запчастини до трактора, ключі, домкрат", "Tractor parts, wrenches & jack"),
+    L("Рибальські вудки, човен та термос", "Fishing rods, inflatable boat & thermos"),
+    L("Колекція вінілових платівок та програвач", "Vinyl record collection & turntable"),
+    L("Медичні шини, турнікети та бинти (гуманітарка)", "Medical splints, tourniquets & bandages"),
+    L("Кавомолка, зерна кави та стаканчики", "Coffee grinder, beans & cups"),
+    L("2 спортивні велосипеди та шоломи", "2 road bicycles & helmets"),
+    L("Коробки з українськими книжками для діаспори", "Boxes of books for diaspora"),
+    L("Ігровий ПК, 2 монітори та механічна клавіатура", "Gaming PC, 2 monitors & keyboard"),
+    L("Саджанці яблунь, лопати та добрива", "Apple tree saplings, shovels & fertilizer"),
+    L("Термінал «Зоряний-Лінк» та сонячна панель", "Satellite terminal & solar panel"),
+    L("Валіза парфумів, 4 капелюшки та фен", "Perfume case, 4 hats & hairdryer"),
+    L("Лижне спорядження, термобілизна, окуляри", "Ski gear, thermal wear & goggles"),
+    L("Мішок картоплі з тещиного городу та кабачки", "Sack of potatoes & zucchini"),
+    L("Фотоштативи, дрон DJI-Іграшка (дитячий) та рюкзак", "Tripods, toy drone & backpack")
   ];
   const CONTRABAND_COVERS = [
     { decl: L("Старі дерев'яні меблі та килими", "Antique wooden furniture & rugs"), found: L("ПЕС «БАВОВНА» РОЗГРИЗ ОБШИВКУ: У ніжках столу сховано 50 блоків контрабандних сигарет!", "DOG SEARCH: Table legs packed with 50 smuggled cigarette cartons!"), bribeAmount: 2400, currency: "UAH" },
@@ -2292,7 +2406,13 @@
     { decl: L("Коробки з «гуманітарним одягом»", "Boxes of 'humanitarian clothes'"), found: L("ПЕС «БАВОВНА» ПОРВАВ СКОТЧ: У коробках сховані підсанкційні мікрочіпи й комплектуючі до дронів!", "DOG SEARCH: Boxes hide sanctioned microchips & drone parts!"), bribeAmount: 4200, currency: "USD" },
     { decl: L("Рулони килимів від бабусі", "Rolled vintage carpets"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ СХОВАНКУ: Усередині рулонів — старовинні ікони та срібні монети на вивіз!", "DOG SEARCH: Rolled carpets conceal antique icons & silver coins!"), bribeAmount: 2800, currency: "USD" },
     { decl: L("Металобрухт на переробку", "Scrap metal for recycling"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА БАГАЖНИК: Під лахміттям вирізані автокаталізатори та бухти мідного кабелю!", "DOG SEARCH: Stolen catalytic converters & copper cables under rags!"), bribeAmount: 2900, currency: "UAH" },
-    { decl: L("Подарункові кошики з шоколадом", "Gift baskets with chocolate"), found: L("ПЕС «БАВОВНА» ЗІРВАВ ФАЛЬШ-ДНО: Під цукерками — ящики безакцизного алкоголю та вейпів!", "DOG SEARCH: False bottom packed with untaxed liquor & vapes!"), bribeAmount: 3600, currency: "UAH" }
+    { decl: L("Подарункові кошики з шоколадом", "Gift baskets with chocolate"), found: L("ПЕС «БАВОВНА» ЗІРВАВ ФАЛЬШ-ДНО: Під цукерками — ящики безакцизного алкоголю та вейпів!", "DOG SEARCH: False bottom packed with untaxed liquor & vapes!"), bribeAmount: 3600, currency: "UAH" },
+    { decl: L("Тубуси з «дитячими малюнками»", "Tubes with 'kids drawings'"), found: L("ПЕС «БАВОВНА» ПОРВАВ ТУБУСИ: Викрадені музейні полотна XIX століття без декларації!", "DOG SEARCH: Stolen 19th-century museum paintings!"), bribeAmount: 5500, currency: "USD" },
+    { decl: L("Холодильник для риби та льоду", "Cooler for fish & ice"), found: L("ПЕС «БАВОВНА» ВІДКРИВ ХОЛОДИЛЬНИК: 18 кг нелегальної чорної ікри та раритетних молюсків!", "DOG SEARCH: 18kg of smuggled black caviar!"), bribeAmount: 3100, currency: "USD" },
+    { decl: L("Туристичні намети й каремати", "Camping tents & mats"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ У НАМЕТАХ: 6 тепловізорів подвійного призначення без документів!", "DOG SEARCH: 6 undeclared thermal optics inside tent rolls!"), bribeAmount: 4800, currency: "USD" },
+    { decl: L("Книжки з кулінарії та журнали", "Cookbooks & magazines"), found: L("ПЕС «БАВОВНА» ВИРВАВ ОБКЛАДИНКУ: Порожнисті томи набиті контрабандними золотими ланцюжками!", "DOG SEARCH: Hollowed books stuffed with gold chains!"), bribeAmount: 3800, currency: "USD" },
+    { decl: L("Пластикові каністри з водою", "Plastic water jerrycans"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА КАНИСТРИ: Замість води — 60 літрів підпільного спирту!", "DOG SEARCH: 60 liters of bootleg spirit inside water cans!"), bribeAmount: 2600, currency: "UAH" },
+    { decl: L("Акваріумні фільтри та трубки", "Aquarium filters & tubes"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ ТЕРАРІУМ: Контрабанда екзотичних хамелеонів та рідкісних папуг!", "DOG SEARCH: Smuggled exotic chameleons & rare parrots!"), bribeAmount: 2200, currency: "USD" }
   ];
 
   function createProceduralTraveler(daySpec) {
@@ -2350,7 +2470,7 @@
 
       const giveTip = Math.random() < 0.35;
       return buildTravelerFromParts({
-        fullName, age, gender, portrait, transport: trMeta,
+        fullName, age, gender, direction: dir, portrait, transport: trMeta,
         passportSub: L(`Серія ${city.code}-${randInt(100000, 999999)} • м. ${city.uk}`, `No. ${city.code}-${randInt(100000, 999999)} • ${city.en}`),
         passportFields: [
           { label: L("ПІБ", "Full Name"), value: fullName, disc: null },
@@ -2397,7 +2517,7 @@
       const disc = isExpired ? DISCREPANCY.EXPIRED_DATE : DISCREPANCY.AGE_RESTRICTION_NO_PERMIT;
       const expYear = pick(["2019", "2020", "2021"]);
       return buildTravelerFromParts({
-        fullName, age, gender, portrait, transport: trMeta,
+        fullName, age, gender, direction: "EXIT", portrait, transport: trMeta,
         passportSub: L(`Серія ${city.code}-${randInt(100000, 999999)} • м. ${city.uk}`, `No. ${city.code}-${randInt(100000, 999999)}`),
         passportFields: [
           { label: L("ПІБ", "Full Name"), value: fullName, disc: null },
@@ -2716,7 +2836,7 @@
 
     if (!isDualCitizen) {
       return buildTravelerFromParts({
-        fullName, age, gender, portrait, transport: trMeta,
+        fullName, age, gender, direction: dir, portrait, transport: trMeta,
         passportTitle: L(`ПАСПОРТ: ${fc.name.uk.toUpperCase()}`, `PASSPORT: ${fc.name.en.toUpperCase()}`),
         passportSub: L(`Іноземний громадянин • ${fc.code}-${randInt(10000, 99999)}`, `Foreign Citizen • ${fc.code}-${randInt(10000, 99999)}`),
         passportFields: [
@@ -3721,7 +3841,7 @@
   }
 
   function saveCampaignCheckpoint(dayNum) {
-    if (state.isSandbox || dayNum < 1 || dayNum > 5) return;
+    if (state.isSandbox || dayNum < 1 || dayNum > 7) return;
     try {
       const cps = loadCampaignCheckpoints();
       cps["day_" + dayNum] = JSON.parse(JSON.stringify(state));
@@ -4103,6 +4223,7 @@
     state.sirenActive = false;
     state.sirenResolved = false;
     state.encounterTriggered = false;
+    state.radioDispatch = null;
     state.barrierState = "CLOSED";
     state.lastFeedback = null;
     prepareCurrentTraveler();
@@ -4113,6 +4234,7 @@
   function prepareCurrentTraveler() {
     state.selectedDocIdx = 0;
     state.vehicleInspected = false;
+    state.trunkPanelOpen = false;
     state.interrogated = false;
     state.bribeAccepted = false;
     state.reactionState = "NONE";
@@ -4122,6 +4244,8 @@
     state.scanActive = false;
     state.scanFailedMsg = false;
     const t = state.queue[state.travelerIdx];
+    const zones = ["TRUNK", "SPARE", "GLOVE"];
+    state.dogTargetZone = (t && (t.hasContraband || t.storyTag === "DUAL_CITIZEN")) ? pick(zones) : null;
     if (t && state.ownedAssets.includes("uv_endoscope")) {
       for (const v of t.violations) {
         if (v.code === "FAKE_ISSUER_SEAL" || v.code === "INVALID_QR_CODE") {
@@ -4167,6 +4291,9 @@
   function finishShift() {
     state.phase = "SHIFT_SUMMARY";
     state.sirenActive = false;
+    if (state.shiftBribesTotal === 0 && state.shiftProcessed >= 5) {
+      unlockAgencyBadge("NABK_CLEAN");
+    }
     state.tonightBills = pickTonightBills();
     saveStateToStorage();
     render();
@@ -4198,11 +4325,16 @@
       const salMult = (state.sandboxMod && state.sandboxMod.salaryMult ? state.sandboxMod.salaryMult : 1.0) * meta.salaryBonusMult;
       salaryDelta = Math.round(rank.salary * salMult);
       if (isDetain && requiresDetain) {
+        const badges = loadAgencyBadges();
         const undercoverBounty = state.isUndercoverSbkAgent ? 1200 : 0;
         const vipBonus = (t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE") ? 3500 : 0;
-        detainBonus = (t.isWantedTarget ? 1800 : 900) + undercoverBounty + vipBonus + ((state.sandboxMod ? state.sandboxMod.detainExtra : 0) * 3);
+        const badgeBonus = (badges.includes("SBK_SHIELD") ? 200 : 0) + (badges.includes("VSP_GUARD") && (t.storyTag === "DUAL_CITIZEN" || t.storyTag === "VIP_DIVERSE") ? 500 : 0);
+        detainBonus = (t.isWantedTarget ? 1800 : 900) + undercoverBounty + vipBonus + badgeBonus + ((state.sandboxMod ? state.sandboxMod.detainExtra : 0) * 3);
         state.sbkRep = Math.min(100, state.sbkRep + (t.isWantedTarget ? 20 : 7));
         state.totalCareerDetained += 1;
+        if (state.totalCareerDetained >= 3) unlockAgencyBadge("SBK_SHIELD");
+        if (t.storyTag === "FSM_SPY") unlockAgencyBadge("GUR_FALCON");
+        if (t.storyTag === "DUAL_CITIZEN") unlockAgencyBadge("VSP_GUARD");
         if (t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE") {
           state.nabkRisk = Math.max(0, state.nabkRisk - 12);
         }
@@ -4253,6 +4385,7 @@
     if (t.storyTag === "INTEL_ALLY" && isApprove) {
       detainBonus += 200;
       state.sbkRep = Math.min(100, state.sbkRep + 15);
+      unlockAgencyBadge("GUR_FALCON");
     }
 
     if (t.storyTag === "TOLIK_RUN") {
@@ -4311,6 +4444,17 @@
       return;
     }
 
+    if (state.travelerIdx === 2 && !state.radioDispatch) {
+      const upcoming = state.queue.slice(state.travelerIdx).find(u => u && (u.isWantedTarget || u.storyTag === "FSM_SPY" || u.storyTag === "DUAL_CITIZEN" || u.storyTag === "VIP_DIVERSE"));
+      if (upcoming) {
+        state.radioDispatch = L(
+          `📞 РАЦІЯ СБК: «Увага! На під'їзді ${upcoming.vehicleDesc.uk} — терміново перевірте документи та багажник!»`,
+          `📞 SBK RADIO: 'Alert! ${upcoming.vehicleDesc.en} approaching — inspect papers & trunk carefully!'`
+        );
+        render();
+      }
+    }
+
     if (state.travelerIdx === 4 && !state.encounterTriggered) {
       state.encounterTriggered = true;
       const enc = MID_SHIFT_ENCOUNTERS[(state.daySpec.dayNumber - 1) % MID_SHIFT_ENCOUNTERS.length];
@@ -4354,7 +4498,8 @@
     state.money += getPassiveRent();
     state.usd += getPassiveUsd();
     const prevRank = getRank();
-    state.nabkRisk = Math.max(0, Math.min(100, state.nabkRisk + getDailyAssetRisk() - (prevRank.dailyRiskHeal || 0)));
+    const badgeHeal = loadAgencyBadges().includes("NABK_CLEAN") ? 5 : 0;
+    state.nabkRisk = Math.max(0, Math.min(100, state.nabkRisk + getDailyAssetRisk() - (prevRank.dailyRiskHeal || 0) - badgeHeal));
 
     if (state.isSandbox) {
       state.daySpec = Object.assign({}, state.daySpec, { dayNumber: nextIdx + 1 });
@@ -4718,7 +4863,7 @@
             </button>
             ${(() => {
               const cps = loadCampaignCheckpoints();
-              const days = [1, 2, 3, 4, 5].filter(d => cps["day_" + d]);
+              const days = [1, 2, 3, 4, 5, 6, 7].filter(d => cps["day_" + d]);
               if (days.length === 0) return "";
               return `<div style="background:rgba(27,25,22,0.08);border:1px dashed #8C7A5B;border-radius:6px;padding:6px 8px;">
                 <div style="font-size:11px;font-weight:800;color:#3E2723;margin-bottom:5px;">⏪ ${tr(L("ГІЛКИ КАМПАНІЇ (Повернутися в День):", "CAMPAIGN BRANCHES (Replay from Day):"), state.lang)}</div>
@@ -4849,6 +4994,27 @@
           }
         });
       } else if (state.archiveTab === 3) {
+        const badges = loadAgencyBadges();
+        const hdrA = document.createElement("div");
+        hdrA.style.cssText = "font-size:11.5px;font-weight:800;color:#E0B145;margin:2px 0;";
+        hdrA.textContent = tr(L("🛡️ ВІДЗНАКИ СПЕЦСЛУЖБ (СБК / ГУР-М / ВСП / НАБК):", "🛡️ AGENCY DISTINCTIONS (SBK / GUR-M / VSP / NABK):"), state.lang);
+        wrap.appendChild(hdrA);
+        AGENCY_BADGE_DEFS.forEach(b => {
+          const unlocked = badges.includes(b.id);
+          const card = document.createElement("div");
+          card.className = "archive-card" + (unlocked ? "" : " locked");
+          card.innerHTML = `
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:800;">${unlocked ? "✅ " : "🔒 "}${b.icon} ${tr(b.title, state.lang)}</div>
+              <div style="font-size:11.5px;margin-top:3px;opacity:0.9;">${tr(b.desc, state.lang)}</div>
+            </div>
+          `;
+          wrap.appendChild(card);
+        });
+        const hdrM = document.createElement("div");
+        hdrM.style.cssText = "font-size:11.5px;font-weight:800;color:#E0B145;margin:6px 0 2px;";
+        hdrM.textContent = tr(L("⚡ МЕТА-ПЕРКИ АРХІВУ:", "⚡ ARCHIVE META-PERKS:"), state.lang);
+        wrap.appendChild(hdrM);
         getActiveMetaPerks().forEach(p => {
           const card = document.createElement("div");
           card.className = "archive-card" + (p.unlocked ? "" : " locked");
@@ -4932,7 +5098,8 @@
       const needsArrest = spottedObjs.some(v => v.requiresDetention);
       const photoSpotted = state.spottedCodes.includes("PHOTO_MISMATCH");
       const rk = getRank();
-      const dogSecCost = state.ownedAssets.includes("uv_endoscope") ? 0 : rk.dogCost;
+      const gurFast = loadAgencyBadges().includes("GUR_FALCON") ? 2 : 0;
+      const dogSecCost = state.ownedAssets.includes("uv_endoscope") ? 0 : Math.max(0, rk.dogCost - gurFast);
       const searchCost = dogSecCost === 0 ? "0s" : `-${dogSecCost}s`;
       const bribeInfo = getComputedBribe(t.bribeOffer);
       const bribeVisible = Boolean(
@@ -4992,6 +5159,7 @@
         ` : ""}
 
         ${droneWarning ? `<div class="radar-alert">${tr(L("⚠️ РАДАР ППО: У небі «мопед» на підльоті! Готуйтесь до сирени!", "⚠️ RADAR ALERT: Drone spotted in sky! Siren imminent!"), state.lang)}</div>` : ""}
+        ${state.radioDispatch ? `<div style="background:#1565C0;color:#FFF;padding:5px 8px;border-radius:6px;font-size:11px;font-weight:700;border:1px solid #90CAF9;">${tr(state.radioDispatch, state.lang)}</div>` : ""}
         ${tabletBadge}
 
         <section class="booth-row">
@@ -5000,7 +5168,12 @@
           </div>
           <div class="dialogue-box">
             <div class="dialogue-scroll">
-              <div style="color:#E0B145;font-weight:700;font-size:13px;">${tr(t.fullName, state.lang)} (${t.age})</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:2px;">
+                <span style="color:#E0B145;font-weight:700;font-size:12.5px;">${tr(t.fullName, state.lang)} (${t.age})</span>
+                <span style="background:${t.direction === "ENTRY" ? "#1B5E20" : "#8E0000"};color:#FFF;font-size:9.5px;font-weight:900;padding:2px 6px;border-radius:4px;letter-spacing:0.3px;">
+                  ${t.direction === "ENTRY" ? tr(L("🟢 В'ЇЗД", "🟢 ENTRY"), state.lang) : tr(L("🔴 ВИЇЗД", "🔴 EXIT"), state.lang)}
+                </span>
+              </div>
               <div style="color:#B0BEC5;font-size:11px;margin-bottom:4px;">🚘 ${tr(t.vehicleDesc, state.lang)}</div>
               <p style="font-size:11.5px;line-height:1.35;">${tr(activeSpeech, state.lang)}</p>
             </div>
@@ -5018,6 +5191,16 @@
           <button type="button" id="react-uv" class="reaction-btn ${state.uvActive ? "uv-on" : ""}">🔦 ${tr(L(state.uvActive ? "УФ: ВКЛ" : "УФ-лампа", state.uvActive ? "UV: ON" : "UV Lamp"), state.lang)}</button>
           <button type="button" id="react-dog" class="reaction-btn ${state.vehicleInspected ? "done" : ""}" ${state.vehicleInspected ? "disabled" : ""}>🐕 ${state.vehicleInspected ? tr(L("Перевірено", "Checked"), state.lang) : tr(L(`Пес ${searchCost}`, `Dog ${searchCost}`), state.lang)}</button>
         </div>
+        ${state.trunkPanelOpen && !state.vehicleInspected ? `
+          <div id="trunk-search-panel" style="background:#1B221E;border:1.5px solid #E0B145;border-radius:6px;padding:7px;display:flex;flex-direction:column;gap:5px;">
+            <div style="font-size:11px;color:#E0B145;font-weight:800;">🐕 ${tr(L("ОБШУК: Обери відсік для перевірки (🐾 — пес чує запах):", "DOG SEARCH: Pick compartment (🐾 — dog scent cue):"), state.lang)}</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;">
+              <button type="button" class="btn-outline trunk-zone-btn" data-zone="TRUNK" style="padding:6px 4px;font-size:11px;${state.dogTargetZone === "TRUNK" ? "border-color:#FF5252;color:#FFE082;" : ""}">🧳 ${tr(L("Багажник", "Trunk"), state.lang)}${state.dogTargetZone === "TRUNK" ? " 🐾" : ""}</button>
+              <button type="button" class="btn-outline trunk-zone-btn" data-zone="SPARE" style="padding:6px 4px;font-size:11px;${state.dogTargetZone === "SPARE" ? "border-color:#FF5252;color:#FFE082;" : ""}">🛞 ${tr(L("Запаска", "Spare"), state.lang)}${state.dogTargetZone === "SPARE" ? " 🐾" : ""}</button>
+              <button type="button" class="btn-outline trunk-zone-btn" data-zone="GLOVE" style="padding:6px 4px;font-size:11px;${state.dogTargetZone === "GLOVE" ? "border-color:#FF5252;color:#FFE082;" : ""}">🧤 ${tr(L("Салон", "Cabin"), state.lang)}${state.dogTargetZone === "GLOVE" ? " 🐾" : ""}</button>
+            </div>
+          </div>
+        ` : ""}
 
         <section class="desk-area">
           <div class="doc-tabs" id="doc-tabs-bar"></div>
@@ -5215,15 +5398,23 @@
 
       document.getElementById("react-dog").addEventListener("click", () => {
         audio.playDogSniff();
-        state.vehicleInspected = true;
-        const rkDog = getRank().dogCost;
-        const costSec = state.ownedAssets.includes("uv_endoscope") ? 0 : rkDog;
-        if (costSec > 0) state.shiftSec = Math.max(5, state.shiftSec - costSec);
-        if (t.hasContraband && !state.spottedCodes.includes("CONTRABAND_CARGO")) state.spottedCodes.push("CONTRABAND_CARGO");
-        if (t.violations.some(v => v.code === "VEHICLE_MISMATCH") && !state.spottedCodes.includes("VEHICLE_MISMATCH")) {
-          state.spottedCodes.push("VEHICLE_MISMATCH");
-        }
+        state.trunkPanelOpen = true;
         render();
+      });
+
+      document.querySelectorAll(".trunk-zone-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          audio.playDogSniff();
+          state.trunkPanelOpen = false;
+          state.vehicleInspected = true;
+          if (dogSecCost > 0) state.shiftSec = Math.max(5, state.shiftSec - dogSecCost);
+          if (t.hasContraband && !state.spottedCodes.includes("CONTRABAND_CARGO")) state.spottedCodes.push("CONTRABAND_CARGO");
+          if (t.storyTag === "DUAL_CITIZEN" && !state.spottedCodes.includes("DUAL_CITIZENSHIP")) state.spottedCodes.push("DUAL_CITIZENSHIP");
+          if (t.violations.some(v => v.code === "VEHICLE_MISMATCH") && !state.spottedCodes.includes("VEHICLE_MISMATCH")) {
+            state.spottedCodes.push("VEHICLE_MISMATCH");
+          }
+          render();
+        });
       });
 
       document.getElementById("hud-music").addEventListener("click", () => { audio.ensureCtx(); audio.musicEnabled = !audio.musicEnabled; render(); });
@@ -5538,7 +5729,7 @@
 
           ${(() => {
             const cps = loadCampaignCheckpoints();
-            const days = [1, 2, 3, 4, 5].filter(d => cps["day_" + d]);
+            const days = [1, 2, 3, 4, 5, 6, 7].filter(d => cps["day_" + d]);
             if (days.length === 0) return "";
             return `<section class="card-slate" style="padding:10px;">
               <div style="font-size:12px;font-weight:800;color:#E0B145;margin-bottom:6px;">⏪ ${tr(L("ПОДАЛЬШІ ГІЛКИ — ПЕРЕГРАТИ З ДНЯ:", "REPLAY FROM CHECKPOINT DAY:"), state.lang)}</div>
