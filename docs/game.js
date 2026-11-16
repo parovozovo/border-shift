@@ -93,31 +93,151 @@
       id: "OLIGARCH_EXODUS",
       title: L("💰 Указ Віче: «Ніч олігархів та мажорів»", "💰 Daily Decree: 'Night of Oligarchs'"),
       desc: L("Багатії рвуться у напрямку Монаківки та Варшавки — усі конверти сьогодні ПОДВІЙНІ (x2)!", "VIPs are rushing toward Monakivka and Varshavka — all bribe offers today are DOUBLED (x2)!"),
-      bribeMult: 2.0, detainExtra: 0, forceOblik: false, forceSiren: false
+      bribeMult: 2.0, detainExtra: 0, salaryMult: 1.0, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
     },
     {
       id: "MARTIAL_AUDIT",
       title: L("🚨 Указ Штабу: «Спецоперація Контррозвідки»", "🚨 Daily Decree: 'Counter-Intel Sweep'"),
       desc: L("Група СБК чергує на КПП! За кожен обґрунтований АРЕШТ сьогодні платять +220 ₴ премії!", "SBK team on site! Every valid DETENTION today pays an extra +220 ₴ bonus!"),
-      bribeMult: 1.0, detainExtra: 220, forceOblik: false, forceSiren: true
+      bribeMult: 1.0, detainExtra: 220, salaryMult: 1.0, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: true, twoWheelerBias: false, extraShytomyr: false, extraWar: true
     },
     {
       id: "TOTAL_DIGITAL_OBLIK",
       title: L("📱 Указ Віче: «Цифровий Рейд Облік+»", "📱 Daily Decree: 'Digital Oblik+ Raid'"),
       desc: L("Усі чоловіки 18–60 зобов'язані пред'явити і довідку, і дійсний QR-код «Облік+».", "All males 18–60 must present both an Exemption Permit and a valid 'Oblik+' QR code."),
-      bribeMult: 1.0, detainExtra: 0, forceOblik: true, forceSiren: false
+      bribeMult: 1.0, detainExtra: 90, salaryMult: 1.1, coffeeMult: 1, shiftSecDelta: 0, forceOblik: true, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
     },
     {
       id: "CONTRABAND_BOOM",
       title: L("📦 Указ Митниці: «Полювання на двійників та тайники»", "📦 Daily Decree: 'Clone & Stash Hunt'"),
       desc: L("Звіряйте колір транспорту перед шлагбаумом із декларацією! Премія за АРЕШТ +180 ₴!", "Compare the parked vehicle color against papers! Detention bonus +180 ₴!"),
-      bribeMult: 1.0, detainExtra: 180, forceOblik: false, forceSiren: false
+      bribeMult: 1.0, detainExtra: 180, salaryMult: 1.0, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
     },
     {
       id: "NIGHT_CONVOY_SURGE",
       title: L("🔦 Спецрежим: «Смуга посиленого контролю»", "🔦 Special Shift: 'Tightened Security Lane'"),
-      desc: L("Через трасу йдуть дипломатичні буси та велокур'єри. Ставка +30%, премія СБК +120 ₴!", "Heavy diplomatic vans & bike couriers on the highway. Base pay +30%, SBK bonus +120 ₴!"),
-      bribeMult: 1.3, detainExtra: 120, forceOblik: false, forceSiren: false
+      desc: L("Через трасу йдуть дипломатичні буси та велокур'єри. Конверти +30%, премія СБК +120 ₴!", "Heavy diplomatic vans & bike couriers on the highway. Bribes +30%, SBK bonus +120 ₴!"),
+      bribeMult: 1.3, detainExtra: 120, salaryMult: 1.1, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
+    },
+    {
+      id: "VELO_PEDAL_RUSH",
+      title: L("🚲 Указ Траси: «Вело-самокатний штурм»", "🚲 Highway Decree: 'Two-Wheeler Rush'"),
+      desc: L("Через чергу на авто масово лізуть на вєліках, самокатах і пішки! Премія за АРЕШТ +150 ₴!", "Travelers swarm on bikes, scooters & on foot to bypass traffic! +150 ₴ arrest bonus!"),
+      bribeMult: 1.0, detainExtra: 150, salaryMult: 1.15, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: true, extraShytomyr: false, extraWar: false
+    },
+    {
+      id: "DIPLOMATIC_SCANNER",
+      title: L("🛂 Рейд ДПСК: «Перевірка липових диппаспортів»", "🛂 SBGS Raid: 'Fake Diplomatic Passports'"),
+      desc: L("З'явились аферисти з фальшивими печатками. Премія за АРЕШТ +200 ₴, уважніше тисніть на печатки!", "Scammers flashing fake seals. +200 ₴ detention bounty — inspect stamps closely!"),
+      bribeMult: 1.0, detainExtra: 200, salaryMult: 1.05, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
+    },
+    {
+      id: "CURFEW_BLITZ",
+      title: L("⚡ Бліц-зміна: «Комендантський прорив»", "⚡ Blitz Shift: 'Curfew Surge'"),
+      desc: L("Зміна коротша на 45с, зате ставка оформлення +40%! Швидкий темп — високий дохід!", "Shift is 45s shorter, but base salary per traveler is +40%! Fast pace, big payout!"),
+      bribeMult: 1.15, detainExtra: 100, salaryMult: 1.4, coffeeMult: 1, shiftSecDelta: -45, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
+    },
+    {
+      id: "NABK_UNDERCOVER_WAVE",
+      title: L("🕵️ Тривога НАБК: «Тиждень прихованих камер»", "🕵️ NABK Alert: 'Hidden Camera Week'"),
+      desc: L("Антикорупційне бюро на трасі! Хабарі менші (x0.8), зате чесна ставка +30% і +240 ₴ за СБК-арешт!", "NABK patrols active! Bribes x0.8, but honest salary +30% and +240 ₴ arrest bonus!"),
+      bribeMult: 0.8, detainExtra: 240, salaryMult: 1.3, coffeeMult: 1, shiftSecDelta: 0, forceOblik: true, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
+    },
+    {
+      id: "BORDER_AMNESTY_COFFEE",
+      title: L("☕ Акція КПП: «Ніч земляцької гостинності»", "☕ Checkpoint Vibe: 'Warm Thermos Night'"),
+      desc: L("На вулиці завірюха! Чайові за каву ПОДВОЄНІ (x2), а чесні мандрівники щедріші!", "Blizzard at the gate! Coffee tips are DOUBLED (x2) and travelers are extra grateful!"),
+      bribeMult: 1.2, detainExtra: 80, salaryMult: 1.0, coffeeMult: 2, shiftSecDelta: 15, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
+    },
+    {
+      id: "SHYTOMYR_DELEGATION",
+      title: L("🧦 Подія траси М-06: «Великий шитомирський караван»", "🧦 M-06 Event: 'Great Shytomyr Caravan'"),
+      desc: L("Через КПП масово їдуть легенди з м. Шитомир! Більше унікальних земляків у черзі +300 ₴ за кожну трійку!", "Shytomyr legends are rolling through! Extra unique Shytomyr guests guaranteed today!"),
+      bribeMult: 1.0, detainExtra: 100, salaryMult: 1.1, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: true, extraWar: false
+    },
+    {
+      id: "DRONE_BLACKOUT",
+      title: L("🛸 Ніч тривог: «Повітряна тривога і блекаут»", "🛸 Alert Night: 'Sirens & Blackout'"),
+      desc: L("Над трасою мопеди, генератор гуде! Ставка +25%, премія СБК +190 ₴, сирена гарантована!", "Drones overhead! Base salary +25%, SBK bonus +190 ₴, air-raid siren active!"),
+      bribeMult: 1.1, detainExtra: 190, salaryMult: 1.25, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: true, twoWheelerBias: false, extraShytomyr: false, extraWar: true
+    }
+  ];
+
+  const SANDBOX_TWISTS = [
+    {
+      id: "CLONE_HUNT",
+      label: L("🎯 Орієнтування дня: Звіряйте КОЛІР та модель авто у вікні — активні авто-двійники!", "🎯 Daily Alert: Watch for CLONED cars — match vehicle color & model in window!"),
+      extraCloneChance: true
+    },
+    {
+      id: "TWO_WHEEL_SMUGGLE",
+      label: L("🎯 Орієнтування дня: Сплеск вело- та самокатної контрабанди — не шкодуйте пса «Бавовну»!", "🎯 Daily Alert: Two-wheeler smuggling spike — send dog 'Bavovna' on suspicious riders!"),
+      twoWheelerBias: true
+    },
+    {
+      id: "QR_SPOT_CHECK",
+      label: L("🎯 Орієнтування дня: Усі чоловіки 18–60 на виїзд проходять під прицілом «Облік+»!", "🎯 Daily Alert: Strict 'Oblik+' QR enforcement for all males 18–60 exiting!"),
+      forceOblik: true
+    },
+    {
+      id: "INTEL_CORRIDOR",
+      label: L("🎯 Орієнтування дня: Через КПП йде 2 розвідувальні борти — чекайте і патріотів, і диверсантів!", "🎯 Daily Alert: Active intelligence corridor — expect both GUR allies and saboteurs!"),
+      extraWar: true
+    },
+    {
+      id: "THERMOS_MORALE",
+      label: L("🎯 Орієнтування дня: Холодна ніч — люди радо дякують за каву та ввічливість.", "🎯 Daily Alert: Freezing night — travelers tip generously for warm coffee!"),
+      coffeeMult: 2
+    },
+    {
+      id: "SHYTOMYR_FLOW",
+      label: L("🎯 Орієнтування дня: На трасі колона земляків з м. Шитомир — шанс швидко поповнити Архів!", "🎯 Daily Alert: Shytomyr convoy on highway — great chance to unlock Archive legends!"),
+      extraShytomyr: true
+    }
+  ];
+
+  const META_PERK_DEFS = [
+    {
+      id: "SHYTOMYR_SEED",
+      reqType: "shytomyr",
+      reqCount: 3,
+      title: L("🧦 Земляки на старті", "🧦 Shytomyr Welcome Fund"),
+      desc: L("Старт будь-якого нового забігу з +300 ₴ у кишені.", "Start every new run with +300 ₴ cash.")
+    },
+    {
+      id: "SHYTOMYR_THERMOS",
+      reqType: "shytomyr",
+      reqCount: 6,
+      title: L("☕ Термос по-шитомирськи", "☕ Shytomyr Thermos"),
+      desc: L("+25 ₴ до кожних чайових за каву у будці.", "+25 ₴ bonus to every coffee tip in the booth.")
+    },
+    {
+      id: "SHYTOMYR_CROWN",
+      reqType: "shytomyr",
+      reqCount: 12,
+      title: L("👑 Орден Шитомира (12/12)", "👑 Order of Shytomyr (12/12)"),
+      desc: L("Старт забігу з +800 ₴ та -15% стартового ризику НАБК!", "Start every run with +800 ₴ and -15% starting NABK risk!")
+    },
+    {
+      id: "TITLE_VETERAN_1",
+      reqType: "titles",
+      reqCount: 3,
+      title: L("🗄️ Досвідчений інспектор", "🗄️ Seasoned Inspector"),
+      desc: L("Перша помилка протоколу за зміну коштує на 50% дешевше.", "First protocol mistake each shift costs 50% less.")
+    },
+    {
+      id: "TITLE_VETERAN_2",
+      reqType: "titles",
+      reqCount: 6,
+      title: L("⚡ Ветеран КПП", "⚡ Checkpoint Veteran"),
+      desc: L("+30 секунд до таймера кожної зміни!", "+30 seconds added to every shift timer!")
+    },
+    {
+      id: "TITLE_LEGEND",
+      reqType: "titles",
+      reqCount: 10,
+      title: L("🦅 Легенда кордону", "🦅 Border Legend"),
+      desc: L("+20% до зарплати за кожного оформленого мандрівника!", "+20% base salary per processed traveler!")
     }
   ];
 
@@ -2017,7 +2137,12 @@
 
   function createProceduralTraveler(daySpec) {
     const city = pick(CITIES);
-    const trMeta = makeTransportMeta(null, null, generatePlate(city.code, true));
+    let trChoice = null;
+    if (daySpec && daySpec.twoWheelerBias && Math.random() < 0.55) {
+      const twoWheelers = TRANSPORT_CATALOG.filter(t => t.shape === "BIKE" || t.shape === "SCOOTER" || t.shape === "FOOT");
+      if (twoWheelers.length > 0) trChoice = pick(twoWheelers);
+    }
+    const trMeta = makeTransportMeta(trChoice, null, generatePlate(city.code, true));
 
     if (Math.random() < 0.42) {
       // Honest traveler (high variety of genders, ages, bikes/scooters/on-foot/cars & cities!)
@@ -2091,7 +2216,10 @@
 
     // Procedural Violator (7 distinct schemes — zero text spoilers!)
     const maxScheme = daySpec.requireOblikQr ? 6 : (daySpec.requireVehicleDecl ? 5 : 3);
-    const scheme = randInt(0, maxScheme);
+    let scheme = randInt(0, maxScheme);
+    if (daySpec && daySpec.extraCloneChance && daySpec.requireVehicleDecl && Math.random() < 0.45) {
+      scheme = 5;
+    }
 
     if (scheme === 0) {
       // Formal violation: Expired date (no "ПРОСТРОЧЕНИЙ" text!) OR Male 18-60 without permit
@@ -2407,7 +2535,7 @@
     const restPool = shuffle(availShytomyr.filter(s => globalSeen.has(s.tag)));
     const orderedShytomyr = unseenGlobally.concat(restPool);
 
-    const pickCount = (daySpec.dayNumber >= 2 && Math.random() < 0.7) ? 2 : 1;
+    const pickCount = daySpec.extraShytomyr ? 3 : ((daySpec.dayNumber >= 2 && Math.random() < 0.7) ? 2 : 1);
     for (let i = 0; i < Math.min(pickCount, orderedShytomyr.length); i++) {
       const leg = orderedShytomyr[i];
       usedShytomyrRun.add(leg.tag);
@@ -2442,10 +2570,16 @@
       }
     }
 
-    // 3. Add 1 War/Intelligence encounter (Ally courier or Saboteur/Spotter)
-    const warTrv = Math.random() < 0.5 ? createIntelCovertCourier() : createArtillerySpotter();
-    seenNames.add(warTrv.fullName.uk);
-    q.push(warTrv);
+    // 3. Add 1-2 War/Intelligence encounters (Ally courier, Spotter, or Microchip smuggler)
+    const warCount = daySpec.extraWar ? 2 : 1;
+    for (let w = 0; w < warCount && q.length < count - 1; w++) {
+      const rWar = Math.random();
+      const warTrv = (w === 0 && daySpec.extraWar)
+        ? createIntelCovertCourier()
+        : (rWar < 0.35 ? createIntelCovertCourier() : (rWar < 0.7 ? createArtillerySpotter() : createMicrochipSmuggler()));
+      seenNames.add(warTrv.fullName.uk);
+      q.push(warTrv);
+    }
 
     // 4. Fill remaining slots with fresh combinatorial travelers (deduping names within same shift)
     let safety = 0;
@@ -3287,17 +3421,171 @@
     }
   }
 
+  function getActiveMetaPerks() {
+    const shytCount = loadUnlockedShytomyr().length;
+    const titleCount = loadUnlockedArchetypes().length;
+    return META_PERK_DEFS.map(p => {
+      const curr = p.reqType === "shytomyr" ? shytCount : titleCount;
+      return Object.assign({}, p, { unlocked: curr >= p.reqCount, progress: curr });
+    });
+  }
+
+  function getMetaPerkFlags() {
+    const shytCount = loadUnlockedShytomyr().length;
+    const titleCount = loadUnlockedArchetypes().length;
+    return {
+      startCashBonus: (shytCount >= 12 ? 800 : 0) + (shytCount >= 3 ? 300 : 0),
+      coffeeTipBonus: shytCount >= 6 ? 25 : 0,
+      startNabkHeal: shytCount >= 12 ? 15 : 0,
+      halfFirstFine: titleCount >= 3,
+      shiftTimeBonus: titleCount >= 6 ? 30 : 0,
+      salaryBonusMult: titleCount >= 10 ? 1.2 : 1.0
+    };
+  }
+
+  let usedSandboxModIds = new Set();
+
+  function buildRandomSandboxDay(dayNumber, rankTitleUk, rankTitleEn) {
+    let pool = SANDBOX_MODIFIERS.filter(m => !usedSandboxModIds.has(m.id));
+    if (pool.length === 0) {
+      usedSandboxModIds.clear();
+      pool = SANDBOX_MODIFIERS.slice();
+    }
+    const mod = pick(pool);
+    usedSandboxModIds.add(mod.id);
+    const twist = pick(SANDBOX_TWISTS);
+    const requireOblikQr = Boolean(mod.forceOblik || twist.forceOblik || (dayNumber >= 4 && Math.random() < 0.45));
+    const hasSiren = Boolean(mod.forceSiren || Math.random() < 0.4);
+    const twoWheelerBias = Boolean(mod.twoWheelerBias || twist.twoWheelerBias);
+    const extraShytomyr = Boolean(mod.extraShytomyr || twist.extraShytomyr);
+    const extraWar = Boolean(mod.extraWar || twist.extraWar);
+    const extraCloneChance = Boolean(twist.extraCloneChance || mod.id === "CONTRABAND_BOOM");
+    const coffeeMult = Math.max(mod.coffeeMult || 1, twist.coffeeMult || 1);
+
+    const briefings = [
+      L(
+        `Пал Палич: «${rankTitleUk}, на зміні №${dayNumber} працює новий указ! Не розслабляйся: перевіряй транспорт у вікні, документи та лови контрабанду!»`,
+        `Pal Palych: '${rankTitleEn}, shift #${dayNumber} has a fresh decree! Check vehicles in the booth window, IDs, and stop smugglers!'`
+      ),
+      L(
+        `Пал Палич: «Сьогодні траса кипить! ${mod.desc.uk} Тримай печатку напоготові й не прогав агентів!»`,
+        `Pal Palych: 'Highway is packed! ${mod.desc.en} Keep your stamp ready and watch for operatives!'`
+      ),
+      L(
+        `Пал Палич: «Нічна ротація №${dayNumber}. Київ та СБК моніторять наш КПП. За чіткі арешти буде жирна премія!»`,
+        `Pal Palych: 'Night rotation #${dayNumber}. Command & SBK are watching our post — sharp detentions pay big!'`
+      )
+    ];
+
+    const rulesList = [
+      L("1. Паспорт: фото, ПІБ і дата дії мають відповідати особі перед вікном.", "1. Passport: photo, name & expiry must match the traveler."),
+      requireOblikQr
+        ? L("2. Чоловіки 18–60 (ВИЇЗД): Довідка про відстрочку + дійсний QR-код «Облік+».", "2. Males 18–60 (EXIT): Exemption Permit + valid 'Oblik+' QR.")
+        : L("2. Чоловіки 18–60 (ВИЇЗД): Обов'язкова дійсна Довідка про відстрочку.", "2. Males 18–60 (EXIT): Valid Exemption Certificate required."),
+      L("3. Транспорт: модель, КОЛІР і держномер у декларації мають збігатися з авто у вікні.", "3. Transport: model, COLOR & plate must match what's at the gate.")
+    ];
+
+    return {
+      mod: Object.assign({}, mod, { coffeeMult }),
+      daySpec: {
+        dayNumber,
+        dateLabel: L(`Вільна служба • День ${dayNumber} (${rankTitleUk})`, `Sandbox Career • Day ${dayNumber} (${rankTitleEn})`),
+        headline: mod.title,
+        radioNews: mod.desc,
+        bossBriefing: pick(briefings),
+        rulesList,
+        requireOblikQr,
+        requireVehicleDecl: true,
+        wantedHint: twist.label,
+        bossCut: Math.min(420, 170 + dayNumber * 20),
+        hasSiren,
+        twoWheelerBias,
+        extraShytomyr,
+        extraWar,
+        extraCloneChance
+      }
+    };
+  }
+
   function getEscapeTarget() { return state.isSandbox ? 3600 : 2400; }
   function getEscapeTolikRep() { return state.isSandbox ? 65 : 55; }
   function getRank() {
-    if (state.sbkColonelPromoted) return { title: L("🕵️ Таємний Полковник СБК («Кордон-7»)", "🕵️ Covert SBK Colonel ('Border-7')"), salary: 320 };
-    if (state.isUndercoverSbkAgent) return { title: L("🕵️ Негласний агент СБК («Кордон-7»)", "🕵️ Undercover SBK Agent ('Border-7')"), salary: 210 };
-    if (!state.isSandbox) return { title: L("Інспектор ДПСК", "SBGS Inspector"), salary: 130 };
+    if (state.sbkColonelPromoted) {
+      return {
+        id: "SBK_COLONEL",
+        title: L("🕵️ Таємний Полковник СБК («Кордон-7»)", "🕵️ Covert SBK Colonel ('Border-7')"),
+        salary: 320,
+        perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 ₴ • -8% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 ₴ • -8% NABK/day"),
+        dogCost: 0,
+        freeFirstMistake: true,
+        dailyRiskHeal: 8
+      };
+    }
+    if (state.isUndercoverSbkAgent) {
+      return {
+        id: "SBK_AGENT",
+        title: L("🕵️ Негласний агент СБК («Кордон-7»)", "🕵️ Undercover SBK Agent ('Border-7')"),
+        salary: 210,
+        perkLabel: L("🔓 Перк: +180 ₴/арешт • Пес -4с", "🔓 Perk: +180 ₴/arrest • Dog -4s"),
+        dogCost: 4,
+        freeFirstMistake: false,
+        dailyRiskHeal: 4
+      };
+    }
+    if (!state.isSandbox) {
+      return {
+        id: "CAMPAIGN_INSPECTOR",
+        title: L("Інспектор ДПСК", "SBGS Inspector"),
+        salary: 130,
+        perkLabel: L("Сюжетний режим (перки Архіву активні)", "Story mode (Archive perks active)"),
+        dogCost: 8,
+        freeFirstMistake: false,
+        dailyRiskHeal: 0
+      };
+    }
     const d = state.daySpec.dayNumber;
-    if (d >= 8) return { title: L("Старший офіцер митниці", "Chief Customs Officer"), salary: 230 };
-    if (d >= 5) return { title: L("Заступник Пал Палича", "Palych's Deputy"), salary: 190 };
-    if (d >= 3) return { title: L("Старший зміни", "Senior Shift Inspector"), salary: 160 };
-    return { title: L("Молодший інспектор", "Junior Inspector"), salary: 130 };
+    if (d >= 8) {
+      return {
+        id: "CHIEF_CUSTOMS",
+        title: L("Старший офіцер митниці", "Chief Customs Officer"),
+        salary: 230,
+        perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 ₴ • -5% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 ₴ • -5% NABK/day"),
+        dogCost: 0,
+        freeFirstMistake: true,
+        dailyRiskHeal: 5
+      };
+    }
+    if (d >= 5) {
+      return {
+        id: "DEPUTY_PALYCH",
+        title: L("Заступник Пал Палича", "Palych's Deputy"),
+        salary: 190,
+        perkLabel: L("🔓 Перки: 1-ша помилка 0 ₴ • Пес -4с", "🔓 Perks: 1st Mistake 0 ₴ • Dog -4s"),
+        dogCost: 4,
+        freeFirstMistake: true,
+        dailyRiskHeal: 0
+      };
+    }
+    if (d >= 3) {
+      return {
+        id: "SENIOR_SHIFT",
+        title: L("Старший зміни", "Senior Shift Inspector"),
+        salary: 160,
+        perkLabel: L("🔓 Перк: Пес «Бавовна» витрачає 4с замість 8с", "🔓 Perk: Sniffer dog costs 4s instead of 8s"),
+        dogCost: 4,
+        freeFirstMistake: false,
+        dailyRiskHeal: 0
+      };
+    }
+    return {
+      id: "JUNIOR",
+      title: L("Молодший інспектор", "Junior Inspector"),
+      salary: 130,
+      perkLabel: L("Підніміться до Дня 3 для 1-го рангового перку!", "Reach Day 3 to unlock your first Rank Perk!"),
+      dogCost: 8,
+      freeFirstMistake: false,
+      dailyRiskHeal: 0
+    };
   }
 
   function getEffectiveBossCut() {
@@ -3321,14 +3609,17 @@
   function startNewGame(sandbox) {
     usedStoryTags = new Set();
     usedShytomyrRun = new Set();
-    const mod = sandbox ? SANDBOX_MODIFIERS[0] : { id: "NONE", title: L("", ""), desc: L("", ""), bribeMult: 1.0, detainExtra: 0, forceOblik: false, forceSiren: false };
-    const baseDay = Object.assign({}, ACT_ONE_DAYS[0]);
+    usedSandboxModIds = new Set();
+    const meta = getMetaPerkFlags();
+
+    let mod = { id: "NONE", title: L("", ""), desc: L("", ""), bribeMult: 1.0, detainExtra: 0, salaryMult: 1.0, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false };
+    let baseDay = Object.assign({}, ACT_ONE_DAYS[0]);
     if (sandbox) {
-      baseDay.dateLabel = L("Вільна служба • День 1", "Career Sandbox • Day 1");
-      baseDay.headline = mod.title;
-      baseDay.radioNews = mod.desc;
-      baseDay.requireVehicleDecl = true;
+      const built = buildRandomSandboxDay(1, "Молодший інспектор", "Junior Inspector");
+      mod = built.mod;
+      baseDay = built.daySpec;
     }
+    const baseSec = (sandbox ? 300 : 270) + (mod.shiftSecDelta || 0) + meta.shiftTimeBonus;
     state = Object.assign(state, {
       phase: "MORNING_BRIEFING",
       isSandbox: sandbox,
@@ -3338,7 +3629,7 @@
       queue: generateDailyQueue(baseDay, sandbox ? 12 : 9),
       travelerIdx: 0,
       selectedDocIdx: 0,
-      shiftSec: sandbox ? 300 : 270,
+      shiftSec: Math.max(150, baseSec),
       sirenActive: false,
       sirenResolved: false,
       vehicleInspected: false,
@@ -3351,10 +3642,10 @@
       spottedCodes: [],
       lastFeedback: null,
       barrierState: "CLOSED",
-      money: 400,
+      money: 400 + meta.startCashBonus,
       escapeFund: 0,
       familyMorale: 80,
-      nabkRisk: 10,
+      nabkRisk: Math.max(0, 10 - meta.startNabkHeal),
       palychRep: 50,
       tolikRep: 30,
       sbkRep: 50,
@@ -3384,10 +3675,12 @@
   }
 
   function beginShift() {
+    const meta = getMetaPerkFlags();
     const baseSec = state.isSandbox ? 300 : 270;
-    const bonusSec = state.ownedAssets.includes("espresso_machine") ? 35 : 0;
+    const modDelta = state.sandboxMod ? (state.sandboxMod.shiftSecDelta || 0) : 0;
+    const bonusSec = (state.ownedAssets.includes("espresso_machine") ? 35 : 0) + meta.shiftTimeBonus + modDelta;
     state.phase = "BOOTH_SHIFT";
-    state.shiftSec = baseSec + bonusSec;
+    state.shiftSec = Math.max(150, baseSec + bonusSec);
     state.travelerIdx = 0;
     state.selectedDocIdx = 0;
     state.sirenActive = false;
@@ -3476,10 +3769,12 @@
 
     const coveredByBribe = state.bribeAccepted && isApprove && !t.isWantedTarget;
     const rank = getRank();
+    const meta = getMetaPerkFlags();
 
     let salaryDelta = 0, fineDelta = 0, detainBonus = 0;
     if (ruleCorrect || coveredByBribe) {
-      salaryDelta = rank.salary;
+      const salMult = (state.sandboxMod && state.sandboxMod.salaryMult ? state.sandboxMod.salaryMult : 1.0) * meta.salaryBonusMult;
+      salaryDelta = Math.round(rank.salary * salMult);
       if (isDetain && requiresDetain) {
         const undercoverBounty = state.isUndercoverSbkAgent ? 180 : 0;
         detainBonus = (t.isWantedTarget ? 320 : 140) + undercoverBounty + (state.sandboxMod ? state.sandboxMod.detainExtra : 0);
@@ -3493,6 +3788,11 @@
       state.shiftCorrect += 1;
     } else {
       fineDelta = excessiveDetain ? 40 : (state.shiftMistakes === 0 ? 50 : 150);
+      if (state.shiftMistakes === 0 && rank.freeFirstMistake) {
+        fineDelta = 0;
+      } else if (state.shiftMistakes === 0 && meta.halfFirstFine) {
+        fineDelta = Math.round(fineDelta * 0.5);
+      }
       state.palychRep = Math.max(0, state.palychRep - 4);
       if (t.isWantedTarget && isApprove) {
         state.sbkRep = Math.max(0, state.sbkRep - 25);
@@ -3617,21 +3917,15 @@
 
     state.dayIndex = nextIdx;
     state.money += getPassiveRent();
-    state.nabkRisk = Math.max(0, Math.min(100, state.nabkRisk + getDailyAssetRisk()));
+    const prevRank = getRank();
+    state.nabkRisk = Math.max(0, Math.min(100, state.nabkRisk + getDailyAssetRisk() - (prevRank.dailyRiskHeal || 0)));
 
     if (state.isSandbox) {
-      const mod = SANDBOX_MODIFIERS[nextIdx % SANDBOX_MODIFIERS.length];
-      state.sandboxMod = mod;
-      const base = Object.assign({}, ACT_ONE_DAYS[nextIdx % ACT_ONE_DAYS.length]);
-      base.dayNumber = nextIdx + 1;
+      state.daySpec = Object.assign({}, state.daySpec, { dayNumber: nextIdx + 1 });
       const rk = getRank();
-      base.dateLabel = L(`Кар'єра • День ${nextIdx + 1} (${rk.title.uk})`, `Career • Day ${nextIdx + 1} (${rk.title.en})`);
-      base.headline = mod.title;
-      base.radioNews = mod.desc;
-      base.requireOblikQr = base.requireOblikQr || mod.forceOblik;
-      base.requireVehicleDecl = true;
-      base.hasSiren = base.hasSiren || mod.forceSiren;
-      state.daySpec = base;
+      const built = buildRandomSandboxDay(nextIdx + 1, rk.title.uk, rk.title.en);
+      state.sandboxMod = built.mod;
+      state.daySpec = built.daySpec;
     } else {
       state.daySpec = ACT_ONE_DAYS[nextIdx];
     }
@@ -4016,9 +4310,10 @@
         </div>
 
         <div class="archive-tabs">
-          <button type="button" id="arch-tab-0" class="${state.archiveTab === 0 ? "btn-mustard" : "btn-secondary"}" style="padding:8px 4px;font-size:11.5px;">🏆 ${tr(L(`Титули (${unlockedArch.length}/16)`, `Titles (${unlockedArch.length}/16)`), state.lang)}</button>
-          <button type="button" id="arch-tab-1" class="${state.archiveTab === 1 ? "btn-mustard" : "btn-secondary"}" style="padding:8px 4px;font-size:11.5px;">🧦 ${tr(L(`Шитомир (${unlockedShyt.length}/12)`, `Shytomyr (${unlockedShyt.length}/12)`), state.lang)}</button>
-          <button type="button" id="arch-tab-2" class="${state.archiveTab === 2 ? "btn-mustard" : "btn-secondary"}" style="padding:8px 4px;font-size:11.5px;">📊 ${tr(L("Статистика", "Stats"), state.lang)}</button>
+          <button type="button" id="arch-tab-0" class="${state.archiveTab === 0 ? "btn-mustard" : "btn-secondary"}" style="padding:8px 4px;font-size:11px;">🏆 ${tr(L(`Титули (${unlockedArch.length}/16)`, `Titles (${unlockedArch.length}/16)`), state.lang)}</button>
+          <button type="button" id="arch-tab-1" class="${state.archiveTab === 1 ? "btn-mustard" : "btn-secondary"}" style="padding:8px 4px;font-size:11px;">🧦 ${tr(L(`Шитомир (${unlockedShyt.length}/12)`, `Shytomyr (${unlockedShyt.length}/12)`), state.lang)}</button>
+          <button type="button" id="arch-tab-3" class="${state.archiveTab === 3 ? "btn-mustard" : "btn-secondary"}" style="padding:8px 4px;font-size:11px;">⚡ ${tr(L("Перки", "Perks"), state.lang)}</button>
+          <button type="button" id="arch-tab-2" class="${state.archiveTab === 2 ? "btn-mustard" : "btn-secondary"}" style="padding:8px 4px;font-size:11px;">📊 ${tr(L("Статистика", "Stats"), state.lang)}</button>
         </div>
 
         <div id="archive-content" class="archive-list"></div>
@@ -4028,6 +4323,7 @@
       document.getElementById("arch-tab-0").addEventListener("click", () => { audio.playTap(); state.archiveTab = 0; render(); });
       document.getElementById("arch-tab-1").addEventListener("click", () => { audio.playTap(); state.archiveTab = 1; render(); });
       document.getElementById("arch-tab-2").addEventListener("click", () => { audio.playTap(); state.archiveTab = 2; render(); });
+      document.getElementById("arch-tab-3").addEventListener("click", () => { audio.playTap(); state.archiveTab = 3; render(); });
 
       const wrap = document.getElementById("archive-content");
       if (state.archiveTab === 0) {
@@ -4071,6 +4367,18 @@
             if (c) drawPortrait(c.getContext("2d"), leg.portrait, 26, 51, 0.38);
           }
         });
+      } else if (state.archiveTab === 3) {
+        getActiveMetaPerks().forEach(p => {
+          const card = document.createElement("div");
+          card.className = "archive-card" + (p.unlocked ? "" : " locked");
+          card.innerHTML = `
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:800;">${p.unlocked ? "✅ " : "🔒 "}${tr(p.title, state.lang)} (${Math.min(p.progress, p.reqCount)}/${p.reqCount})</div>
+              <div style="font-size:11.5px;margin-top:3px;opacity:0.9;">${tr(p.desc, state.lang)}</div>
+            </div>
+          `;
+          wrap.appendChild(card);
+        });
       } else {
         const box = document.createElement("div");
         box.className = "stat-grid";
@@ -4088,6 +4396,8 @@
 
     if (state.phase === "MORNING_BRIEFING") {
       const d = state.daySpec;
+      const rk = getRank();
+      const activeMeta = getActiveMetaPerks().filter(p => p.unlocked);
       root.innerHTML = `
         <div style="display:flex;flex-direction:column;gap:10px;flex:1;">
           <p style="color:#E0B145;font-family:monospace;font-size:13px;">${tr(d.dateLabel, state.lang)}</p>
@@ -4095,6 +4405,12 @@
           <section class="card-radio">
             <h2 style="color:#E0B145;font-size:12px;margin-bottom:4px;">${tr(L("📻 РАДІОЕФІР РАНКУ", "📻 MORNING RADIO BROADCAST"), state.lang)}</h2>
             <p style="font-size:13px;color:#CFD8DC;">${tr(d.radioNews, state.lang)}</p>
+          </section>
+          <section class="card-slate">
+            <h2 style="color:#E0B145;font-size:13px;margin-bottom:4px;">${tr(L("🎖️ РАНГ І ПЕРКИ:", "🎖️ RANK & ACTIVE PERKS:"), state.lang)}</h2>
+            <p style="font-size:12.5px;font-weight:700;color:#FFE082;">${tr(rk.title, state.lang)} (${rk.salary} ₴/${tr(L("оформ.", "proc."), state.lang)})</p>
+            <p style="font-size:11.5px;color:#B0BEC5;margin-top:2px;">${tr(rk.perkLabel, state.lang)}</p>
+            ${activeMeta.length > 0 ? `<p style="font-size:11px;color:#81C784;margin-top:4px;">⚡ ${tr(L("Мета-перки Архіву:", "Archive Perks:"), state.lang)} ${activeMeta.map(p => tr(p.title, state.lang)).join(" • ")}</p>` : ""}
           </section>
           <section class="card-slate">
             <h2 style="color:#E0B145;font-size:13px;margin-bottom:4px;">${tr(L("🧢 НАРАДА У ПАЛ ПАЛИЧА:", "🧢 PAL PALYCH'S BRIEFING:"), state.lang)}</h2>
@@ -4120,7 +4436,9 @@
       const spottedObjs = t.violations.filter(v => state.spottedCodes.includes(v.code));
       const needsArrest = spottedObjs.some(v => v.requiresDetention);
       const photoSpotted = state.spottedCodes.includes("PHOTO_MISMATCH");
-      const searchCost = state.ownedAssets.includes("uv_endoscope") ? "0s" : "-8s";
+      const rk = getRank();
+      const dogSecCost = state.ownedAssets.includes("uv_endoscope") ? 0 : rk.dogCost;
+      const searchCost = dogSecCost === 0 ? "0s" : `-${dogSecCost}s`;
       const bribeAmount = t.bribeOffer ? Math.round(t.bribeOffer.amount * (state.sandboxMod ? state.sandboxMod.bribeMult || 1 : 1)) : 0;
       const hasSbkTablet = state.ownedAssets.includes("sbk_database_tablet");
 
@@ -4340,7 +4658,9 @@
         state.reactionState = "COFFEE_GIVEN";
         if (!state.coffeeTipGiven && t.coffeeTip > 0) {
           state.coffeeTipGiven = true;
-          const tip = t.coffeeTip + (state.ownedAssets.includes("espresso_machine") ? 35 : 0);
+          const meta = getMetaPerkFlags();
+          const cMult = state.sandboxMod ? (state.sandboxMod.coffeeMult || 1) : 1;
+          const tip = Math.round(t.coffeeTip * cMult) + (state.ownedAssets.includes("espresso_machine") ? 35 : 0) + meta.coffeeTipBonus;
           state.money += tip;
           state.lastFeedback = {
             ok: true,
@@ -4361,7 +4681,9 @@
       document.getElementById("react-dog").addEventListener("click", () => {
         audio.playDogSniff();
         state.vehicleInspected = true;
-        if (!state.ownedAssets.includes("uv_endoscope")) state.shiftSec = Math.max(5, state.shiftSec - 8);
+        const rkDog = getRank().dogCost;
+        const costSec = state.ownedAssets.includes("uv_endoscope") ? 0 : rkDog;
+        if (costSec > 0) state.shiftSec = Math.max(5, state.shiftSec - costSec);
         if (t.hasContraband && !state.spottedCodes.includes("CONTRABAND_CARGO")) state.spottedCodes.push("CONTRABAND_CARGO");
         if (t.violations.some(v => v.code === "VEHICLE_MISMATCH") && !state.spottedCodes.includes("VEHICLE_MISMATCH")) {
           state.spottedCodes.push("VEHICLE_MISMATCH");
