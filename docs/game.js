@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v5.3";
+  const BUILD_VERSION = "v5.4";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -42,7 +42,7 @@
       id: "SBK_SHIELD",
       icon: "🛡️",
       title: L("Медаль СБК «Чистий Рубіж»", "SBK Medal 'Clean Frontier'"),
-      desc: L("Затримай 3+ шпигунів або контрабандистів — назавжди +200 🪙 до премії СБК за кожен арешт!", "Detain 3+ spies/smugglers — permanently +200 🪙 per SBK arrest!")
+      desc: L("Затримай 3+ шпигунів або контрабандистів — назавжди +600 🪙 до премії СБК за кожен арешт!", "Detain 3+ spies/smugglers — permanently +600 🪙 per SBK arrest!")
     },
     {
       id: "GUR_FALCON",
@@ -54,7 +54,7 @@
       id: "VSP_GUARD",
       icon: "🎖️",
       title: L("Подяка ВСП «Залізна Варта»", "VSP 'Iron Guard' Commendation"),
-      desc: L("Викрий та затримай порушника з подвійним громадянством — +500 🪙 за затримання ухилянтів!", "Catch a dual-citizen evader — +500 🪙 bounty on evader arrests!")
+      desc: L("Викрий та затримай порушника з подвійним громадянством — +800 🪙 за затримання ухилянтів!", "Catch a dual-citizen evader — +800 🪙 bounty on evader arrests!")
     },
     {
       id: "NABK_CLEAN",
@@ -225,72 +225,162 @@
     {
       id: "MARTIAL_AUDIT",
       title: L("🚨 Указ Штабу: «Спецоперація Контррозвідки»", "🚨 Daily Decree: 'Counter-Intel Sweep'"),
-      desc: L("Група СБК чергує на КПП! За кожен обґрунтований АРЕШТ сьогодні платять +220 🪙 премії!", "SBK team on site! Every valid DETENTION today pays an extra +220 🪙 bonus!"),
-      bribeMult: 1.0, detainExtra: 220, salaryMult: 1.0, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: true, twoWheelerBias: false, extraShytomyr: false, extraWar: true
+      desc: L("Група СБК чергує на КПП! За кожен обґрунтований АРЕШТ сьогодні платять +1 100 🪙 премії!", "SBK team on site! Every valid DETENTION today pays an extra +1 100 🪙 bonus!"),
+      bribeMult: 1.0, detainExtra: 1100, salaryMult: 1.0, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: true, twoWheelerBias: false, extraShytomyr: false, extraWar: true
     },
     {
       id: "TOTAL_DIGITAL_OBLIK",
       title: L("📱 Указ Віче: «Цифровий Рейд Облік+»", "📱 Daily Decree: 'Digital Oblik+ Raid'"),
       desc: L("Усі чоловіки 18–60 зобов'язані пред'явити і довідку, і дійсний QR-код «Облік+».", "All males 18–60 must present both an Exemption Permit and a valid 'Oblik+' QR code."),
-      bribeMult: 1.0, detainExtra: 90, salaryMult: 1.1, coffeeMult: 1, shiftSecDelta: 0, forceOblik: true, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
+      bribeMult: 1.0, detainExtra: 450, salaryMult: 1.1, coffeeMult: 1, shiftSecDelta: 0, forceOblik: true, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
     },
     {
       id: "CONTRABAND_BOOM",
       title: L("📦 Указ Митниці: «Полювання на двійників та тайники»", "📦 Daily Decree: 'Clone & Stash Hunt'"),
-      desc: L("Звіряйте колір транспорту перед шлагбаумом із декларацією! Премія за АРЕШТ +180 🪙!", "Compare the parked vehicle color against papers! Detention bonus +180 🪙!"),
-      bribeMult: 1.0, detainExtra: 180, salaryMult: 1.0, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
+      desc: L("Звіряйте колір транспорту перед шлагбаумом із декларацією! Премія за АРЕШТ +900 🪙!", "Compare the parked vehicle color against papers! Detention bonus +900 🪙!"),
+      bribeMult: 1.0, detainExtra: 900, salaryMult: 1.0, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
     },
     {
       id: "NIGHT_CONVOY_SURGE",
       title: L("🔦 Спецрежим: «Смуга посиленого контролю»", "🔦 Special Shift: 'Tightened Security Lane'"),
-      desc: L("Через трасу йдуть дипломатичні буси та велокур'єри. Конверти +30%, премія СБК +120 🪙!", "Heavy diplomatic vans & bike couriers on the highway. Bribes +30%, SBK bonus +120 🪙!"),
-      bribeMult: 1.3, detainExtra: 120, salaryMult: 1.1, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
+      desc: L("Через трасу йдуть дипломатичні буси та велокур'єри. Конверти +30%, премія СБК +600 🪙!", "Heavy diplomatic vans & bike couriers on the highway. Bribes +30%, SBK bonus +600 🪙!"),
+      bribeMult: 1.3, detainExtra: 600, salaryMult: 1.1, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
     },
     {
       id: "VELO_PEDAL_RUSH",
       title: L("🚲 Указ Траси: «Вело-самокатний штурм»", "🚲 Highway Decree: 'Two-Wheeler Rush'"),
-      desc: L("Через чергу на авто масово лізуть на вєліках, самокатах і пішки! Премія за АРЕШТ +150 🪙!", "Travelers swarm on bikes, scooters & on foot to bypass traffic! +150 🪙 arrest bonus!"),
-      bribeMult: 1.0, detainExtra: 150, salaryMult: 1.15, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: true, extraShytomyr: false, extraWar: false
+      desc: L("Через чергу на авто масово лізуть на вєліках, самокатах і пішки! Премія за АРЕШТ +750 🪙!", "Travelers swarm on bikes, scooters & on foot to bypass traffic! +750 🪙 arrest bonus!"),
+      bribeMult: 1.0, detainExtra: 750, salaryMult: 1.15, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: true, extraShytomyr: false, extraWar: false
     },
     {
       id: "DIPLOMATIC_SCANNER",
       title: L("🛂 Рейд ДПСК: «Перевірка липових диппаспортів»", "🛂 SBGS Raid: 'Fake Diplomatic Passports'"),
-      desc: L("З'явились аферисти з фальшивими печатками. Премія за АРЕШТ +200 🪙, уважніше тисніть на печатки!", "Scammers flashing fake seals. +200 🪙 detention bounty — inspect stamps closely!"),
-      bribeMult: 1.0, detainExtra: 200, salaryMult: 1.05, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
+      desc: L("З'явились аферисти з фальшивими печатками. Премія за АРЕШТ +1 000 🪙, уважніше тисніть на печатки!", "Scammers flashing fake seals. +1 000 🪙 detention bounty — inspect stamps closely!"),
+      bribeMult: 1.0, detainExtra: 1000, salaryMult: 1.05, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
     },
     {
       id: "CURFEW_BLITZ",
       title: L("⚡ Бліц-зміна: «Комендантський прорив»", "⚡ Blitz Shift: 'Curfew Surge'"),
       desc: L("Зміна коротша на 45с, зате ставка оформлення +40%! Швидкий темп — високий дохід!", "Shift is 45s shorter, but base salary per traveler is +40%! Fast pace, big payout!"),
-      bribeMult: 1.15, detainExtra: 100, salaryMult: 1.4, coffeeMult: 1, shiftSecDelta: -45, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
+      bribeMult: 1.15, detainExtra: 500, salaryMult: 1.4, coffeeMult: 1, shiftSecDelta: -45, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
     },
     {
       id: "NABK_UNDERCOVER_WAVE",
       title: L("🕵️ Тривога НАБК: «Тиждень прихованих камер»", "🕵️ NABK Alert: 'Hidden Camera Week'"),
-      desc: L("Антикорупційне бюро на трасі! Хабарі менші (x0.8), зате чесна ставка +30% і +240 🪙 за СБК-арешт!", "NABK patrols active! Bribes x0.8, but honest salary +30% and +240 🪙 arrest bonus!"),
-      bribeMult: 0.8, detainExtra: 240, salaryMult: 1.3, coffeeMult: 1, shiftSecDelta: 0, forceOblik: true, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
+      desc: L("Антикорупційне бюро на трасі! Хабарі менші (x0.8), зате чесна ставка +30% і +1 200 🪙 за СБК-арешт!", "NABK patrols active! Bribes x0.8, but honest salary +30% and +1 200 🪙 arrest bonus!"),
+      bribeMult: 0.8, detainExtra: 1200, salaryMult: 1.3, coffeeMult: 1, shiftSecDelta: 0, forceOblik: true, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
     },
     {
       id: "BORDER_AMNESTY_COFFEE",
       title: L("☕ Акція КПП: «Ніч земляцької гостинності»", "☕ Checkpoint Vibe: 'Warm Thermos Night'"),
       desc: L("На вулиці завірюха! Чайові за каву ПОДВОЄНІ (x2), а чесні мандрівники щедріші!", "Blizzard at the gate! Coffee tips are DOUBLED (x2) and travelers are extra grateful!"),
-      bribeMult: 1.2, detainExtra: 80, salaryMult: 1.0, coffeeMult: 2, shiftSecDelta: 15, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
+      bribeMult: 1.2, detainExtra: 400, salaryMult: 1.0, coffeeMult: 2, shiftSecDelta: 15, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
     },
     {
       id: "SHYTOMYR_DELEGATION",
       title: L("🧦 Подія траси М-06: «Великий шитомирський караван»", "🧦 M-06 Event: 'Great Shytomyr Caravan'"),
       desc: L("Через КПП масово їдуть легенди з м. Шитомир! Більше унікальних земляків у черзі +300 🪙 за кожну трійку!", "Shytomyr legends are rolling through! Extra unique Shytomyr guests guaranteed today!"),
-      bribeMult: 1.0, detainExtra: 100, salaryMult: 1.1, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: true, extraWar: false
+      bribeMult: 1.0, detainExtra: 500, salaryMult: 1.1, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: true, extraWar: false
     },
     {
       id: "DRONE_BLACKOUT",
       title: L("🛸 Ніч тривог: «Повітряна тривога і блекаут»", "🛸 Alert Night: 'Sirens & Blackout'"),
-      desc: L("Над трасою мопеди, генератор гуде! Ставка +25%, премія СБК +190 🪙, сирена гарантована!", "Drones overhead! Base salary +25%, SBK bonus +190 🪙, air-raid siren active!"),
-      bribeMult: 1.1, detainExtra: 190, salaryMult: 1.25, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: true, twoWheelerBias: false, extraShytomyr: false, extraWar: true
+      desc: L("Над трасою мопеди, генератор гуде! Ставка +25%, премія СБК +950 🪙, сирена гарантована!", "Drones overhead! Base salary +25%, SBK bonus +950 🪙, air-raid siren active!"),
+      bribeMult: 1.1, detainExtra: 950, salaryMult: 1.25, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: true, twoWheelerBias: false, extraShytomyr: false, extraWar: true
+    },
+    {
+      id: "WEDDING_SEASON",
+      title: L("💒 Сезон весіль: «Кортежі з бантиками»", "💒 Wedding Season: 'Ribbon Convoys'"),
+      desc: L("Колони з повітряними кульками їдуть на весілля до Кракова. Ставка +10%, конверти +10%, премія за АРЕШТ +300 🪙, зміна довша на 10с.", "Ribboned wedding convoys heading to Krakiv. Salary +10%, bribes +10%, arrest bonus +300 🪙, shift +10s."),
+      bribeMult: 1.1, detainExtra: 300, salaryMult: 1.1, coffeeMult: 1, shiftSecDelta: 10, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
+    },
+    {
+      id: "TRUCKER_STRIKE",
+      title: L("🚛 Страйк далекобійників: «Фури стали в чергу»", "🚛 Trucker Strike: 'Gridlock on M-06'"),
+      desc: L("Водії фур нервують і радо «домовляються»: конверти +40%, премія за АРЕШТ +700 🪙, але зміна коротша на 20с.", "Nervous truckers love to 'negotiate': bribes +40%, arrest bonus +700 🪙, shift -20s."),
+      bribeMult: 1.4, detainExtra: 700, salaryMult: 1.0, coffeeMult: 1, shiftSecDelta: -20, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
+    },
+    {
+      id: "FOOTBALL_FANS",
+      title: L("⚽ Матч у Кракові: «Фанатський прорив»", "⚽ Krakiv Match: 'Fan Surge'"),
+      desc: L("Фанати їдуть на самокатах і пішки. Ставка +20%, премія за АРЕШТ +400 🪙, багато двоколісного транспорту.", "Fans swarm on scooters and on foot. Salary +20%, arrest bonus +400 🪙, tons of two-wheelers."),
+      bribeMult: 1.0, detainExtra: 400, salaryMult: 1.2, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: true, extraShytomyr: false, extraWar: false
+    },
+    {
+      id: "MINISTER_VISIT",
+      title: L("🎩 Візит міністра: «Чисті руки, чистий шлагбаум»", "🎩 Minister's Visit: 'Clean Hands Day'"),
+      desc: L("На пості столична комісія з камерами. Конверти x0.7, зате ставка +35% і премія за АРЕШТ +1 300 🪙. Обов'язковий «Облік+».", "Capital commission with cameras on site. Bribes x0.7, salary +35%, arrest bonus +1,300 🪙. Oblik+ enforced."),
+      bribeMult: 0.7, detainExtra: 1300, salaryMult: 1.35, coffeeMult: 1, shiftSecDelta: 0, forceOblik: true, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
+    },
+    {
+      id: "HARVEST_RUSH",
+      title: L("🌾 Жнива: «Аграрний ажіотаж»", "🌾 Harvest Rush: 'Agro Frenzy'"),
+      desc: L("Агро-барони женуть комбайни та зерновози. Конверти +25%, премія за АРЕШТ +500 🪙, зміна +20с.", "Agro barons rush harvesters and grain trucks. Bribes +25%, arrest bonus +500 🪙, shift +20s."),
+      bribeMult: 1.25, detainExtra: 500, salaryMult: 1.0, coffeeMult: 1, shiftSecDelta: 20, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
+    },
+    {
+      id: "BLACK_MARKET_FAIR",
+      title: L("🕶️ Ярмарок «У тіні Варшавки»", "🕶️ 'In the Shadow of Varshavka' Fair"),
+      desc: L("Чорний ринок їде на розпродаж! Конверти +60%, премія за АРЕШТ +800 🪙, але НАБК пильнує (зарплата -10%).", "The black market rolls to sell! Bribes +60%, arrest bonus +800 🪙, but NABK watches (salary -10%)."),
+      bribeMult: 1.6, detainExtra: 800, salaryMult: 0.9, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
+    },
+    {
+      id: "HOLIDAY_EVE",
+      title: L("🎄 Переддень свят: «Передсвятковий потік»", "🎄 Holiday Eve: 'Festive Flow'"),
+      desc: L("Усі їдуть додому з подарунками. Чайові за каву x2, премія за АРЕШТ +350 🪙, зміна +25с.", "Everyone drives home with gifts. Coffee tips x2, arrest bonus +350 🪙, shift +25s."),
+      bribeMult: 1.0, detainExtra: 350, salaryMult: 1.0, coffeeMult: 2, shiftSecDelta: 25, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
+    },
+    {
+      id: "GUR_QUIET_CORRIDOR",
+      title: L("🦅 Операція ГУР-М: «Тихий коридор»", "🦅 GUR-M Operation: 'Quiet Corridor'"),
+      desc: L("Розвідка веде свою гру на КПП: більше шпигунів і союзників. Премія за АРЕШТ +1 400 🪙, ставка +10%.", "Intel runs its own game: more spies and allies. Arrest bonus +1,400 🪙, salary +10%."),
+      bribeMult: 1.0, detainExtra: 1400, salaryMult: 1.1, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: true
+    },
+    {
+      id: "FOG_NIGHT",
+      title: L("🌫️ Густий туман над трасою", "🌫️ Thick Fog over the Highway"),
+      desc: L("Видимість нульова, черга повзе. Ставка +30%, конверти +10%, премія за АРЕШТ +600 🪙, зміна коротша на 30с.", "Zero visibility, queue crawls. Salary +30%, bribes +10%, arrest bonus +600 🪙, shift -30s."),
+      bribeMult: 1.1, detainExtra: 600, salaryMult: 1.3, coffeeMult: 1, shiftSecDelta: -30, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
+    },
+    {
+      id: "SHYTOMYR_BORSCH_FEST",
+      title: L("🧦 Фестиваль «Шитомирський борщ»", "🧦 'Shytomyr Borscht' Festival"),
+      desc: L("Земляки везуть бідони борщу на фестиваль. Чайові за каву x2, багато шитомирців у черзі, премія за АРЕШТ +300 🪙.", "Shytomyr folks haul borscht cauldrons to the fest. Coffee tips x2, extra Shytomyr guests, arrest bonus +300 🪙."),
+      bribeMult: 1.0, detainExtra: 300, salaryMult: 1.0, coffeeMult: 2, shiftSecDelta: 10, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: true, extraWar: false
     }
   ];
 
   const SANDBOX_TWISTS = [
+    {
+      id: "SNOW_NIGHT",
+      label: L("🎯 Орієнтування дня: Мете сніг — мандрівники вдячні за кожен ковток гарячої кави.", "🎯 Daily Alert: Snowstorm — travelers are grateful for every sip of hot coffee."),
+      coffeeMult: 2
+    },
+    {
+      id: "FSM_NETWORK",
+      label: L("🎯 Орієнтування дня: Перехоплено шифровки ФСМ — на КПП очікуйте більше агентури!", "🎯 Daily Alert: FSM ciphers intercepted — expect extra operatives at the gate!"),
+      extraWar: true
+    },
+    {
+      id: "BIKE_PELOTON",
+      label: L("🎯 Орієнтування дня: Велоколона проти черги — і контрабанда в рюкзаках!", "🎯 Daily Alert: Bike peloton dodging the queue — and smuggling in backpacks!"),
+      twoWheelerBias: true
+    },
+    {
+      id: "SEAL_SWEEP",
+      label: L("🎯 Орієнтування дня: Печатки та QR під мікроскопом — підробки на потоці!", "🎯 Daily Alert: Seals & QR under the microscope — forgeries incoming!"),
+      forceOblik: true
+    },
+    {
+      id: "CLONE_FACTORY",
+      label: L("🎯 Орієнтування дня: Підпільний цех перебиває VIN — двійників більше, ніж зазвичай!", "🎯 Daily Alert: A chop shop is re-stamping VINs — more cloned cars than usual!"),
+      extraCloneChance: true
+    },
+    {
+      id: "LEGEND_TOUR",
+      label: L("🎯 Орієнтування дня: Земляцька делегація м. Шитомир — вітайте легенд і поповнюйте Архів!", "🎯 Daily Alert: Shytomyr delegation on the road — welcome the legends and fill the Archive!"),
+      extraShytomyr: true
+    },
     {
       id: "CLONE_HUNT",
       label: L("🎯 Орієнтування дня: Звіряйте КОЛІР та модель авто у вікні — активні авто-двійники!", "🎯 Daily Alert: Watch for CLONED cars — match vehicle color & model in window!"),
@@ -4601,6 +4691,28 @@
       };
     }
     const d = state.daySpec.dayNumber;
+    if (d >= 20) {
+      return {
+        id: "REGIONAL_CURATOR",
+        title: L("Регіональний куратор ДПСК", "Regional SBGS Curator"),
+        salary: 2300,
+        perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 🪙 • -8% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 🪙 • -8% NABK/day"),
+        dogCost: 0,
+        freeFirstMistake: true,
+        dailyRiskHeal: 8
+      };
+    }
+    if (d >= 14) {
+      return {
+        id: "CHECKPOINT_CHIEF",
+        title: L("Начальник КПП", "Checkpoint Chief"),
+        salary: 1800,
+        perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 🪙 • -6% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 🪙 • -6% NABK/day"),
+        dogCost: 0,
+        freeFirstMistake: true,
+        dailyRiskHeal: 6
+      };
+    }
     if (d >= 8) {
       return {
         id: "CHIEF_CUSTOMS",
@@ -4886,13 +4998,16 @@
       salaryDelta = Math.round(rank.salary * salMult);
       if (isDetain && canDetain) {
         const badges = loadAgencyBadges();
-        const undercoverBounty = state.isUndercoverSbkAgent ? 2500 : 0;
+        const undercoverBounty = state.isUndercoverSbkAgent ? 1200 : 0;
         const isHighValueSpyOrVip = t.isWantedTarget || t.storyTag === "FSM_SPY" || t.storyTag === "SABOTEUR" || t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE";
-        const baseDetainBounty = isHighValueSpyOrVip
-          ? (10000 + Math.floor(Math.random() * 8001))
-          : (1200 + Math.floor(Math.random() * 1001));
+        // Bounties grow with career progress: day 1 = 60%, day 9+ = 160% of base (spies pay ~11-18k 🪙 at full ramp)
+        const bountyDay = state.daySpec ? state.daySpec.dayNumber : 1;
+        const bountyRamp = Math.min(1.6, 0.6 + 0.12 * (bountyDay - 1));
+        const baseDetainBounty = Math.round((isHighValueSpyOrVip
+          ? (7000 + Math.floor(Math.random() * 4501))
+          : (700 + Math.floor(Math.random() * 701))) * bountyRamp);
         const badgeBonus = (badges.includes("SBK_SHIELD") ? 600 : 0) + (badges.includes("VSP_GUARD") && (t.storyTag === "DUAL_CITIZEN" || t.storyTag === "VIP_DIVERSE") ? 800 : 0);
-        detainBonus = baseDetainBounty + undercoverBounty + badgeBonus + ((state.sandboxMod ? state.sandboxMod.detainExtra : 0) * 5);
+        detainBonus = baseDetainBounty + undercoverBounty + badgeBonus + (state.sandboxMod ? state.sandboxMod.detainExtra : 0);
         state.sbkRep = Math.min(100, state.sbkRep + (isHighValueSpyOrVip ? 14 : 4));
         state.totalCareerDetained += 1;
         if (state.totalCareerDetained >= 3) unlockAgencyBadge("SBK_SHIELD");
