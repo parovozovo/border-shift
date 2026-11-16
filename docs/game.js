@@ -85,8 +85,14 @@
     WANTED_CRIMINAL_OR_SPY: {
       code: "WANTED_CRIMINAL_OR_SPY",
       requiresDetention: true,
-      title: L("Особа з орієнтування СБК (шпигун/ДРГ)", "SBK Wanted Target / Saboteur"),
-      hint: L("Особливо небезпечний (СБК) → 🚨 АРЕШТ!", "High-Value SBK Target → 🚨 DETAIN!")
+      title: L("Особа з орієнтування СБК / ФСМ", "SBK / FSM Wanted Target / Spy"),
+      hint: L("Шпигун / Розшук (СБК / ГУР-М) → 🚨 АРЕШТ!", "Spy / Wanted (SBK / GUR-M) → 🚨 DETAIN!")
+    },
+    DUAL_CITIZENSHIP: {
+      code: "DUAL_CITIZENSHIP",
+      requiresDetention: true,
+      title: L("Подвійне громадянство (прихований паспорт Kraina)", "Dual Citizenship (Hidden Kraina ID)"),
+      hint: L("Є паспорт Kraina у чоловіка 18–60 → 🚨 ВІЙСЬКОВА ПОЛІЦІЯ!", "Hidden Kraina passport on male 18–60 → 🚨 MILITARY POLICE!")
     }
   };
 
@@ -384,7 +390,7 @@
       category: "TECH",
       currency: "UAH",
       icon: "☕",
-      title: L("Італійська кавомашина «ДеЛонгі-Люкс» у будку", "Italian 'DeLongi-Lux' Espresso Machine"),
+      title: L("Італійська кавомашина «Еспресо-Магнат» у будку", "Italian 'Espresso-Magnat' Machine"),
       subtitle: L("+35 секунд до кожної зміни назавжди + краща реакція на частування кавою", "+35s to every shift permanently + boosted coffee tips"),
       cost: 4500, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 5
     },
@@ -465,7 +471,7 @@
       category: "LUXURY",
       currency: "UAH",
       icon: "🧥",
-      title: L("Бренд-куртка «Баленсіага-Піксель»", "Luxury Jacket 'Balenciaga-Pixel'"),
+      title: L("Бренд-куртка «Баляга-Шок Піксель»", "Luxury Jacket 'Balyaga-Shok Pixel'"),
       subtitle: L("+25% до всіх чайових за каву та +15% до конвертів від VIP-клієнтів!", "+25% coffee tips & +15% larger VIP bribe envelopes!"),
       cost: 32000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 1, tolikBoost: 10, palychBoost: 10, moraleBoost: 10
     },
@@ -474,8 +480,8 @@
       category: "TECH",
       currency: "UAH",
       icon: "📱",
-      title: L("АйФон 17 Про Макс «Тітан» (З лівим Дія-ботом)", "iPhon 17 Pro Max 'Titan'"),
-      subtitle: L("Миттєво підсвічує підміну фото в паспорті та недійсний QR «Облік+»!", "Auto-flags passport photo swaps & invalid 'Oblik+' QR codes!"),
+      title: L("Смартфон «ЯблуФон 17 Про» (З лівим Офіс-ботом)", "Phone 'YabloPhon 17 Pro'"),
+      subtitle: L("Миттєво підсвічує підміну фото в паспорті, фейкові ФСМ-печатки та QR «Облік+»!", "Auto-flags passport photo swaps, fake FSM seals & 'Oblik+' QR!"),
       cost: 62000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 5, palychBoost: 5, moraleBoost: 15
     },
     {
@@ -483,7 +489,7 @@
       category: "LUXURY",
       currency: "USD",
       icon: "🏎️",
-      title: L("Спорткар «Порш 911 Каррера-Тюнінг»", "Sports Car 'Porsh 911 Carrera'"),
+      title: L("Спорткар «Стріла 911 Турбо»", "Sports Car 'Strila 911 Turbo'"),
       subtitle: L("+35 секунд до кожної зміни назавжди +25 поваги Толіка та +20 щастя сім'ї!", "+35s to every shift permanently +25 Tolik rep & +20 family morale!"),
       cost: 65000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 4, tolikBoost: 25, palychBoost: 10, moraleBoost: 20
     },
@@ -2161,7 +2167,7 @@
   function createItEvaderVip() {
     const fullName = randomFullName("M");
     const portrait = Object.assign(randomPortrait("M"), { glasses: 2, hairStyle: 1, outfitStyle: 2 });
-    const trMeta = makeTransportMeta({ shape: "SPORT", name: L("«Порш Тайкан Електро»", "'Porsh Taykan EV'"), isCar: true }, getColorById("RED"), "КА 8844 ІТ");
+    const trMeta = makeTransportMeta({ shape: "SPORT", name: L("«Електро-Комета GT»", "'Electro-Comet GT'"), isCar: true }, getColorById("RED"), "КА 8844 ІТ");
     return buildTravelerFromParts({
       fullName, age: 31, gender: "M", portrait, transport: trMeta,
       passportFields: [
@@ -2172,7 +2178,7 @@
       ],
       includeDecl: true,
       declaredCargo: L("Макбук Про, крипто-флешка Ledger, валіза", "MacBook Pro, Ledger wallet, suitcase"),
-      greeting: L("«Бро, я сеньйор-архітектор! На 3 дні на мітап у Краків — маю віддалений реліз. Не затримуй!»", "'Bro, I'm a Senior Architect! Off to a 3-day meetup, let's keep it smooth!'"),
+      greeting: L("«Бро, я сеньйор-архітектор! На 3 дні на мітап у Варшавку — маю віддалений реліз. Не затримуй!»", "'Bro, I'm a Senior Architect! Off to a 3-day meetup in Varshavka, let's keep it smooth!'"),
       interrogationReply: L("«Слухай, у мене контракт горить. Закину 4 500 💵 чистими прямо зараз — забудь про довідку!»", "'Look, my contract is burning. Here's 4,500 💵 cash right now — forget the permit!'"),
       intimidateReply: L("«*Знімає брендові окуляри* Та я податки плачу, нащо так кричати?!»", "'*Takes off shades* Hey I pay taxes, no need to yell!'"),
       coffeeReply: L("«О, фільтр-кава є? Можу накинути 500 💵 на каву, якщо піднімеш шлагбаум!»", "'Nice filter coffee! Raise the barrier and I'll tip big!'"),
@@ -2296,7 +2302,7 @@
     }
     const trMeta = makeTransportMeta(trChoice, null, generatePlate(city.code, true));
 
-    if (Math.random() < 0.42) {
+    if (Math.random() < 0.60) {
       // Honest traveler (high variety of genders, ages, bikes/scooters/on-foot/cars & cities!)
       const gender = Math.random() < 0.56 ? "F" : "M";
       const age = (gender === "M" && Math.random() < 0.45) ? randInt(61, 75) : randInt(20, 56);
@@ -2674,6 +2680,158 @@
     return Math.random() < 0.5 ? createMicrochipSmuggler() : createArtillerySpotter();
   }
 
+  const FOREIGN_COUNTRIES = [
+    { name: L("Франція-Люкс", "Francia-Lux"), code: "FRL", car: L("«Рено-Люкс Меган»", "'Reno-Lux Megan'"), namesM: [L("П'єр Дюваль", "Pierre Duval"), L("Жан-Люк Моро", "Jean-Luc Moreau")], namesF: [L("Софі Лоран", "Sophie Laurent"), L("Клер Дюпон", "Claire Dupont")] },
+    { name: L("Поландія", "Polandia"), code: "PLD", car: L("«Шкода-Варшава»", "'Shkoda-Varshava'"), namesM: [L("Марек Ковальський", "Marek Kowalski"), L("Пьотр Новак", "Piotr Nowak")], namesF: [L("Агнєшка Зелінська", "Agnieszka Zielinska"), L("Кася Войцік", "Kasia Wojcik")] },
+    { name: L("Германія-Штос", "Germania-Shtos"), code: "GRS", car: L("«Фолькс Гольф-Берлін»", "'Folks Golf-Berlin'"), namesM: [L("Ганс Вебер", "Hans Weber"), L("Лукас Мюллер", "Lukas Muller")], namesF: [L("Ханна Шмідт", "Hannah Schmidt"), L("Емма Бекер", "Emma Becker")] },
+    { name: L("Британіка", "Britanika"), code: "BRT", car: L("«Ленд Ровер-Лондон»", "'Land Rover-London'"), namesM: [L("Олівер Сміт", "Oliver Smith"), L("Джеймс Браун", "James Brown")], namesF: [L("Емілі Кларк", "Emily Clark"), L("Шарлотта Тейлор", "Charlotte Taylor")] },
+    { name: L("Карпатія", "Karpatia"), code: "KRP", car: L("«Сузукі-Тиса»", "'Suzuki-Tysa'"), namesM: [L("Ласло Ковач", "Laszlo Kovacs"), L("Золтан Надь", "Zoltan Nagy")], namesF: [L("Ілона Тот", "Ilona Toth"), L("Аніко Варга", "Aniko Varga")] }
+  ];
+
+  function createForeignTraveler() {
+    const fc = pick(FOREIGN_COUNTRIES);
+    const isDualCitizen = Math.random() < 0.34;
+    const gender = isDualCitizen ? "M" : (Math.random() < 0.52 ? "F" : "M");
+    const age = isDualCitizen ? randInt(24, 52) : randInt(21, 68);
+    const fullName = isDualCitizen
+      ? randomFullName("M")
+      : (gender === "F" ? pick(fc.namesF) : pick(fc.namesM));
+    const portrait = randomPortrait(gender);
+    const trMeta = makeTransportMeta({ shape: Math.random() < 0.5 ? "SEDAN" : "SUV", name: fc.car, isCar: true }, null, `${fc.code} ${randInt(1000, 9999)}`);
+    const dir = isDualCitizen ? "EXIT" : (Math.random() < 0.5 ? "ENTRY" : "EXIT");
+
+    if (!isDualCitizen) {
+      return buildTravelerFromParts({
+        fullName, age, gender, portrait, transport: trMeta,
+        passportTitle: L(`ПАСПОРТ: ${fc.name.uk.toUpperCase()}`, `PASSPORT: ${fc.name.en.toUpperCase()}`),
+        passportSub: L(`Іноземний громадянин • ${fc.code}-${randInt(10000, 99999)}`, `Foreign Citizen • ${fc.code}-${randInt(10000, 99999)}`),
+        passportFields: [
+          { label: L("ПІБ", "Full Name"), value: fullName, disc: null },
+          { label: L("Громадянство", "Citizenship"), value: fc.name, disc: null },
+          { label: L("Напрямок", "Direction"), value: dir === "EXIT" ? L(`ВИЇЗД → ${fc.name.uk}`, `EXIT → ${fc.name.en}`) : L("В'ЇЗД → Kraina (Волонтер/Гість)", "ENTRY → Kraina (Guest)"), disc: null },
+          { label: L("Дійсний до", "Valid Until"), value: L("15.09.2031", "2031-09-15"), disc: null }
+        ],
+        passportSeal: L(`МІД ${fc.name.uk.toUpperCase()} • ДІЙСНИЙ`, `${fc.code} FOREIGN OFFICE • VALID`),
+        includeDecl: true,
+        declaredCargo: L("Медикаменти, кава, особисті валізи", "Medicine, coffee, suitcases"),
+        greeting: L(`«Бонжур / Вітаю! Я громадянин(ка) ${fc.name.uk}, везу допомогу й повертаюсь додому!»`, `'Hello! Citizen of ${fc.name.en}, papers in order!'`),
+        interrogationReply: L(`«Мій паспорт ${fc.name.uk} абсолютно офіційний, громадянства Kraina не маю!»`, `'My ${fc.name.en} passport is completely valid, no Kraina citizenship!'`),
+        intimidateReply: L("«О, мон дьйо! Навіщо так голосно? У нас у Європі так не приймають!»", "'Whoa, why so loud?! Check my passport calmly!'"),
+        coffeeReply: L("«Мерсі! Чудова кава на вашому кордоні!»", "'Thank you! Great border coffee!'"),
+        coffeeTip: 60,
+        arrestFull: L("Ти безпідставно затримав чистого іноземця — назріває дипломатичний скандал!", "Wrongfully detained a clean foreign citizen!"),
+        arrestToned: L("Іноземного громадянина помилково затримано.", "Foreign citizen detained mistakenly."),
+        shouldBeApproved: true,
+        storyTag: "FOREIGN_CLEAN"
+      });
+    }
+
+    // Dual-citizenship evader pretending to be a pure foreigner!
+    return buildTravelerFromParts({
+      fullName, age, gender: "M", portrait, transport: trMeta,
+      passportTitle: L(`ПАСПОРТ: ${fc.name.uk.toUpperCase()}`, `PASSPORT: ${fc.name.en.toUpperCase()}`),
+      passportSub: L(`Серія ${fc.code}-${randInt(10000, 99999)}`, `No. ${fc.code}-${randInt(10000, 99999)}`),
+      passportFields: [
+        { label: L("ПІБ", "Full Name"), value: fullName, disc: null },
+        { label: L("Заявлено", "Claimed"), value: fc.name, disc: null },
+        { label: L("Реєстр ДПСК", "SBGS Registry"), value: L("Увага: є активне громадянство KRAINA!", "Alert: active KRAINA citizenship found!"), disc: DISCREPANCY.DUAL_CITIZENSHIP },
+        { label: L("Дійсний до", "Valid Until"), value: L("22.04.2030", "2030-04-22"), disc: null }
+      ],
+      passportSeal: L(`ПЕРЕВІРИТИ ПОДВІЙНЕ ГРОМАДЯНСТВО`, `CHECK DUAL CITIZENSHIP`),
+      passportSealDisc: DISCREPANCY.DUAL_CITIZENSHIP,
+      includeDecl: true,
+      declaredCargo: L("Особисті речі, другий гаманець", "Personal bags"),
+      vehicleSearchResult: L("ПЕС «БАВОВНА» І СКАНЕР: Під килимком водія сховано синій закордонний паспорт громадянина KRAINA!", "DOG SEARCH: Hidden KRAINA passport found under floor mat!"),
+      greeting: L(`«Пардон, я іноземець з ${fc.name.uk}! Які обмеження?! Пропускайте мерщій!»`, `'Pardon, I am from ${fc.name.en}! Let me exit right now!'`),
+      interrogationReply: L("«Тихіше! Ну так, у мене є ще паспорт Kraina... Візьми 2 200 💵 і не викликай Військову Поліцію!»", "'Quiet! Okay I also hold a Kraina passport... Take 2,200 💵 and don't call Military Police!'"),
+      intimidateReply: L("«*Ховає другий паспорт у кишеню* Я громадянин іншої держави, не чіпайте мене!»", "'*Hides second passport* I am a foreign national!'"),
+      coffeeReply: L("«Дякую... а Військова Поліція сьогодні на зміні?..»", "'Thanks... is Military Police on duty tonight?..'"),
+      arrestFull: L("Викликано Військову Поліцію (ВСП)! Ухилянта з подвійним громадянством затримано!", "Military Police (VSP) arrived and detained the dual-citizen evader!"),
+      arrestToned: L("Порушника з подвійним громадянством передано Військовій Поліції.", "Dual-citizen violator handed over to Military Police."),
+      hasContraband: true,
+      bribeOffer: { amount: 2200, currency: "USD", requiresDiscovery: true, nabkRiskJump: 15, isStingTrap: false, syndicateFavor: false },
+      shouldBeApproved: false,
+      violations: [DISCREPANCY.DUAL_CITIZENSHIP],
+      isWantedTarget: true,
+      storyTag: "DUAL_CITIZEN"
+    });
+  }
+
+  function createFsmSleeperSpy() {
+    const fc = pick(FOREIGN_COUNTRIES);
+    const fullName = pick(fc.namesM);
+    const portrait = Object.assign(randomPortrait("M"), { glasses: 1, scarOrDetail: 2, expression: 1 });
+    const trMeta = makeTransportMeta({ shape: "SEDAN", name: fc.car, isCar: true }, getColorById("SILVER"), `${fc.code} 4040 XX`);
+    return buildTravelerFromParts({
+      fullName, age: 42, gender: "M", portrait, transport: trMeta,
+      passportTitle: L(`ПАСПОРТ: ${fc.name.uk.toUpperCase()}`, `PASSPORT: ${fc.name.en.toUpperCase()}`),
+      passportFields: [
+        { label: L("ПІБ", "Full Name"), value: fullName, disc: null },
+        { label: L("Мета", "Purpose"), value: L("В'ЇЗД → «Туризм біля військових частин»", "ENTRY → 'Tourism near bases'"), disc: null },
+        { label: L("Орієнтування ГУР-М", "GUR-M Alert"), value: L("Ймовірний агент ворожої «ФСМ»", "Suspected enemy FSM operative"), disc: DISCREPANCY.WANTED_CRIMINAL_OR_SPY }
+      ],
+      passportSeal: L("ШТАБ ФСМ • ОСОБЛИВИЙ", "FSM HQ • ALERT"),
+      passportSealDisc: DISCREPANCY.WANTED_CRIMINAL_OR_SPY,
+      includeDecl: true,
+      declaredCargo: L("Туристичний намет, павербанки", "Camping tent, powerbanks"),
+      vehicleSearchResult: L("ПЕС «БАВОВНА» ЗНАЙШОВ СХОВАНКУ: Супутниковий маячок «ФСМ», шифроблокнот і карта ТЕЦ!", "DOG SEARCH: Enemy FSM satellite beacon, cipher pad & power-grid map!"),
+      greeting: L(`«Вітаю! Я незалежний журналіст з ${fc.name.uk}, їду знімати ваші пейзажі та підстанції!»`, `'Hello! Independent journalist from ${fc.name.en}, filming landscapes!'`),
+      interrogationReply: L("«Не треба кликати ГУР-М чи СБК! Ось 6 500 💵 — забудь про багажник!»", "'Don't call GUR-M or SBK! Take 6,500 💵 and forget the trunk!'"),
+      intimidateReply: L("«*Холодно посміхається* Ви ще пошкодуєте про такий тон...»", "'*Cold smile* You'll regret that tone...'"),
+      coffeeReply: L("«Дякую. У нас у відомстві кава гірша.»", "'Thanks. Our agency serves worse coffee.'"),
+      arrestFull: L("СПЕЦОПЕРАЦІЯ ГУР-М І СБК! Ти взяв кадрового шпигуна ворожої «ФСМ»!", "GUR-M & SBK joint sting! Enemy FSM sleeper agent captured!"),
+      arrestToned: L("Агента ворожої розвідки «ФСМ» затримано.", "Enemy FSM intelligence operative detained."),
+      hasContraband: true,
+      bribeOffer: { amount: 6500, currency: "USD", requiresDiscovery: true, nabkRiskJump: 28, isStingTrap: false, syndicateFavor: false },
+      shouldBeApproved: false,
+      violations: [DISCREPANCY.WANTED_CRIMINAL_OR_SPY, DISCREPANCY.CONTRABAND_CARGO],
+      isWantedTarget: true,
+      storyTag: "FSM_SPY"
+    });
+  }
+
+  const VIP_CATEGORY_PRESETS = [
+    { cat: "Будівництво", shape: "SUV", car: L("«Крузак-Піраміда 300»", "'Kruzak-Pyramid 300'"), cargo: L("Макети елітних ЖК, папки з дозвіллям", "Luxury condo blueprints"), usd: 18000, risk: 18, greet: L("«Шефе, я забудовник! У мене 400 обманутих вкладників під мерією, треба терміново на відпочинок!»", "'Boss, I'm a developer! Need urgent rest abroad!'") },
+    { cat: "Освіта", shape: "SEDAN", car: L("«Мерс-Аспірант Е350»", "'Mers-Aspirant E350'"), cargo: L("300 дипломів магістрів та печатка", "300 blank master diplomas"), usd: 7500, risk: 14, greet: L("«Вітаю, колего! Ректор Академії Таро та Крипти їде на симпозіум до Франції-Люкс!»", "'Greetings! Rector of Tarot Academy heading to a symposium!'") },
+    { cat: "Митниця", shape: "SUV", car: L("«Беха Х7 Конфіскат»", "'Beha X7 Confiscate'"), cargo: L("Коробки з конфіскованими гаджетами", "Seized gadget crates"), usd: 35000, risk: 24, greet: L("«Свій до свого! Я зі складу митниці, їду в Монаківку інвентаризувати фури!»", "'One of yours! Customs warehouse chief off to Monakivka!'") },
+    { cat: "Фінанси", shape: "SPORT", car: L("«Стріла-Купе GT»", "'Strila-Coupe GT'"), cargo: L("Апаратні крипто-гаманці та сервери", "Hardware crypto wallets"), usd: 55000, risk: 26, greet: L("«Слухай, у мого банку завтра забирають ліцензію — мені кров з носу треба за кордон!»", "'Listen, my bank loses its license tomorrow — I gotta cross tonight!'") },
+    { cat: "Феміда", shape: "SUV", car: L("«Лексус-Крейсер LX»", "'Leksus-Cruiser LX'"), cargo: L("Мантія та кейс з «вироками»", "Judge robe & briefcase"), usd: 42000, risk: 25, greet: L("«Я недоторканний суддя у відставці! Куди ти дивишся? Шлагбаум вгору!»", "'Retired high judge! Raise the barrier at once!'") },
+    { cat: "Силовики", shape: "G_WAGON", car: L("«Гелік-Прокурор 500»", "'Gelik-Prosecutor 500'"), cargo: L("Справи на олігархів (усе «закрито»)", "Closed oligarch case files"), usd: 60000, risk: 28, greet: L("«Екс-прокурор району на зв'язку! Краще не перевіряй мій техпаспорт — домовимось!»", "'Ex-district prosecutor here! Better not inspect too closely!'") },
+    { cat: "Шоу-біз", shape: "SPORT", car: L("«Електро-Комета Стрім»", "'Electro-Comet Stream'"), cargo: L("Кільцева лампа і гайд «Як стати мільйонером»", "Ring light & course guides"), usd: 6000, risk: 12, greet: L("«Йоу! Я топ-коуч успішного успіху! Лечу знімати рілси в Поландію!»", "'Yo! Top success coach flying to shoot reels!'") }
+  ];
+
+  function createDiverseVipEscapee() {
+    const vp = pick(VIP_CATEGORY_PRESETS);
+    const fullName = randomFullName("M");
+    const portrait = Object.assign(randomPortrait("M"), { glasses: 2, outfitStyle: 2, expression: 2 });
+    const trMeta = makeTransportMeta({ shape: vp.shape, name: vp.car, isCar: true }, getColorById("BLACK"), `VIP ${randInt(100, 999)}`);
+    return buildTravelerFromParts({
+      fullName, age: randInt(32, 56), gender: "M", portrait, transport: trMeta,
+      passportFields: [
+        { label: L("ПІБ", "Full Name"), value: fullName, disc: null },
+        { label: L("Категорія", "Category"), value: L(vp.cat, vp.cat), disc: null },
+        { label: L("Підстава 18–60", "Exit Permit"), value: L("Липова бронь VIP-клубу", "Bogus VIP club exemption"), disc: DISCREPANCY.FAKE_ISSUER_SEAL }
+      ],
+      passportSeal: L("КЛУБ «МОНАКІВКА»", "CLUB 'MONAKIVKA'"),
+      passportSealDisc: DISCREPANCY.FAKE_ISSUER_SEAL,
+      includeDecl: true,
+      declaredCargo: vp.cargo,
+      vehicleSearchResult: L("ПЕС «БАВОВНА» ЗНАЙШОВ СХОВАНКУ: Подвійне дно з пачками готівки на вивіз!", "DOG SEARCH: False bottom packed with undeclared cash!"),
+      greeting: vp.greet,
+      interrogationReply: L(`«Не ускладнюй! Тримай ${vp.usd.toLocaleString("en-US")} 💵 без зайвих записів!»`, `'Keep it simple! Here is ${vp.usd.toLocaleString("en-US")} 💵!'`),
+      intimidateReply: L("«Та в мене адвокати кращі за твій КПП! Беріть гроші й не затримуйте!»", "'My lawyers own this road! Take the cash!'"),
+      coffeeReply: L("«О, еспресо? Дякую, але давай ближче до справи!»", "'Espresso? Nice, now let's talk business!'"),
+      arrestFull: L(`СБК та ВСП затримали VIP-ухилянта (${vp.cat}) з липовою печаткою!`, `SBK & VSP detained VIP (${vp.cat}) with forged seal!`),
+      arrestToned: L(`Затримано VIP-порушника (${vp.cat}) за підробленою перепусткою.`, `VIP violator (${vp.cat}) detained.`),
+      hasContraband: true,
+      bribeOffer: { amount: vp.usd, currency: "USD", instantOffer: true, nabkRiskJump: vp.risk, isStingTrap: false, syndicateFavor: false },
+      shouldBeApproved: false,
+      violations: [DISCREPANCY.FAKE_ISSUER_SEAL],
+      isWantedTarget: true,
+      storyTag: "VIP_DIVERSE"
+    });
+  }
+
   // Non-repeating queue builder across all Story + 12 Shytomyr Legends + War/Intel + Combinatorial travelers
   let usedStoryTags = new Set();
   let usedShytomyrRun = new Set();
@@ -2728,21 +2886,31 @@
       }
     }
 
-    // 3. Add 1-2 War/Intelligence encounters (Ally courier, Spotter, or Microchip smuggler)
+    // 3. Add 1-2 War/Intelligence encounters (GUR-M courier, Spotter, Microchip smuggler, or Enemy FSM Spy!)
     const warCount = daySpec.extraWar ? 2 : 1;
-    for (let w = 0; w < warCount && q.length < count - 1; w++) {
+    for (let w = 0; w < warCount && q.length < count - 2; w++) {
       const rWar = Math.random();
       const warTrv = (w === 0 && daySpec.extraWar)
         ? createIntelCovertCourier()
-        : (rWar < 0.35 ? createIntelCovertCourier() : (rWar < 0.7 ? createArtillerySpotter() : createMicrochipSmuggler()));
+        : (rWar < 0.25 ? createIntelCovertCourier() : (rWar < 0.5 ? createArtillerySpotter() : (rWar < 0.75 ? createMicrochipSmuggler() : createFsmSleeperSpy())));
       seenNames.add(warTrv.fullName.uk);
       q.push(warTrv);
     }
 
-    // 3b. Rare High-Stakes VIP Escapees (IT Evader, Fleeing MP, Top Corruptor) offering serious USD ($) with real NABK risk!
-    if (q.length < count - 1 && Math.random() < (daySpec.dayNumber >= 3 ? 0.35 : 0.22)) {
+    // 3a. Add 1-2 Foreign Travelers (Francia-Lux, Polandia, Britanika, Karpatia, Germania-Shtos — clean or Dual Citizenship!)
+    const fCount = Math.random() < 0.6 ? 2 : 1;
+    for (let f = 0; f < fCount && q.length < count - 1; f++) {
+      const fTrv = createForeignTraveler();
+      if (!seenNames.has(fTrv.fullName.uk)) {
+        seenNames.add(fTrv.fullName.uk);
+        q.push(fTrv);
+      }
+    }
+
+    // 3b. Rare High-Stakes VIP Escapees (10 diverse categories!) offering serious 💵 with real NABK risk!
+    if (q.length < count - 1 && Math.random() < (daySpec.dayNumber >= 3 ? 0.42 : 0.28)) {
       const rVip = Math.random();
-      const vipTrv = rVip < 0.5 ? createItEvaderVip() : (rVip < 0.82 ? createDeputyEscapee() : createTopCorruptor());
+      const vipTrv = rVip < 0.2 ? createItEvaderVip() : (rVip < 0.38 ? createDeputyEscapee() : (rVip < 0.52 ? createTopCorruptor() : createDiverseVipEscapee()));
       if (!seenNames.has(vipTrv.fullName.uk)) {
         seenNames.add(vipTrv.fullName.uk);
         q.push(vipTrv);
@@ -4740,8 +4908,8 @@
         else if (t.storyTag === "INTEL_ALLY") tabletBadge = `<div style="background:#1565C0;color:#FFF;padding:3px 7px;border-radius:4px;font-size:10.5px;font-weight:700;">💻 БАЗА СБК: 🦅 Допуск ГУР/СБК підтверджено</div>`;
       }
       if (hasIphon) {
-        if (t.violations.some(v => v.code === "INVALID_QR_CODE")) tabletBadge += `<div style="background:#4A148C;color:#FFF;padding:3px 7px;border-radius:4px;font-size:10.5px;font-weight:700;">📱 АЙФОН-БОТ: ❌ QR «Облік+» НЕДІЙСНИЙ!</div>`;
-        else if (t.violations.some(v => v.code === "PHOTO_MISMATCH")) tabletBadge += `<div style="background:#4A148C;color:#FFF;padding:3px 7px;border-radius:4px;font-size:10.5px;font-weight:700;">📱 АЙФОН-БОТ: ⚠️ Фото в паспорті підмінене!</div>`;
+        if (t.violations.some(v => v.code === "INVALID_QR_CODE")) tabletBadge += `<div style="background:#4A148C;color:#FFF;padding:3px 7px;border-radius:4px;font-size:10.5px;font-weight:700;">📱 ЯБЛУФОН-БОТ: ❌ QR «Облік+» НЕДІЙСНИЙ!</div>`;
+        else if (t.violations.some(v => v.code === "PHOTO_MISMATCH")) tabletBadge += `<div style="background:#4A148C;color:#FFF;padding:3px 7px;border-radius:4px;font-size:10.5px;font-weight:700;">📱 ЯБЛУФОН-БОТ: ⚠️ Фото в паспорті підмінене!</div>`;
       }
 
       let activeSpeech = t.greeting;
