@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v2.12";
+  const BUILD_VERSION = "v2.13";
   let confirmResetArmed = false;
 
   // Fallback for older Safari lacking CanvasRenderingContext2D.roundRect
@@ -4119,6 +4119,8 @@
     state.coffeeTipGiven = false;
     state.justShook = false;
     state.spottedCodes = [];
+    state.scanActive = false;
+    state.scanFailedMsg = false;
     const t = state.queue[state.travelerIdx];
     if (t && state.ownedAssets.includes("uv_endoscope")) {
       for (const v of t.violations) {
@@ -5049,6 +5051,19 @@
               </div>
             ` : ""}
           </div>
+          ${state.scanActive ? `
+            <div class="scanner-box">
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:#E0B145;font-weight:800;">
+                <span>📡 ${tr(L("СКАНЕР РЕЄСТРУ: Влучи в зелену зону!", "REGISTRY SCANNER: Hit the green zone!"), state.lang)}</span>
+                ${state.scanFailedMsg ? `<span style="color:#FF5252;">${tr(L("Збій (-4s)!", "Miss (-4s)!"), state.lang)}</span>` : ""}
+              </div>
+              <div class="scanner-track">
+                <div class="scanner-zone"></div>
+                <div class="scanner-cursor"></div>
+              </div>
+              <button type="button" id="btn-scanner-hit" class="btn-mustard" style="padding:7px;font-size:12px;">🎯 ${tr(L("ЗЛОВИТИ СИГНАЛ", "LOCK SIGNAL"), state.lang)}</button>
+            </div>
+          ` : ""}
           <div class="row-between">
             <button type="button" id="btn-interrogate" class="btn-outline" style="flex:1;background:#3E2723;">${tr(L("🔍 Вказати на помилку / Допитати", "🔍 Point Out Issue / Question"), state.lang)}</button>
           </div>
@@ -5158,12 +5173,21 @@
         audio.playKnock();
         state.reactionState = "INTIMIDATED";
         state.justShook = true;
+        // Real effect: shouting at a guilty suspect can crack their nerves and expose a paper/wire clue!
+        if (!t.shouldBeApproved && state.spottedCodes.length === 0 && Math.random() < 0.6) {
+          const clue = t.violations.find(v => v.code !== "CONTRABAND_CARGO" && v.code !== "VEHICLE_MISMATCH");
+          if (clue) state.spottedCodes.push(clue.code);
+        }
         render();
       });
 
       document.getElementById("react-coffee").addEventListener("click", () => {
         audio.playCoffee();
         state.reactionState = "COFFEE_GIVEN";
+        if (t.shouldBeApproved && !state.coffeeTipGiven) {
+          state.familyMorale = Math.min(100, state.familyMorale + 2);
+          if (t.storyTag === "INTEL_ALLY") state.sbkRep = Math.min(100, state.sbkRep + 3);
+        }
         if (!state.coffeeTipGiven && t.coffeeTip > 0) {
           state.coffeeTipGiven = true;
           const meta = getMetaPerkFlags();
@@ -5205,16 +5229,49 @@
         audio.playTap();
         state.interrogated = true;
         state.reactionState = "NONE";
-        // Interrogation / registry check catches paper/registry discrepancies only (visual photo, vehicle clone & contraband must be spotted manually!)
         const paperDisc = t.violations.find(v =>
           v.code !== "CONTRABAND_CARGO" &&
           v.code !== "VEHICLE_MISMATCH" &&
           v.code !== "PHOTO_MISMATCH" &&
           !state.spottedCodes.includes(v.code)
         );
-        if (paperDisc) state.spottedCodes.push(paperDisc.code);
+        if (paperDisc) {
+          if (hasSbkTablet) {
+            state.spottedCodes.push(paperDisc.code);
+            state.scanActive = false;
+          } else {
+            state.scanActive = true;
+            state.scanFailedMsg = false;
+          }
+        }
         render();
       });
+
+      const scanHitBtn = document.getElementById("btn-scanner-hit");
+      if (scanHitBtn) {
+        scanHitBtn.addEventListener("click", () => {
+          // 1.4s triangle wave: 0..0.7s goes 2% -> 94%, 0.7..1.4s goes 94% -> 2%
+          const phase = (Date.now() % 1400) / 1400;
+          const posPct = phase <= 0.5 ? (2 + (phase * 2) * 92) : (94 - ((phase - 0.5) * 2) * 92);
+          if (posPct >= 30 && posPct <= 70) {
+            audio.playApprove();
+            state.scanActive = false;
+            state.scanFailedMsg = false;
+            const paperDisc = t.violations.find(v =>
+              v.code !== "CONTRABAND_CARGO" &&
+              v.code !== "VEHICLE_MISMATCH" &&
+              v.code !== "PHOTO_MISMATCH" &&
+              !state.spottedCodes.includes(v.code)
+            );
+            if (paperDisc) state.spottedCodes.push(paperDisc.code);
+          } else {
+            audio.playDeny();
+            state.scanFailedMsg = true;
+            state.shiftSec = Math.max(5, state.shiftSec - 4);
+          }
+          render();
+        });
+      }
 
       const bribeBtn = document.getElementById("btn-take-bribe");
       if (bribeBtn && bribeInfo) {
