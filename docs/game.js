@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v3.2";
+  const BUILD_VERSION = "v3.3";
   let confirmResetArmed = false;
 
   // Fallback for older Safari lacking CanvasRenderingContext2D.roundRect
@@ -574,6 +574,82 @@
       title: L("Вілла на березі Алікантово (Іспанщина) + Золотий паспорт", "Alikantovo Seafront Villa (Spainia) & Golden Visa"),
       subtitle: L("Вершина імперії нерухомості + пасивні +5 000 🪙 і +5 000 💵 щоранку!", "Peak real-estate empire + 5,000 🪙 & 5,000 💵 passive yield every morning!"),
       cost: 350000, passiveIncome: 5000, passiveUsd: 5000, dailyRisk: 0, tolikBoost: 0, palychBoost: 0, moraleBoost: 35
+    }
+  ];
+
+  // Add-ons & Upgrades unlocked once you own the base asset (Crocs pool, OSINT app, etc.!)
+  const ASSET_ADDONS = [
+    {
+      id: "addon_syrup_bar",
+      parentId: "espresso_machine",
+      currency: "UAH",
+      icon: "🍯",
+      title: L("Сироп-бар та круасани у будці", "Syrup Bar & Croissants"),
+      subtitle: L("+40 🪙 до кожних чайових за каву!", "+40 🪙 bonus to every coffee tip!"),
+      cost: 3200, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 5
+    },
+    {
+      id: "addon_osint_app",
+      parentId: "iphon_17_pro",
+      currency: "UAH",
+      icon: "🛰️",
+      title: L("Додаток «Око-КПП» (OSINT-Радар)", "'Eye-Post' OSINT Radar App"),
+      subtitle: L("Миттєво позначає шпигунів ФСМ та незбіги ПІБ прямо в черзі!", "Auto-flags FSM spies & name mismatches!"),
+      cost: 18000, passiveIncome: 0, passiveUsd: 0, dailyRisk: -2, tolikBoost: 0, palychBoost: 0, moraleBoost: 5
+    },
+    {
+      id: "addon_night_grill",
+      parentId: "shawarma_kiosk",
+      currency: "UAH",
+      icon: "🔥",
+      title: L("Цілодобовий нічний гриль + чебуреки", "24/7 Night Grill Extension"),
+      subtitle: L("+800 🪙 чистого білого прибутку щоранку!", "+800 🪙 legal profit every morning!"),
+      cost: 14000, passiveIncome: 800, passiveUsd: 0, dailyRisk: 0, tolikBoost: 5, palychBoost: 5, moraleBoost: 5
+    },
+    {
+      id: "addon_migalka",
+      parentId: "euro_bmw",
+      currency: "USD",
+      icon: "🚨",
+      title: L("Стробоскопи та «блатні» номери КР 0001", "VIP Strobes & KR 0001 Plates"),
+      subtitle: L("+15с до кожної зміни (доїзд без пробок) + 15 поваги Толіка і Палича!", "+15s shift time + 15 Tolik & Palych rep!"),
+      cost: 8500, passiveIncome: 0, passiveUsd: 0, dailyRisk: 3, tolikBoost: 15, palychBoost: 15, moraleBoost: 5
+    },
+    {
+      id: "addon_croc_pool",
+      parentId: "kyivhrad_flat",
+      currency: "USD",
+      icon: "🐊",
+      title: L("Басейн на даху з ручним крокодилом «Гена»", "Rooftop Pool with Pet Crocodile 'Gena'"),
+      subtitle: L("+1 800 🪙 оренди за VIP-вечірки щоранку + 20% щастя сім'ї!", "+1,800 🪙 VIP party rent every morning + 20% family morale!"),
+      cost: 22000, passiveIncome: 1800, passiveUsd: 0, dailyRisk: 3, tolikBoost: 10, palychBoost: 10, moraleBoost: 20
+    },
+    {
+      id: "addon_heli_pad",
+      parentId: "carpathian_chalet",
+      currency: "USD",
+      icon: "🚁",
+      title: L("Персональний гелікоптер «Бджілка-М»", "Private Helicopter 'Bdzhilka-M'"),
+      subtitle: L("+1 200 💵 чартеру щоранку та -8% ризику НАБК щодня!", "+1,200 💵 charter every morning & -8% daily NABK risk!"),
+      cost: 45000, passiveIncome: 0, passiveUsd: 1200, dailyRisk: -8, tolikBoost: 10, palychBoost: 10, moraleBoost: 15
+    },
+    {
+      id: "addon_gold_jacuzzi",
+      parentId: "monako_yacht",
+      currency: "USD",
+      icon: "🛁",
+      title: L("Золоте джакузі на верхній палубі", "Gold Deck Jacuzzi"),
+      subtitle: L("+900 💵 чартерного доходу щоранку!", "+900 💵 extra charter income every morning!"),
+      cost: 25000, passiveIncome: 0, passiveUsd: 900, dailyRisk: 2, tolikBoost: 10, palychBoost: 5, moraleBoost: 15
+    },
+    {
+      id: "addon_vineyard",
+      parentId: "spain_villa",
+      currency: "USD",
+      icon: "🍷",
+      title: L("Власний виноградник та бункер на березі", "Private Vineyard & Coastal Bunker"),
+      subtitle: L("+3 000 💵 прибутку щоранку!", "+3,000 💵 passive yield every morning!"),
+      cost: 65000, passiveIncome: 0, passiveUsd: 3000, dailyRisk: -4, tolikBoost: 0, palychBoost: 0, moraleBoost: 20
     }
   ];
 
@@ -4127,14 +4203,19 @@
 
   function getPassiveRent() {
     const assetRent = ASSET_UPGRADES.filter(a => state.ownedAssets.includes(a.id)).reduce((s, a) => s + a.passiveIncome, 0);
+    const addonRent = ASSET_ADDONS.filter(a => state.ownedAssets.includes(a.id)).reduce((s, a) => s + a.passiveIncome, 0);
     const sbkCovertPay = state.isUndercoverSbkAgent ? (state.sbkColonelPromoted ? 2500 : 1200) : 0;
-    return assetRent + sbkCovertPay;
+    return assetRent + addonRent + sbkCovertPay;
   }
   function getPassiveUsd() {
-    return ASSET_UPGRADES.filter(a => state.ownedAssets.includes(a.id)).reduce((s, a) => s + (a.passiveUsd || 0), 0);
+    const baseUsd = ASSET_UPGRADES.filter(a => state.ownedAssets.includes(a.id)).reduce((s, a) => s + (a.passiveUsd || 0), 0);
+    const addonUsd = ASSET_ADDONS.filter(a => state.ownedAssets.includes(a.id)).reduce((s, a) => s + (a.passiveUsd || 0), 0);
+    return baseUsd + addonUsd;
   }
   function getDailyAssetRisk() {
-    return ASSET_UPGRADES.filter(a => state.ownedAssets.includes(a.id)).reduce((s, a) => s + a.dailyRisk, 0);
+    const baseR = ASSET_UPGRADES.filter(a => state.ownedAssets.includes(a.id)).reduce((s, a) => s + a.dailyRisk, 0);
+    const addonR = ASSET_ADDONS.filter(a => state.ownedAssets.includes(a.id)).reduce((s, a) => s + a.dailyRisk, 0);
+    return baseR + addonR;
   }
 
   function pickTonightBills() {
@@ -4219,7 +4300,7 @@
     const meta = getMetaPerkFlags();
     const baseSec = state.isSandbox ? 300 : 270;
     const modDelta = state.sandboxMod ? (state.sandboxMod.shiftSecDelta || 0) : 0;
-    const bonusSec = (state.ownedAssets.includes("espresso_machine") ? 35 : 0) + (state.ownedAssets.includes("porsche_911") ? 35 : 0) + meta.shiftTimeBonus + modDelta;
+    const bonusSec = (state.ownedAssets.includes("espresso_machine") ? 35 : 0) + (state.ownedAssets.includes("porsche_911") ? 35 : 0) + (state.ownedAssets.includes("addon_migalka") ? 15 : 0) + meta.shiftTimeBonus + modDelta;
     state.phase = "BOOTH_SHIFT";
     state.shiftSec = Math.max(150, baseSec + bonusSec);
     state.travelerIdx = 0;
@@ -5274,6 +5355,10 @@
         if (t.violations.some(v => v.code === "INVALID_QR_CODE")) tabletBadge += `<div style="background:#4A148C;color:#FFF;padding:3px 7px;border-radius:4px;font-size:10.5px;font-weight:700;">📱 ЯБЛУФОН-БОТ: ❌ QR «Облік+» НЕДІЙСНИЙ!</div>`;
         else if (t.violations.some(v => v.code === "PHOTO_MISMATCH")) tabletBadge += `<div style="background:#4A148C;color:#FFF;padding:3px 7px;border-radius:4px;font-size:10.5px;font-weight:700;">📱 ЯБЛУФОН-БОТ: ⚠️ Фото в паспорті підмінене!</div>`;
       }
+      if (state.ownedAssets.includes("addon_osint_app")) {
+        if (t.storyTag === "FSM_SPY") tabletBadge += `<div style="background:#311B92;color:#FFF;padding:3px 7px;border-radius:4px;font-size:10.5px;font-weight:700;">🛰️ ОКО-КПП OSINT: 🚨 Профіль ФСМ виявлено!</div>`;
+        else if (t.violations.some(v => v.code === "NAME_MISMATCH")) tabletBadge += `<div style="background:#311B92;color:#FFF;padding:3px 7px;border-radius:4px;font-size:10.5px;font-weight:700;">🛰️ ОКО-КПП OSINT: ⚠️ Розбіжність ПІБ!</div>`;
+      }
 
       let activeSpeech = t.greeting;
       if (state.reactionState === "INTIMIDATED") activeSpeech = t.intimidateReply || t.interrogationReply;
@@ -5532,7 +5617,7 @@
           state.coffeeTipGiven = true;
           const meta = getMetaPerkFlags();
           const cMult = (state.sandboxMod ? (state.sandboxMod.coffeeMult || 1) : 1) * (state.ownedAssets.includes("balenci_jacket") ? 1.25 : 1);
-          const tip = Math.round(t.coffeeTip * cMult) + (state.ownedAssets.includes("espresso_machine") ? 35 : 0) + meta.coffeeTipBonus;
+          const tip = Math.round(t.coffeeTip * cMult) + (state.ownedAssets.includes("espresso_machine") ? 35 : 0) + (state.ownedAssets.includes("addon_syrup_bar") ? 40 : 0) + meta.coffeeTipBonus;
           state.money += tip;
           state.lastFeedback = {
             ok: true,
@@ -5883,6 +5968,50 @@
           });
           card.appendChild(b);
           listEl.appendChild(card);
+
+          // Render unlocked Add-ons (Pool with Crocs, OSINT App, Night Grill, etc.) if parent asset is owned!
+          if (owned) {
+            ASSET_ADDONS.filter(ad => ad.parentId === asset.id).forEach(addon => {
+              const adOwned = state.ownedAssets.includes(addon.id);
+              const adIsUsd = addon.currency === "USD";
+              const adCanBuy = !adOwned && canAffordAsset(addon);
+              const adUahEq = getAssetCostUah(addon);
+              const adUsdEq = Math.ceil(adUahEq / USD_UAH_RATE);
+              const adPriceStr = adIsUsd
+                ? `${addon.cost.toLocaleString("en-US")} 💵 (≈ ${adUahEq.toLocaleString("en-US")} 🪙)`
+                : `${addon.cost.toLocaleString("en-US")} 🪙 (≈ ${adUsdEq.toLocaleString("en-US")} 💵)`;
+              const adCard = document.createElement("div");
+              adCard.className = "card-slate row-between";
+              adCard.style.marginLeft = "14px";
+              adCard.style.borderLeft = "3px solid #E0B145";
+              if (adOwned) adCard.style.backgroundColor = "#1B5E20";
+              adCard.innerHTML = `
+                <div style="flex:1;">
+                  <div style="font-size:12px;font-weight:800;color:#FFE082;">↳ ${addon.icon} ${tr(addon.title, state.lang)}</div>
+                  <div style="color:#CFD8DC;font-size:10.5px;line-height:1.3;">${tr(addon.subtitle, state.lang)}</div>
+                  <div style="color:${adIsUsd ? "#81C784" : "#E0B145"};font-size:11px;font-weight:800;">${adPriceStr}</div>
+                </div>
+              `;
+              const ab = document.createElement("button");
+              ab.type = "button";
+              ab.className = "btn-mustard";
+              ab.style.fontSize = "11px";
+              ab.disabled = !adCanBuy;
+              ab.textContent = adOwned ? tr(L("Встановлено", "Installed"), state.lang) : tr(L("Додати", "Add"), state.lang);
+              ab.addEventListener("click", () => {
+                audio.playBribe();
+                payForAsset(addon);
+                state.ownedAssets.push(addon.id);
+                state.tolikRep = Math.min(100, state.tolikRep + addon.tolikBoost);
+                state.palychRep = Math.min(100, state.palychRep + addon.palychBoost);
+                state.familyMorale = Math.min(100, state.familyMorale + addon.moraleBoost);
+                saveStateToStorage();
+                render();
+              });
+              adCard.appendChild(ab);
+              listEl.appendChild(adCard);
+            });
+          }
         });
       }
 
