@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v5.0";
+  const BUILD_VERSION = "v5.1";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -2233,7 +2233,7 @@
       coffeeReply: L("«*Дмухає на каву, перука з'їжджає набік* Ой, гаряченька!»", "'*Blows on coffee, wig shifts slightly* Oh, nice and hot!'"),
       arrestFull: L("Коли хустку й біляву перуку зняли, з'ясувалося що «Тітка Галя» — це Петро Пасічник із Левгорода!", "Once the wig came off, 'Aunt Halya' turned out to be Petro from Levhorod!"),
       arrestToned: L("Порушника з чужим паспортом затримано.", "Impersonator detained."),
-      bribeOffer: { amount: 380, isStingTrap: false, syndicateFavor: false },
+      bribeOffer: { amount: 120, currency: "USD", isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.PHOTO_MISMATCH],
       storyTag: "AUNT_HALYA"
@@ -2272,7 +2272,7 @@
       arrestFull: L("Група СБК витягає із труни «небіжчика в ластах» та затримує водія катафалка!", "SBK pulls the 'deceased in swim fins' out of the coffin and cuffs the driver!"),
       arrestToned: L("Спроба незаконного переправлення особи у тайнику викрита.", "Stowaway smuggling attempt prevented."),
       hasContraband: true,
-      bribeOffer: { amount: 650, isStingTrap: false, syndicateFavor: false },
+      bribeOffer: { amount: 180, currency: "USD", isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.CONTRABAND_CARGO],
       storyTag: "COFFIN"
@@ -2311,7 +2311,7 @@
       arrestFull: L("Толіка «Бусика» беруть на гарячому — контрабандна мережа зазнала важких втрат!", "Tolik 'Busyk' is busted red-handed — smuggling syndicate takes a heavy hit!"),
       arrestToned: L("Перевізника з незадекларованим вантажем затримано.", "Carrier with undeclared contraband detained."),
       hasContraband: true,
-      bribeOffer: { amount: 700, isStingTrap: false, syndicateFavor: true },
+      bribeOffer: { amount: 220, currency: "USD", isStingTrap: false, syndicateFavor: true },
       shouldBeApproved: false,
       violations: [DISCREPANCY.CONTRABAND_CARGO],
       storyTag: "TOLIK_RUN"
@@ -2474,7 +2474,7 @@
       arrestFull: L("Псевдоволонтера пакують у бус СБК під його ж власний стрім!", "The fake charity influencer gets cuffed on his own livestream!"),
       arrestToned: L("Затримано за комерційну контрабанду під виглядом гуманітарки.", "Detained for commercial smuggling under false charity guise."),
       hasContraband: true,
-      bribeOffer: { amount: 3400, currency: "UAH", requiresDiscovery: true, isStingTrap: false, syndicateFavor: false },
+      bribeOffer: { amount: 160, currency: "USD", requiresDiscovery: true, isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.CONTRABAND_CARGO],
       storyTag: "FAKE_BLOGGER"
@@ -2515,7 +2515,7 @@
       coffeeTip: isLegit ? 60 : 0,
       arrestFull: L(isLegit ? "Ти затримав справжнього кіберінженера!" : "Шахрая з вигаданою крипто-печаткою затримано!", isLegit ? "You detained a real cyber engineer!" : "Detained for bogus crypto seal!"),
       arrestToned: L("Мандрівника на самокаті затримано.", "Scooter rider detained."),
-      bribeOffer: isLegit ? null : { amount: 450, isStingTrap: false, syndicateFavor: false },
+      bribeOffer: isLegit ? null : { amount: 140, currency: "USD", isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: isLegit,
       violations: isLegit ? [] : [DISCREPANCY.FAKE_ISSUER_SEAL],
       storyTag: `CRYPTO_${dayNum}`
@@ -2787,20 +2787,20 @@
     L("Фотоштативи, дрон DJI-Іграшка (дитячий) та рюкзак", "Tripods, toy drone & backpack")
   ];
   const CONTRABAND_COVERS = [
-    { decl: L("Старі дерев'яні меблі та килими", "Antique wooden furniture & rugs"), found: L("ПЕС «БАВОВНА» РОЗГРИЗ ОБШИВКУ: У ніжках столу сховано 50 блоків контрабандних сигарет!", "DOG SEARCH: Table legs packed with 50 smuggled cigarette cartons!"), bribeAmount: 2400, currency: "UAH" },
-    { decl: L("Мішки з будівельним гіпсом та шпаклівкою", "Sacks of construction plaster"), found: L("ПЕС «БАВОВНА» РОЗКОПАВ ГІПС: Усередині мішків — каміння нелегального бурштину з Бурштинівки!", "DOG SEARCH: Sacks hide raw Burshtynivka amber!"), bribeAmount: 1800, currency: "USD" },
-    { decl: L("Запасні автомобільні шини (4 шт.)", "Spare car tires (4 pcs)"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА ЗАПАСКУ: Всередині покришок заховані пачки нелегальної валюти та чужі паспорти!", "DOG SEARCH: Tires stuffed with undeclared cash and forged passports!"), bribeAmount: 2500, currency: "USD" },
-    { decl: L("Паливні баки та запчастини до фур", "Fuel cans & truck spare parts"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ ТАЙНИК: Під сидінням 400 л краденого дизелю та паливні талони!", "DOG SEARCH: Stolen diesel & black-market fuel coupons under the seat!"), bribeAmount: 3200, currency: "UAH" },
-    { decl: L("Коробки з «гуманітарним одягом»", "Boxes of 'humanitarian clothes'"), found: L("ПЕС «БАВОВНА» ПОРВАВ СКОТЧ: У коробках сховані підсанкційні мікрочіпи й комплектуючі до дронів!", "DOG SEARCH: Boxes hide sanctioned microchips & drone parts!"), bribeAmount: 4200, currency: "USD" },
-    { decl: L("Рулони килимів від бабусі", "Rolled vintage carpets"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ СХОВАНКУ: Усередині рулонів — старовинні ікони та срібні монети на вивіз!", "DOG SEARCH: Rolled carpets conceal antique icons & silver coins!"), bribeAmount: 2800, currency: "USD" },
-    { decl: L("Металобрухт на переробку", "Scrap metal for recycling"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА БАГАЖНИК: Під лахміттям вирізані автокаталізатори та бухти мідного кабелю!", "DOG SEARCH: Stolen catalytic converters & copper cables under rags!"), bribeAmount: 2900, currency: "UAH" },
-    { decl: L("Подарункові кошики з шоколадом", "Gift baskets with chocolate"), found: L("ПЕС «БАВОВНА» ЗІРВАВ ФАЛЬШ-ДНО: Під цукерками — ящики безакцизного алкоголю та вейпів!", "DOG SEARCH: False bottom packed with untaxed liquor & vapes!"), bribeAmount: 3600, currency: "UAH" },
-    { decl: L("Тубуси з «дитячими малюнками»", "Tubes with 'kids drawings'"), found: L("ПЕС «БАВОВНА» ПОРВАВ ТУБУСИ: Викрадені музейні полотна XIX століття без декларації!", "DOG SEARCH: Stolen 19th-century museum paintings!"), bribeAmount: 5500, currency: "USD" },
-    { decl: L("Холодильник для риби та льоду", "Cooler for fish & ice"), found: L("ПЕС «БАВОВНА» ВІДКРИВ ХОЛОДИЛЬНИК: 18 кг нелегальної чорної ікри та раритетних молюсків!", "DOG SEARCH: 18kg of smuggled black caviar!"), bribeAmount: 3100, currency: "USD" },
-    { decl: L("Туристичні намети й каремати", "Camping tents & mats"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ У НАМЕТАХ: 6 тепловізорів подвійного призначення без документів!", "DOG SEARCH: 6 undeclared thermal optics inside tent rolls!"), bribeAmount: 4800, currency: "USD" },
-    { decl: L("Книжки з кулінарії та журнали", "Cookbooks & magazines"), found: L("ПЕС «БАВОВНА» ВИРВАВ ОБКЛАДИНКУ: Порожнисті томи набиті контрабандними золотими ланцюжками!", "DOG SEARCH: Hollowed books stuffed with gold chains!"), bribeAmount: 3800, currency: "USD" },
-    { decl: L("Пластикові каністри з водою", "Plastic water jerrycans"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА КАНИСТРИ: Замість води — 60 літрів підпільного спирту!", "DOG SEARCH: 60 liters of bootleg spirit inside water cans!"), bribeAmount: 2600, currency: "UAH" },
-    { decl: L("Акваріумні фільтри та трубки", "Aquarium filters & tubes"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ ТЕРАРІУМ: Контрабанда екзотичних хамелеонів та рідкісних папуг!", "DOG SEARCH: Smuggled exotic chameleons & rare parrots!"), bribeAmount: 2200, currency: "USD" }
+    { decl: L("Старі дерев'яні меблі та килими", "Antique wooden furniture & rugs"), found: L("ПЕС «БАВОВНА» РОЗГРИЗ ОБШИВКУ: У ніжках столу сховано 50 блоків контрабандних сигарет!", "DOG SEARCH: Table legs packed with 50 smuggled cigarette cartons!"), bribeAmount: 140, currency: "USD" },
+    { decl: L("Мішки з будівельним гіпсом та шпаклівкою", "Sacks of construction plaster"), found: L("ПЕС «БАВОВНА» РОЗКОПАВ ГІПС: Усередині мішків — каміння нелегального бурштину з Бурштинівки!", "DOG SEARCH: Sacks hide raw Burshtynivka amber!"), bribeAmount: 350, currency: "USD" },
+    { decl: L("Запасні автомобільні шини (4 шт.)", "Spare car tires (4 pcs)"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА ЗАПАСКУ: Всередині покришок заховані пачки нелегальної валюти та чужі паспорти!", "DOG SEARCH: Tires stuffed with undeclared cash and forged passports!"), bribeAmount: 420, currency: "USD" },
+    { decl: L("Паливні баки та запчастини до фур", "Fuel cans & truck spare parts"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ ТАЙНИК: Під сидінням 400 л краденого дизелю та паливні талони!", "DOG SEARCH: Stolen diesel & black-market fuel coupons under the seat!"), bribeAmount: 160, currency: "USD" },
+    { decl: L("Коробки з «гуманітарним одягом»", "Boxes of 'humanitarian clothes'"), found: L("ПЕС «БАВОВНА» ПОРВАВ СКОТЧ: У коробках сховані підсанкційні мікрочіпи й комплектуючі до дронів!", "DOG SEARCH: Boxes hide sanctioned microchips & drone parts!"), bribeAmount: 650, currency: "USD" },
+    { decl: L("Рулони килимів від бабусі", "Rolled vintage carpets"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ СХОВАНКУ: Усередині рулонів — старовинні ікони та срібні монети на вивіз!", "DOG SEARCH: Rolled carpets conceal antique icons & silver coins!"), bribeAmount: 480, currency: "USD" },
+    { decl: L("Металобрухт на переробку", "Scrap metal for recycling"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА БАГАЖНИК: Під лахміттям вирізані автокаталізатори та бухти мідного кабелю!", "DOG SEARCH: Stolen catalytic converters & copper cables under rags!"), bribeAmount: 150, currency: "USD" },
+    { decl: L("Подарункові кошики з шоколадом", "Gift baskets with chocolate"), found: L("ПЕС «БАВОВНА» ЗІРВАВ ФАЛЬШ-ДНО: Під цукерками — ящики безакцизного алкоголю та вейпів!", "DOG SEARCH: False bottom packed with untaxed liquor & vapes!"), bribeAmount: 190, currency: "USD" },
+    { decl: L("Тубуси з «дитячими малюнками»", "Tubes with 'kids drawings'"), found: L("ПЕС «БАВОВНА» ПОРВАВ ТУБУСИ: Викрадені музейні полотна XIX століття без декларації!", "DOG SEARCH: Stolen 19th-century museum paintings!"), bribeAmount: 750, currency: "USD" },
+    { decl: L("Холодильник для риби та льоду", "Cooler for fish & ice"), found: L("ПЕС «БАВОВНА» ВІДКРИВ ХОЛОДИЛЬНИК: 18 кг нелегальної чорної ікри та раритетних молюсків!", "DOG SEARCH: 18kg of smuggled black caviar!"), bribeAmount: 520, currency: "USD" },
+    { decl: L("Туристичні намети й каремати", "Camping tents & mats"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ У НАМЕТАХ: 6 тепловізорів подвійного призначення без документів!", "DOG SEARCH: 6 undeclared thermal optics inside tent rolls!"), bribeAmount: 680, currency: "USD" },
+    { decl: L("Книжки з кулінарії та журнали", "Cookbooks & magazines"), found: L("ПЕС «БАВОВНА» ВИРВАВ ОБКЛАДИНКУ: Порожнисті томи набиті контрабандними золотими ланцюжками!", "DOG SEARCH: Hollowed books stuffed with gold chains!"), bribeAmount: 560, currency: "USD" },
+    { decl: L("Пластикові каністри з водою", "Plastic water jerrycans"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА КАНИСТРИ: Замість води — 60 літрів підпільного спирту!", "DOG SEARCH: 60 liters of bootleg spirit inside water cans!"), bribeAmount: 130, currency: "USD" },
+    { decl: L("Акваріумні фільтри та трубки", "Aquarium filters & tubes"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ ТЕРАРІУМ: Контрабанда екзотичних хамелеонів та рідкісних папуг!", "DOG SEARCH: Smuggled exotic chameleons & rare parrots!"), bribeAmount: 380, currency: "USD" }
   ];
 
   function createProceduralTraveler(daySpec) {
@@ -3100,20 +3100,21 @@
         coffeeReply: L("«Дякую! Гаряча кава краще за будь-яке СТО!»", "'Thanks! Better than any mechanic!'"),
         arrestFull: L("Авто-двійника з перебитими номерами конфісковано, водія затримано!", "Cloned vehicle confiscated and driver arrested!"),
         arrestToned: L("Виявлено невідповідність транспорту техпаспорту.", "Vehicle mismatch detained."),
-        bribeOffer: { amount: 3200, currency: "UAH", requiresDiscovery: true, isStingTrap: false, syndicateFavor: false },
+        bribeOffer: { amount: 180, currency: "USD", requiresDiscovery: true, isStingTrap: false, syndicateFavor: false },
         shouldBeApproved: false,
         violations: [DISCREPANCY.VEHICLE_MISMATCH]
       });
     }
 
     if (scheme === 5 && daySpec.requireVehicleDecl) {
-      // CONTRABAND_CARGO hidden behind plausible declaration (revealed on Dog Search!)
+      // CONTRABAND_CARGO hidden behind plausible declaration (only in cars/vans, never e-scooters!)
       const fullName = randomFullName("M");
       const age = randInt(28, 53);
       const portrait = randomPortrait("M");
       const cCase = pick(CONTRABAND_COVERS);
+      const carOnlyMeta = makeTransportMeta(pick(TRANSPORT_CATALOG.filter(m => m.isCar)), null, generatePlate(city.code, true));
       return buildTravelerFromParts({
-        fullName, age, gender: "M", portrait, transport: trMeta,
+        fullName, age, gender: "M", portrait, transport: carOnlyMeta,
         passportFields: [
           { label: L("ПІБ", "Full Name"), value: fullName, disc: null },
           { label: L("Вік / Стать", "Age / Sex"), value: L(`${age} р. • ЧОЛ`, `${age} y/o • M`), disc: null },
@@ -4307,10 +4308,10 @@
     let rankScale = 1;
     if (currency === "USD" && !offer.isStingTrap) {
       const d = state.daySpec ? state.daySpec.dayNumber : 1;
-      if (state.sbkColonelPromoted || d >= 8) rankScale = 25;
-      else if (d >= 5) rankScale = 8;
-      else if (d >= 3) rankScale = 3;
-      else rankScale = 1;
+      if (state.sbkColonelPromoted || d >= 8) rankScale = 1.5;
+      else if (d >= 5) rankScale = 1.25;
+      else if (d >= 3) rankScale = 1.1;
+      else rankScale = 1.0;
     }
     const amt = Math.round(offer.amount * rankScale * modMult * jacketMult);
     return {
@@ -4786,11 +4787,11 @@
         const undercoverBounty = state.isUndercoverSbkAgent ? 2500 : 0;
         const isHighValueSpyOrVip = t.isWantedTarget || t.storyTag === "FSM_SPY" || t.storyTag === "SABOTEUR" || t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE";
         const baseDetainBounty = isHighValueSpyOrVip
-          ? (10000 + Math.floor(Math.random() * 10001))
-          : (3500 + Math.floor(Math.random() * 3001));
-        const badgeBonus = (badges.includes("SBK_SHIELD") ? 800 : 0) + (badges.includes("VSP_GUARD") && (t.storyTag === "DUAL_CITIZEN" || t.storyTag === "VIP_DIVERSE") ? 1200 : 0);
+          ? (10000 + Math.floor(Math.random() * 8001))
+          : (1200 + Math.floor(Math.random() * 1001));
+        const badgeBonus = (badges.includes("SBK_SHIELD") ? 600 : 0) + (badges.includes("VSP_GUARD") && (t.storyTag === "DUAL_CITIZEN" || t.storyTag === "VIP_DIVERSE") ? 800 : 0);
         detainBonus = baseDetainBounty + undercoverBounty + badgeBonus + ((state.sandboxMod ? state.sandboxMod.detainExtra : 0) * 5);
-        state.sbkRep = Math.min(100, state.sbkRep + (isHighValueSpyOrVip ? 22 : 9));
+        state.sbkRep = Math.min(100, state.sbkRep + (isHighValueSpyOrVip ? 14 : 4));
         state.totalCareerDetained += 1;
         if (state.totalCareerDetained >= 3) unlockAgencyBadge("SBK_SHIELD");
         if (t.storyTag === "FSM_SPY") { unlockAgencyBadge("GUR_FALCON"); unlockDiscovery("DISC_FSM_SPY"); }
