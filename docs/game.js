@@ -1,7 +1,14 @@
 (() => {
   "use strict";
 
-  const SAVE_KEY = "border_shift_save_v2";
+  const SAVE_KEY = "border_shift_save_v3";
+
+  // Fallback for older Safari lacking CanvasRenderingContext2D.roundRect
+  if (typeof CanvasRenderingContext2D !== "undefined" && !CanvasRenderingContext2D.prototype.roundRect) {
+    CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h) {
+      this.rect(x, y, w, h);
+    };
+  }
 
   // Safari fallback for <dialog closedby="any"> per modern-web-guidance
   if (typeof HTMLDialogElement !== "undefined" && !("closedBy" in HTMLDialogElement.prototype)) {
@@ -761,38 +768,45 @@
       this.mood = "CALM_DARK";
       this.musicInterval = null;
       this.chordStep = 0;
+      this._ensuring = false;
     }
 
     ensureCtx() {
-      if (!this.ctx) {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (AudioCtx) {
-          this.ctx = new AudioCtx();
-          const sr = this.ctx.sampleRate;
-          this.noiseBuf = this.ctx.createBuffer(1, sr, sr);
-          const data = this.noiseBuf.getChannelData(0);
-          let b0 = 0, b1 = 0, b2 = 0;
-          for (let i = 0; i < sr; i++) {
-            const white = Math.random() * 2 - 1;
-            b0 = 0.997 * b0 + white * 0.029;
-            b1 = 0.985 * b1 + white * 0.032;
-            b2 = 0.950 * b2 + white * 0.048;
-            data[i] = (b0 + b1 + b2 + white * 0.04) * 0.35;
+      if (this._ensuring) return;
+      this._ensuring = true;
+      try {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) {
+            this.ctx = new AudioCtx();
+            const sr = this.ctx.sampleRate;
+            this.noiseBuf = this.ctx.createBuffer(1, sr, sr);
+            const data = this.noiseBuf.getChannelData(0);
+            let b0 = 0, b1 = 0, b2 = 0;
+            for (let i = 0; i < sr; i++) {
+              const white = Math.random() * 2 - 1;
+              b0 = 0.997 * b0 + white * 0.029;
+              b1 = 0.985 * b1 + white * 0.032;
+              b2 = 0.950 * b2 + white * 0.048;
+              data[i] = (b0 + b1 + b2 + white * 0.04) * 0.35;
+            }
           }
         }
-      }
-      if (this.ctx && this.ctx.state === "suspended") {
-        this.ctx.resume().catch(() => {});
-      }
-      if (!this.musicInterval && this.ctx) {
-        this.startMusicLoop();
+        if (this.ctx && this.ctx.state === "suspended" && typeof this.ctx.resume === "function") {
+          this.ctx.resume().catch(() => {});
+        }
+        if (!this.musicInterval && this.ctx) {
+          this.startMusicLoop();
+        }
+      } catch (_) {} finally {
+        this._ensuring = false;
       }
     }
 
     playNoiseBurst(durationSec, filterType, cutoffHz, qVal, gainVal) {
-      this.ensureCtx();
-      if (!this.ctx || !this.noiseBuf) return;
       try {
+        this.ensureCtx();
+        if (!this.ctx || !this.noiseBuf) return;
         const now = this.ctx.currentTime;
         const src = this.ctx.createBufferSource();
         src.buffer = this.noiseBuf;
@@ -812,9 +826,9 @@
     }
 
     playWarmNote(freq, durationSec, attackSec = 0.02, cutoffHz = 900, gainVal = 0.06, wave = "triangle") {
-      this.ensureCtx();
-      if (!this.ctx) return;
       try {
+        this.ensureCtx();
+        if (!this.ctx) return;
         const now = this.ctx.currentTime;
         const osc = this.ctx.createOscillator();
         const filter = this.ctx.createBiquadFilter();
@@ -899,9 +913,9 @@
     }
 
     playSiren() {
-      this.ensureCtx();
-      if (!this.ctx) return;
       try {
+        this.ensureCtx();
+        if (!this.ctx) return;
         const now = this.ctx.currentTime;
         const osc1 = this.ctx.createOscillator();
         const osc2 = this.ctx.createOscillator();
@@ -938,6 +952,7 @@
     }
 
     startMusicLoop() {
+      if (this.musicInterval) return;
       const chords = [
         [146.83, 220.00, 261.63, 329.63],
         [116.54, 174.61, 220.00, 293.66],
@@ -946,38 +961,41 @@
       ];
 
       const playPadSlice = () => {
-        if (!this.musicEnabled || !this.ctx || this.ctx.state !== "running" || document.hidden) return;
-        const chord = chords[this.chordStep % chords.length];
-        this.chordStep = (this.chordStep + 1) % chords.length;
+        try {
+          if (!this.musicEnabled || !this.ctx || this.ctx.state !== "running" || document.hidden) return;
+          const chord = chords[this.chordStep % chords.length];
+          this.chordStep = (this.chordStep + 1) % chords.length;
 
-        const isTense = this.mood === "TENSE";
-        const isBooth = this.mood === "BOOTH_NORMAL";
-        const cutoff = isTense ? 520 : (isBooth ? 420 : 340);
+          const isTense = this.mood === "TENSE";
+          const isBooth = this.mood === "BOOTH_NORMAL";
+          const cutoff = isTense ? 520 : (isBooth ? 420 : 340);
 
-        chord.forEach((freq, idx) => {
-          const voiceGain = idx === 0 ? 0.022 : 0.011;
-          this.playWarmNote(freq, 3.5, 1.3, cutoff, voiceGain, idx === 0 ? "sine" : "triangle");
-        });
+          chord.forEach((freq, idx) => {
+            const voiceGain = idx === 0 ? 0.022 : 0.011;
+            this.playWarmNote(freq, 3.5, 1.3, cutoff, voiceGain, idx === 0 ? "sine" : "triangle");
+          });
 
-        if (isBooth || isTense) {
-          const melodyFreq = chord[(this.chordStep + 1) % chord.length] * 2;
-          setTimeout(() => {
-            if (!this.musicEnabled || document.hidden) return;
-            this.playWarmNote(melodyFreq, 1.4, 0.04, 620, 0.016, "sine");
-          }, 1200);
-        }
+          if (isBooth || isTense) {
+            const melodyFreq = chord[(this.chordStep + 1) % chord.length] * 2;
+            setTimeout(() => {
+              if (!this.musicEnabled || document.hidden) return;
+              this.playWarmNote(melodyFreq, 1.4, 0.04, 620, 0.016, "sine");
+            }, 1200);
+          }
 
-        if (isTense) {
-          this.playWarmNote(55.0, 0.35, 0.02, 130, 0.085, "sine");
-          setTimeout(() => {
-            if (!this.musicEnabled || document.hidden) return;
-            this.playWarmNote(52.0, 0.42, 0.02, 120, 0.065, "sine");
-          }, 320);
-        }
+          if (isTense) {
+            this.playWarmNote(55.0, 0.35, 0.02, 130, 0.085, "sine");
+            setTimeout(() => {
+              if (!this.musicEnabled || document.hidden) return;
+              this.playWarmNote(52.0, 0.42, 0.02, 120, 0.065, "sine");
+            }, 320);
+          }
+        } catch (_) {}
       };
 
-      playPadSlice();
+      // Assign interval BEFORE initial slice so ensureCtx() never re-enters startMusicLoop()!
       this.musicInterval = setInterval(playPadSlice, 3600);
+      playPadSlice();
     }
   }
 
@@ -2230,118 +2248,204 @@
     return shuffle(q.slice(0, count));
   }
 
-  // ★ BESPOKE ATMOSPHERIC NIGHT CHECKPOINT MENU PANORAMA (Not grey AI box!) ★
-  function drawMenuPanorama(canvas) {
+  // ★ BESPOKE ANIMATED NIGHT CHECKPOINT MENU PANORAMA ★
+  let menuAnimRaf = null;
+  function stopMenuAnimation() {
+    if (menuAnimRaf && typeof cancelAnimationFrame === "function") {
+      cancelAnimationFrame(menuAnimRaf);
+    }
+    menuAnimRaf = null;
+  }
+
+  function drawMenuPanorama(canvas, tSec = 0) {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     const w = canvas.width, h = canvas.height;
     ctx.clearRect(0, 0, w, h);
 
-    // Dusk / Night sky gradient
-    const sky = ctx.createLinearGradient(0, 0, 0, h * 0.65);
-    sky.addColorStop(0, "#0A1014");
-    sky.addColorStop(0.55, "#19262B");
-    sky.addColorStop(1, "#2A3832");
+    // 1. Twilight Carpathian Sky Gradient
+    const sky = ctx.createLinearGradient(0, 0, 0, h * 0.66);
+    sky.addColorStop(0, "#080D12");
+    sky.addColorStop(0.55, "#152329");
+    sky.addColorStop(1, "#2A3D36");
     ctx.fillStyle = sky;
     ctx.fillRect(0, 0, w, h);
 
-    // Faint stars & crescent moon
-    ctx.fillStyle = "rgba(255, 248, 225, 0.7)";
-    [[45, 22], [110, 14], [190, 30], [275, 16], [350, 26], [395, 40]].forEach(([sx, sy]) => {
-      ctx.fillRect(sx, sy, 1.5, 1.5);
+    // Subtle twinkling stars & Crescent Moon
+    [[34, 18], [88, 32], [142, 14], [214, 26], [284, 16], [336, 30], [398, 22]].forEach(([sx, sy], i) => {
+      const alpha = 0.45 + 0.4 * Math.sin(tSec * 1.8 + i * 1.3);
+      ctx.fillStyle = `rgba(255, 248, 225, ${alpha.toFixed(2)})`;
+      ctx.fillRect(sx, sy, 1.8, 1.8);
     });
     ctx.beginPath();
-    ctx.arc(w * 0.85, 28, 11, 0, Math.PI * 2);
-    ctx.fillStyle = "#EFE6C8";
+    ctx.arc(w * 0.87, 29, 12, 0, Math.PI * 2);
+    ctx.fillStyle = "#F4E9C9";
     ctx.fill();
     ctx.beginPath();
-    ctx.arc(w * 0.85 + 4, 25, 10, 0, Math.PI * 2);
-    ctx.fillStyle = "#121C20";
+    ctx.arc(w * 0.87 + 4.5, 26, 11, 0, Math.PI * 2);
+    ctx.fillStyle = "#0F1A20";
     ctx.fill();
 
-    // Distant pine tree line silhouette
-    ctx.fillStyle = "#0F1613";
+    // 2. Layered Carpathian Ridge + Pine Silhouette
+    ctx.fillStyle = "#16201C";
     ctx.beginPath();
-    ctx.moveTo(0, h * 0.62);
-    for (let x = 0; x <= w; x += 18) {
-      const peak = (x % 36 === 0) ? 20 : 12;
-      ctx.lineTo(x + 9, h * 0.62 - peak);
-      ctx.lineTo(x + 18, h * 0.62);
+    ctx.moveTo(0, h * 0.64);
+    ctx.lineTo(w * 0.18, h * 0.44);
+    ctx.lineTo(w * 0.42, h * 0.56);
+    ctx.lineTo(w * 0.68, h * 0.41);
+    ctx.lineTo(w, h * 0.55);
+    ctx.lineTo(w, h * 0.64);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = "#0D1411";
+    ctx.beginPath();
+    ctx.moveTo(0, h * 0.63);
+    for (let x = 0; x <= w; x += 15) {
+      const peak = (x % 30 === 0) ? 22 : ((x % 45 === 0) ? 16 : 11);
+      ctx.lineTo(x + 7.5, h * 0.63 - peak);
+      ctx.lineTo(x + 15, h * 0.63);
     }
     ctx.closePath();
     ctx.fill();
 
-    // Sweeping searchlight beam from Watchtower on the left
-    const towerX = 48, towerY = 38;
-    const beamGrad = ctx.createLinearGradient(towerX, towerY, w * 0.76, h * 0.85);
-    beamGrad.addColorStop(0, "rgba(255, 235, 150, 0.35)");
-    beamGrad.addColorStop(1, "rgba(255, 235, 150, 0.0)");
+    // 3. Animated Sweeping Searchlight Beam from Watchtower
+    const towerX = 48, towerY = 42;
+    const sweepOffset = Math.sin(tSec * 0.65) * 75;
+    const beamTargetX = w * 0.62 + sweepOffset;
+    const beamGrad = ctx.createLinearGradient(towerX, towerY, beamTargetX, h * 0.92);
+    beamGrad.addColorStop(0, "rgba(255, 232, 140, 0.36)");
+    beamGrad.addColorStop(1, "rgba(255, 232, 140, 0.0)");
     ctx.fillStyle = beamGrad;
     ctx.beginPath();
-    ctx.moveTo(towerX + 6, towerY);
-    ctx.lineTo(w * 0.88, h * 0.64);
-    ctx.lineTo(w * 0.56, h * 0.96);
+    ctx.moveTo(towerX + 6, towerY + 2);
+    ctx.lineTo(beamTargetX + 52, h * 0.94);
+    ctx.lineTo(beamTargetX - 48, h * 0.94);
     ctx.closePath();
     ctx.fill();
 
-    // Wooden Border Watchtower silhouette
+    // 4. Watchtower Silhouette (ВИШКА ДПСК)
     ctx.fillStyle = "#161B18";
-    ctx.fillRect(towerX - 14, towerY - 10, 28, 16);
-    ctx.fillRect(towerX - 18, towerY - 15, 36, 6);
+    ctx.fillRect(towerX - 15, towerY - 12, 30, 18);
+    ctx.fillRect(towerX - 19, towerY - 17, 38, 6);
+    ctx.fillStyle = "#E0B145";
+    ctx.fillRect(towerX - 8, towerY - 7, 16, 7);
     ctx.strokeStyle = "#161B18";
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 3.2;
     ctx.beginPath();
-    ctx.moveTo(towerX - 10, towerY + 6); ctx.lineTo(towerX - 18, h * 0.72);
-    ctx.moveTo(towerX + 10, towerY + 6); ctx.lineTo(towerX + 18, h * 0.72);
+    ctx.moveTo(towerX - 11, towerY + 6); ctx.lineTo(towerX - 20, h * 0.72);
+    ctx.moveTo(towerX + 11, towerY + 6); ctx.lineTo(towerX + 20, h * 0.72);
+    ctx.moveTo(towerX - 15, towerY + 34); ctx.lineTo(towerX + 15, towerY + 34);
     ctx.stroke();
 
-    // Wet Asphalt Road
-    ctx.fillStyle = "#202523";
-    ctx.fillRect(0, h * 0.64, w, h * 0.36);
-    ctx.strokeStyle = "#5C6862";
-    ctx.setLineDash([12, 10]);
+    // 5. Wet Asphalt Frontier Highway
+    ctx.fillStyle = "#1E2422";
+    ctx.fillRect(0, h * 0.63, w, h * 0.37);
+    ctx.fillStyle = "#141816";
+    ctx.fillRect(0, h * 0.63, w, 4);
+    ctx.strokeStyle = "#627068";
+    ctx.setLineDash([14, 10]);
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(0, h * 0.84); ctx.lineTo(w, h * 0.84);
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // Waiting SUV headlights glow + silhouette on road
-    ctx.fillStyle = "#171D20";
-    ctx.beginPath();
-    ctx.roundRect(w * 0.52, h * 0.56, 98, 34, 7);
-    ctx.fill();
-    ctx.fillStyle = "#3E2723";
-    ctx.beginPath();
-    ctx.roundRect(w * 0.55, h * 0.58, 72, 14, 3);
-    ctx.fillStyle = "#263238";
-    ctx.fill();
-    // Glowing warm headlights
+    // 6. Concrete Stele Sign ("KRAINA") on shoulder
+    ctx.fillStyle = "#3E4A44";
+    ctx.fillRect(w * 0.17, h * 0.50, 18, 28);
+    ctx.fillStyle = "#1565C0";
+    ctx.fillRect(w * 0.17, h * 0.53, 18, 5);
+    ctx.fillStyle = "#FBC02D";
+    ctx.fillRect(w * 0.17, h * 0.58, 18, 5);
+
+    // 7. Queued Vehicles on Road (front SUV + rear Sedan) with glowing headlights
+    // Rear Sedan (subtle headlights)
+    ctx.fillStyle = "#202A30";
+    ctx.beginPath(); ctx.roundRect(w * 0.25, h * 0.60, 62, 22, 5); ctx.fill();
+    ctx.fillStyle = "#151D22";
+    ctx.beginPath(); ctx.roundRect(w * 0.28, h * 0.54, 40, 10, 4); ctx.fill();
+    ctx.fillStyle = "#FF5252";
+    ctx.fillRect(w * 0.25 + 2, h * 0.66, 4, 4);
     ctx.fillStyle = "#FFF59D";
-    ctx.beginPath(); ctx.arc(w * 0.52 + 8, h * 0.72, 4, 0, Math.PI * 2); ctx.fill();
-    ctx.beginPath(); ctx.arc(w * 0.52 + 28, h * 0.72, 4, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(w * 0.25 + 58, h * 0.69, 3, 0, Math.PI * 2); ctx.fill();
 
-    // Checkpoint Inspector Booth on right
-    ctx.fillStyle = "#2A342E";
-    ctx.fillRect(w * 0.77, h * 0.36, 76, 68);
-    ctx.fillStyle = "#1A221E";
-    ctx.fillRect(w * 0.75, h * 0.32, 84, 8);
-    // Warm amber lit booth window + inspector silhouette
+    // Lead Black Beha SUV at Barrier
+    ctx.fillStyle = "#14191C";
+    ctx.beginPath(); ctx.roundRect(w * 0.45, h * 0.58, 96, 32, 6); ctx.fill();
+    ctx.fillStyle = "#232F36";
+    ctx.beginPath(); ctx.roundRect(w * 0.48, h * 0.49, 64, 15, 5); ctx.fill();
+    // Wheels
+    ctx.fillStyle = "#0B0D0E";
+    [w * 0.49, w * 0.62].forEach(wx => {
+      ctx.beginPath(); ctx.arc(wx, h * 0.58 + 30, 7, 0, Math.PI * 2); ctx.fill();
+    });
+    // Warm amber headlight cones on asphalt
+    const headGrad = ctx.createLinearGradient(w * 0.67, h * 0.72, w * 0.80, h * 0.78);
+    headGrad.addColorStop(0, "rgba(255, 243, 148, 0.36)");
+    headGrad.addColorStop(1, "rgba(255, 243, 148, 0)");
+    ctx.fillStyle = headGrad;
+    ctx.beginPath();
+    ctx.moveTo(w * 0.67, h * 0.70);
+    ctx.lineTo(w * 0.80, h * 0.66);
+    ctx.lineTo(w * 0.80, h * 0.83);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = "#FFF59D";
+    ctx.beginPath(); ctx.arc(w * 0.45 + 90, h * 0.72, 3.8, 0, Math.PI * 2); ctx.fill();
+
+    // 8. Inspector Booth (ПОСТ № 04) on Right + Pal Palych Standing at Gate
+    ctx.fillStyle = "#26302B";
+    ctx.fillRect(w * 0.77, h * 0.34, 86, 80);
+    ctx.fillStyle = "#161E1A";
+    ctx.fillRect(w * 0.75, h * 0.29, 94, 9);
+    // Warm amber lit window + interior inspector silhouette
     ctx.fillStyle = "#DFAF42";
-    ctx.fillRect(w * 0.80, h * 0.44, 42, 26);
-    ctx.fillStyle = "#2B2219";
-    ctx.beginPath(); ctx.arc(w * 0.84, h * 0.54, 7, 0, Math.PI * 2); ctx.fill();
-    ctx.fillRect(w * 0.82, h * 0.60, 14, 10);
+    ctx.fillRect(w * 0.80, h * 0.43, 48, 30);
+    ctx.fillStyle = "#2A2018";
+    ctx.beginPath(); ctx.arc(w * 0.85, h * 0.56, 7.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillRect(w * 0.825, h * 0.63, 17, 10);
 
-    // Red-and-white Barrier across the road with glowing signal beacon
+    // Pal Palych standing outside beside the barrier post with clipboard
+    const px = w * 0.72, py = h * 0.67;
+    ctx.fillStyle = "#2E4032";
+    ctx.fillRect(px - 6, py, 12, 20);
+    ctx.fillStyle = "#DCAE88";
+    ctx.beginPath(); ctx.arc(px, py - 5, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#1E2D24";
+    ctx.fillRect(px - 7, py - 11, 14, 4);
+
+    // 9. Red-and-White Barrier Arm + Pulsing Beacon
+    const barPostX = w * 0.30, barY = h * 0.65;
     ctx.fillStyle = "#37474F";
-    ctx.fillRect(w * 0.25, h * 0.58, 12, 34);
-    ctx.fillStyle = "#FF1744";
-    ctx.beginPath(); ctx.arc(w * 0.25 + 6, h * 0.57, 4, 0, Math.PI * 2); ctx.fill();
+    ctx.fillRect(barPostX, h * 0.56, 12, 36);
+    const pulse = 0.55 + 0.45 * Math.sin(tSec * 4.2);
+    ctx.fillStyle = `rgba(255, 23, 68, ${pulse.toFixed(2)})`;
+    ctx.beginPath(); ctx.arc(barPostX + 6, h * 0.55, 4.5, 0, Math.PI * 2); ctx.fill();
     for (let s = 0; s < 10; s++) {
-      ctx.fillStyle = s % 2 === 0 ? "#B82323" : "#EAE6DF";
-      ctx.fillRect(w * 0.27 + s * 18, h * 0.65, 18, 6);
+      ctx.fillStyle = s % 2 === 0 ? "#B82323" : "#ECEFF1";
+      ctx.fillRect(barPostX + 12 + s * 17, barY, 17, 6);
     }
+  }
+
+  function startMenuPanoramaLoop() {
+    stopMenuAnimation();
+    const tick = (nowMs) => {
+      if (state.phase !== "MAIN_MENU") {
+        stopMenuAnimation();
+        return;
+      }
+      const c = document.getElementById("menu-canvas");
+      if (!c) {
+        stopMenuAnimation();
+        return;
+      }
+      drawMenuPanorama(c, (nowMs || 0) / 1000);
+      if (typeof requestAnimationFrame === "function") {
+        menuAnimRaf = requestAnimationFrame(tick);
+      }
+    };
+    tick(0);
   }
 
   // ★ DISTINCT MALE VS FEMALE PORTRAIT + VISUAL REACTIONS RENDERER ★
@@ -2884,11 +2988,11 @@
     }
   }
 
-  // Main State
+  // Main State (starts directly on the atmospheric Checkpoint Main Menu!)
   let state = {
     lang: "UK",
     contentMode: "FULL_18_PLUS",
-    phase: "AGE_GATE",
+    phase: "MAIN_MENU",
     isSandbox: false,
     dayIndex: 0,
     daySpec: ACT_ONE_DAYS[0],
@@ -3579,6 +3683,7 @@
   }
 
   function render() {
+    stopMenuAnimation();
     updateMood();
     document.documentElement.lang = state.lang === "EN" ? "en" : "uk";
     const root = document.getElementById("app-shell");
@@ -3586,25 +3691,7 @@
     root.innerHTML = "";
 
     if (state.phase === "AGE_GATE") {
-      root.innerHTML = `
-        <div style="margin: auto 0; display: flex; flex-direction: column; gap: 14px;">
-          <div class="row-between" style="justify-content: center;">
-            <button type="button" id="lang-uk" class="btn-outline" style="${state.lang === "UK" ? "background:#E0B145;color:#1F1D1A;" : ""}">🇺🇦 УКРАЇНСЬКА</button>
-            <button type="button" id="lang-en" class="btn-outline" style="${state.lang === "EN" ? "background:#E0B145;color:#1F1D1A;" : ""}">🇬🇧 ENGLISH</button>
-          </div>
-          <section class="card-slate" style="display:flex;flex-direction:column;gap:12px;">
-            <h1 style="color:#E0B145;font-size:20px;">${tr(L("ПОПЕРЕДЖЕННЯ ПРО КОНТЕНТ (18+)", "CONTENT WARNING & AGE GATE (18+)"), state.lang)}</h1>
-            <p style="font-size:14px;line-height:1.45;">${tr(L("«Border Shift: Kraina» — сатиричний симулятор прикордонного пункту у вигаданій країні. Усі персонажі, установи (ДПСК, СБК, НАБК), міста та автомобілі є художньою вигадкою.\n\nГра містить чорний гумор, теми корупції та силових затримань.", "'Border Shift: Kraina' is a satirical work of fiction. All institutions, cities, vehicles, and characters are fictional satire. Choose your content mode:"), state.lang)}</p>
-            <button type="button" id="btn-age-full" class="btn-primary-red">${tr(L("Мені є 18+ • ПОВНИЙ РЕЖИМ (Без цензури)", "I am 18+ • FULL UNCUT MODE"), state.lang)}</button>
-            <button type="button" id="btn-age-toned" class="btn-outline" style="width:100%;padding:12px;">${tr(L("ПОМ'ЯКШЕНИЙ РЕЖИМ (Без жорстокості)", "TONED-DOWN MODE (Soft Language)"), state.lang)}</button>
-          </section>
-        </div>
-      `;
-      document.getElementById("lang-uk").addEventListener("click", () => { state.lang = "UK"; render(); });
-      document.getElementById("lang-en").addEventListener("click", () => { state.lang = "EN"; render(); });
-      document.getElementById("btn-age-full").addEventListener("click", () => { audio.playApprove(); state.contentMode = "FULL_18_PLUS"; state.phase = "MAIN_MENU"; render(); });
-      document.getElementById("btn-age-toned").addEventListener("click", () => { audio.playApprove(); state.contentMode = "TONED_DOWN"; state.phase = "MAIN_MENU"; render(); });
-      return;
+      state.phase = "MAIN_MENU";
     }
 
     if (state.phase === "MAIN_MENU") {
@@ -3613,12 +3700,12 @@
       root.innerHTML = `
         <div class="menu-control-strip">
           <button type="button" id="menu-lang" class="ctrl-pill">${state.lang === "UK" ? "🇺🇦 УКР" : "🇬🇧 ENG"}</button>
-          <button type="button" id="menu-music" class="ctrl-pill" aria-label="Toggle music">${audio.musicEnabled ? "🔊 Звук ON" : "🔇 Звук OFF"}</button>
-          <button type="button" id="menu-mode" class="ctrl-pill">${state.contentMode === "FULL_18_PLUS" ? "🔞 18+ Повний" : "🛡 М'який"}</button>
+          <button type="button" id="menu-music" class="ctrl-pill" aria-label="Toggle music">${audio.musicEnabled ? tr(L("🔊 Звук ON", "🔊 Audio ON"), state.lang) : tr(L("🔇 Звук OFF", "🔇 Muted"), state.lang)}</button>
+          <button type="button" id="menu-mode" class="ctrl-pill">${state.contentMode === "FULL_18_PLUS" ? tr(L("🔞 18+ Повний", "🔞 18+ Uncut"), state.lang) : tr(L("🛡 М'який", "🛡 Toned-Down"), state.lang)}</button>
         </div>
 
         <div class="menu-panorama-box">
-          <canvas id="menu-canvas" width="436" height="156"></canvas>
+          <canvas id="menu-canvas" width="436" height="186"></canvas>
           <div class="menu-panorama-badge">${tr(L("ДПСК • КПП «ЗАХІД-KRAINA» • ПОСТ №04", "SBGS • CHECKPOINT 'WEST-KRAINA' • GATE 04"), state.lang)}</div>
         </div>
 
@@ -3637,8 +3724,8 @@
             </div>
             <p style="font-size:12.5px;line-height:1.45;color:#2E2820;">
               ${tr(L(
-                "Ти заступаєш у нічну й денну зміну на західний шлагбаум країни Kraina. Звіряй паспорти та техпаспорти, перевіряй транспорт біля вікна, реагуй на підозрілих подорожніх — і сам вирішуй, кому служити.",
-                "Take command of the checkpoint booth on Kraina's western frontier. Match passports, inspect vehicles & luggage, read people's reactions — and forge your own fate."
+                "Ти заступаєш на прикордонний шлагбаум країни Kraina. Звіряй документи, перевіряй транспорт біля вікна, реагуй на подорожніх — і сам обирай свій шлях.",
+                "Take command of the checkpoint booth on Kraina's western frontier. Check IDs, inspect transport & luggage, read reactions — and forge your own fate."
               ), state.lang)}
             </p>
             <div class="menu-stats-pill">
@@ -3650,23 +3737,36 @@
           <div style="display:flex;flex-direction:column;gap:8px;margin-top:2px;">
             ${canResume ? `
               <button type="button" id="btn-resume" class="stamp-action-btn stamp-action-gold">
-                <span>${tr(L("⏯ ПРОДОВЖИТИ ЗБЕРЕЖЕНУ ЗМІНУ", "⏯ RESUME SAVED SHIFT"), state.lang)}</span>
+                <div class="stamp-btn-text">
+                  <span>${tr(L("⏯ ПРОДОВЖИТИ ЗБЕРЕЖЕНУ ЗМІНУ", "⏯ RESUME SAVED SHIFT"), state.lang)}</span>
+                  <span class="stamp-btn-sub">${tr(L("Повернутися на поточний день служби", "Continue your saved border progress"), state.lang)}</span>
+                </div>
                 <span>→</span>
               </button>
             ` : ""}
             <button type="button" id="btn-start-camp" class="stamp-action-btn stamp-action-green">
-              <span>${tr(L("▶ ПОЧАТИ КАМПАНІЮ (2022–2024)", "▶ START STORY CAMPAIGN"), state.lang)}</span>
+              <div class="stamp-btn-text">
+                <span>${tr(L("▶ ПОЧАТИ КАМПАНІЮ (2022–2024)", "▶ START STORY CAMPAIGN"), state.lang)}</span>
+                <span class="stamp-btn-sub">${tr(L("5 ключових етапів історії з вибором продовження", "5 pivotal shifts with career continuation option"), state.lang)}</span>
+              </div>
               <span>✔</span>
             </button>
             <button type="button" id="btn-start-sand" class="stamp-action-btn stamp-action-ink">
-              <span>${tr(L("∞ ВІЛЬНА СЛУЖБА (ПІСОЧНИЦЯ + РАНГИ)", "∞ ENDLESS CAREER (SANDBOX)"), state.lang)}</span>
+              <div class="stamp-btn-text">
+                <span>${tr(L("∞ ВІЛЬНА СЛУЖБА (ПІСОЧНИЦЯ + РАНГИ)", "∞ ENDLESS CAREER (SANDBOX)"), state.lang)}</span>
+                <span class="stamp-btn-sub">${tr(L("Нескінченна кар'єра, випадкові укази й підвищення", "Endless shifts, daily decrees & rank promotions"), state.lang)}</span>
+              </div>
               <span>♾</span>
             </button>
           </div>
+
+          <p class="menu-disclaimer">
+            ${tr(L("18+ Сатирична художня вигадка: установи, міста й події вигадані • Змінити тон можна вгорі", "18+ Satirical work of fiction: cities, names & agencies are fictional • Toggle mode above"), state.lang)}
+          </p>
         </section>
       `;
 
-      drawMenuPanorama(document.getElementById("menu-canvas"));
+      startMenuPanoramaLoop();
       document.getElementById("menu-lang").addEventListener("click", () => { state.lang = state.lang === "UK" ? "EN" : "UK"; render(); });
       document.getElementById("menu-music").addEventListener("click", () => { audio.ensureCtx(); audio.musicEnabled = !audio.musicEnabled; render(); });
       document.getElementById("menu-mode").addEventListener("click", () => { state.contentMode = state.contentMode === "FULL_18_PLUS" ? "TONED_DOWN" : "FULL_18_PLUS"; render(); });
