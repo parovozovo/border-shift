@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v2.13";
+  const BUILD_VERSION = "v2.14";
   let confirmResetArmed = false;
 
   // Fallback for older Safari lacking CanvasRenderingContext2D.roundRect
@@ -4967,9 +4967,12 @@
       root.innerHTML = `
         <header class="top-bar">
           <div class="row-between">
-            <span id="hud-timer" style="color:${state.shiftSec < 40 ? "#FF8A80" : "#E0B145"};font-weight:700;font-size:13px;">${tr(L("День", "Day"), state.lang)} ${state.daySpec.dayNumber} • ⏱ ${state.shiftSec}s</span>
-            <span style="color:#81C784;font-weight:800;font-size:13px;">💵 ${state.money} 🪙${state.usd > 0 ? ` • 💵 ${state.usd.toLocaleString("en-US")}` : ""}</span>
-            <span style="font-size:12px;">${tr(L("Черга", "Queue"), state.lang)}: ${state.travelerIdx + 1}/${state.queue.length}</span>
+            <span id="hud-timer" style="color:${state.shiftSec < 40 ? "#FF8A80" : "#E0B145"};font-weight:700;font-size:12.5px;">${tr(L("День", "Day"), state.lang)} ${state.daySpec.dayNumber} • ⏱ ${state.shiftSec}s</span>
+            <div style="display:flex;flex-direction:column;line-height:1.15;font-weight:800;font-size:12px;text-align:right;">
+              <span style="color:#E0B145;">${state.money.toLocaleString("en-US")} 🪙</span>
+              <span style="color:#81C784;">${state.usd.toLocaleString("en-US")} 💵</span>
+            </div>
+            <span style="font-size:11.5px;">${tr(L("Черга", "Queue"), state.lang)}: ${state.travelerIdx + 1}/${state.queue.length}</span>
             <div style="display:flex;gap:4px;">
               <button type="button" id="hud-music" class="btn-outline" style="padding:3px 7px;" aria-label="Toggle music">${audio.musicEnabled ? "🔊" : "🔇"}</button>
               <button type="button" id="hud-rules" class="btn-outline" style="padding:3px 7px;">${tr(L("📋 Правила", "📋 Rules"), state.lang)}</button>
@@ -5361,7 +5364,10 @@
         <div style="display:flex;flex-direction:column;gap:10px;flex:1;">
           <h1 style="color:#E0B145;font-size:20px;">${tr(L(`🌙 ВЕЧІР УДОМА (Після Дня ${state.daySpec.dayNumber})`, `🌙 EVENING AT HOME (After Day ${state.daySpec.dayNumber})`), state.lang)}</h1>
           <section class="card-slate" style="display:flex;flex-direction:column;gap:4px;font-size:13px;">
-            <div style="color:#81C784;font-size:16px;font-weight:700;">💵 ${tr(L("Готівка вдома", "Cash on Hand"), state.lang)}: ${state.money.toLocaleString("en-US")} 🪙${state.usd > 0 ? ` • 💵 ${state.usd.toLocaleString("en-US")}` : ""}</div>
+            <div style="display:flex;flex-direction:column;gap:2px;font-size:15px;font-weight:800;">
+              <div style="color:#E0B145;">🪙 ${tr(L("Гримники", "Hrymnyky"), state.lang)}: ${state.money.toLocaleString("en-US")} 🪙</div>
+              <div style="color:#81C784;">💵 ${tr(L("Баксіки", "Baksiky"), state.lang)}: ${state.usd.toLocaleString("en-US")} 💵</div>
+            </div>
             <div style="display:flex;gap:6px;flex-wrap:wrap;margin:2px 0;">
               ${state.usd > 0 ? `<button type="button" id="btn-exchange-usd" class="btn-mustard" style="flex:1;padding:6px 8px;font-size:11.5px;">💱 ${tr(L(`Здати 💵 ${state.usd.toLocaleString("en-US")} → +${(state.usd * USD_UAH_RATE).toLocaleString("en-US")} 🪙`, `Sell 💵 ${state.usd.toLocaleString("en-US")} → +${(state.usd * USD_UAH_RATE).toLocaleString("en-US")} 🪙`), state.lang)}</button>` : ""}
               ${state.money >= USD_UAH_RATE * 100 ? `<button type="button" id="btn-buy-usd" class="btn-outline" style="flex:1;padding:6px 8px;font-size:11.5px;">💵 ${tr(L(`Купити 100 💵 (${(USD_UAH_RATE * 100).toLocaleString("en-US")} 🪙)`, `Buy 100 💵 (${(USD_UAH_RATE * 100).toLocaleString("en-US")} 🪙)`), state.lang)}</button>` : ""}
