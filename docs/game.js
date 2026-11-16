@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v4.1";
+  const BUILD_VERSION = "v4.2";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -34,6 +34,7 @@
   const STATS_SAVE_KEY = "border_shift_stats_v1";
   const CAMPAIGN_CHECKPOINTS_KEY = "border_shift_campaign_checkpoints_v1";
   const AGENCY_BADGES_KEY = "border_shift_agency_badges_v1";
+  const GAME_DISCOVERIES_KEY = "border_shift_discoveries_v1";
   const USD_UAH_RATE = 41;
 
   const AGENCY_BADGE_DEFS = [
@@ -60,6 +61,93 @@
       icon: "🕵️",
       title: L("Імунітет НАБК «Чисті Руки»", "NABK 'Clean Hands' Immunity"),
       desc: L("Заверши зміну без хабарів у ДПСК — щодня знижує ризик НАБК на -5%!", "Finish a shift bribe-free — reduces daily NABK risk by -5%!")
+    }
+  ];
+
+  const GAME_DISCOVERY_DEFS = [
+    {
+      id: "SERV_SBK_AGENT",
+      icon: "🕵️",
+      title: L("СБК: Таємний агент «Кордон-7»", "SBK: Covert Agent 'Border-7'"),
+      desc: L("Підписано контракт негласного оперативника СБК під носом у Палича.", "Signed covert SBK operative contract right under Palych's nose."),
+      hint: L("Затримай 2+ серйозних порушників і прийми пропозицію Майора «Тихого».", "Detain 2+ serious violators and accept Major 'Quiet's offer.")
+    },
+    {
+      id: "SERV_SBK_COLONEL",
+      icon: "🎖️",
+      title: L("СБК: Полковник під прикриттям", "SBK: Undercover Colonel"),
+      desc: L("Викрито 4 агентів на службі «Кордон-7» — отримано погони полковника СБК!", "Caught 4 operatives as 'Border-7' — earned SBK Colonel epaulets!"),
+      hint: L("Будучи агентом «Кордон-7», затримай 4 шпигунів або контрабандистів.", "As Agent 'Border-7', detain 4 spies or smugglers.")
+    },
+    {
+      id: "SERV_GUR_FINALE",
+      icon: "🦅",
+      title: L("ГУР-М: Операція «Перехват-7»", "GUR-M: Operation 'Intercept-7'"),
+      desc: L("Успішна спільна спецоперація СБК та ГУР-М проти кортежу резидента ФСМ.", "Joint SBK & GUR-M operation against an armed FSM convoy."),
+      hint: L("Заверши 5-й день із високою репутацією СБК (≥ 70).", "Finish Day 5 with high SBK reputation (≥ 70).")
+    },
+    {
+      id: "SERV_TOLIK_FINALE",
+      icon: "🚐",
+      title: L("Синдикат Толіка: «Захід-Експрес»", "Tolik Syndicate: 'West-Express'"),
+      desc: L("Вирішальна нічна справа контрабандистів на 3 фури до Варшавки.", "Decisive midnight smuggling convoy finale on the Varshavka route."),
+      hint: L("Заверши 5-й день із високою довірою Толіка (≥ 60).", "Finish Day 5 with high Tolik trust (≥ 60).")
+    },
+    {
+      id: "SERV_PALYCH_FINALE",
+      icon: "🧢",
+      title: L("Пал Палич: «Великий кошторис»", "Palych: 'The Grand Budget'"),
+      desc: L("Пройдено фінальну перевірку генераторного бюджету перед ревізією з Києва.", "Cleared the grand generator-fund finale before the Kyiv audit."),
+      hint: L("Заверши 5-й день із довірою Пал Палича (≥ 65).", "Finish Day 5 with Palych reputation (≥ 65).")
+    },
+    {
+      id: "SERV_HONEST_FINALE",
+      icon: "🏅",
+      title: L("ДПСК: Державна подяка «Чесний рубіж»", "SBGS: 'Honorable Service' Commendation"),
+      desc: L("Отримано офіційну подяку з Києва за дисципліну та порядок на КПП.", "Received official Kyiv commendation for honor and discipline."),
+      hint: L("Заверши 5-й день без перекосу в кримінал чи корупцію.", "Finish Day 5 without leaning into corruption or smuggling.")
+    },
+    {
+      id: "DISC_NABK_STING",
+      icon: "🎙️",
+      title: L("Провокація НАБК: Мічені купюри", "NABK Sting: Marked Bills"),
+      desc: L("Виявлено або затримано підсадного агента НАБК із мікрокамерою на лацкані.", "Spotted or detained an undercover NABK sting with a lapel mic."),
+      hint: L("Перевір УФ-лампою або бардачок водія з міченими купюрами і відмов / затримай.", "Scan with UV or check glovebox of a sting traveler and deny or detain.")
+    },
+    {
+      id: "DISC_FSM_SPY",
+      icon: "🕷️",
+      title: L("Резидент ФСМ: Затримання", "FSM Resident: Captured"),
+      desc: L("Знешкоджено ворожого агента розвідки на кордоні.", "Neutralized an enemy intelligence operative at the border."),
+      hint: L("Вияви флуоресцентну мітку ФСМ або орієнтування і натисни 🚨 ЗАТРИМАТИ.", "Spot FSM clues or wanted dossier and press 🚨 DETAIN.")
+    },
+    {
+      id: "DISC_VIP_CORRUPTOR",
+      icon: "💼",
+      title: L("Довідник розшуку: VIP-утікач", "Wanted Dossier: VIP Escapee"),
+      desc: L("Опрацьовано фігуранта зі списку розшуку СБК (топ-корупціонер або депутат-утікач).", "Handled a target from the SBK Wanted Dossier."),
+      hint: L("Звір обличчя у «📋 Довідник» та затримай VIP-порушника.", "Cross-check faces in Wanted Dossier and detain the VIP.")
+    },
+    {
+      id: "DISC_KRYSHA",
+      icon: "🤝",
+      title: L("Тіньова «Криша» та Зам'яття", "Shadow 'Krysha' Cover"),
+      desc: L("Скористався послугами зв'язків, щоб зняти догану або нагляд НАБК.", "Used shady connections to clear a reprimand or NABK watch."),
+      hint: L("Отримавши догану чи високий ризик НАБК, занеси за «Кришу» ввечері.", "With a reprimand or high NABK risk, pay for 'Krysha' at night.")
+    },
+    {
+      id: "DISC_SHOP_ADDON",
+      icon: "💎",
+      title: L("Елітний тюнінг активу", "Elite Asset Upgrade"),
+      desc: L("Прокачано куплену нерухомість, авто або спецгаджет додатковим модулем.", "Upgraded an owned house, car, or gadget with an add-on."),
+      hint: L("Купи будь-який актив у Магазині та додай до нього апгрейд.", "Buy any asset in the Shop and install an add-on.")
+    },
+    {
+      id: "DISC_NIGHT_RARE",
+      icon: "🌙",
+      title: L("Рідкісна нічна пригода", "Rare Night Encounter"),
+      desc: L("Пережито й оплачено одну з ексклюзивних випадкових вечірніх справ.", "Unlocked and paid for a rare random night event."),
+      hint: L("Увечері впіймай рідкісну подію з фіолетовою рамкою та оплати її.", "Catch a rare purple-bordered night activity and pay for it.")
     }
   ];
 
@@ -1109,6 +1197,29 @@
       if (!cur.includes(id)) {
         cur.push(id);
         localStorage.setItem(AGENCY_BADGES_KEY, JSON.stringify(cur));
+      }
+      return cur;
+    } catch (_) {
+      return [];
+    }
+  }
+
+  function loadDiscoveries() {
+    try {
+      const raw = localStorage.getItem(GAME_DISCOVERIES_KEY);
+      const arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr : [];
+    } catch (_) {
+      return [];
+    }
+  }
+
+  function unlockDiscovery(id) {
+    try {
+      const cur = loadDiscoveries();
+      if (!cur.includes(id)) {
+        cur.push(id);
+        localStorage.setItem(GAME_DISCOVERIES_KEY, JSON.stringify(cur));
       }
       return cur;
     } catch (_) {
@@ -4696,10 +4807,11 @@
         state.sbkRep = Math.min(100, state.sbkRep + (t.isWantedTarget ? 20 : 7));
         state.totalCareerDetained += 1;
         if (state.totalCareerDetained >= 3) unlockAgencyBadge("SBK_SHIELD");
-        if (t.storyTag === "FSM_SPY") unlockAgencyBadge("GUR_FALCON");
+        if (t.storyTag === "FSM_SPY") { unlockAgencyBadge("GUR_FALCON"); unlockDiscovery("DISC_FSM_SPY"); }
         if (t.storyTag === "DUAL_CITIZEN") unlockAgencyBadge("VSP_GUARD");
-        if (t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE") {
+        if (t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE" || t.isWantedTarget) {
           state.nabkRisk = Math.max(0, state.nabkRisk - 12);
+          unlockDiscovery("DISC_VIP_CORRUPTOR");
         }
         if (state.isUndercoverSbkAgent) {
           state.spiesCaughtAsAgent += 1;
@@ -4760,7 +4872,10 @@
     if (t.storyTag === "DEPUTY_SON" && isApprove) state.campaignFlags.letDeputyPass = true;
     if (t.storyTag === "SABOTEUR" && isDetain && ruleCorrect) state.campaignFlags.caughtSpotter = true;
     if (t.storyTag === "AUNT_HALYA" && isApprove) state.campaignFlags.helpedHalya = true;
-    if (t.storyTag === "NABK_STING" && !isApprove && !state.bribeAccepted) state.campaignFlags.refusedNabk = true;
+    if (t.storyTag === "NABK_STING" && !isApprove && !state.bribeAccepted) {
+      state.campaignFlags.refusedNabk = true;
+      unlockDiscovery("DISC_NABK_STING");
+    }
 
     const netMoney = salaryDelta + detainBonus - fineDelta;
     state.money += netMoney;
@@ -5087,7 +5202,7 @@
           label: L("🕵️ Стати негласним агентом СБК «Кордон-7»! (+2 500 🪙 підйомних)", "🕵️ Become Undercover Agent 'Border-7'! (+2,500 🪙 bonus)"),
           outcome: L("Ти підписав таємну угоду! Тепер ти негласний агент СБК «Кордон-7» (ціль: 4 агенти)!", "You signed the covert agreement! Hunt 4 enemy operatives!"),
           moneyDelta: 2500, timeDelta: 15, riskDelta: -15, sbkDelta: 20, tolikDelta: 0, palychDelta: 0, moraleDelta: 10,
-          onSelect: () => { state.isUndercoverSbkAgent = true; }
+          onSelect: () => { state.isUndercoverSbkAgent = true; unlockDiscovery("SERV_SBK_AGENT"); }
         },
         {
           id: "decline_sbk_agent",
@@ -5100,6 +5215,7 @@
   }
 
   function openSbkColonelPromotionModal() {
+    unlockDiscovery("SERV_SBK_COLONEL");
     openEncounterModal({
       id: "sbk_colonel_climax",
       title: L("🎖️ СПЕЦОПЕРАЦІЯ УСПІШНА: ПОГОНИ ПОЛКОВНИКА СБК!", "🎖️ OPERATION COMPLETE: SBK COLONEL PROMOTION!"),
@@ -5143,14 +5259,14 @@
             label: L("🫡 Очолити штурм із ГУР-М (+4 000 🪙, +2 500 💵, +25 СБК)", "🫡 Lead the GUR-M raid (+4,000 🪙, +2,500 💵, +25 SBK)"),
             outcome: L("Блискуче захоплення! Спецслужби вручають нагороду та очищають досьє!", "Flawless capture! Intel awards you and clears your dossier!"),
             moneyDelta: 4000, timeDelta: 0, riskDelta: -25, sbkDelta: 25, tolikDelta: 0, palychDelta: 0, moraleDelta: 15,
-            onSelect: () => { state.usd += 2500; unlockAgencyBadge("GUR_FALCON"); openCampaignMilestoneModal(); return true; }
+            onSelect: () => { state.usd += 2500; unlockAgencyBadge("GUR_FALCON"); unlockDiscovery("SERV_GUR_FINALE"); openCampaignMilestoneModal(); return true; }
           },
           {
             id: "finale_sbk_cover",
             label: L("📡 Прикрити операцію з КПП (+2 000 🪙, +10 СБК)", "📡 Provide checkpoint cover (+2,000 🪙, +10 SBK)"),
             outcome: L("Усе пройшло тихо й без втрат!", "Smooth and clean!"),
             moneyDelta: 2000, timeDelta: 0, riskDelta: -10, sbkDelta: 10, tolikDelta: 0, palychDelta: 0, moraleDelta: 10,
-            onSelect: () => { openCampaignMilestoneModal(); return true; }
+            onSelect: () => { unlockDiscovery("SERV_GUR_FINALE"); openCampaignMilestoneModal(); return true; }
           }
         ]
       };
@@ -5169,14 +5285,14 @@
             label: L("💵 Пропустити конвой Толіка (+18 000 💵, +22% НАБК)", "💵 Wave Tolik's convoy (+18,000 💵, +22% NABK)"),
             outcome: L("Фури пролетіли за хвилину, а в кишені хрустять пачки баксіків!", "Trucks cleared in a minute, pockets heavy with cash!"),
             moneyDelta: 0, timeDelta: 0, riskDelta: 22, sbkDelta: -15, tolikDelta: 30, palychDelta: 0, moraleDelta: 10,
-            onSelect: () => { state.usd += 18000; openCampaignMilestoneModal(); return true; }
+            onSelect: () => { state.usd += 18000; unlockDiscovery("SERV_TOLIK_FINALE"); openCampaignMilestoneModal(); return true; }
           },
           {
             id: "finale_tolik_bust",
             label: L("🚨 Злити конвой СБК (+6 000 🪙, -25% НАБК)", "🚨 Tip off SBK (+6,000 🪙, -25% NABK)"),
             outcome: L("СБК перехоплює фури, Толік у люті, але твоя репутація чиста!", "SBK seizes the trucks! Tolik is furious, your record is spotless!"),
             moneyDelta: 6000, timeDelta: 0, riskDelta: -25, sbkDelta: 30, tolikDelta: -40, palychDelta: 0, moraleDelta: 0,
-            onSelect: () => { unlockAgencyBadge("SBK_SHIELD"); openCampaignMilestoneModal(); return true; }
+            onSelect: () => { unlockAgencyBadge("SBK_SHIELD"); unlockDiscovery("SERV_TOLIK_FINALE"); openCampaignMilestoneModal(); return true; }
           }
         ]
       };
@@ -5195,14 +5311,14 @@
             label: L("🤝 Розпилити бюджет із Паличем (+8 000 💵, +15% НАБК)", "🤝 Split budget with Palych (+8,000 💵, +15% NABK)"),
             outcome: L("Частка на руках, Палич тисне руку!", "Share pocketed, Palych salutes you!"),
             moneyDelta: 0, timeDelta: 0, riskDelta: 15, sbkDelta: 0, tolikDelta: 0, palychDelta: 25, moraleDelta: 15,
-            onSelect: () => { state.usd += 8000; openCampaignMilestoneModal(); return true; }
+            onSelect: () => { state.usd += 8000; unlockDiscovery("SERV_PALYCH_FINALE"); openCampaignMilestoneModal(); return true; }
           },
           {
             id: "finale_palych_clean",
             label: L("📋 Відмовитися й подати чесний звіт (+3 500 🪙, -10% НАБК)", "📋 Refuse & file clean audit (+3,500 🪙, -10% NABK)"),
             outcome: L("Палич бурчить, але поважає принциповість.", "Palych grumbles but respects your spine."),
             moneyDelta: 3500, timeDelta: 0, riskDelta: -10, sbkDelta: 10, tolikDelta: 0, palychDelta: -15, moraleDelta: 10,
-            onSelect: () => { openCampaignMilestoneModal(); return true; }
+            onSelect: () => { unlockDiscovery("SERV_PALYCH_FINALE"); openCampaignMilestoneModal(); return true; }
           }
         ]
       };
@@ -5221,7 +5337,7 @@
             label: L("🏅 Прийняти державну подяку (+7 500 🪙, -15% НАБК, +20% сім'я)", "🏅 Accept commendation (+7,500 🪙, -15% NABK, +20% family)"),
             outcome: L("Родина пишається тобою!", "Your family is proud of you!"),
             moneyDelta: 7500, timeDelta: 0, riskDelta: -15, sbkDelta: 15, tolikDelta: 0, palychDelta: 10, moraleDelta: 20,
-            onSelect: () => { unlockAgencyBadge("NABK_CLEAN"); openCampaignMilestoneModal(); return true; }
+            onSelect: () => { unlockAgencyBadge("NABK_CLEAN"); unlockDiscovery("SERV_HONEST_FINALE"); openCampaignMilestoneModal(); return true; }
           }
         ]
       };
@@ -5443,6 +5559,8 @@
           localStorage.removeItem(SHYTOMYR_SAVE_KEY);
           localStorage.removeItem(STATS_SAVE_KEY);
           localStorage.removeItem(CAMPAIGN_CHECKPOINTS_KEY);
+          localStorage.removeItem(AGENCY_BADGES_KEY);
+          localStorage.removeItem(GAME_DISCOVERIES_KEY);
         } catch (_) {}
         render();
       });
@@ -5461,18 +5579,22 @@
     if (state.phase === "ARCHIVE") {
       const unlockedArch = loadUnlockedArchetypes();
       const unlockedShyt = loadUnlockedShytomyr();
+      const badges = loadAgencyBadges();
+      const discoveries = loadDiscoveries();
+      const totalServDisc = AGENCY_BADGE_DEFS.length + GAME_DISCOVERY_DEFS.length;
+      const openServDisc = badges.length + discoveries.length;
       const stats = loadCareerStats();
 
       root.innerHTML = `
         <div class="row-between">
           <button type="button" id="arch-back" class="ctrl-pill">← ${tr(L("Назад", "Back"), state.lang)}</button>
-          <span style="color:#E0B145;font-family:monospace;font-weight:800;font-size:13px;">${tr(L("🗄️ АРХІВ ДПСК", "🗄️ SBGS ARCHIVE"), state.lang)}</span>
+          <span style="color:#E0B145;font-family:monospace;font-weight:800;font-size:13px;">${tr(L("🗄️ АРХІВ ДПСК • КОЛЕКЦІЯ", "🗄️ SBGS ARCHIVE • COLLECTION"), state.lang)}</span>
         </div>
 
         <div class="archive-tabs">
           <button type="button" id="arch-tab-0" class="${state.archiveTab === 0 ? "btn-mustard" : "btn-secondary"}" style="padding:8px 4px;font-size:11px;">🏆 ${tr(L(`Титули (${unlockedArch.length}/16)`, `Titles (${unlockedArch.length}/16)`), state.lang)}</button>
           <button type="button" id="arch-tab-1" class="${state.archiveTab === 1 ? "btn-mustard" : "btn-secondary"}" style="padding:8px 4px;font-size:11px;">🧦 ${tr(L(`Шитомир (${unlockedShyt.length}/12)`, `Shytomyr (${unlockedShyt.length}/12)`), state.lang)}</button>
-          <button type="button" id="arch-tab-3" class="${state.archiveTab === 3 ? "btn-mustard" : "btn-secondary"}" style="padding:8px 4px;font-size:11px;">⚡ ${tr(L("Перки", "Perks"), state.lang)}</button>
+          <button type="button" id="arch-tab-3" class="${state.archiveTab === 3 ? "btn-mustard" : "btn-secondary"}" style="padding:8px 4px;font-size:11px;">🛡️ ${tr(L(`Служби (${openServDisc}/${totalServDisc})`, `Agencies (${openServDisc}/${totalServDisc})`), state.lang)}</button>
           <button type="button" id="arch-tab-2" class="${state.archiveTab === 2 ? "btn-mustard" : "btn-secondary"}" style="padding:8px 4px;font-size:11px;">📊 ${tr(L("Статистика", "Stats"), state.lang)}</button>
         </div>
 
@@ -5528,10 +5650,9 @@
           }
         });
       } else if (state.archiveTab === 3) {
-        const badges = loadAgencyBadges();
         const hdrA = document.createElement("div");
         hdrA.style.cssText = "font-size:11.5px;font-weight:800;color:#E0B145;margin:2px 0;";
-        hdrA.textContent = tr(L("🛡️ ВІДЗНАКИ СПЕЦСЛУЖБ (СБК / ГУР-М / ВСП / НАБК):", "🛡️ AGENCY DISTINCTIONS (SBK / GUR-M / VSP / NABK):"), state.lang);
+        hdrA.textContent = tr(L(`🛡️ ВІДЗНАКИ СПЕЦСЛУЖБ (${badges.length}/${AGENCY_BADGE_DEFS.length}):`, `🛡️ AGENCY DISTINCTIONS (${badges.length}/${AGENCY_BADGE_DEFS.length}):`), state.lang);
         wrap.appendChild(hdrA);
         AGENCY_BADGE_DEFS.forEach(b => {
           const unlocked = badges.includes(b.id);
@@ -5545,6 +5666,26 @@
           `;
           wrap.appendChild(card);
         });
+
+        const hdrD = document.createElement("div");
+        hdrD.style.cssText = "font-size:11.5px;font-weight:800;color:#E0B145;margin:6px 0 2px;";
+        hdrD.textContent = tr(L(`🕵️ СЛУЖБИ, ФРАКЦІЇ ТА ВІДКРИТТЯ ГРИ (${discoveries.length}/${GAME_DISCOVERY_DEFS.length}):`, `🕵️ AGENCIES, FACTIONS & GAME DISCOVERIES (${discoveries.length}/${GAME_DISCOVERY_DEFS.length}):`), state.lang);
+        wrap.appendChild(hdrD);
+        GAME_DISCOVERY_DEFS.forEach(dItem => {
+          const unlocked = discoveries.includes(dItem.id);
+          const card = document.createElement("div");
+          card.className = "archive-card" + (unlocked ? "" : " locked");
+          card.innerHTML = `
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:800;">${unlocked ? `✅ ${dItem.icon} ${tr(dItem.title, state.lang)}` : `🔒 ${dItem.icon} ???`}</div>
+              <div style="font-size:11.5px;margin-top:3px;opacity:0.9;">
+                ${unlocked ? tr(dItem.desc, state.lang) : tr(L(`Як відкрити: ${dItem.hint.uk}`, `How to unlock: ${dItem.hint.en}`), state.lang)}
+              </div>
+            </div>
+          `;
+          wrap.appendChild(card);
+        });
+
         const hdrM = document.createElement("div");
         hdrM.style.cssText = "font-size:11.5px;font-weight:800;color:#E0B145;margin:6px 0 2px;";
         hdrM.textContent = tr(L("⚡ МЕТА-ПЕРКИ АРХІВУ:", "⚡ ARCHIVE META-PERKS:"), state.lang);
@@ -5568,6 +5709,7 @@
           <div class="stat-box"><div style="font-size:20px;font-weight:900;">${stats.totalProcessed}</div><div style="font-size:11px;">${tr(L("Оформлено людей", "Travelers Processed"), state.lang)}</div></div>
           <div class="stat-box"><div style="font-size:20px;font-weight:900;">${stats.totalDetained}</div><div style="font-size:11px;">${tr(L("Затримано агентів/контрабанди", "Criminals Detained"), state.lang)}</div></div>
           <div class="stat-box"><div style="font-size:20px;font-weight:900;">${stats.bestCash} 🪙</div><div style="font-size:11px;">${tr(L("Рекорд кешу", "Best Cash"), state.lang)}</div></div>
+          <div class="stat-box" style="grid-column:span 2;"><div style="font-size:17px;font-weight:900;">${unlockedArch.length + unlockedShyt.length + openServDisc} / ${16 + 12 + totalServDisc}</div><div style="font-size:11px;">${tr(L("Відкрито в Колекції (Титули + Шитомир + Служби)", "Collection Unlocked (Titles + Shytomyr + Agencies)"), state.lang)}</div></div>
           <div class="stat-box" style="grid-column:span 2;"><div style="font-size:17px;font-weight:900;">27 648</div><div style="font-size:11px;">${tr(L("Унікальних комбінацій досьє долі в грі", "Unique Epilogue Combinations"), state.lang)}</div></div>
         `;
         wrap.appendChild(box);
@@ -6320,6 +6462,7 @@
           kb.addEventListener("click", () => {
             payForAsset({ currency: "UAH", cost: kCost });
             state.purchasedExpensesToday.push("krysha_bribe");
+            unlockDiscovery("DISC_KRYSHA");
             if (state.nabkRisk >= 70 && Math.random() < 0.25) {
               audio.playDeny();
               state.nabkRisk = Math.min(100, state.nabkRisk + 15);
@@ -6392,6 +6535,7 @@
             if (exp.reprimandHeal) state.reprimands = Math.max(0, (state.reprimands || 0) - exp.reprimandHeal);
             if (exp.tolikDelta) state.tolikRep = Math.max(0, Math.min(100, state.tolikRep + exp.tolikDelta));
             if (exp.palychDelta) state.palychRep = Math.max(0, Math.min(100, state.palychRep + exp.palychDelta));
+            if (exp.isRare) unlockDiscovery("DISC_NIGHT_RARE");
             state.familyMorale = Math.max(0, Math.min(100, state.familyMorale + exp.morale));
             state.escapeFund += (exp.escape || 0);
             state.nabkRisk = Math.max(0, Math.min(100, state.nabkRisk + exp.riskDelta));
@@ -6475,6 +6619,7 @@
                 audio.playBribe();
                 payForAsset(addon);
                 state.ownedAssets.push(addon.id);
+                unlockDiscovery("DISC_SHOP_ADDON");
                 state.tolikRep = Math.min(100, state.tolikRep + addon.tolikBoost);
                 state.palychRep = Math.min(100, state.palychRep + addon.palychBoost);
                 state.familyMorale = Math.min(100, state.familyMorale + addon.moraleBoost);
