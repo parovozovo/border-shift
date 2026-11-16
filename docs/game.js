@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v3.6";
+  const BUILD_VERSION = "v3.7";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -745,15 +745,15 @@
       options: [
         {
           id: "pass_gur_convoy",
-          label: L("🫡 Підняти шлагбаум без запису в журнал (+25 СБК, +250 🪙 зі спецфонду)", "🫡 Raise barrier off-the-record (+25 SBK, +250 🪙 covert bonus)"),
-          outcome: L("Офіцер тисне тобі руку: «Служба не забуде, брате!» Увечері на картку приходить 250 🪙 премії.", "The officer shakes your hand: 'The Service won't forget!' 250 🪙 lands on your card."),
-          moneyDelta: 250, timeDelta: 10, riskDelta: -5, sbkDelta: 25, tolikDelta: 0, palychDelta: 0, moraleDelta: 10
+          label: L("🫡 Підняти шлагбаум без запису в журнал (+25 СБК, +2 000 🪙 зі спецфонду)", "🫡 Raise barrier off-the-record (+25 SBK, +2,000 🪙 covert bonus)"),
+          outcome: L("Офіцер тисне тобі руку: «Служба не забуде, брате!» Увечері на картку приходить 2 000 🪙 премії.", "The officer shakes your hand: 'The Service won't forget!' 2,000 🪙 lands on your card."),
+          moneyDelta: 2000, timeDelta: 10, riskDelta: -5, sbkDelta: 25, tolikDelta: 0, palychDelta: 0, moraleDelta: 10
         },
         {
           id: "demand_bureaucracy",
           label: L("📋 Вимагати повного митного оформлення за інструкцією (-15с часу, +10 Палич)", "📋 Demand full customs paperwork by the book (-15s time, +10 Palych)"),
           outcome: L("Спецпризначенці крізь зуби чекають 15 хвилин, поки ти заповнюєш папірці.", "The operatives grind their teeth waiting while you fill out forms."),
-          moneyDelta: 100, timeDelta: -15, riskDelta: 0, sbkDelta: -10, tolikDelta: 0, palychDelta: 10, moraleDelta: 0
+          moneyDelta: 500, timeDelta: -15, riskDelta: 0, sbkDelta: -10, tolikDelta: 0, palychDelta: 10, moraleDelta: 0
         }
       ]
     },
@@ -4869,16 +4869,16 @@
       id: "sbk_undercover_recruitment",
       title: L("🕵️ ВЕРБУВАННЯ СБК: ПОЗИВНИЙ «КОРДОН-7»", "🕵️ SBK RECRUITMENT: CALLSIGN 'BORDER-7'"),
       desc: L(
-        "Майор СБК «Тихий» заходить у будку через службовий вхід і кладе на стіл чорне посвідчення:\n«Інспекторе, ти взяв уже двох серйозних порушників. Нам потрібна своя негласна людина прямо в будці, під носом у Пал Палича та контрабандистів.\n\nПідписуй згоду як Негласний оперативник СБК «Кордон-7»: ти ПРОДОВЖУЄШ працювати на шлагбаумі під прикриттям, але отримуєш +180 🪙 таємного окладу щоранку, +180 🪙 премії за кожного спійманого шпигуна та імунітет від НАБК!»",
-        "SBK Major 'Quiet' enters the booth and places a black folder on your desk:\n'Inspector, you have sharp eyes. We need an undercover operative right here in the booth under Palych's nose.\n\nSign on as Undercover Agent Border-7: you KEEP working the checkpoint under cover, earning +180 🪙 covert pay every morning, +180 🪙 extra bounty per spy detained, and NABK immunity!'"
+        "Майор СБК «Тихий» заходить у будку через службовий вхід і кладе на стіл чорне посвідчення:\n«Інспекторе, ти взяв уже двох серйозних порушників. Нам потрібна своя негласна людина прямо в будці, під носом у Пал Палича та контрабандистів.\n\nПідписуй згоду як Негласний оперативник «Кордон-7»: отримуєш +1 200 🪙 окладу щоранку, +1 200 🪙 премії за кожного шпигуна, імунітет від доган Палича та -35% ціни на «Кришу»! Для легенди можеш брати конверти, але не доводь НАБК до обшуків!»",
+        "SBK Major 'Quiet' enters the booth and places a black folder on your desk:\n'Inspector, you have sharp eyes. Sign on as Undercover Agent Border-7: earn +1,200 🪙 covert pay every morning, +1,200 🪙 extra bounty per spy, protection from Palych's reprimands & -35% Krysha cost!'"
       ),
       portrait: { gender: "M", skinTone: 0, faceShape: 2, hairStyle: 4, hairColor: 0, facialHair: 0, glasses: 2, headwear: 4, scarOrDetail: 0, expression: 0, specialId: "NONE" },
       options: [
         {
           id: "accept_sbk_agent",
-          label: L("🕵️ Стати негласним агентом СБК «Кордон-7» і продовжити полювання! (+300 🪙 підйомних)", "🕵️ Become Undercover Agent 'Border-7' & keep hunting spies! (+300 🪙 bonus)"),
-          outcome: L("Ти підписав таємну угоду! Тепер ти негласний агент СБК «Кордон-7». Продовжуй працювати в будці й виловлюй ворожих резидентів (ціль: 4 агенти)!", "You signed the covert agreement! You are now Undercover Agent 'Border-7'. Hunt 4 enemy operatives!"),
-          moneyDelta: 300, timeDelta: 15, riskDelta: -15, sbkDelta: 20, tolikDelta: 0, palychDelta: 0, moraleDelta: 10,
+          label: L("🕵️ Стати негласним агентом СБК «Кордон-7»! (+2 500 🪙 підйомних)", "🕵️ Become Undercover Agent 'Border-7'! (+2,500 🪙 bonus)"),
+          outcome: L("Ти підписав таємну угоду! Тепер ти негласний агент СБК «Кордон-7» (ціль: 4 агенти)!", "You signed the covert agreement! Hunt 4 enemy operatives!"),
+          moneyDelta: 2500, timeDelta: 15, riskDelta: -15, sbkDelta: 20, tolikDelta: 0, palychDelta: 0, moraleDelta: 10,
           onSelect: () => { state.isUndercoverSbkAgent = true; }
         },
         {
@@ -4896,22 +4896,22 @@
       id: "sbk_colonel_climax",
       title: L("🎖️ СПЕЦОПЕРАЦІЯ УСПІШНА: ПОГОНИ ПОЛКОВНИКА СБК!", "🎖️ OPERATION COMPLETE: SBK COLONEL PROMOTION!"),
       desc: L(
-        "Ти ліквідував цілу мережу шпигунів та контрабандистів, працюючи під прикриттям! Майор «Тихий» особисто вручає тобі коробку з погонами Полковника СБК та премію 1 500 🪙:\n\n«Агенте «Кордон-7», штаб у захваті! Ти можеш залишитися на пункті Таємним Куратором кордону (продовжувати гру зі ставкою 320 🪙/людину), або переїхати в Центральний Штаб у Кийграді!»",
-        "You dismantled the spy ring while undercover! Major 'Quiet' hands you Colonel's epaulets and a 1,500 🪙 reward:\n\n'You can STAY at the checkpoint as Secret Sector Commander (keep playing at 320 🪙/traveler) or transfer to Central HQ in Kyihrad!'"
+        "Ти ліквідував цілу мережу шпигунів та контрабандистів, працюючи під прикриттям! Майор «Тихий» особисто вручає тобі коробку з погонами Полковника СБК та премію 6 500 🪙:\n\n«Агенте «Кордон-7», штаб у захваті! Ти можеш залишитися на пункті Таємним Куратором кордону (ставка 1 800 🪙/людину + 2 500 🪙 щоранку), або переїхати в Центральний Штаб у Кийграді!»",
+        "You dismantled the spy ring while undercover! Major 'Quiet' hands you Colonel's epaulets and a 6,500 🪙 reward:\n\n'Stay at the checkpoint as Secret Sector Commander (1,800 🪙/traveler + 2,500 🪙/day) or transfer to Central HQ!'"
       ),
       portrait: { gender: "M", skinTone: 0, faceShape: 2, hairStyle: 4, hairColor: 0, facialHair: 0, glasses: 2, headwear: 4, scarOrDetail: 0, expression: 1, specialId: "NONE" },
       options: [
         {
           id: "stay_undercover_colonel",
-          label: L("🕵️ Залишитися в будці Таємним Полковником і ПРОДОВЖУВАТИ ГРУ! (+1500 🪙, ставка 320 🪙)", "🕵️ Stay in booth as Covert Colonel & KEEP PLAYING! (+1500 🪙, 320 🪙 salary)"),
+          label: L("🕵️ Залишитися Таємним Полковником і ПРОДОВЖУВАТИ ГРУ! (+6 500 🪙, ставка 1 800 🪙)", "🕵️ Stay as Covert Colonel & KEEP PLAYING! (+6,500 🪙, 1,800 🪙 salary)"),
           outcome: L("Ти сховав погони полковника в сейф і залишився негласним господарем кордону!", "You locked the Colonel's epaulets in the safe and stayed as covert master of the border!"),
-          moneyDelta: 1500, timeDelta: 30, riskDelta: -40, sbkDelta: 30, tolikDelta: 0, palychDelta: 0, moraleDelta: 25
+          moneyDelta: 6500, timeDelta: 30, riskDelta: -40, sbkDelta: 30, tolikDelta: 0, palychDelta: 0, moraleDelta: 25
         },
         {
           id: "retire_to_sbk_hq",
           label: L("🏛️ Очолити Центральний Штаб у Кийграді (Завершити службу — Персональне Досьє)", "🏛️ Lead Central HQ in Kyihrad (Finish Game — Epilogue Dossier)"),
           outcome: L("Ти передаєш ключі від будки й від'їжджаєш до столиці!", "You depart for Kyihrad!"),
-          moneyDelta: 1500, timeDelta: 0, riskDelta: 0, sbkDelta: 30, tolikDelta: 0, palychDelta: 0, moraleDelta: 20,
+          moneyDelta: 6500, timeDelta: 0, riskDelta: 0, sbkDelta: 30, tolikDelta: 0, palychDelta: 0, moraleDelta: 20,
           onSelect: () => { triggerEnding("SBK_SHADOW_COLONEL"); return true; }
         }
       ]
@@ -5872,11 +5872,13 @@
         state.palychRep = Math.max(0, state.palychRep - 15);
         if (state.shiftBribesTotal > 0 || state.shiftMistakes > 0) {
           state.nabkRisk = Math.min(100, state.nabkRisk + 12);
-          state.reprimands = (state.reprimands || 0) + 1;
-          state.underSurveillance = true;
-          if (state.reprimands >= 3) {
-            triggerEnding("FIRED_LOSER");
-            return;
+          if (!state.isUndercoverSbkAgent || state.nabkRisk >= 60) {
+            state.reprimands = (state.reprimands || 0) + 1;
+            state.underSurveillance = true;
+            if (state.reprimands >= 3) {
+              triggerEnding("FIRED_LOSER");
+              return;
+            }
           }
         }
         state.purchasedExpensesToday = [];
@@ -6000,7 +6002,8 @@
       const billsToShow = (state.tonightBills && state.tonightBills.length > 0) ? state.tonightBills : DYNAMIC_EVENING_BILLS.slice(0, 3);
       if (state.eveningTab === 0) {
         if ((state.reprimands > 0 || state.underSurveillance || state.nabkRisk >= 25) && !state.purchasedExpensesToday.includes("krysha_bribe")) {
-          const kCost = 2200 + state.nabkRisk * 75 + (state.reprimands || 0) * 1500;
+          const baseK = 2200 + state.nabkRisk * 75 + (state.reprimands || 0) * 1500;
+          const kCost = state.isUndercoverSbkAgent ? Math.round(baseK * 0.65) : baseK;
           const canK = (state.money + state.usd * USD_UAH_RATE) >= kCost;
           const kCard = document.createElement("div");
           kCard.className = "card-slate row-between";
