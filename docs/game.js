@@ -2,7 +2,8 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v3.3";
+  const BUILD_VERSION = "v3.4";
+  const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
   // Fallback for older Safari lacking CanvasRenderingContext2D.roundRect
@@ -486,6 +487,26 @@
       cost: 25000, passiveIncome: 1200, passiveUsd: 0, dailyRisk: 0, tolikBoost: 5, palychBoost: 10, moraleBoost: 10
     },
     {
+      id: "lanos_sport",
+      category: "TECH",
+      currency: "UAH",
+      onlyUah: true,
+      icon: "🚗",
+      title: L("«Ланос-Спорт 1.6» (Чесна робоча конячка)", "'Lanos-Sport 1.6' Workhorse"),
+      subtitle: L("+20с до зміни (швидкий доїзд) +10 сім'ї та Паличу, 0% НАБК!", "+20s shift time, +10 family & Palych, 0% NABK!"),
+      cost: 28000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 10, moraleBoost: 10
+    },
+    {
+      id: "suburban_brick_house",
+      category: "REALTY",
+      currency: "UAH",
+      onlyUah: true,
+      icon: "🏡",
+      title: L("Цегляна хата в передмісті (Теплиця + льох)", "Suburban Brick House (Greenhouse & Cellar)"),
+      subtitle: L("Біла нерухомість! +1 400 🪙 щоранку та +18% щастя сім'ї (0% НАБК).", "Clean home! +1,400 🪙 every morning & +18% family morale (0% NABK)."),
+      cost: 45000, passiveIncome: 1400, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 18
+    },
+    {
       id: "rolex_watch",
       category: "LUXURY",
       currency: "USD",
@@ -565,6 +586,15 @@
       title: L("Яхта «Хвиля Монаківки» (Стоїть на причалі)", "Yacht 'Monakivka Wave'"),
       subtitle: L("Здається туристам: +2 200 💵 щоранку та +10 щастя сім'ї щодня!", "Charter income: +2,200 💵 every morning & +10 daily family morale!"),
       cost: 140000, passiveIncome: 0, passiveUsd: 2200, dailyRisk: 3, tolikBoost: 15, palychBoost: 10, moraleBoost: 25
+    },
+    {
+      id: "dnipro_mansion",
+      category: "REALTY",
+      currency: "USD",
+      icon: "🏰",
+      title: L("Особняк на березі Дніпра (З власним причалом)", "Riverfront Mansion with Private Pier"),
+      subtitle: L("+3 800 💵 оренди щоранку та +30% щастя сім'ї!", "+3,800 💵 rent every morning & +30% family morale!"),
+      cost: 240000, passiveIncome: 0, passiveUsd: 3800, dailyRisk: 5, tolikBoost: 15, palychBoost: 15, moraleBoost: 30
     },
     {
       id: "spain_villa",
@@ -3968,7 +3998,12 @@
     return asset.currency === "USD" ? asset.cost * USD_UAH_RATE : asset.cost;
   }
 
+  function isStrictUahAsset(asset) {
+    return Boolean(asset.onlyUah || asset.category === "TECH" || asset.id === "shawarma_kiosk" || asset.id === "addon_night_grill" || asset.id === "addon_syrup_bar");
+  }
+
   function canAffordAsset(asset) {
+    if (isStrictUahAsset(asset)) return state.money >= asset.cost;
     const totalWealthUah = state.money + state.usd * USD_UAH_RATE;
     return totalWealthUah >= getAssetCostUah(asset);
   }
@@ -4289,7 +4324,9 @@
       campaignFlags: {},
       factionFinaleDone: false,
       reprimands: 0,
-      underSurveillance: false
+      underSurveillance: false,
+      obnalUsedToday: 0,
+      exchDir: "USD_TO_UAH"
     });
     if (!sandbox) saveCampaignCheckpoint(1);
     saveStateToStorage();
@@ -4300,7 +4337,7 @@
     const meta = getMetaPerkFlags();
     const baseSec = state.isSandbox ? 300 : 270;
     const modDelta = state.sandboxMod ? (state.sandboxMod.shiftSecDelta || 0) : 0;
-    const bonusSec = (state.ownedAssets.includes("espresso_machine") ? 35 : 0) + (state.ownedAssets.includes("porsche_911") ? 35 : 0) + (state.ownedAssets.includes("addon_migalka") ? 15 : 0) + meta.shiftTimeBonus + modDelta;
+    const bonusSec = (state.ownedAssets.includes("espresso_machine") ? 35 : 0) + (state.ownedAssets.includes("porsche_911") ? 35 : 0) + (state.ownedAssets.includes("lanos_sport") ? 20 : 0) + (state.ownedAssets.includes("addon_migalka") ? 15 : 0) + meta.shiftTimeBonus + modDelta;
     state.phase = "BOOTH_SHIFT";
     state.shiftSec = Math.max(150, baseSec + bonusSec);
     state.travelerIdx = 0;
@@ -4609,6 +4646,7 @@
     state.shiftDetained = 0;
     state.shiftBribesTotal = 0;
     state.shiftFinesTotal = 0;
+    state.obnalUsedToday = 0;
     state.phase = "MORNING_BRIEFING";
     if (!state.isSandbox) saveCampaignCheckpoint(state.daySpec.dayNumber);
     saveStateToStorage();
@@ -5808,10 +5846,36 @@
               <div style="color:#E0B145;">🪙 ${tr(L("Гримники", "Hrymnyky"), state.lang)}: ${state.money.toLocaleString("en-US")} 🪙</div>
               <div style="color:#81C784;">💵 ${tr(L("Баксіки", "Baksiky"), state.lang)}: ${state.usd.toLocaleString("en-US")} 💵</div>
             </div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap;margin:2px 0;">
-              ${state.usd > 0 ? `<button type="button" id="btn-exchange-usd" class="btn-mustard" style="flex:1;padding:6px 8px;font-size:11.5px;">💱 ${tr(L(`Здати 💵 ${state.usd.toLocaleString("en-US")} → +${(state.usd * USD_UAH_RATE).toLocaleString("en-US")} 🪙`, `Sell 💵 ${state.usd.toLocaleString("en-US")} → +${(state.usd * USD_UAH_RATE).toLocaleString("en-US")} 🪙`), state.lang)}</button>` : ""}
-              ${state.money >= USD_UAH_RATE * 100 ? `<button type="button" id="btn-buy-usd" class="btn-outline" style="flex:1;padding:6px 8px;font-size:11.5px;">💵 ${tr(L(`Купити 100 💵 (${(USD_UAH_RATE * 100).toLocaleString("en-US")} 🪙)`, `Buy 100 💵 (${(USD_UAH_RATE * 100).toLocaleString("en-US")} 🪙)`), state.lang)}</button>` : ""}
-            </div>
+            ${(() => {
+              const dir = state.exchDir || "USD_TO_UAH";
+              const remObnal = Math.max(0, DAILY_OBNAL_LIMIT_USD - (state.obnalUsedToday || 0));
+              const maxUsd = dir === "USD_TO_UAH"
+                ? Math.min(state.usd, remObnal)
+                : Math.floor(state.money / USD_UAH_RATE);
+              const step = maxUsd >= 100 ? 50 : 10;
+              const initVal = maxUsd > 0 ? Math.min(maxUsd, Math.max(step, Math.floor(maxUsd / 2 / 10) * 10 || maxUsd)) : 0;
+              return `
+                <div style="background:rgba(0,0,0,0.22);border:1px solid #455A64;border-radius:6px;padding:7px;margin:3px 0;display:flex;flex-direction:column;gap:5px;">
+                  <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+                    <span style="font-size:11px;font-weight:800;color:#FFE082;">
+                      ${dir === "USD_TO_UAH"
+                        ? tr(L(`💱 Обнал 💵→🪙 (Ліміт сьогодні: ${remObnal}/${DAILY_OBNAL_LIMIT_USD} 💵)`, `💱 Cash Out 💵→🪙 (Daily cap: ${remObnal}/${DAILY_OBNAL_LIMIT_USD} 💵)`), state.lang)
+                        : tr(L("💱 Купити 💵 за 🪙 (Курс 41 🪙)", "💱 Buy 💵 with 🪙 (Rate 41 🪙)"), state.lang)}
+                    </span>
+                    <button type="button" id="btn-exch-flip" class="btn-outline" style="padding:2px 7px;font-size:10.5px;">⇄ ${dir === "USD_TO_UAH" ? "🪙→💵" : "💵→🪙"}</button>
+                  </div>
+                  ${maxUsd >= 10 ? `
+                    <input type="range" id="exch-slider" min="10" max="${maxUsd}" step="${maxUsd >= 50 ? 10 : 1}" value="${Math.max(10, initVal)}" style="width:100%;accent-color:#E0B145;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+                      <span id="exch-preview" style="font-size:11.5px;font-weight:700;color:#81C784;">
+                        ${dir === "USD_TO_UAH" ? `${Math.max(10, initVal)} 💵 → +${(Math.max(10, initVal) * USD_UAH_RATE).toLocaleString("en-US")} 🪙` : `${(Math.max(10, initVal) * USD_UAH_RATE).toLocaleString("en-US")} 🪙 → +${Math.max(10, initVal)} 💵`}
+                      </span>
+                      <button type="button" id="btn-do-exchange" class="btn-mustard" style="padding:4px 10px;font-size:11px;">${tr(L("Обміняти", "Exchange"), state.lang)}</button>
+                    </div>
+                  ` : `<div style="font-size:11px;color:#B0BEC5;">${dir === "USD_TO_UAH" ? (remObnal <= 0 ? tr(L("Денний ліміт обналу вичерпано!", "Daily obnal cap reached!"), state.lang) : tr(L("Недостатньо 💵 (мін. 10 💵)", "Need at least 10 💵"), state.lang)) : tr(L("Недостатньо 🪙 (мін. 410 🪙)", "Need at least 410 🪙"), state.lang)}</div>`}
+                </div>
+              `;
+            })()}
             ${rent > 0 ? `<div style="color:#81C784;font-weight:700;">🏢 ${tr(L("Пасивний дохід та оклад СБК", "Passive & Covert Income"), state.lang)}: +${rent} 🪙/${tr(L("ранок", "morning"), state.lang)}</div>` : ""}
             <div style="color:#64B5F6;font-weight:700;">🎖️ ${tr(rk.title, state.lang)}${state.isUndercoverSbkAgent ? ` (${tr(L("Спіймано агентури", "Operatives caught"), state.lang)}: ${state.spiesCaughtAsAgent}/4)` : ""}</div>
             <div>🏠 ${tr(L("Настрій сім'ї", "Family Morale"), state.lang)}: ${state.familyMorale}% | 🕵️ НАБК: <span style="color:${state.nabkRisk >= 60 ? "#FF5252" : "#FFF"};">${state.nabkRisk}%</span> | СБК: ${state.sbkRep}</div>
@@ -5833,27 +5897,45 @@
 
       document.getElementById("tab-home-0").addEventListener("click", () => { audio.playTap(); state.eveningTab = 0; render(); });
       document.getElementById("tab-home-1").addEventListener("click", () => { audio.playTap(); state.eveningTab = 1; render(); });
-      const exchBtn = document.getElementById("btn-exchange-usd");
-      if (exchBtn) {
-        exchBtn.addEventListener("click", () => {
-          audio.playBribe();
-          state.money += state.usd * USD_UAH_RATE;
-          state.usd = 0;
+      document.getElementById("btn-exch-flip").addEventListener("click", () => {
+        audio.playTap();
+        state.exchDir = (state.exchDir === "UAH_TO_USD") ? "USD_TO_UAH" : "UAH_TO_USD";
+        render();
+      });
+      const sliderEl = document.getElementById("exch-slider");
+      const previewEl = document.getElementById("exch-preview");
+      const doExchBtn = document.getElementById("btn-do-exchange");
+      if (sliderEl && previewEl && doExchBtn) {
+        sliderEl.addEventListener("input", () => {
+          const val = Number(sliderEl.value) || 0;
+          const dir = state.exchDir || "USD_TO_UAH";
+          previewEl.textContent = dir === "USD_TO_UAH"
+            ? `${val} 💵 → +${(val * USD_UAH_RATE).toLocaleString("en-US")} 🪙`
+            : `${(val * USD_UAH_RATE).toLocaleString("en-US")} 🪙 → +${val} 💵`;
+        });
+        doExchBtn.addEventListener("click", () => {
+          const val = Number(sliderEl.value) || 0;
+          if (val <= 0) return;
+          const dir = state.exchDir || "USD_TO_UAH";
+          if (dir === "USD_TO_UAH") {
+            const rem = Math.max(0, DAILY_OBNAL_LIMIT_USD - (state.obnalUsedToday || 0));
+            const take = Math.min(val, state.usd, rem);
+            if (take > 0) {
+              audio.playBribe();
+              state.usd -= take;
+              state.money += take * USD_UAH_RATE;
+              state.obnalUsedToday = (state.obnalUsedToday || 0) + take;
+            }
+          } else {
+            const costUah = val * USD_UAH_RATE;
+            if (state.money >= costUah) {
+              audio.playBribe();
+              state.money -= costUah;
+              state.usd += val;
+            }
+          }
           saveStateToStorage();
           render();
-        });
-      }
-      const buyUsdBtn = document.getElementById("btn-buy-usd");
-      if (buyUsdBtn) {
-        buyUsdBtn.addEventListener("click", () => {
-          const stepCost = USD_UAH_RATE * 100;
-          if (state.money >= stepCost) {
-            audio.playBribe();
-            state.money -= stepCost;
-            state.usd += 100;
-            saveStateToStorage();
-            render();
-          }
         });
       }
       if (canRetire) {
@@ -5938,9 +6020,10 @@
           const canBuy = !owned && canAffordAsset(asset);
           const uahEq = getAssetCostUah(asset);
           const usdEq = Math.ceil(uahEq / USD_UAH_RATE);
+          const strictUah = isStrictUahAsset(asset);
           const priceStr = isUsd
             ? `${asset.cost.toLocaleString("en-US")} 💵 (≈ ${uahEq.toLocaleString("en-US")} 🪙)`
-            : `${asset.cost.toLocaleString("en-US")} 🪙 (≈ ${usdEq.toLocaleString("en-US")} 💵)`;
+            : (strictUah ? `${asset.cost.toLocaleString("en-US")} 🪙 (${tr(L("тільки чесні 🪙", "honest 🪙 only"), state.lang)})` : `${asset.cost.toLocaleString("en-US")} 🪙 (≈ ${usdEq.toLocaleString("en-US")} 💵)`);
           const card = document.createElement("div");
           card.className = "card-slate row-between";
           if (owned) card.style.backgroundColor = "#1B5E20";
