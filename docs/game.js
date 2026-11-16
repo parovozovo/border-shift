@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v3.8";
+  const BUILD_VERSION = "v3.9";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -4007,13 +4007,60 @@
       uvActive: opts.uvActive
     });
 
-    // UV Spotlight Beam over booth window!
+    // UV Spotlight Beam over booth window + fluorescent clues!
     if (opts.uvActive) {
       const uvGrad = ctx.createRadialGradient(w * 0.75, h * 0.55, 8, w * 0.75, h * 0.55, w * 0.55);
       uvGrad.addColorStop(0, "rgba(179, 136, 255, 0.34)");
       uvGrad.addColorStop(1, "rgba(49, 27, 146, 0.25)");
       ctx.fillStyle = uvGrad;
       ctx.fillRect(0, 0, w, h);
+
+      ctx.save();
+      if (opts.storyTag === "NABK_STING") {
+        // Hidden lapel wire & micro-camera glowing under UV
+        ctx.strokeStyle = "#00E5FF";
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.moveTo(w * 0.74, h * 0.84);
+        ctx.lineTo(w * 0.79, h * 0.96);
+        ctx.stroke();
+        ctx.fillStyle = "#FF1744";
+        ctx.beginPath();
+        ctx.arc(w * 0.74, h * 0.84, 3.2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#00E5FF";
+        ctx.font = "bold 9px monospace";
+        ctx.fillText("MIC", w * 0.76, h * 0.83);
+      } else if (opts.storyTag === "FSM_SPY") {
+        ctx.fillStyle = "rgba(255, 64, 129, 0.85)";
+        ctx.font = "bold 10px monospace";
+        ctx.fillText("ФСМ-UV", w * 0.69, h * 0.82);
+      } else if (opts.storyTag === "INTEL_ALLY") {
+        ctx.fillStyle = "#FFD54F";
+        ctx.font = "bold 10px monospace";
+        ctx.fillText("🦅 ГУР-М", w * 0.69, h * 0.82);
+      }
+
+      if (opts.hasContraband) {
+        // Fluorescent amber/powder smudges on driver side sill
+        ctx.fillStyle = "rgba(118, 255, 3, 0.65)";
+        ctx.beginPath(); ctx.arc(w * 0.64, h * 0.88, 3, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(w * 0.67, h * 0.91, 2.2, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(w * 0.62, h * 0.92, 2.5, 0, Math.PI * 2); ctx.fill();
+      }
+
+      if (opts.hasCloneCar) {
+        // Repainted / welded VIN outline around transport
+        ctx.strokeStyle = "#FF4081";
+        ctx.setLineDash([4, 3]);
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(w * 0.08, h * 0.56, w * 0.42, h * 0.28);
+        ctx.setLineDash([]);
+        ctx.fillStyle = "#FF80AB";
+        ctx.font = "bold 9px monospace";
+        ctx.fillText("VIN?", w * 0.10, h * 0.54);
+      }
+      ctx.restore();
     }
 
     // Visual Coffee Cup on sill if COFFEE_GIVEN!
@@ -4533,6 +4580,8 @@
     state.selectedDocIdx = 0;
     state.vehicleInspected = false;
     state.trunkPanelOpen = false;
+    state.checkedZones = [];
+    state.zoneCheckMsg = null;
     state.interrogated = false;
     state.bribeAccepted = false;
     state.reactionState = "NONE";
@@ -5647,16 +5696,33 @@
           <button type="button" id="react-uv" class="reaction-btn ${state.uvActive ? "uv-on" : ""}">🔦 ${tr(L(state.uvActive ? "УФ: ВКЛ" : "УФ-лампа", state.uvActive ? "UV: ON" : "UV Lamp"), state.lang)}</button>
           <button type="button" id="react-dog" class="reaction-btn ${state.vehicleInspected ? "done" : ""}" ${state.vehicleInspected ? "disabled" : ""}>🐕 ${state.vehicleInspected ? tr(L("Перевірено", "Checked"), state.lang) : tr(L(`Пес ${searchCost}`, `Dog ${searchCost}`), state.lang)}</button>
         </div>
-        ${state.trunkPanelOpen && !state.vehicleInspected ? `
+        ${state.trunkPanelOpen && !state.vehicleInspected ? (() => {
+          const hasEndoscope = state.ownedAssets.includes("uv_endoscope");
+          const checked = state.checkedZones || [];
+          const zonesList = [
+            { id: "TRUNK", icon: "🧳", name: L("Багажник", "Trunk") },
+            { id: "SPARE", icon: "🛞", name: L("Запаска", "Spare") },
+            { id: "GLOVE", icon: "🧤", name: L("Салон", "Cabin") }
+          ];
+          const stepCostText = hasEndoscope ? "0s" : "-2s";
+          return `
           <div id="trunk-search-panel" style="background:#1B221E;border:1.5px solid #E0B145;border-radius:6px;padding:7px;display:flex;flex-direction:column;gap:5px;">
-            <div style="font-size:11px;color:#E0B145;font-weight:800;">🐕 ${tr(L("ОБШУК: Обери відсік для перевірки (🐾 — пес чує запах):", "DOG SEARCH: Pick compartment (🐾 — dog scent cue):"), state.lang)}</div>
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;">
-              <button type="button" class="btn-outline trunk-zone-btn" data-zone="TRUNK" style="padding:6px 4px;font-size:11px;${state.dogTargetZone === "TRUNK" ? "border-color:#FF5252;color:#FFE082;" : ""}">🧳 ${tr(L("Багажник", "Trunk"), state.lang)}${state.dogTargetZone === "TRUNK" ? " 🐾" : ""}</button>
-              <button type="button" class="btn-outline trunk-zone-btn" data-zone="SPARE" style="padding:6px 4px;font-size:11px;${state.dogTargetZone === "SPARE" ? "border-color:#FF5252;color:#FFE082;" : ""}">🛞 ${tr(L("Запаска", "Spare"), state.lang)}${state.dogTargetZone === "SPARE" ? " 🐾" : ""}</button>
-              <button type="button" class="btn-outline trunk-zone-btn" data-zone="GLOVE" style="padding:6px 4px;font-size:11px;${state.dogTargetZone === "GLOVE" ? "border-color:#FF5252;color:#FFE082;" : ""}">🧤 ${tr(L("Салон", "Cabin"), state.lang)}${state.dogTargetZone === "GLOVE" ? " 🐾" : ""}</button>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#E0B145;font-weight:800;">
+              <span>🐕 ${tr(L(`ОБШУК: Перевір будь-які відсіки (${stepCostText}/відсік):`, `DOG SEARCH: Check any compartments (${stepCostText}/zone):`), state.lang)}</span>
+              ${hasEndoscope && state.dogTargetZone ? `<span style="color:#80DEEA;">🩻 🐾</span>` : ""}
             </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;">
+              ${zonesList.map(z => {
+                const isChecked = checked.includes(z.id);
+                const hintScents = hasEndoscope && state.dogTargetZone === z.id;
+                return `<button type="button" class="btn-outline trunk-zone-btn" data-zone="${z.id}" ${isChecked ? "disabled" : ""} style="padding:6px 4px;font-size:11px;${isChecked ? "opacity:0.55;border-color:#546E7A;color:#90A4AE;" : (hintScents ? "border-color:#FF5252;color:#FFE082;" : "")}">${z.icon} ${tr(z.name, state.lang)}${isChecked ? " ✓" : (hintScents ? " 🐾" : "")}</button>`;
+              }).join("")}
+            </div>
+            ${state.zoneCheckMsg ? `<div style="font-size:11px;color:#FFE082;font-weight:700;">🔎 ${tr(state.zoneCheckMsg, state.lang)}</div>` : ""}
+            ${checked.length > 0 ? `<button type="button" id="btn-finish-dog-search" class="btn-outline" style="padding:4px 8px;font-size:11px;border-color:#66BB6A;color:#A5D6A7;">✅ ${tr(L("Завершити обшук (нічого не знайдено)", "Finish search (nothing found)"), state.lang)}</button>` : ""}
           </div>
-        ` : ""}
+          `;
+        })() : ""}
 
         <section class="desk-area">
           <div class="doc-tabs" id="doc-tabs-bar"></div>
@@ -5674,11 +5740,43 @@
             </div>
             <hr style="border:none;border-top:1px solid ${state.uvActive ? "#5E35B1" : "#BCAAA4"};margin:2px 0;">
             <div id="doc-fields-list" style="display:flex;flex-direction:column;gap:3px;"></div>
-            ${state.uvActive ? `
-              <div class="uv-watermark" style="color:${doc.sealDisc ? "#FF4081" : "#00E5FF"};">
-                ${doc.sealDisc ? tr(L("UV-АНАЛІЗ: СЛАБКИЙ ДРУК / БЕЗ ВОЛОКОН!", "UV SCAN: NO WATERMARK / FAKE!"), state.lang) : tr(L("UV-АНАЛІЗ: ДЕРЖАВНІ ВОЛОКНА ОК", "UV SCAN: STATE FIBERS OK"), state.lang)}
-              </div>
-            ` : ""}
+            ${state.uvActive ? (() => {
+              const uvFindings = [];
+              let uvColor = "#00E5FF";
+              if (t.storyTag === "NABK_STING") {
+                uvColor = "#FF4081";
+                uvFindings.push(L("🎙️ UV: На лацкані світиться мікрокамера НАБК та мічені купюри «ХАБАР»!", "🎙️ UV: NABK lapel micro-cam & marked bribe bills glowing!"));
+              } else if (t.storyTag === "FSM_SPY") {
+                uvColor = "#FF4081";
+                uvFindings.push(L("🕵️ UV: Паспорт світиться флуоресцентною фарбою типографії ФСМ!", "🕵️ UV: Fluorescent FSM print ink detected on pages!"));
+              } else if (t.storyTag === "INTEL_ALLY") {
+                uvColor = "#FFD54F";
+                uvFindings.push(L("🦅 UV: Проявився невидимий тризуб-голограма ГУР-М!", "🦅 UV: Hidden GUR-M trident hologram revealed!"));
+              }
+              if (doc.sealDisc) {
+                uvColor = "#FF4081";
+                uvFindings.push(L("🔴 UV: Кустарний штамп, нуль захисних волокон!", "🔴 UV: Forged stamp, zero state security fibers!"));
+              }
+              if (doc.type === "VEHICLE_CUSTOMS" && t.violations.some(v => v.code === "VEHICLE_MISMATCH")) {
+                uvColor = "#FF4081";
+                uvFindings.push(L("🚗 UV: На авто сліди перебитого VIN-номера та свіжої фарби!", "🚗 UV: Repainted hull & tampered VIN traces visible!"));
+              }
+              if (t.hasContraband) {
+                if (uvColor === "#00E5FF") uvColor = "#76FF03";
+                uvFindings.push(L("🧪 UV: На обкладинці сліди мазуту та бурштинового пилу — варто пустити пса!", "🧪 UV: Grease & amber dust smudges — send the sniffer dog!"));
+              }
+              if (uvFindings.length === 0) {
+                const cleanNotes = [
+                  L("✨ UV: Державні волокна ДПСК світяться чітко (+ жирна пляма від шаурми).", "✨ UV: State fibers OK (+ a faint shawarma grease stain)."),
+                  L("✨ UV: Водяні знаки в нормі. На палітурці дитячий малюнок котика.", "✨ UV: Watermarks OK. Tiny UV-ink kitten drawn on cover."),
+                  L("✨ UV: Захисна сітка ідеальна. Видно старий штамп «Оплачено 100 🪙».", "✨ UV: Security mesh clean. Old 'Paid 100 🪙' stamp visible."),
+                  L("✨ UV: Усе чисто, лише сліди кави та стікер «Вимкнути праску».", "✨ UV: Clean! Only coffee rings & invisible 'Unplug iron' note.")
+                ];
+                const idx = Math.abs((t.id || "").split("").reduce((a, c) => a + c.charCodeAt(0), 0)) % cleanNotes.length;
+                uvFindings.push(cleanNotes[idx]);
+              }
+              return `<div class="uv-watermark" style="color:${uvColor};display:flex;flex-direction:column;gap:2px;">${uvFindings.map(item => `<div>${tr(item, state.lang)}</div>`).join("")}</div>`;
+            })() : ""}
             <button type="button" id="btn-doc-seal" class="seal-stamp ${doc.sealDisc && state.spottedCodes.includes(doc.sealDisc.code) ? "forged-spotted" : ""} ${state.uvActive && doc.sealDisc ? "forged-uv" : ""}">
               ✪ ${tr(doc.sealText, state.lang)}
             </button>
@@ -5731,7 +5829,9 @@
         reactionState: state.reactionState,
         uvActive: state.uvActive,
         snifferActive: state.vehicleInspected,
-        hasContraband: t.hasContraband
+        hasContraband: t.hasContraband,
+        storyTag: t.storyTag,
+        hasCloneCar: t.violations.some(v => v.code === "VEHICLE_MISMATCH")
       });
 
       const miniC = document.getElementById("passport-mini-canvas");
@@ -5860,18 +5960,52 @@
 
       document.querySelectorAll(".trunk-zone-btn").forEach(btn => {
         btn.addEventListener("click", () => {
+          const zone = btn.getAttribute("data-zone");
+          const hasEndoscope = state.ownedAssets.includes("uv_endoscope");
           audio.playDogSniff();
+          if (!state.checkedZones) state.checkedZones = [];
+          if (!state.checkedZones.includes(zone)) state.checkedZones.push(zone);
+          const stepSec = hasEndoscope ? 0 : 2;
+          if (stepSec > 0) state.shiftSec = Math.max(5, state.shiftSec - stepSec);
+
+          if (state.dogTargetZone && state.dogTargetZone === zone) {
+            state.trunkPanelOpen = false;
+            state.vehicleInspected = true;
+            state.zoneCheckMsg = null;
+            if (t.hasContraband && !state.spottedCodes.includes("CONTRABAND_CARGO")) state.spottedCodes.push("CONTRABAND_CARGO");
+            if (t.storyTag === "DUAL_CITIZEN" && !state.spottedCodes.includes("DUAL_CITIZENSHIP")) state.spottedCodes.push("DUAL_CITIZENSHIP");
+            if (t.violations.some(v => v.code === "VEHICLE_MISMATCH") && !state.spottedCodes.includes("VEHICLE_MISMATCH")) {
+              state.spottedCodes.push("VEHICLE_MISMATCH");
+            }
+          } else if (state.dogTargetZone) {
+            state.zoneCheckMsg = L("Пусто! Тут лише особисті речі — перевір інший відсік.", "Empty! Only personal items — check another compartment.");
+          } else if (state.checkedZones.length >= 3) {
+            state.trunkPanelOpen = false;
+            state.vehicleInspected = true;
+            state.zoneCheckMsg = null;
+            if (t.violations.some(v => v.code === "VEHICLE_MISMATCH") && !state.spottedCodes.includes("VEHICLE_MISMATCH")) {
+              state.spottedCodes.push("VEHICLE_MISMATCH");
+            }
+          } else {
+            state.zoneCheckMsg = L("Пусто! Схованки тут немає — можеш перевірити інший відсік або завершити.", "Empty here! Check another compartment or finish search.");
+          }
+          render();
+        });
+      });
+
+      const finishDogBtn = document.getElementById("btn-finish-dog-search");
+      if (finishDogBtn) {
+        finishDogBtn.addEventListener("click", () => {
+          audio.playTap();
           state.trunkPanelOpen = false;
           state.vehicleInspected = true;
-          if (dogSecCost > 0) state.shiftSec = Math.max(5, state.shiftSec - dogSecCost);
-          if (t.hasContraband && !state.spottedCodes.includes("CONTRABAND_CARGO")) state.spottedCodes.push("CONTRABAND_CARGO");
-          if (t.storyTag === "DUAL_CITIZEN" && !state.spottedCodes.includes("DUAL_CITIZENSHIP")) state.spottedCodes.push("DUAL_CITIZENSHIP");
+          state.zoneCheckMsg = null;
           if (t.violations.some(v => v.code === "VEHICLE_MISMATCH") && !state.spottedCodes.includes("VEHICLE_MISMATCH")) {
             state.spottedCodes.push("VEHICLE_MISMATCH");
           }
           render();
         });
-      });
+      }
 
       document.getElementById("hud-music").addEventListener("click", () => { audio.ensureCtx(); audio.musicEnabled = !audio.musicEnabled; render(); });
       document.getElementById("hud-wanted").addEventListener("click", () => { audio.playTap(); openWantedDossierModal(); });
