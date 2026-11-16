@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v3.4";
+  const BUILD_VERSION = "v3.5";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -4149,7 +4149,7 @@
     };
   }
 
-  function getEscapeTarget() { return state.isSandbox ? 3600 : 2400; }
+  function getEscapeTarget() { return state.isSandbox ? 20000 : 12000; }
   function getEscapeTolikRep() { return state.isSandbox ? 65 : 55; }
   function getRank() {
     if (state.sbkColonelPromoted) {
@@ -5879,7 +5879,7 @@
             ${rent > 0 ? `<div style="color:#81C784;font-weight:700;">🏢 ${tr(L("Пасивний дохід та оклад СБК", "Passive & Covert Income"), state.lang)}: +${rent} 🪙/${tr(L("ранок", "morning"), state.lang)}</div>` : ""}
             <div style="color:#64B5F6;font-weight:700;">🎖️ ${tr(rk.title, state.lang)}${state.isUndercoverSbkAgent ? ` (${tr(L("Спіймано агентури", "Operatives caught"), state.lang)}: ${state.spiesCaughtAsAgent}/4)` : ""}</div>
             <div>🏠 ${tr(L("Настрій сім'ї", "Family Morale"), state.lang)}: ${state.familyMorale}% | 🕵️ НАБК: <span style="color:${state.nabkRisk >= 60 ? "#FF5252" : "#FFF"};">${state.nabkRisk}%</span> | СБК: ${state.sbkRep}</div>
-            <div style="color:#E0B145;font-weight:700;">🚐 ${tr(L("Фонд утечі", "Escape Fund"), state.lang)}: ${state.escapeFund} / ${getEscapeTarget()} 🪙 (${tr(L("Толік", "Tolik"), state.lang)}: ${state.tolikRep}/${getEscapeTolikRep()})</div>
+            <div style="color:#E0B145;font-weight:700;">🚐 ${tr(L("Фонд утечі", "Escape Fund"), state.lang)}: ${state.escapeFund.toLocaleString("en-US")} / ${getEscapeTarget().toLocaleString("en-US")} 💵 (${tr(L("Толік", "Tolik"), state.lang)}: ${state.tolikRep}/${getEscapeTolikRep()})</div>
           </section>
 
           <div class="row-between">
@@ -5980,6 +5980,34 @@
           });
           kCard.appendChild(kb);
           listEl.appendChild(kCard);
+        }
+        if (state.escapeFund < getEscapeTarget()) {
+          const escStep = 1000;
+          const canEsc = (state.usd >= escStep) || ((state.money + state.usd * USD_UAH_RATE) >= escStep * USD_UAH_RATE);
+          const eCard = document.createElement("div");
+          eCard.className = "card-slate row-between";
+          eCard.innerHTML = `
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:800;color:#81C784;">🚐 ${tr(L("Фонд утечі через Толіка (+1 000 💵, +10 Толік)", "Tolik Escape Fund (+1,000 💵, +10 Tolik)"), state.lang)}</div>
+              <div style="color:#CFD8DC;font-size:11px;">${tr(L(`Зібрано: ${state.escapeFund.toLocaleString("en-US")} / ${getEscapeTarget().toLocaleString("en-US")} 💵`, `Saved: ${state.escapeFund.toLocaleString("en-US")} / ${getEscapeTarget().toLocaleString("en-US")} 💵`), state.lang)}</div>
+              <div style="color:#E0B145;font-size:12px;font-weight:800;">1 000 💵 (≈ ${(1000 * USD_UAH_RATE).toLocaleString("en-US")} 🪙)</div>
+            </div>
+          `;
+          const eb = document.createElement("button");
+          eb.type = "button";
+          eb.className = "btn-mustard";
+          eb.disabled = !canEsc;
+          eb.textContent = tr(L("Вкласти", "Fund"), state.lang);
+          eb.addEventListener("click", () => {
+            audio.playBribe();
+            payForAsset({ currency: "USD", cost: escStep });
+            state.escapeFund += escStep;
+            state.tolikRep = Math.min(100, state.tolikRep + 10);
+            saveStateToStorage();
+            render();
+          });
+          eCard.appendChild(eb);
+          listEl.appendChild(eCard);
         }
         billsToShow.forEach(exp => {
           const bought = state.purchasedExpensesToday.includes(exp.id);
