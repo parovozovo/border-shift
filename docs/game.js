@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v3.9";
+  const BUILD_VERSION = "v4.0";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -4656,13 +4656,22 @@
     if (state.bribeAccepted && !isApprove && (!t.bribeOffer || !t.bribeOffer.isFriendlyGift)) {
       return;
     }
+    const bribeOfferInfo = getComputedBribe(t.bribeOffer);
+    const criminalBribeOffer = Boolean(
+      t.bribeOffer &&
+      !t.bribeOffer.isFriendlyGift &&
+      !state.bribeAccepted &&
+      bribeOfferInfo &&
+      (bribeOfferInfo.isInstant || state.vehicleInspected || state.spottedCodes.length > 0 || state.interrogated)
+    );
     const requiresDetain = t.isWantedTarget || t.violations.some(v => v.requiresDetention);
-    const excessiveDetain = isDetain && !t.shouldBeApproved && !requiresDetain;
+    const canDetain = requiresDetain || criminalBribeOffer;
+    const excessiveDetain = isDetain && !t.shouldBeApproved && !canDetain;
 
     let ruleCorrect = false;
     if (decisionType === "APPROVE") ruleCorrect = t.shouldBeApproved;
     else if (decisionType === "DENY") ruleCorrect = !t.shouldBeApproved && !t.isWantedTarget;
-    else if (decisionType === "DETAIN") ruleCorrect = !t.shouldBeApproved && requiresDetain;
+    else if (decisionType === "DETAIN") ruleCorrect = (!t.shouldBeApproved || criminalBribeOffer) && canDetain;
 
     const coveredByBribe = state.bribeAccepted && isApprove && !t.isWantedTarget;
     const rank = getRank();
@@ -4672,7 +4681,7 @@
     if (ruleCorrect || coveredByBribe) {
       const salMult = (state.sandboxMod && state.sandboxMod.salaryMult ? state.sandboxMod.salaryMult : 1.0) * meta.salaryBonusMult;
       salaryDelta = Math.round(rank.salary * salMult);
-      if (isDetain && requiresDetain) {
+      if (isDetain && canDetain) {
         const badges = loadAgencyBadges();
         const undercoverBounty = state.isUndercoverSbkAgent ? 1200 : 0;
         const vipBonus = (t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE") ? 3500 : 0;
@@ -4754,6 +4763,12 @@
     state.shiftFinesTotal += fineDelta;
     updateCareerStats({ processed: 1, detained: (isDetain && ruleCorrect) ? 1 : 0, cash: state.money });
 
+    const bribeDetainMsg = (ruleCorrect && isDetain && !requiresDetain && criminalBribeOffer)
+      ? (t.storyTag === "NABK_STING"
+        ? L("Провокацію НАБК з міченими купюрами задокументовано! Спроба підкупу зафіксована.", "NABK marked-bill provocation documented! Bribery attempt recorded.")
+        : L("Водій запропонував хабар службовій особі — оформлено кримінальний протокол (ст. 369)!", "Driver offered a bribe to an officer — criminal protocol filed!"))
+      : null;
+
     state.barrierState = isApprove ? "OPEN_APPROVED" : (isDetain ? "SBK_ARREST_FLASH" : "CLOSED");
     state.lastFeedback = {
       ok: ruleCorrect || coveredByBribe,
@@ -4761,8 +4776,10 @@
         ? L("🧦 БРАТЕРСТВО М. ШИТОМИР!", "🧦 ORDER OF SHYTOMYR!")
         : (coveredByBribe
           ? L("ЗАКРИТО ОЧІ (ЗА ХАБАР)", "LOOKED THE OTHER WAY (BRIBED)")
-          : (ruleCorrect && isDetain ? L("КРИМІНАЛ ЗАТРИМАНО! (+ПРЕМІЯ СБК)", "CRIMINAL DETAINED! (+SBK BONUS)") : (ruleCorrect ? L("РІШЕННЯ ПРАВИЛЬНЕ", "CORRECT DECISION") : (excessiveDetain ? L("ПЕРЕВИЩЕННЯ! Треба ✖ ВІДМОВИТИ", "EXCESSIVE FORCE! Should ✖ DENY") : L("ПОМИЛКА ПРОТОКОЛУ! ШТРАФ", "PROTOCOL VIOLATION! FINE"))))),
-      detail: shytomyrBonusToast || (isDetain
+          : (bribeDetainMsg
+            ? L("СПРОБУ ХАБАРЯ ЗАТРИМАНО! (+ПРЕМІЯ СБК)", "BRIBE ATTEMPT DETAINED! (+SBK BONUS)")
+            : (ruleCorrect && isDetain ? L("КРИМІНАЛ ЗАТРИМАНО! (+ПРЕМІЯ СБК)", "CRIMINAL DETAINED! (+SBK BONUS)") : (ruleCorrect ? L("РІШЕННЯ ПРАВИЛЬНЕ", "CORRECT DECISION") : (excessiveDetain ? L("ПЕРЕВИЩЕННЯ! Треба ✖ ВІДМОВИТИ", "EXCESSIVE FORCE! Should ✖ DENY") : L("ПОМИЛКА ПРОТОКОЛУ! ШТРАФ", "PROTOCOL VIOLATION! FINE")))))),
+      detail: shytomyrBonusToast || bribeDetainMsg || (isDetain
         ? (state.contentMode === "FULL_18_PLUS" ? t.arrestFull : t.arrestToned)
         : (ruleCorrect ? L("Оформлено за директивою ДПСК.", "Processed per SBGS directive.") : (t.violations[0] ? t.violations[0].title : L("Безпідставна відмова", "Wrongful denial")))),
       moneyDelta: netMoney
@@ -5686,6 +5703,7 @@
               <button type="button" id="btn-take-bribe" style="background:${t.bribeOffer.isFriendlyGift ? "#1B5E20" : "#6D4C41"};color:#E0B145;padding:5px 8px;font-size:11px;width:100%;margin-top:4px;">
                 ${t.bribeOffer.isFriendlyGift ? tr(L(`🤝 ВЗЯТИ ПІДГОН НА КАВУ (+${bribeInfo.display})`, `🤝 ACCEPT GIFT (+${bribeInfo.display})`), state.lang) : tr(L(`✉️ ВЗЯТИ КОНВЕРТ (+${bribeInfo.display})`, `✉️ TAKE ENVELOPE (+${bribeInfo.display})`), state.lang)}
               </button>
+              ${!t.bribeOffer.isFriendlyGift ? `<div style="font-size:10px;color:#FFAB91;margin-top:2px;">⚖️ ${tr(L("Пропозиція хабаря — кримінал (можна 🚨 Затримати)", "Offering a bribe is a crime (can 🚨 Detain)"), state.lang)}</div>` : ""}
             ` : (state.bribeAccepted ? `<div style="color:#81C784;font-size:11px;font-weight:700;margin-top:4px;">${tr(L("✔ У кишені (тисни ✔ ПРОПУСТИТИ)", "✔ Pocketed (press ✔ APPROVE)"), state.lang)}</div>` : "")}
           </div>
         </section>
