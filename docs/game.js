@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v2.10";
+  const BUILD_VERSION = "v2.11";
   let confirmResetArmed = false;
 
   // Fallback for older Safari lacking CanvasRenderingContext2D.roundRect
@@ -34,67 +34,67 @@
   const CAMPAIGN_CHECKPOINTS_KEY = "border_shift_campaign_checkpoints_v1";
   const USD_UAH_RATE = 41;
 
-  // Discrepancy catalog with clear DENY vs DETAIN hints
+  // Discrepancy catalog — factual findings only (no button-press spoilers!)
   const DISCREPANCY = {
     EXPIRED_DATE: {
       code: "EXPIRED_DATE",
       requiresDetention: false,
       title: L("Прострочений документ", "Expired Document"),
-      hint: L("Формальне порушення → ✖ ВІДМОВИТИ", "Formal violation → ✖ DENY")
+      hint: L("Виявлено: термін дії документа вичерпано.", "Finding: document expiry date is past.")
     },
     AGE_RESTRICTION_NO_PERMIT: {
       code: "AGE_RESTRICTION_NO_PERMIT",
       requiresDetention: false,
       title: L("Чоловік 18–60 на виїзд без підстави", "Male 18–60 Exiting Without Permit"),
-      hint: L("Немає підстави на виїзд → ✖ ВІДМОВИТИ", "No exit permit → ✖ DENY")
+      hint: L("Виявлено: відсутня підстава на виїзд 18–60.", "Finding: no valid 18–60 exit permit.")
     },
     NAME_MISMATCH: {
       code: "NAME_MISMATCH",
       requiresDetention: true,
       title: L("Розбіжність ПІБ у документах", "Name Mismatch Across Documents"),
-      hint: L("Чужий документ (Кримінал) → 🚨 АРЕШТ", "Stolen/Fake ID (Crime) → 🚨 DETAIN")
+      hint: L("Виявлено: ПІБ у документах не збігається.", "Finding: full name differs across documents.")
     },
     PHOTO_MISMATCH: {
       code: "PHOTO_MISMATCH",
       requiresDetention: true,
       title: L("Чуже фото в паспорті", "Passport Photo Mismatch"),
-      hint: L("Підміна особи (Кримінал) → 🚨 АРЕШТ", "Impersonation (Crime) → 🚨 DETAIN")
+      hint: L("Виявлено: фото в паспорті не відповідає особі.", "Finding: passport photo does not match traveler.")
     },
     FAKE_ISSUER_SEAL: {
       code: "FAKE_ISSUER_SEAL",
       requiresDetention: true,
       title: L("Підроблена печатка / ліва установа", "Forged Seal / Invalid Authority"),
-      hint: L("Підробка документів (Кримінал) → 🚨 АРЕШТ", "Forged Seal (Crime) → 🚨 DETAIN")
+      hint: L("Виявлено: недійсна установа або підроблена печатка.", "Finding: bogus issuing authority or forged seal.")
     },
     INVALID_QR_CODE: {
       code: "INVALID_QR_CODE",
       requiresDetention: true,
       title: L("Код «Облік+» недійсний / у розшуку", "Oblik+ QR Code Invalid / Wanted"),
-      hint: L("Розшук у реєстрі → 🚨 АРЕШТ", "Registry Wanted → 🚨 DETAIN")
+      hint: L("Виявлено: помилка синхронізації / статус у базі «Облік+».", "Finding: 'Oblik+' registry error / flagged.")
     },
     VEHICLE_MISMATCH: {
       code: "VEHICLE_MISMATCH",
       requiresDetention: true,
       title: L("Колір/модель авто не збігається з техпаспортом", "Vehicle Color/Model Registry Mismatch"),
-      hint: L("Перебиті номери / авто-двійник → 🚨 АРЕШТ", "Stolen clone / VIN mismatch → 🚨 DETAIN")
+      hint: L("Виявлено: авто у вікні не збігається з техпаспортом.", "Finding: parked vehicle does not match declaration.")
     },
     CONTRABAND_CARGO: {
       code: "CONTRABAND_CARGO",
       requiresDetention: true,
       title: L("Контрабанда / схованка в транспорті", "Contraband / Hidden Stash in Transport"),
-      hint: L("Контрабанда / Тайник → 🚨 АРЕШТ", "Contraband / Stowaways → 🚨 DETAIN")
+      hint: L("Виявлено: незадекларований вантаж / схованка.", "Finding: undeclared cargo / hidden stash.")
     },
     WANTED_CRIMINAL_OR_SPY: {
       code: "WANTED_CRIMINAL_OR_SPY",
       requiresDetention: true,
-      title: L("Особа з орієнтування СБК / ФСМ", "SBK / FSM Wanted Target / Spy"),
-      hint: L("Шпигун / Розшук (СБК / ГУР-М) → 🚨 АРЕШТ!", "Spy / Wanted (SBK / GUR-M) → 🚨 DETAIN!")
+      title: L("Підозріла особа / орієнтування спецслужб", "Suspicious Profile / Intel Alert"),
+      hint: L("Виявлено: особа фігурує в орієнтуванні спецслужб.", "Finding: traveler matches intelligence alert.")
     },
     DUAL_CITIZENSHIP: {
       code: "DUAL_CITIZENSHIP",
       requiresDetention: true,
       title: L("Подвійне громадянство (прихований паспорт Kraina)", "Dual Citizenship (Hidden Kraina ID)"),
-      hint: L("Є паспорт Kraina у чоловіка 18–60 → 🚨 ВІЙСЬКОВА ПОЛІЦІЯ!", "Hidden Kraina passport on male 18–60 → 🚨 MILITARY POLICE!")
+      hint: L("Виявлено: приховане громадянство Kraina у чоловіка 18–60.", "Finding: hidden Kraina citizenship on male 18–60.")
     }
   };
 
@@ -2242,7 +2242,7 @@
       passportFields: [
         { label: L("ПІБ", "Full Name"), value: fullName, disc: null },
         { label: L("Вік / Стать", "Age / Sex"), value: L("54 р. • ЧОЛ", "54 y/o • M"), disc: null },
-        { label: L("Мітки реєстру", "Registry Note"), value: L("У розшуку НАБК (Екс-голова Держрезерву)", "NABK Red Notice (Ex-Reserve Chief)"), disc: DISCREPANCY.WANTED_CRIMINAL_OR_SPY },
+        { label: L("Мітки реєстру", "Registry Note"), value: L("Службова примітка №77-А", "Service Note #77-A"), disc: DISCREPANCY.WANTED_CRIMINAL_OR_SPY },
         { label: L("Дійсний до", "Valid Until"), value: L("11.11.2030", "2030-11-11"), disc: null }
       ],
       passportSeal: L("ОРІЄНТУВАННЯ НАБК / СБК", "NABK / SBK ALERT"),
@@ -2736,7 +2736,7 @@
       passportFields: [
         { label: L("ПІБ", "Full Name"), value: fullName, disc: null },
         { label: L("Заявлено", "Claimed"), value: fc.name, disc: null },
-        { label: L("Реєстр ДПСК", "SBGS Registry"), value: L("Увага: є активне громадянство KRAINA!", "Alert: active KRAINA citizenship found!"), disc: DISCREPANCY.DUAL_CITIZENSHIP },
+        { label: L("Реєстр ДПСК", "SBGS Registry"), value: L("Відмітка перетину №904", "Crossing Stamp #904"), disc: DISCREPANCY.DUAL_CITIZENSHIP },
         { label: L("Дійсний до", "Valid Until"), value: L("22.04.2030", "2030-04-22"), disc: null }
       ],
       passportSeal: L(`ПЕРЕВІРИТИ ПОДВІЙНЕ ГРОМАДЯНСТВО`, `CHECK DUAL CITIZENSHIP`),
@@ -2770,9 +2770,9 @@
       passportFields: [
         { label: L("ПІБ", "Full Name"), value: fullName, disc: null },
         { label: L("Мета", "Purpose"), value: L("В'ЇЗД → «Туризм біля військових частин»", "ENTRY → 'Tourism near bases'"), disc: null },
-        { label: L("Орієнтування ГУР-М", "GUR-M Alert"), value: L("Ймовірний агент ворожої «ФСМ»", "Suspected enemy FSM operative"), disc: DISCREPANCY.WANTED_CRIMINAL_OR_SPY }
+        { label: L("Орієнтування ГУР-М", "Registry Note"), value: L("Прес-акредитація №404-М", "Press Pass #404-M"), disc: DISCREPANCY.WANTED_CRIMINAL_OR_SPY }
       ],
-      passportSeal: L("ШТАБ ФСМ • ОСОБЛИВИЙ", "FSM HQ • ALERT"),
+      passportSeal: L(`МІД ${fc.name.uk.toUpperCase()} • ПРЕСА`, `${fc.code} PRESS SEAL`),
       passportSealDisc: DISCREPANCY.WANTED_CRIMINAL_OR_SPY,
       includeDecl: true,
       declaredCargo: L("Туристичний намет, павербанки", "Camping tent, powerbanks"),
@@ -4945,6 +4945,10 @@
       if (state.reactionState === "INTIMIDATED") activeSpeech = t.intimidateReply || t.interrogationReply;
       else if (state.reactionState === "COFFEE_GIVEN") activeSpeech = t.coffeeReply || t.greeting;
       else if (state.interrogated) activeSpeech = t.interrogationReply;
+      if (activeSpeech && bribeInfo) {
+        const syncText = (str) => String(str).replace(/\d[\d\s,]*\s*(💵|🪙)/g, bribeInfo.display);
+        activeSpeech = { uk: syncText(activeSpeech.uk), en: syncText(activeSpeech.en) };
+      }
 
       root.innerHTML = `
         <header class="top-bar">
@@ -5034,7 +5038,7 @@
             ` : ""}
           </div>
           <div class="row-between">
-            <button type="button" id="btn-interrogate" class="btn-outline" style="flex:1;background:#3E2723;">${tr(L("🔍 Звірити по базі / Допит", "🔍 Verify Papers / Ask"), state.lang)}</button>
+            <button type="button" id="btn-interrogate" class="btn-outline" style="flex:1;background:#3E2723;">${tr(L("🔍 Вказати на помилку / Допитати", "🔍 Point Out Issue / Question"), state.lang)}</button>
           </div>
         </section>
 
@@ -5189,7 +5193,14 @@
         audio.playTap();
         state.interrogated = true;
         state.reactionState = "NONE";
-        t.violations.forEach(v => { if (!state.spottedCodes.includes(v.code)) state.spottedCodes.push(v.code); });
+        // Interrogation / registry check catches paper/registry discrepancies only (visual photo, vehicle clone & contraband must be spotted manually!)
+        const paperDisc = t.violations.find(v =>
+          v.code !== "CONTRABAND_CARGO" &&
+          v.code !== "VEHICLE_MISMATCH" &&
+          v.code !== "PHOTO_MISMATCH" &&
+          !state.spottedCodes.includes(v.code)
+        );
+        if (paperDisc) state.spottedCodes.push(paperDisc.code);
         render();
       });
 
