@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v3.5";
+  const BUILD_VERSION = "v3.6";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -402,49 +402,98 @@
     }
   ];
 
-  // Dynamic Evening Bills & Life Situations (picked per evening so it's not repetitive & you can skip!)
+  // Dynamic Evening Bills, Progressive Activities & Rare Night Events (UAH & USD)
   const DYNAMIC_EVENING_BILLS = [
     {
       id: "food_utilities",
+      minDay: 1, chance: 1.0, currency: "UAH",
       title: L("🛒 Закупити харчі, павербанки та бензин у генератор (+15% сім'я)", "🛒 Buy groceries, powerbanks & generator fuel (+15% family)"),
       subtitle: L("Дім у теплі й зі світлом — можна пропустити 1–2 вечори", "Keep home warm and lit — optional if savings are tight"),
-      cost: 220, morale: 15, escape: 0, riskDelta: 0, sbkDelta: 0
+      cost: 950, morale: 15, escape: 0, riskDelta: 0, sbkDelta: 0
     },
     {
       id: "reb_donation",
+      minDay: 1, chance: 1.0, currency: "UAH",
       title: L("📡 Скинутися куму з ЗСК на купольний РЕБ проти «мопедів» (+15 СБК, +12% сім'я)", "📡 Chip in for an anti-drone EW jammer (+15 SBK, +12% family)"),
       subtitle: L("Військові дякують, а майор СБК «Тихий» ставить плюсик у досьє", "Troops thank you and SBK Major Quiet logs your support"),
-      cost: 300, morale: 12, escape: 0, riskDelta: -8, sbkDelta: 15
+      cost: 1400, morale: 12, escape: 0, riskDelta: -8, sbkDelta: 15
     },
     {
       id: "mother_truskavets",
+      minDay: 1, chance: 0.85, currency: "UAH",
       title: L("⛲ Путівка для мами й тещі у Трускавецьк на мінеральні води (+25% сім'я)", "⛲ Send mom & mother-in-law to Truskavetsk mineral spa (+25% family)"),
       subtitle: L("Удома панує благословенна тиша на тиждень вперед!", "Blessed peace and quiet at home all week!"),
-      cost: 350, morale: 25, escape: 0, riskDelta: 0, sbkDelta: 0
+      cost: 1800, morale: 25, escape: 0, riskDelta: 0, sbkDelta: 0
+    },
+    {
+      id: "dog_vet_spa",
+      minDay: 1, chance: 0.9, currency: "UAH",
+      title: L("🐕 СПА та вітаміни для пса «Бавовни» (+10 СБК, +10% сім'я)", "🐕 Vet Spa & Vitamins for Sniffer Dog 'Bavovna' (+10 SBK, +10% family)"),
+      subtitle: L("Пес радісно махає хвостом і краще чує контрабанду", "Happy sniffer dog stays sharp at the gate"),
+      cost: 1100, morale: 10, escape: 0, riskDelta: 0, sbkDelta: 10
     },
     {
       id: "shred_evidence",
-      title: L("🕵️‍♂️ Адвокат-«рішала» з Кийграда: зачистити хвости в НАБК (-28% ризику НАБК)", "🕵️‍♂️ Kyihrad fixer lawyer: scrub NABK investigation tails (-28% NABK risk)"),
+      minDay: 2, chance: 0.75, currency: "USD",
+      title: L("🕵️‍♂️ Адвокат-«рішала» з Кийграда: зачистити хвости в НАБК (-25% ризику НАБК)", "🕵️‍♂️ Kyihrad fixer lawyer: scrub NABK investigation tails (-25% NABK risk)"),
       subtitle: L("Порятунок, якщо брав товсті конверти або прикупив майно", "Lifesaver if you took fat envelopes or bought luxury assets"),
-      cost: 350, morale: 0, escape: 0, riskDelta: -28, sbkDelta: 0
+      cost: 900, morale: 0, escape: 0, riskDelta: -25, sbkDelta: 0
     },
     {
-      id: "escape_fund",
-      title: L("🚐 Відкласти частку Толіку на «нічний трансфер у Варшавку» (+600 🪙 до фонду)", "🚐 Put cash with Tolik for a midnight Varshavka transfer (+600 🪙 escape fund)"),
-      subtitle: L("Кожна гривня наближає запасний вихід із країни", "Every bill brings your covert exit plan closer"),
-      cost: 600, morale: -4, escape: 600, riskDelta: 0, sbkDelta: 0
+      id: "smuggler_poker",
+      minDay: 2, chance: 0.55, currency: "USD",
+      title: L("🃏 Закритий покер із перевізниками Толіка (+18 Толік, +12% сім'я)", "🃏 Backroom Poker with Tolik's Crew (+18 Tolik, +12% family)"),
+      subtitle: L("Живі зв'язки з синдикатом та шанс зірвати банк (+6% НАБК)", "Build syndicate trust (+6% NABK risk)"),
+      cost: 600, morale: 12, escape: 0, riskDelta: 6, sbkDelta: 0, tolikDelta: 18
     },
     {
-      id: "counter_intel_gift",
-      title: L("🥃 Трофейний тепловізор-монокуляр для відділу СБК (+20 СБК, -10% ризик)", "🥃 Donate a thermal monocular to the local SBK team (+20 SBK, -10% risk)"),
-      subtitle: L("Зміцнює твій авторитет у контррозвідці", "Boosts your counter-intelligence standing"),
-      cost: 400, morale: 0, escape: 0, riskDelta: -10, sbkDelta: 20
+      id: "crypto_signal_vip",
+      minDay: 3, chance: 0.45, currency: "USD",
+      title: L("📈 Вкластися в закритий крипто-інсайд «Шитомир-Коїн» (+1 600 💵!)", "📈 Join 'Shytomyr-Coin' Crypto Insider Pool (+1,600 💵!)"),
+      subtitle: L("Поступово відкривається з Дня 3+ — подвоює вкладені 800 💵!", "Unlocks Day 3+ — doubles your 800 💵 stake!"),
+      cost: 800, morale: 8, escape: 0, riskDelta: 4, sbkDelta: 0, usdReward: 1600
+    },
+    {
+      id: "secret_shytomyr_party",
+      minDay: 2, chance: 0.22, isRare: true, currency: "USD",
+      title: L("🧦 Таємна вечірка «Підземний Шитомир» (+35% сім'я, -10% НАБК)", "🧦 Secret 'Underground Shytomyr' Party (+35% family, -10% NABK)"),
+      subtitle: L("✨ Рідкісна нічна подія (22% шанс): земляки накривають стіл!", "✨ Rare night event (22% chance): Shytomyr legends host a feast!"),
+      cost: 500, morale: 35, escape: 0, riskDelta: -10, sbkDelta: 0, tolikDelta: 15
+    },
+    {
+      id: "witch_fortune",
+      minDay: 3, chance: 0.18, isRare: true, currency: "UAH",
+      title: L("🔮 Карпатська мольфарка: зняти «порчу НАБК» (-20% НАБК, +18% сім'я)", "🔮 Carpathian Mystic: Cleanse 'NABK Hex' (-20% NABK, +18% family)"),
+      subtitle: L("✨ Рідкісна подія (18% шанс): димить травами прямо над декларацією!", "✨ Rare event (18% chance): herbal smoke clears your audit karma!"),
+      cost: 2200, morale: 18, escape: 0, riskDelta: -20, sbkDelta: 5
+    },
+    {
+      id: "shady_kazino_night",
+      minDay: 2, chance: 0.24, isRare: true, currency: "USD",
+      title: L("🎰 Підпільне «Казино КПП-777» (Шанс виграти +1 500 💵!)", "🎰 Underground 'Gate-777 Casino' (Win up to +1,500 💵!)"),
+      subtitle: L("✨ Рідкісна подія (24% шанс): крутиш рулетку за 400 💵!", "✨ Rare event (24% chance): spin the midnight wheel for 400 💵!"),
+      cost: 400, morale: 15, escape: 0, riskDelta: 5, sbkDelta: 0, usdReward: 1500
+    },
+    {
+      id: "black_market_drone_lens",
+      minDay: 3, chance: 0.20, isRare: true, currency: "USD",
+      title: L("🛸 Нічний аукціон трофейної оптики для ГУР-М (+30 СБК, -12% НАБК)", "🛸 Midnight Trophy Optics Auction for GUR-M (+30 SBK, -12% NABK)"),
+      subtitle: L("✨ Рідкісна подія (20% шанс): розвідка цінує такий підгін!", "✨ Rare event (20% chance): GUR-M remembers top-grade optics!"),
+      cost: 1500, morale: 0, escape: 0, riskDelta: -12, sbkDelta: 30
+    },
+    {
+      id: "diplomat_banquet",
+      minDay: 4, chance: 0.16, isRare: true, currency: "USD",
+      title: L("🥂 Закритий банкет консулів Франції-Люкс (+25 Палич, +25 СБК, -15% НАБК)", "🥂 Francia-Lux Consuls Banquet (+25 Palych, +25 SBK, -15% NABK)"),
+      subtitle: L("✨ Елітна подія Дня 4+ (16% шанс): найвищі зв'язки на кордоні!", "✨ Rare Day 4+ event (16% chance): elite diplomatic connections!"),
+      cost: 2500, morale: 20, escape: 0, riskDelta: -15, sbkDelta: 25, palychDelta: 25
     },
     {
       id: "bukovel_weekend",
+      minDay: 1, chance: 0.9, currency: "UAH",
       title: L("🎿 Сімейні вихідні в аквапарку Буковельська (+22% сім'я, -5% стресу НАБК)", "🎿 Family weekend at Bukovelsk spa resort (+22% family)"),
       subtitle: L("Справжнє перезавантаження між важкими змінами", "Real reset between intense shifts"),
-      cost: 420, morale: 22, escape: 0, riskDelta: -5, sbkDelta: 5
+      cost: 1600, morale: 22, escape: 0, riskDelta: -5, sbkDelta: 5
     }
   ];
 
@@ -4253,8 +4302,13 @@
     return baseR + addonR;
   }
 
-  function pickTonightBills() {
-    return shuffle(DYNAMIC_EVENING_BILLS).slice(0, 3);
+  function pickTonightBills(dayNum) {
+    const d = dayNum || (state.daySpec ? state.daySpec.dayNumber : 1);
+    const unlocked = DYNAMIC_EVENING_BILLS.filter(item => (item.minDay || 1) <= d);
+    const rolledRare = shuffle(unlocked.filter(item => item.isRare && Math.random() < (item.chance || 0.2)));
+    const common = shuffle(unlocked.filter(item => !item.isRare && Math.random() < (item.chance || 1.0)));
+    const combined = rolledRare.slice(0, 1).concat(common);
+    return combined.slice(0, 3);
   }
 
   function startNewGame(sandbox) {
@@ -6011,15 +6065,18 @@
         }
         billsToShow.forEach(exp => {
           const bought = state.purchasedExpensesToday.includes(exp.id);
-          const canBuy = state.money >= exp.cost && !bought;
+          const isUsdExp = exp.currency === "USD";
+          const canBuy = !bought && (isUsdExp ? (state.usd >= exp.cost || (state.money + state.usd * USD_UAH_RATE) >= exp.cost * USD_UAH_RATE) : state.money >= exp.cost);
+          const priceStr = isUsdExp ? `${exp.cost.toLocaleString("en-US")} 💵` : `${exp.cost.toLocaleString("en-US")} 🪙`;
           const card = document.createElement("div");
           card.className = "card-slate row-between";
+          if (exp.isRare && !bought) card.style.borderLeft = "4px solid #CE93D8";
           if (bought) card.style.backgroundColor = "#1B5E20";
           card.innerHTML = `
             <div style="flex:1;">
               <div style="font-size:13px;font-weight:700;">${tr(exp.title, state.lang)}</div>
               <div style="color:#CFD8DC;font-size:11px;">${tr(exp.subtitle, state.lang)}</div>
-              <div style="color:#E0B145;font-size:12px;font-weight:800;">${exp.cost} 🪙</div>
+              <div style="color:${isUsdExp ? "#81C784" : "#E0B145"};font-size:12px;font-weight:800;">${priceStr}</div>
             </div>
           `;
           const b = document.createElement("button");
@@ -6029,9 +6086,13 @@
           b.textContent = bought ? tr(L("Оплачено", "Paid"), state.lang) : tr(L("Оплатити", "Pay"), state.lang);
           b.addEventListener("click", () => {
             audio.playBribe();
-            state.money -= exp.cost;
+            if (isUsdExp) payForAsset({ currency: "USD", cost: exp.cost });
+            else state.money -= exp.cost;
+            if (exp.usdReward) state.usd += exp.usdReward;
+            if (exp.tolikDelta) state.tolikRep = Math.max(0, Math.min(100, state.tolikRep + exp.tolikDelta));
+            if (exp.palychDelta) state.palychRep = Math.max(0, Math.min(100, state.palychRep + exp.palychDelta));
             state.familyMorale = Math.max(0, Math.min(100, state.familyMorale + exp.morale));
-            state.escapeFund += exp.escape;
+            state.escapeFund += (exp.escape || 0);
             state.nabkRisk = Math.max(0, Math.min(100, state.nabkRisk + exp.riskDelta));
             state.sbkRep = Math.max(0, Math.min(100, state.sbkRep + (exp.sbkDelta || 0)));
             state.purchasedExpensesToday.push(exp.id);
