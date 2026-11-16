@@ -2,7 +2,8 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v2.9";
+  const BUILD_VERSION = "v2.10";
+  let confirmResetArmed = false;
 
   // Fallback for older Safari lacking CanvasRenderingContext2D.roundRect
   if (typeof CanvasRenderingContext2D !== "undefined" && !CanvasRenderingContext2D.prototype.roundRect) {
@@ -4717,9 +4718,12 @@
           <p class="menu-disclaimer">
             ${tr(L("18+ Сатирична художня вигадка: установи, міста й події вигадані • Змінити тон можна вгорі", "18+ Satirical work of fiction: cities, names & agencies are fictional • Toggle mode above"), state.lang)}
           </p>
-          <div style="display:flex;justify-content:space-between;align-items:center;font-family:monospace;font-size:10.5px;color:#5D4037;margin-top:2px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;font-family:monospace;font-size:10.5px;color:#5D4037;margin-top:2px;gap:6px;flex-wrap:wrap;">
             <span>Версія: <strong>${BUILD_VERSION}</strong></span>
-            <button type="button" id="btn-force-refresh" class="btn-outline" style="padding:2px 7px;font-size:10px;color:#3E2723;border-color:#8C7A5B;">🔄 ${tr(L("Оновити кеш", "Force Refresh"), state.lang)}</button>
+            <div style="display:flex;gap:5px;">
+              <button type="button" id="btn-reset-progress" class="btn-outline" style="padding:2px 7px;font-size:10px;color:${confirmResetArmed ? "#B71C1C" : "#5D4037"};border-color:${confirmResetArmed ? "#B71C1C" : "#8C7A5B"};font-weight:${confirmResetArmed ? "800" : "600"};">${confirmResetArmed ? tr(L("⚠️ Точно скинути?", "⚠️ Confirm Wipe?"), state.lang) : tr(L("🗑️ Скинути прогрес", "🗑️ Reset Progress"), state.lang)}</button>
+              <button type="button" id="btn-force-refresh" class="btn-outline" style="padding:2px 7px;font-size:10px;color:#3E2723;border-color:#8C7A5B;">🔄 ${tr(L("Оновити кеш", "Force Refresh"), state.lang)}</button>
+            </div>
           </div>
         </section>
       `;
@@ -4732,6 +4736,23 @@
       document.getElementById("btn-start-camp").addEventListener("click", () => { audio.playApprove(); startNewGame(false); });
       document.getElementById("btn-start-sand").addEventListener("click", () => { audio.playApprove(); startNewGame(true); });
       document.getElementById("btn-open-archive").addEventListener("click", () => { audio.playTap(); state.phase = "ARCHIVE"; render(); });
+      document.getElementById("btn-reset-progress").addEventListener("click", () => {
+        audio.playTap();
+        if (!confirmResetArmed) {
+          confirmResetArmed = true;
+          render();
+          return;
+        }
+        confirmResetArmed = false;
+        try {
+          localStorage.removeItem(SAVE_KEY);
+          localStorage.removeItem(EPILOGUE_SAVE_KEY);
+          localStorage.removeItem(SHYTOMYR_SAVE_KEY);
+          localStorage.removeItem(STATS_SAVE_KEY);
+          localStorage.removeItem(CAMPAIGN_CHECKPOINTS_KEY);
+        } catch (_) {}
+        render();
+      });
       document.getElementById("btn-force-refresh").addEventListener("click", () => {
         window.location.href = window.location.pathname + "?v=" + Date.now();
       });
