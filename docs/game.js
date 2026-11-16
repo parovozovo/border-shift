@@ -100,7 +100,7 @@
     {
       id: "MARTIAL_AUDIT",
       title: L("🚨 Указ Штабу: «Спецоперація Контррозвідки»", "🚨 Daily Decree: 'Counter-Intel Sweep'"),
-      desc: L("Група СБК чергує на КПП! За кожен обґрунтований АРЕШТ сьогодні платять +220 ₴ премії!", "SBK team on site! Every valid DETENTION today pays an extra +220 ₴ bonus!"),
+      desc: L("Група СБК чергує на КПП! За кожен обґрунтований АРЕШТ сьогодні платять +220 🪙 премії!", "SBK team on site! Every valid DETENTION today pays an extra +220 🪙 bonus!"),
       bribeMult: 1.0, detainExtra: 220, salaryMult: 1.0, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: true, twoWheelerBias: false, extraShytomyr: false, extraWar: true
     },
     {
@@ -112,25 +112,25 @@
     {
       id: "CONTRABAND_BOOM",
       title: L("📦 Указ Митниці: «Полювання на двійників та тайники»", "📦 Daily Decree: 'Clone & Stash Hunt'"),
-      desc: L("Звіряйте колір транспорту перед шлагбаумом із декларацією! Премія за АРЕШТ +180 ₴!", "Compare the parked vehicle color against papers! Detention bonus +180 ₴!"),
+      desc: L("Звіряйте колір транспорту перед шлагбаумом із декларацією! Премія за АРЕШТ +180 🪙!", "Compare the parked vehicle color against papers! Detention bonus +180 🪙!"),
       bribeMult: 1.0, detainExtra: 180, salaryMult: 1.0, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
     },
     {
       id: "NIGHT_CONVOY_SURGE",
       title: L("🔦 Спецрежим: «Смуга посиленого контролю»", "🔦 Special Shift: 'Tightened Security Lane'"),
-      desc: L("Через трасу йдуть дипломатичні буси та велокур'єри. Конверти +30%, премія СБК +120 ₴!", "Heavy diplomatic vans & bike couriers on the highway. Bribes +30%, SBK bonus +120 ₴!"),
+      desc: L("Через трасу йдуть дипломатичні буси та велокур'єри. Конверти +30%, премія СБК +120 🪙!", "Heavy diplomatic vans & bike couriers on the highway. Bribes +30%, SBK bonus +120 🪙!"),
       bribeMult: 1.3, detainExtra: 120, salaryMult: 1.1, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
     },
     {
       id: "VELO_PEDAL_RUSH",
       title: L("🚲 Указ Траси: «Вело-самокатний штурм»", "🚲 Highway Decree: 'Two-Wheeler Rush'"),
-      desc: L("Через чергу на авто масово лізуть на вєліках, самокатах і пішки! Премія за АРЕШТ +150 ₴!", "Travelers swarm on bikes, scooters & on foot to bypass traffic! +150 ₴ arrest bonus!"),
+      desc: L("Через чергу на авто масово лізуть на вєліках, самокатах і пішки! Премія за АРЕШТ +150 🪙!", "Travelers swarm on bikes, scooters & on foot to bypass traffic! +150 🪙 arrest bonus!"),
       bribeMult: 1.0, detainExtra: 150, salaryMult: 1.15, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: true, extraShytomyr: false, extraWar: false
     },
     {
       id: "DIPLOMATIC_SCANNER",
       title: L("🛂 Рейд ДПСК: «Перевірка липових диппаспортів»", "🛂 SBGS Raid: 'Fake Diplomatic Passports'"),
-      desc: L("З'явились аферисти з фальшивими печатками. Премія за АРЕШТ +200 ₴, уважніше тисніть на печатки!", "Scammers flashing fake seals. +200 ₴ detention bounty — inspect stamps closely!"),
+      desc: L("З'явились аферисти з фальшивими печатками. Премія за АРЕШТ +200 🪙, уважніше тисніть на печатки!", "Scammers flashing fake seals. +200 🪙 detention bounty — inspect stamps closely!"),
       bribeMult: 1.0, detainExtra: 200, salaryMult: 1.05, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
     },
     {
@@ -142,7 +142,7 @@
     {
       id: "NABK_UNDERCOVER_WAVE",
       title: L("🕵️ Тривога НАБК: «Тиждень прихованих камер»", "🕵️ NABK Alert: 'Hidden Camera Week'"),
-      desc: L("Антикорупційне бюро на трасі! Хабарі менші (x0.8), зате чесна ставка +30% і +240 ₴ за СБК-арешт!", "NABK patrols active! Bribes x0.8, but honest salary +30% and +240 ₴ arrest bonus!"),
+      desc: L("Антикорупційне бюро на трасі! Хабарі менші (x0.8), зате чесна ставка +30% і +240 🪙 за СБК-арешт!", "NABK patrols active! Bribes x0.8, but honest salary +30% and +240 🪙 arrest bonus!"),
       bribeMult: 0.8, detainExtra: 240, salaryMult: 1.3, coffeeMult: 1, shiftSecDelta: 0, forceOblik: true, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
     },
     {
@@ -154,13 +154,13 @@
     {
       id: "SHYTOMYR_DELEGATION",
       title: L("🧦 Подія траси М-06: «Великий шитомирський караван»", "🧦 M-06 Event: 'Great Shytomyr Caravan'"),
-      desc: L("Через КПП масово їдуть легенди з м. Шитомир! Більше унікальних земляків у черзі +300 ₴ за кожну трійку!", "Shytomyr legends are rolling through! Extra unique Shytomyr guests guaranteed today!"),
+      desc: L("Через КПП масово їдуть легенди з м. Шитомир! Більше унікальних земляків у черзі +300 🪙 за кожну трійку!", "Shytomyr legends are rolling through! Extra unique Shytomyr guests guaranteed today!"),
       bribeMult: 1.0, detainExtra: 100, salaryMult: 1.1, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: true, extraWar: false
     },
     {
       id: "DRONE_BLACKOUT",
       title: L("🛸 Ніч тривог: «Повітряна тривога і блекаут»", "🛸 Alert Night: 'Sirens & Blackout'"),
-      desc: L("Над трасою мопеди, генератор гуде! Ставка +25%, премія СБК +190 ₴, сирена гарантована!", "Drones overhead! Base salary +25%, SBK bonus +190 ₴, air-raid siren active!"),
+      desc: L("Над трасою мопеди, генератор гуде! Ставка +25%, премія СБК +190 🪙, сирена гарантована!", "Drones overhead! Base salary +25%, SBK bonus +190 🪙, air-raid siren active!"),
       bribeMult: 1.1, detainExtra: 190, salaryMult: 1.25, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: true, twoWheelerBias: false, extraShytomyr: false, extraWar: true
     }
   ];
@@ -204,21 +204,21 @@
       reqType: "shytomyr",
       reqCount: 3,
       title: L("🧦 Земляки на старті", "🧦 Shytomyr Welcome Fund"),
-      desc: L("Старт будь-якого нового забігу з +300 ₴ у кишені.", "Start every new run with +300 ₴ cash.")
+      desc: L("Старт будь-якого нового забігу з +300 🪙 у кишені.", "Start every new run with +300 🪙 cash.")
     },
     {
       id: "SHYTOMYR_THERMOS",
       reqType: "shytomyr",
       reqCount: 6,
       title: L("☕ Термос по-шитомирськи", "☕ Shytomyr Thermos"),
-      desc: L("+25 ₴ до кожних чайових за каву у будці.", "+25 ₴ bonus to every coffee tip in the booth.")
+      desc: L("+25 🪙 до кожних чайових за каву у будці.", "+25 🪙 bonus to every coffee tip in the booth.")
     },
     {
       id: "SHYTOMYR_CROWN",
       reqType: "shytomyr",
       reqCount: 12,
       title: L("👑 Орден Шитомира (12/12)", "👑 Order of Shytomyr (12/12)"),
-      desc: L("Старт забігу з +800 ₴ та -15% стартового ризику НАБК!", "Start every run with +800 ₴ and -15% starting NABK risk!")
+      desc: L("Старт забігу з +800 🪙 та -15% стартового ризику НАБК!", "Start every run with +800 🪙 and -15% starting NABK risk!")
     },
     {
       id: "TITLE_VETERAN_1",
@@ -359,7 +359,7 @@
     },
     {
       id: "escape_fund",
-      title: L("🚐 Відкласти частку Толіку на «нічний трансфер у Варшавку» (+600 ₴ до фонду)", "🚐 Put cash with Tolik for a midnight Varshavka transfer (+600 ₴ escape fund)"),
+      title: L("🚐 Відкласти частку Толіку на «нічний трансфер у Варшавку» (+600 🪙 до фонду)", "🚐 Put cash with Tolik for a midnight Varshavka transfer (+600 🪙 escape fund)"),
       subtitle: L("Кожна гривня наближає запасний вихід із країни", "Every bill brings your covert exit plan closer"),
       cost: 600, morale: -4, escape: 600, riskDelta: 0, sbkDelta: 0
     },
@@ -377,7 +377,7 @@
     }
   ];
 
-  // Expanded Shop: 10 Assets — Honest Tools/Business in UAH (₴), Serious Luxury/Offshores in USD ($)!
+  // Expanded Shop: 10 Assets — Honest Tools/Business in UAH (🪙), Serious Luxury/Offshores in USD ($)!
   const ASSET_UPGRADES = [
     {
       id: "espresso_machine",
@@ -412,7 +412,7 @@
       currency: "UAH",
       icon: "🥙",
       title: L("Кіоск «Шаурма Шлагбаум-Люкс» біля КПП", "'Barrier-Lux Shawarma' Kiosk outside Checkpoint"),
-      subtitle: L("Білий бізнес! Приносить +1 200 ₴ щоранку з черги водіїв без уваги НАБК", "Legal business! Yields +1,200 ₴ every morning with zero NABK risk"),
+      subtitle: L("Білий бізнес! Приносить +1 200 🪙 щоранку з черги водіїв без уваги НАБК", "Legal business! Yields +1,200 🪙 every morning with zero NABK risk"),
       cost: 25000, passiveIncome: 1200, passiveUsd: 0, dailyRisk: 0, tolikBoost: 5, palychBoost: 10, moraleBoost: 10
     },
     {
@@ -439,7 +439,7 @@
       currency: "USD",
       icon: "🏢",
       title: L("Пентхаус у ЖК «Липки-Гранд» (Кийград) на тещу", "Kyihrad Penthouse (in Mother-in-Law's Name)"),
-      subtitle: L("Стабільна оренда +2 500 ₴ щоранку! (+7% уваги НАБК/день)", "Rental yield +2,500 ₴ every morning! (+7% daily NABK attention)"),
+      subtitle: L("Стабільна оренда +2 500 🪙 щоранку! (+7% уваги НАБК/день)", "Rental yield +2,500 🪙 every morning! (+7% daily NABK attention)"),
       cost: 85000, passiveIncome: 2500, passiveUsd: 0, dailyRisk: 7, tolikBoost: 0, palychBoost: 0, moraleBoost: 25
     },
     {
@@ -448,7 +448,7 @@
       currency: "USD",
       icon: "🏝️",
       title: L("Холодний крипто-гаманець та траст в Офшорії", "Cold Crypto Wallet & Ofshoria Offshore Trust"),
-      subtitle: L("Ховає декларацію: щодня знижує ризик НАБК на -10% і дає +$1 500 дивідендів!", "Shields your assets: cuts NABK risk by -10%/day & yields +$1,500!"),
+      subtitle: L("Ховає декларацію: щодня знижує ризик НАБК на -10% і дає +1 500 💵 дивідендів!", "Shields your assets: cuts NABK risk by -10%/day & yields +1,500 💵!"),
       cost: 110000, passiveIncome: 0, passiveUsd: 1500, dailyRisk: -10, tolikBoost: 15, palychBoost: 0, moraleBoost: 10
     },
     {
@@ -457,8 +457,44 @@
       currency: "USD",
       icon: "🏔️",
       title: L("Шале з чанами в Буковельську (Із вертолітним майданчиком)", "Bukovelsk Mountain Chalet with Hot Tubs"),
-      subtitle: L("Повноцінний курорт: +4 500 ₴ та +$2 000 щоранку + 25% щастя сім'ї!", "Booming resort income: +4,500 ₴ & +$2,000 every morning!"),
+      subtitle: L("Повноцінний курорт: +4 500 🪙 та +2 000 💵 щоранку + 25% щастя сім'ї!", "Booming resort income: +4,500 🪙 & +2,000 💵 every morning!"),
       cost: 180000, passiveIncome: 4500, passiveUsd: 2000, dailyRisk: 4, tolikBoost: 10, palychBoost: 15, moraleBoost: 25
+    },
+    {
+      id: "balenci_jacket",
+      category: "LUXURY",
+      currency: "UAH",
+      icon: "🧥",
+      title: L("Бренд-куртка «Баленсіага-Піксель»", "Luxury Jacket 'Balenciaga-Pixel'"),
+      subtitle: L("+25% до всіх чайових за каву та +15% до конвертів від VIP-клієнтів!", "+25% coffee tips & +15% larger VIP bribe envelopes!"),
+      cost: 32000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 1, tolikBoost: 10, palychBoost: 10, moraleBoost: 10
+    },
+    {
+      id: "iphon_17_pro",
+      category: "TECH",
+      currency: "UAH",
+      icon: "📱",
+      title: L("АйФон 17 Про Макс «Тітан» (З лівим Дія-ботом)", "iPhon 17 Pro Max 'Titan'"),
+      subtitle: L("Миттєво підсвічує підміну фото в паспорті та недійсний QR «Облік+»!", "Auto-flags passport photo swaps & invalid 'Oblik+' QR codes!"),
+      cost: 62000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 5, palychBoost: 5, moraleBoost: 15
+    },
+    {
+      id: "porsche_911",
+      category: "LUXURY",
+      currency: "USD",
+      icon: "🏎️",
+      title: L("Спорткар «Порш 911 Каррера-Тюнінг»", "Sports Car 'Porsh 911 Carrera'"),
+      subtitle: L("+35 секунд до кожної зміни назавжди +25 поваги Толіка та +20 щастя сім'ї!", "+35s to every shift permanently +25 Tolik rep & +20 family morale!"),
+      cost: 65000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 4, tolikBoost: 25, palychBoost: 10, moraleBoost: 20
+    },
+    {
+      id: "monako_yacht",
+      category: "LUXURY",
+      currency: "USD",
+      icon: "🚤",
+      title: L("Яхта «Хвиля Монаківки» (Стоїть на причалі)", "Yacht 'Monakivka Wave'"),
+      subtitle: L("Здається туристам: +2 200 💵 щоранку та +10 щастя сім'ї щодня!", "Charter income: +2,200 💵 every morning & +10 daily family morale!"),
+      cost: 140000, passiveIncome: 0, passiveUsd: 2200, dailyRisk: 3, tolikBoost: 15, palychBoost: 10, moraleBoost: 25
     },
     {
       id: "spain_villa",
@@ -466,7 +502,7 @@
       currency: "USD",
       icon: "🏖️",
       title: L("Вілла на березі Алікантово (Іспанщина) + Золотий паспорт", "Alikantovo Seafront Villa (Spainia) & Golden Visa"),
-      subtitle: L("Вершина імперії нерухомості + пасивні +5 000 ₴ і +$5 000 щоранку!", "Peak real-estate empire + 5,000 ₴ & $5,000 passive yield every morning!"),
+      subtitle: L("Вершина імперії нерухомості + пасивні +5 000 🪙 і +5 000 💵 щоранку!", "Peak real-estate empire + 5,000 🪙 & 5,000 💵 passive yield every morning!"),
       cost: 350000, passiveIncome: 5000, passiveUsd: 5000, dailyRisk: 0, tolikBoost: 0, palychBoost: 0, moraleBoost: 35
     }
   ];
@@ -484,8 +520,8 @@
       options: [
         {
           id: "pass_gur_convoy",
-          label: L("🫡 Підняти шлагбаум без запису в журнал (+25 СБК, +250 ₴ зі спецфонду)", "🫡 Raise barrier off-the-record (+25 SBK, +250 ₴ covert bonus)"),
-          outcome: L("Офіцер тисне тобі руку: «Служба не забуде, брате!» Увечері на картку приходить 250 ₴ премії.", "The officer shakes your hand: 'The Service won't forget!' 250 ₴ lands on your card."),
+          label: L("🫡 Підняти шлагбаум без запису в журнал (+25 СБК, +250 🪙 зі спецфонду)", "🫡 Raise barrier off-the-record (+25 SBK, +250 🪙 covert bonus)"),
+          outcome: L("Офіцер тисне тобі руку: «Служба не забуде, брате!» Увечері на картку приходить 250 🪙 премії.", "The officer shakes your hand: 'The Service won't forget!' 250 🪙 lands on your card."),
           moneyDelta: 250, timeDelta: 10, riskDelta: -5, sbkDelta: 25, tolikDelta: 0, palychDelta: 0, moraleDelta: 10
         },
         {
@@ -500,21 +536,21 @@
       id: "double_agent_cipher",
       title: L("🕵️ ПЕРЕХОПЛЕНИЙ ЗВ'ЯЗКОВИЙ ФЕДЕРАЦІЇ", "🕵️ INTERCEPTED FEDERATION COURIER"),
       desc: L(
-        "Чоловік у сірому плащі нахиляється до вікна й шепоче пароль:\n«Скажіть, по чому сьогодні бринза в Буковельську?.. Ось флешка з графіком руху ешелонів. Мовчки пропустите — у конверті 800 ₴. Або тисніть тривожну кнопку СБК під столом!»",
-        "A man in a grey trenchcoat whispers a cipher at the glass:\n'What is the price of cheese in Bukovelsk today?.. Here is a flash drive with train schedules. Wave me through for 800 ₴ — or hit the hidden SBK alarm under your desk!'"
+        "Чоловік у сірому плащі нахиляється до вікна й шепоче пароль:\n«Скажіть, по чому сьогодні бринза в Буковельську?.. Ось флешка з графіком руху ешелонів. Мовчки пропустите — у конверті 800 🪙. Або тисніть тривожну кнопку СБК під столом!»",
+        "A man in a grey trenchcoat whispers a cipher at the glass:\n'What is the price of cheese in Bukovelsk today?.. Here is a flash drive with train schedules. Wave me through for 800 🪙 — or hit the hidden SBK alarm under your desk!'"
       ),
       portrait: { gender: "M", skinTone: 0, faceShape: 2, hairStyle: 4, hairColor: 0, facialHair: 0, glasses: 2, headwear: 1, scarOrDetail: 0, expression: 1, specialId: "NONE" },
       options: [
         {
           id: "report_to_sbk",
-          label: L("🚨 Натиснути кнопку СБК і взяти шпигуна на гарячому (+400 ₴ премії, +25 СБК)", "🚨 Press SBK alarm & capture spy red-handed (+400 ₴ reward, +25 SBK)"),
-          outcome: L("Група захоплення СБК миттєво пакує агента! Майор «Тихий» виписує тобі 400 ₴ премії та знімає всі питання НАБК.", "SBK strike team tackles the spy in seconds! Major Quiet awards you 400 ₴ and clears your file."),
+          label: L("🚨 Натиснути кнопку СБК і взяти шпигуна на гарячому (+400 🪙 премії, +25 СБК)", "🚨 Press SBK alarm & capture spy red-handed (+400 🪙 reward, +25 SBK)"),
+          outcome: L("Група захоплення СБК миттєво пакує агента! Майор «Тихий» виписує тобі 400 🪙 премії та знімає всі питання НАБК.", "SBK strike team tackles the spy in seconds! Major Quiet awards you 400 🪙 and clears your file."),
           moneyDelta: 400, timeDelta: 0, riskDelta: -12, sbkDelta: 25, tolikDelta: 0, palychDelta: 5, moraleDelta: 10
         },
         {
           id: "fake_double_game",
-          label: L("🎭 Підмінити флешку на дезінформацію СБК і забрати його 800 ₴! (+800 ₴, +15 СБК)", "🎭 Swap drive with SBK disinfo AND pocket his 800 ₴! (+800 ₴, +15 SBK)"),
-          outcome: L("Вищий пілотаж! Ворожа розвідка отримала фальшиві координати муляжів, а 800 ₴ залишилися у твоїй кишені!", "Masterclass! Enemy intel got decoy coordinates while you kept the 800 ₴ cash!"),
+          label: L("🎭 Підмінити флешку на дезінформацію СБК і забрати його 800 🪙! (+800 🪙, +15 СБК)", "🎭 Swap drive with SBK disinfo AND pocket his 800 🪙! (+800 🪙, +15 SBK)"),
+          outcome: L("Вищий пілотаж! Ворожа розвідка отримала фальшиві координати муляжів, а 800 🪙 залишилися у твоїй кишені!", "Masterclass! Enemy intel got decoy coordinates while you kept the 800 🪙 cash!"),
           moneyDelta: 800, timeDelta: -10, riskDelta: 5, sbkDelta: 15, tolikDelta: 0, palychDelta: 0, moraleDelta: 5
         }
       ]
@@ -530,7 +566,7 @@
       options: [
         {
           id: "pay_palych_on_spot",
-          label: L("💵 Відстібнути 200 ₴ «на коньяк» (+15 Палич, -10% ризик НАБК)", "💵 Slip him 200 ₴ 'for cognac' (+15 Palych, -10% NABK risk)"),
+          label: L("💵 Відстібнути 200 🪙 «на коньяк» (+15 Палич, -10% ризик НАБК)", "💵 Slip him 200 🪙 'for cognac' (+15 Palych, -10% NABK risk)"),
           outcome: L("Палич ховає купюри в кашкет: «Оце розмова дорослих людей! Працюй спокійно.»", "Palych tucks the bills into his cap: 'Now that is grown-up talk! Carry on.'"),
           moneyDelta: -200, timeDelta: 0, riskDelta: -10, sbkDelta: 0, tolikDelta: 0, palychDelta: 15, moraleDelta: 0
         },
@@ -553,8 +589,8 @@
       options: [
         {
           id: "trust_cat",
-          label: L("🦴 Дати тваринам ковбаси й розкрити подвійне дно фури (+380 ₴ премії СБК!)", "🦴 Feed pets sausage & tear open the truck bed (+380 ₴ SBK reward!)"),
-          outcome: L("У схованці під підлогою знайдено 50 блоків контрабандної електроніки! СБК виписує 380 ₴ премії!", "Hidden under the floor were 50 crates of smuggled electronics! SBK pays 380 ₴!"),
+          label: L("🦴 Дати тваринам ковбаси й розкрити подвійне дно фури (+380 🪙 премії СБК!)", "🦴 Feed pets sausage & tear open the truck bed (+380 🪙 SBK reward!)"),
+          outcome: L("У схованці під підлогою знайдено 50 блоків контрабандної електроніки! СБК виписує 380 🪙 премії!", "Hidden under the floor were 50 crates of smuggled electronics! SBK pays 380 🪙!"),
           moneyDelta: 380, timeDelta: 0, riskDelta: -5, sbkDelta: 12, tolikDelta: 0, palychDelta: 0, moraleDelta: 8
         },
         {
@@ -591,7 +627,7 @@
       idx: 3,
       title: L("🏖️ КОРОЛЬ КОРДОНУ — ВІЛЛА В АЛІКАНТОВО", "🏖️ BORDER OLIGARCH — VILLA IN ALIKANTOVO"),
       subtitle: L("Від скромного шлагбаума до власного басейну в Іспанщині з золотим паспортом у кишені.", "From a cold checkpoint booth to your own seafront pool in Spainia."),
-      hint: L("Накопич 3 000 ₴ і купи віллу в Алікантово в магазині активів.", "Save 3,000 ₴ and buy the Alikantovo Villa.")
+      hint: L("Накопич 3 000 🪙 і купи віллу в Алікантово в магазині активів.", "Save 3,000 🪙 and buy the Alikantovo Villa.")
     },
     ESCAPED_IN_VAN: {
       idx: 4,
@@ -603,7 +639,7 @@
       idx: 5,
       title: L("👑 БАРОН ЗАХІДНОЇ МИТНИЦІ", "👑 BARON OF WESTERN CUSTOMS"),
       subtitle: L("Ти викупив посаду начальника КПП — тепер Пал Палич стоїть на шлагбаумі під дощем.", "You bought out the Checkpoint Chief's chair — now Palych freezes at the barrier."),
-      hint: L("Купи «Беху Х5», квартиру в Кийграді та май 1 500 ₴ кешу.", "Own Beha X5, Kyihrad Penthouse, and 1,500 ₴ cash.")
+      hint: L("Купи «Беху Х5», квартиру в Кийграді та май 1 500 🪙 кешу.", "Own Beha X5, Kyihrad Penthouse, and 1,500 🪙 cash.")
     },
     BUKOVEL_HETMAN: {
       idx: 6,
@@ -639,7 +675,7 @@
       idx: 11,
       title: L("🚕 КОМЕРЦІЙНИЙ ПАРТНЕР СИНДИКАТУ", "🚕 LOGISTICS PARTNER OF THE SYNDICATE"),
       subtitle: L("Не звільнившись із кордону, ти став тіньовим диспетчером усіх бусів Толіка.", "Still at the gate on paper, you became the shadow dispatcher for Tolik's entire fleet."),
-      hint: L("Підніми репутацію у Толіка до 70+ та накопич 800 ₴.", "Reach 70+ Tolik rep with 800 ₴+ cash.")
+      hint: L("Підніми репутацію у Толіка до 70+ та накопич 800 🪙.", "Reach 70+ Tolik rep with 800 🪙+ cash.")
     },
     PALYCH_GODSON: {
       idx: 12,
@@ -768,8 +804,8 @@
     if (has("spain_villa") && has("cyprus_offshore")) {
       assetIdx = 0;
       assetText = L(
-        `Ти зібрав повний джекпот: активи сховані в Офшорії, у Кийграді капає оренда, а ранок починається на терасі вілли в Алікантово. На рахунках залишилось ${st.money} ₴ живого кешу.`,
-        `Full jackpot: offshore trusts in Ofshoria, rental cash flowing in, and mornings on your Alikantovo terrace with ${st.money} ₴ cash remaining.`
+        `Ти зібрав повний джекпот: активи сховані в Офшорії, у Кийграді капає оренда, а ранок починається на терасі вілли в Алікантово. На рахунках залишилось ${st.money} 🪙 живого кешу.`,
+        `Full jackpot: offshore trusts in Ofshoria, rental cash flowing in, and mornings on your Alikantovo terrace with ${st.money} 🪙 cash remaining.`
       );
     } else if (has("spain_villa")) {
       assetIdx = 1;
@@ -792,26 +828,26 @@
     } else if (has("shawarma_kiosk")) {
       assetIdx = 4;
       assetText = L(
-        `Кіоск «Шаурма Шлагбаум-Люкс» годує 30-кілометрову чергу до Варшавки й щодня відбиває інвестиції чистим кешем (${st.money} ₴ у сейфі).`,
-        `Your Barrier-Lux Shawarma kiosk feeds endless Varshavka queues and turns crisp profits (${st.money} ₴ saved).`
+        `Кіоск «Шаурма Шлагбаум-Люкс» годує 30-кілометрову чергу до Варшавки й щодня відбиває інвестиції чистим кешем (${st.money} 🪙 у сейфі).`,
+        `Your Barrier-Lux Shawarma kiosk feeds endless Varshavka queues and turns crisp profits (${st.money} 🪙 saved).`
       );
     } else if (has("espresso_machine") || has("uv_endoscope") || has("sbk_database_tablet")) {
       assetIdx = 5;
       assetText = L(
-        `Уся зарплатня пішла не в люкс, а у професійне спорядження будки: кавомашину «ДеЛонгі», сканери й базу розвідки (${st.money} ₴ готівки).`,
-        `You invested in booth tech — espresso gear, scanners, and intel tablets (${st.money} ₴ left on hand).`
+        `Уся зарплатня пішла не в люкс, а у професійне спорядження будки: кавомашину «ДеЛонгі», сканери й базу розвідки (${st.money} 🪙 готівки).`,
+        `You invested in booth tech — espresso gear, scanners, and intel tablets (${st.money} 🪙 left on hand).`
       );
     } else if (st.money >= 1500) {
       assetIdx = 6;
       assetText = L(
-        `Ти не витрачався на показові понти й назбирав солідний запас готівки (${st.money} ₴) у банці під підлогою.`,
-        `You skipped flashy purchases and amassed a serious cash reserve (${st.money} ₴) under the floorboards.`
+        `Ти не витрачався на показові понти й назбирав солідний запас готівки (${st.money} 🪙) у банці під підлогою.`,
+        `You skipped flashy purchases and amassed a serious cash reserve (${st.money} 🪙) under the floorboards.`
       );
     } else {
       assetIdx = 7;
       assetText = L(
-        `Після всіх витрат і штрафів у кишені залишилося всього ${st.money} ₴ — доведеться жити на звичайну зарплату без особливих заощаджень.`,
-        `After bills and fines, only ${st.money} ₴ stayed in your pocket — modest living ahead.`
+        `Після всіх витрат і штрафів у кишені залишилося всього ${st.money} 🪙 — доведеться жити на звичайну зарплату без особливих заощаджень.`,
+        `After bills and fines, only ${st.money} 🪙 stayed in your pocket — modest living ahead.`
       );
     }
 
@@ -1370,7 +1406,7 @@
         greeting: L("«Здоров, братан! Тарас Панчішний, 34! Дивись прописку — м. Шитомир! Хтось каже, що нашого міста не існує, а шкарпетки мої на всіх ногах! Пропустиш?»", "'Hey bro! Taras Panchishnyi! Check the birthplace — Shytomyr City! They say our city doesn't exist, yet everyone wears our socks!'"),
         reply: L("«Усе чітко за накладною, навіть колір носків задекларовано!»", "'Everything is 100% legal on the manifest!'"),
         intimidate: L("«Ей, не стукай по склу, там же 600 пар бавовни!»", "'Hey, easy on the glass!'"),
-        coffee: L("«За каву респект! Тримай 75 ₴ на круасани для поста!»", "'Respect for the coffee! Catch 75 ₴ for snacks!'")
+        coffee: L("«За каву респект! Тримай 75 🪙 на круасани для поста!»", "'Respect for the coffee! Catch 75 🪙 for snacks!'")
       }]
     },
     {
@@ -1387,7 +1423,7 @@
         greeting: L("«Привіт, земле! Соломія з Шитомира! Усі сміються з нашого космодрому, а ми вже в Варшавці телескоп забираємо! Глянеш паспорт?»", "'Hi Earthling! Solomiia from Shytomyr! Picking up a telescope in Varshavka!'"),
         reply: L("«Усе космічно точно, печатка державна!»", "'Astronomically accurate papers!'"),
         intimidate: L("«Обережно, це не просто самокат — тут прототип іонного двигуна!»", "'Careful, that is an ion-drive prototype!'"),
-        coffee: L("«Спасибі за каву! Як у невагомості — лови 60 ₴!»", "'Thanks for the coffee! Have 60 ₴!'")
+        coffee: L("«Спасибі за каву! Як у невагомості — лови 60 🪙!»", "'Thanks for the coffee! Have 60 🪙!'")
       }]
     },
     {
@@ -1404,7 +1440,7 @@
         greeting: L("«Свіжий холод у будку! Орест із заводу «Шинка-Рудь», м. Шитомир! Везу пробну партію пломбіру на виставку в Поландію!»", "'Fresh chill to the booth! Orest from Shynka-Rud plant, Shytomyr!'"),
         reply: L("«Документи на рефрижератор і сертифікати якості в повному порядку!»", "'Reefer & quality certificates are spotless!'"),
         intimidate: L("«Та чого ти гримаєш — у мене ж пломбір розтане!»", "'Stop yelling, the ice cream will melt!'"),
-        coffee: L("«Гаряча кава до пломбіру — ідеально! Ось 80 ₴ на пост!»", "'Hot coffee with ice cream — perfection! 80 ₴ for the booth!'")
+        coffee: L("«Гаряча кава до пломбіру — ідеально! Ось 80 🪙 на пост!»", "'Hot coffee with ice cream — perfection! 80 🪙 for the booth!'")
       }]
     },
     {
@@ -1421,7 +1457,7 @@
         greeting: L("«Сім футів під шлагбаумом! Богдана з берегів Тетерівки, м. Шитомир! Їду за моторами для рятувальників!»", "'Smooth sailing at the barrier! Bohdana from Teterivka river, Shytomyr!'"),
         reply: L("«Усі бортові журнали та паспорти звірені!»", "'Logbooks and passports verified!'"),
         intimidate: L("«Я шторм на Тетерівці пережила, а ви мені по склу стукаєте!»", "'I survived storms on Teterivka!'"),
-        coffee: L("«Дякую за гарячий кофеїн на борту! 70 ₴ на флот!»", "'Thanks for the coffee! 70 ₴ tip!'")
+        coffee: L("«Дякую за гарячий кофеїн на борту! 70 🪙 на флот!»", "'Thanks for the coffee! 70 🪙 tip!'")
       }]
     },
     {
@@ -1438,7 +1474,7 @@
         greeting: L("«Доброго здоров'я, синку! Гнат із Соколовського кар'єру, м. Шитомир. Кремінь, а не мужик! Документи залізні — глянь!»", "'Greetings! Hnat from Sokolovskyi Quarry, Shytomyr. Rock-solid papers!'"),
         reply: L("«Камінь не бреше, і печатка теж справжня!»", "'Stone doesn't lie, seal is genuine!'"),
         intimidate: L("«Ха! Гранітник від стукоту не здригається!»", "'Ha! A quarryman doesn't flinch at knocking!'"),
-        coffee: L("«Міцна кава, як наш граніт! Тримай 90 ₴!»", "'Strong as granite! Take 90 ₴!'")
+        coffee: L("«Міцна кава, як наш граніт! Тримай 90 🪙!»", "'Strong as granite! Take 90 🪙!'")
       }]
     },
     {
@@ -1455,7 +1491,7 @@
         greeting: L("«Привітик із Польової-Авеню, м. Шитомир! Марта їде на благодійний ярмарок смажити деруни на всю Поландію!»", "'Hello from Polova Ave, Shytomyr! Heading to a charity deruny fair!'"),
         reply: L("«Папери підсмажені ідеально, жодної помилки!»", "'Papers cooked to perfection!'"),
         intimidate: L("«Ой не кричи, бо сметана скисне!»", "'Don't yell or the sour cream will curdle!'"),
-        coffee: L("«Дякую, золотко! Ось тобі 65 ₴ і рецепт хрумких дерунів!»", "'Thank you dear! Have 65 ₴!'")
+        coffee: L("«Дякую, золотко! Ось тобі 65 🪙 і рецепт хрумких дерунів!»", "'Thank you dear! Have 65 🪙!'")
       }]
     },
     {
@@ -1472,7 +1508,7 @@
         greeting: L("«Хелоу! Ілля з Богунії-Сіті, м. Шитомир! Їду в Краків доводити дата-центру, що наш IP не баг у матриці!»", "'Hello! Illia from Bohunia-City, Shytomyr! Proving our IP is real!'"),
         reply: L("«Усі сертифікати TLS і штамп ДПСК валідні!»", "'All certificates and stamps valid!'"),
         intimidate: L("«Пінг підскочив, але папери без багів!»", "'Ping spiked, but papers are bug-free!'"),
-        coffee: L("«Кава як патч першого дня! Лови 80 ₴!»", "'Coffee is a day-one patch! 80 ₴ tip!'")
+        coffee: L("«Кава як патч першого дня! Лови 80 🪙!»", "'Coffee is a day-one patch! 80 🪙 tip!'")
       }]
     },
     {
@@ -1489,7 +1525,7 @@
         greeting: L("«Добрий вечір! Зоряна з Чуднівського мосту, м. Шитомир. Кручу педалі на виставку до Варшавки!»", "'Good evening! Zoriana from Chudnivskyi Bridge, Shytomyr!'"),
         reply: L("«Перегляньте паспорт — там усе яскраво й чесно!»", "'Check my passport — bright and honest!'"),
         intimidate: L("«Не лякайте натхнення, будь ласка!»", "'Please don't scare my muse!'"),
-        coffee: L("«Ваша кава надихає! Тримайте 50 ₴ на фарбу для шлагбаума!»", "'Inspiring coffee! 50 ₴ tip!'")
+        coffee: L("«Ваша кава надихає! Тримайте 50 🪙 на фарбу для шлагбаума!»", "'Inspiring coffee! 50 🪙 tip!'")
       }]
     },
     {
@@ -1506,7 +1542,7 @@
         greeting: L("«Траса М-06 вітає КПП! Віталік з Шитомира, до Кийграда й назад за 40 хвилин, а тепер везу пікап пацанам!»", "'Highway M-06 salutes the gate! Vitalii from Shytomyr hauling gear!'"),
         reply: L("«Гальма перевірені, довідка і декларація чіткі!»", "'Brakes and permits both solid!'"),
         intimidate: L("«Та спокійно, я по трасі й не таке бачив!»", "'Easy, I've seen wilder on the M-06!'"),
-        coffee: L("«Дальнобійний респект за каву! 85 ₴ на зміну!»", "'Trucker respect! 85 ₴ tip!'")
+        coffee: L("«Дальнобійний респект за каву! 85 🪙 на зміну!»", "'Trucker respect! 85 🪙 tip!'")
       }]
     },
     {
@@ -1523,7 +1559,7 @@
         greeting: L("«Здоровенькі були, дитинко! Леся з Шодуарівського парку, м. Шитомир! Іду пішки, бо в нашому місті трамвай — святе, а до Варшавки й ногами дійду!»", "'Bless you dear! Lesia from Shoduar Park, Shytomyr!'"),
         reply: L("«Пенсійний вік, паспорт новісінький, дивіться!»", "'Fresh passport, look right here!'"),
         intimidate: L("«Та не кричи на бабцю, я ж із пряниками!»", "'Don't yell at grandma, I brought cookies!'"),
-        coffee: L("«Яка смачна кава! Ось 50 ₴ і баночка меду!»", "'Lovely coffee! Take 50 ₴!'")
+        coffee: L("«Яка смачна кава! Ось 50 🪙 і баночка меду!»", "'Lovely coffee! Take 50 🪙!'")
       }]
     },
     {
@@ -1540,7 +1576,7 @@
         greeting: L("«Всім привіт, це хвіжс-патруль з Шитомира! Знімаємо докфільм, шо ми не міраж! Інспекторе, все по закону, ставиш лайк і штамп?»", "'What's up, khvizhs patrol from Shytomyr! Filming proof we exist!'"),
         reply: L("«Усі прес-карти й довідки в базі, перевіряй!»", "'Press cards and permits verified!'"),
         intimidate: L("«О, крутий кадр для рілсів — суворий страж кордону!»", "'Ooh great clip for reels!'"),
-        coffee: L("«За каву — 100 ₴ донат на будку без камер!»", "'100 ₴ coffee donation!'")
+        coffee: L("«За каву — 100 🪙 донат на будку без камер!»", "'100 🪙 coffee donation!'")
       }]
     },
     {
@@ -1557,7 +1593,7 @@
         greeting: L("«Вітаю, колего! Вікторія з Корбутівки, м. Шитомир! Їду замовляти підсвітку для нових прикордонних стел!»", "'Hello colleague! Viktoriia from Korbutivka, Shytomyr!'"),
         reply: L("«Креслення затверджені, QR та довідка активні!»", "'Blueprints approved, QR active!'"),
         intimidate: L("«Шум це добре, але акустика в будці слабенька — поправлю в проєкті!»", "'Note to self: improve booth acoustics!'"),
-        coffee: L("«Прекрасний еспресо! Ось 95 ₴ на модернізацію кавомашини!»", "'Lovely espresso! 95 ₴ tip!'")
+        coffee: L("«Прекрасний еспресо! Ось 95 🪙 на модернізацію кавомашини!»", "'Lovely espresso! 95 🪙 tip!'")
       }]
     }
   ];
@@ -1710,7 +1746,7 @@
       declaredCargo: L("Пиріжки, хустки, банка меду", "Pastries, scarves & jar of honey"),
       vehicleSearchResult: L("Під пасажирським сидінням знайдено чоловічу бритву та гель для гоління.", "Found a men's razor and shaving foam under the seat."),
       greeting: L("«Ой, синочку! Їду в Поландію до онуків... трохи голос охрип, бо протягло в автобусі!»", "'Oh sonny! Heading to Polandia to see my grandkids... caught a deep frog in my throat!'"),
-      interrogationReply: L("«Та то я на паспорт фотографувалася ще до перукарні! Візьми 380 ₴ на шоколадку та став зелений штамп!»", "'I just took the photo before my hairdo! Take 380 ₴ for chocolate and stamp green!'"),
+      interrogationReply: L("«Та то я на паспорт фотографувалася ще до перукарні! Візьми 380 🪙 на шоколадку та став зелений штамп!»", "'I just took the photo before my hairdo! Take 380 🪙 for chocolate and stamp green!'"),
       intimidateReply: L("«*Хрипким басом* Ти шо кричиш?! Хустка ледь не злетіла...»", "'*Deep baritone cough* Why are you shouting?! My headscarf nearly slipped...'"),
       coffeeReply: L("«*Дмухає на каву, перука з'їжджає набік* Ой, гаряченька!»", "'*Blows on coffee, wig shifts slightly* Oh, nice and hot!'"),
       arrestFull: L("Коли хустку й біляву перуку зняли, з'ясувалося що «Тітка Галя» — це Петро Пасічник із Левгорода!", "Once the wig came off, 'Aunt Halya' turned out to be Petro from Levhorod!"),
@@ -1748,7 +1784,7 @@
       declaredCargo: L("Пуста дубова труна (без вкладення), 2 вінки", "Empty oak casket, 2 wreaths"),
       vehicleSearchResult: L("ПЕС «БАВОВНА» РОЗКРИВ ТРУНУ: Усередині сидить живий кум у ластах із телефоном і банкою консервів!", "DOG SEARCH: Inside the coffin sits a live cousin in swim fins eating canned food!"),
       greeting: L("«Скорботний рейс, командире... Везу пусту антикварну труну... *ІЗ КУЗОВА ЛУНАЄ ГУЧНЕ: АПЧХИ!*»", "'Solemn run, officer... Just hauling an empty casket... *LOUD SNEEZE FROM THE BACK!*"),
-      interrogationReply: L("«То... протяги в катафалку скриплять! Не кличте собаку, ось 650 ₴ за моральну шкоду!»", "'Just... creaky hinges! Don't bring the dog, take 650 ₴!'"),
+      interrogationReply: L("«То... протяги в катафалку скриплять! Не кличте собаку, ось 650 🪙 за моральну шкоду!»", "'Just... creaky hinges! Don't bring the dog, take 650 🪙!'"),
       intimidateReply: L("«*Стук по склу — із труни панічно кричать: БУДЬ ЛАСКА, НЕ ВІДКРИВАЙТЕ, В МЕНЕ КЛАУСТРОФОБІЯ!*»", "'*From the coffin: PLEASE DON'T OPEN, I'M CLAUSTROPHOBIC!*"),
       coffeeReply: L("«О, дайте два стаканчики... другий для... е-е... охолодження радіатора!»", "'Give me two cups... second one is for the radiator!'"),
       arrestFull: L("Група СБК витягає із труни «небіжчика в ластах» та затримує водія катафалка!", "SBK pulls the 'deceased in swim fins' out of the coffin and cuffs the driver!"),
@@ -1787,7 +1823,7 @@
       declaredCargo: L("Коробки з теплими шкарпетками та крупою (120 кг)", "Boxes of warm socks & buckwheat (120 kg)"),
       vehicleSearchResult: L("ПЕС «БАВОВНА» ЗНАЙШОВ СХОВАНКУ: За фальшивою стінкою буса — 40 блоків контрабандних цигарок і 2 пасажири без квитків!", "DOG SEARCH: False bulkhead hides 40 cigarette cartons and 2 unticketed stowaways!"),
       greeting: L("«Здорово, командире! Свій рейс! Толік везе «гуманітарку» до Варшавки. Можемо по-діловому порішати — і будемо друзями на майбутнє!»", "'Hey boss! Tolik running a friendly load to Varshavka. Let's make a business deal for future favors!'"),
-      interrogationReply: L("«Слухай, у мене за спиною хлопці до Варшавки їдуть... Бери 700 ₴ у кишеню — і колись сам вивеземо вночі, як припече!»", "'Listen, carrying passengers in back... Take 700 ₴ and earn syndicate favors if you ever need a night exit!'"),
+      interrogationReply: L("«Слухай, у мене за спиною хлопці до Варшавки їдуть... Бери 700 🪙 у кишеню — і колись сам вивеземо вночі, як припече!»", "'Listen, carrying passengers in back... Take 700 🪙 and earn syndicate favors if you ever need a night exit!'"),
       intimidateReply: L("«Ой, не гарячкуй! Твої колеги на сусідній зміні спокійніше з Толіком працюють!»", "'Whoa easy there! Other shifts work smoothly with Tolik!'"),
       coffeeReply: L("«Дякую за каву, брате! Як буде треба тихо виїхати в Поландію — ти знаєш, де шукати Толіка!»", "'Thanks for the coffee brother! Whenever you need a quiet ride out, ask for Tolik!'"),
       arrestFull: L("Толіка «Бусика» беруть на гарячому — контрабандна мережа зазнала важких втрат!", "Tolik 'Busyk' is busted red-handed — smuggling syndicate takes a heavy hit!"),
@@ -1815,7 +1851,7 @@
       includeDecl: true,
       declaredCargo: L("Валізи Louis Vuitton, золотий ланцюг", "Designer suitcases"),
       greeting: L("«Чуєш, ти знаєш, хто мій батя?! Я лечу на бізнес-конференцію в Монаківку! Які довідки?! Став штамп бігом!»", "'Do you know who my dad is?! Heading to Monakivka! What permit?! Stamp it NOW!'"),
-      interrogationReply: L("«Ой не напрягай. Ось 1 000 ₴ прямо на торпеді — або ж просто нажми ✖ ВІДМОВИТИ і втрачай шанс!»", "'Stop stressing me. Take 1,000 ₴ cash — or turn me down and stay broke!'"),
+      interrogationReply: L("«Ой не напрягай. Ось 1 000 🪙 прямо на торпеді — або ж просто нажми ✖ ВІДМОВИТИ і втрачай шанс!»", "'Stop stressing me. Take 1,000 🪙 cash — or turn me down and stay broke!'"),
       intimidateReply: L("«ТИ НА КОГО ГАВКАЄШ?! Та мій батя цей шлагбаум завтра знесе! *руки тремтять на кермі*»", "'WHO DO YOU THINK YOU ARE YELLING AT?! My dad will demolish this booth!'"),
       coffeeReply: L("«Фу, та це ж розчинна з термоса? Ну... хоч гаряча, спасибі.»", "'Ugh, thermos coffee? Well... at least it is hot.'"),
       arrestFull: L("Мажор кричить у телефон «Батя, мене пакують за відмову виїзду!», але ти перестарався — достатньо було відмови!", "You detained a VIP over a missing permit when a simple DENY sufficed!"),
@@ -1847,7 +1883,7 @@
       greeting: L("«Здоровенькі були, онучку! Бойко Степан, 68 років! Подивися на мої сиві вуса — їду провідати дочку й онуків!»", "'Good day, grandson! Stepan Boiko, 68 years old! Just visiting my grandkids!'"),
       interrogationReply: L("«Та чого там перевіряти, в мене й вік пенсійний, і документи як у космонавта!»", "'Nothing to worry about, senior age and clean papers!'"),
       intimidateReply: L("«Синочку, не кричи на діда, в мене ж тиск...»", "'Son, don't yell at an old man, my blood pressure...'"),
-      coffeeReply: L("«Ой спасибі за кавусю! Тримай 50 ₴ на пиріжок і банку малинового варення для родини!»", "'Bless you for the coffee! Take 50 ₴ for pastries!'"),
+      coffeeReply: L("«Ой спасибі за кавусю! Тримай 50 🪙 на пиріжок і банку малинового варення для родини!»", "'Bless you for the coffee! Take 50 🪙 for pastries!'"),
       coffeeTip: 50,
       arrestFull: L("Черга в шоці — ти навіщось затримав доброго дідуся на пенсії!", "The entire queue boos as you detain an innocent 68-year-old grandfather!"),
       arrestToned: L("Пенсіонера помилково затримано.", "Innocent retiree mistakenly detained."),
@@ -1871,7 +1907,7 @@
       includeDecl: true,
       declaredCargo: L("Шкіряний портфель, диктофон", "Leather briefcase"),
       vehicleSearchResult: L("В бардачку лежать пусті протоколи вилучення готівки з шапкою НАБК!", "Glovebox holds blank NABK cash-seizure protocols!"),
-      greeting: L("«Добрий день... Слухайте, довідку забув дома, а на зустріч у Варшавку запізнююся. Може, ось 500 ₴ — ніхто ж не бачить?..» *поправляє ґудзик піджака*", "'Hello... Forgot my permit at home. Here is 500 ₴ — nobody is watching, right?..' *adjusts lapel button*"),
+      greeting: L("«Добрий день... Слухайте, довідку забув дома, а на зустріч у Варшавку запізнююся. Може, ось 500 🪙 — ніхто ж не бачить?..» *поправляє ґудзик піджака*", "'Hello... Forgot my permit at home. Here is 500 🪙 — nobody is watching, right?..' *adjusts lapel button*"),
       interrogationReply: L("«Та які камери, інспекторе?! Я звичайний менеджер, візьміть купюри в руки — швидше ж!»", "'What cameras?! Just touch the cash bills and stamp me!'"),
       intimidateReply: L("«*Різко блідне й прикриває рукою ґудзик на грудях* Е-е... не маєте права чіпати!»", "'*Goes pale and covers chest button* H-hey, hands off!'"),
       coffeeReply: L("«Дякую... тільки, будь ласка, не бризніть на лацкан піджака, там... чутлива електроніка!»", "'Thanks... please don't spill on my lapel, sensitive... fabric!'"),
@@ -1910,7 +1946,7 @@
       declaredCargo: L("Годинники «Кролекс», готівка в дипломаті", "Krolex watches & briefcase"),
       vehicleSearchResult: L("В багажнику знайдено принтер для друку пластикових посвідчень!", "Found a fake ID card printer in the trunk!"),
       greeting: L("«Термінова дипломатична місія у справах офшорів! Ось посвідчення Почесного Консула Монаківки!»", "'Urgent diplomatic mission! Behold my Honorary Consul pass of Monakivka!'"),
-      interrogationReply: L("«Ти шо, не поважаєш Князівство Монаківка?! Дам 900 ₴ — закрий очі на печатку!»", "'Disrespecting Monakivka?! Here is 900 ₴ — ignore the seal!'"),
+      interrogationReply: L("«Ти шо, не поважаєш Князівство Монаківка?! Дам 900 🪙 — закрий очі на печатку!»", "'Disrespecting Monakivka?! Here is 900 🪙 — ignore the seal!'"),
       intimidateReply: L("«Ти... ти не смієш! В мене бронь... ну майже бронь...»", "'You... you wouldn't dare!'"),
       coffeeReply: L("«Хм, а непогана кава. У Монаківці така по 20 євро.»", "'Decent espresso. Costs 20 euros in Monakivka.'"),
       arrestFull: L("Контррозвідка СБК затримує псевдо-дипломата з липовим мандатом на «Геліку»!", "SBK arrests the fake diplomat with a bogus Duchy seal!"),
@@ -1950,7 +1986,7 @@
       declaredCargo: L("Коробки з маскувальними сітками та бронеплитами", "Camouflage nets & armor plates"),
       vehicleSearchResult: L("ПЕС «БАВОВНА» РОЗГРИЗ КОРОБКИ: Жодних сіток — 30 нових смартфонів, брендові сумочки та елітний алкоголь на перепродаж!", "DOG SEARCH: Zero camo nets — 30 new phones, designer handbags & luxury liquor for resale!"),
       greeting: L("«Йоу підписники! Я знімаю сторіз для донатів — їдемо в Поландію, пропускай, шефе!»", "'Yo followers! Shooting a livestream, heading to Polandia, roll us out!'"),
-      interrogationReply: L("«Та все для армії, чесно! Ось 600 ₴ за швидкість оформлення без пса!»", "'All for charity, promise! Take 600 ₴ to skip the sniffer dog!'"),
+      interrogationReply: L("«Та все для армії, чесно! Ось 600 🪙 за швидкість оформлення без пса!»", "'All for charity, promise! Take 600 🪙 to skip the sniffer dog!'"),
       intimidateReply: L("«Стій, не тряси телефон! У мене прямий ефір зараз впаде!»", "'Stop shaking! My livestream is dropping frames!'"),
       coffeeReply: L("«Класний контент буде — п'ю каву з інспектором!»", "'Great vlog content — coffee with the guard!'"),
       arrestFull: L("Псевдоволонтера пакують у бус СБК під його ж власний стрім!", "The fake charity influencer gets cuffed on his own livestream!"),
@@ -1991,7 +2027,7 @@
       includeDecl: true,
       declaredCargo: L("Макбук, 2 павербанки, рюкзак", "Laptop, 2 powerbanks, backpack"),
       greeting: L("«Вітаю! Я на електросамокаті до Варшавки — заряджаюся в кожному селі. Ось документи!»", "'Hi! Taking my e-scooter to Varshavka — charging at every village!'"),
-      interrogationReply: isLegit ? L("«Перевіряйте по реєстру — я інженер кіберзахисту!»", "'Verify it — I am a cyber-defense engineer!'") : L("«Можу в USDT на крипто-гаманець кинути 450 ₴ еквівалентом?»", "'Can I send 450 ₴ in USDT to your wallet?'"),
+      interrogationReply: isLegit ? L("«Перевіряйте по реєстру — я інженер кіберзахисту!»", "'Verify it — I am a cyber-defense engineer!'") : L("«Можу в USDT на крипто-гаманець кинути 450 🪙 еквівалентом?»", "'Can I send 450 🪙 in USDT to your wallet?'"),
       intimidateReply: isLegit ? L("«Ой, акуратно, не впустіть мій ноутбук!»", "'Careful, don't startle me with my laptop!'") : L("«Та ладно, невже печатка не виглядає солідно?!»", "'Come on, doesn't the stamp look legit?!'"),
       coffeeReply: L("«Дякую! Кофеїн + електросамокат = подвійна швидкість!»", "'Thanks! Caffeine + e-scooter = double speed!'"),
       coffeeTip: isLegit ? 60 : 0,
@@ -2022,7 +2058,7 @@
       greeting: L("«Дай Боже здоров'я, синку! Я пішки з самої Чернівців... ой, із Левгорода з двома картатими сумками до доньки!»", "'Bless you, sonny! Walking from Levhorod with two plaid bazaar bags to see my daughter!'"),
       interrogationReply: L("«Та заглядай у сумку, тільки пиріжки не подави!»", "'Go ahead and peek in the bags, just don't squish my pies!'"),
       intimidateReply: L("«Ох ти ж батюшки, злякав стару! Чого грюкаєш?»", "'Oh goodness, you scared an old woman!'"),
-      coffeeReply: L("«Дякую, дитинко! Візьми 40 ₴ на гостинець та банку огірків на зміну!»", "'Thank you dear! Have 40 ₴ and a jar of pickles for the shift!'"),
+      coffeeReply: L("«Дякую, дитинко! Візьми 40 🪙 на гостинець та банку огірків на зміну!»", "'Thank you dear! Have 40 🪙 and a jar of pickles for the shift!'"),
       coffeeTip: 40,
       arrestFull: L("Навіщо ти заарештував бабусю з пиріжками?!", "Why did you arrest a sweet grandma carrying pies?!"),
       arrestToned: L("Похилу мандрівницю помилково затримано.", "Elderly traveler mistakenly detained."),
@@ -2077,7 +2113,7 @@
       declaredCargo: L("Фотоапарат, бінокль туриста", "Camera & binoculars"),
       vehicleSearchResult: L("ПЕС «БАВОВНА» ЗНАЙШОВ СХОВАНКУ: Під запаскою — пачки рублів, чужі SIM-карти та фото підстанцій Кийграда і Левгорода!", "DOG SEARCH: Spare wheel hides rubles, foreign SIM cards & substation coordinates!"),
       greeting: L("«Добрий день... Я фотограф-любитель, фотографую мости й колії та їду до родичів у Поландію.»", "'Hello... Amateur photographer shooting railways, heading to relatives in Polandia.'"),
-      interrogationReply: L("«Не кличте СБК! Ось 900 ₴ просто зараз — тільки не перевіряйте багажник!»", "'Don't call SBK! 900 ₴ right now — just don't search the trunk!'"),
+      interrogationReply: L("«Не кличте СБК! Ось 900 🪙 просто зараз — тільки не перевіряйте багажник!»", "'Don't call SBK! 900 🪙 right now — just don't search the trunk!'"),
       intimidateReply: L("«*Різко пітніє* Я... я видалив усі фото! Простіше домовитись!»", "'*Sweating heavily* I... deleted the photos!'"),
       coffeeReply: L("«*Тремтячими руками тримає стакан* Д-дякую... а ви швидко штампуєте?»", "'*Hands shaking* Th-thanks... stamp quick?'"),
       arrestFull: L("Група СБК вилітає з будки й пакує коригувальника! Майор «Тихий» виписує тобі премію!", "SBK tackles the spotter and awards you a combat bonus!"),
@@ -2108,7 +2144,7 @@
       declSealDisc: DISCREPANCY.FAKE_ISSUER_SEAL,
       vehicleSearchResult: L("ПЕС «БАВОВНА» І РЕНТГЕН: Усередині барабанів пралок сховані підсанкційні військові мікрочіпи та гіроскопи!", "DOG & X-RAY: Washing drums conceal sanctioned missile microchips & gyroscopes!"),
       greeting: L("«Вітаю, шефе! Везу транзитом з Офшорії старі пральні машини на розбірку. Там лише металобрухт!»", "'Hey boss! Hauling old washing machines from Ofshoria for scrap!'"),
-      interrogationReply: L("«Тихіше! За ці плати серйозні люди платять золотом! Візьми 850 ₴ і закрий двері!»", "'Quiet! Gold awaits for those chips! Take 850 ₴!'"),
+      interrogationReply: L("«Тихіше! За ці плати серйозні люди платять золотом! Візьми 850 🪙 і закрий двері!»", "'Quiet! Gold awaits for those chips! Take 850 🪙!'"),
       intimidateReply: L("«*Озирається на кузов* Е-е... пралки звичайні, пломбу не чіпай!»", "'*Glances back nervously* Normal washers, don't break the seal!'"),
       coffeeReply: L("«Дякую за каву. Ось би ще штамп без затримок...»", "'Thanks for the coffee. Could really use a quick stamp...'"),
       arrestFull: L("Контррозвідка СБК арештовує контрабандиста військової електроніки разом із фургоном!", "SBK arrests the military chip smuggler and impounds the van!"),
@@ -2137,9 +2173,9 @@
       includeDecl: true,
       declaredCargo: L("Макбук Про, крипто-флешка Ledger, валіза", "MacBook Pro, Ledger wallet, suitcase"),
       greeting: L("«Бро, я сеньйор-архітектор! На 3 дні на мітап у Краків — маю віддалений реліз. Не затримуй!»", "'Bro, I'm a Senior Architect! Off to a 3-day meetup, let's keep it smooth!'"),
-      interrogationReply: L("«Слухай, у мене контракт горить. Закину $4 500 чистими прямо зараз — забудь про довідку!»", "'Look, my contract is burning. Here's $4,500 cash right now — forget the permit!'"),
+      interrogationReply: L("«Слухай, у мене контракт горить. Закину 4 500 💵 чистими прямо зараз — забудь про довідку!»", "'Look, my contract is burning. Here's 4,500 💵 cash right now — forget the permit!'"),
       intimidateReply: L("«*Знімає брендові окуляри* Та я податки плачу, нащо так кричати?!»", "'*Takes off shades* Hey I pay taxes, no need to yell!'"),
-      coffeeReply: L("«О, фільтр-кава є? Можу накинути $500 на каву, якщо піднімеш шлагбаум!»", "'Nice filter coffee! Raise the barrier and I'll tip big!'"),
+      coffeeReply: L("«О, фільтр-кава є? Можу накинути 500 💵 на каву, якщо піднімеш шлагбаум!»", "'Nice filter coffee! Raise the barrier and I'll tip big!'"),
       arrestFull: L("За відсутність відстрочки достатньо було натиснути ✖ ВІДМОВИТИ — а не пакувати айтішника!", "Should have pressed ✖ DENY instead of full detention!"),
       arrestToned: L("Перевищення сили — треба було ✖ ВІДМОВИТИ.", "Should have pressed DENY."),
       bribeOffer: { amount: 4500, currency: "USD", instantOffer: true, nabkRiskJump: 14, isStingTrap: false, syndicateFavor: false },
@@ -2173,9 +2209,9 @@
       }],
       includeDecl: true,
       declaredCargo: L("Сейфові кейси з «документами комітету»", "Armored briefcases with 'committee docs'"),
-      vehicleSearchResult: L("ПЕС «БАВОВНА» І СКАНЕР: У кейсах $400 000 готівкою в банківських стрічках і 3 закордонні паспорти!", "DOG & X-RAY: Briefcases stuffed with $400,000 cash and 3 foreign passports!"),
+      vehicleSearchResult: L("ПЕС «БАВОВНА» І СКАНЕР: У кейсах 400 000 💵 готівкою в банківських стрічках і 3 закордонні паспорти!", "DOG & X-RAY: Briefcases stuffed with 400,000 💵 cash and 3 foreign passports!"),
       greeting: L("«Ти знаєш, з ким розмовляєш? Народний обранець їде на саміт у Монаківку! Шлагбаум вгору!»", "'Do you know who I am?! MP heading to Monakivka summit! Barrier UP!'"),
-      interrogationReply: L("«Не псуй собі кар'єру, синку. Ось тобі $28 000 у пакеті — мовчи й натискай зелений!»", "'Don't ruin your career, son. Here's $28,000 in a bag — press green!'"),
+      interrogationReply: L("«Не псуй собі кар'єру, синку. Ось тобі 28 000 💵 у пакеті — мовчи й натискай зелений!»", "'Don't ruin your career, son. Here's 28,000 💵 in a bag — press green!'"),
       intimidateReply: L("«*Червоніє від люті* Завтра твій начальник у мене на килимі стоятиме!»", "'*Turns red with rage* Your boss will answer to me tomorrow!'"),
       coffeeReply: L("«Коньяк до кави є? Хоча гаразд, штампуй вже.»", "'Got cognac for the coffee? Whatever, stamp it.'"),
       arrestFull: L("Контррозвідка СБК та НАБК блокують Майбах депутата-втікача! Тобі виписують величезну премію!", "SBK & NABK block the fleeing MP's Maybach! Massive bounty awarded!"),
@@ -2205,9 +2241,9 @@
       passportSealDisc: DISCREPANCY.WANTED_CRIMINAL_OR_SPY,
       includeDecl: true,
       declaredCargo: L("Спортивні сумки з тенісними ракетками", "Sports bags with tennis rackets"),
-      vehicleSearchResult: L("ПЕС «БАВОВНА» ЗІРВАВ ДНО БАГАЖНИКА: Дві спортивні сумки набиті пачками $100 купюр і золотими злитками!", "DOG SEARCH: False trunk floor packed with $100 bill bricks & gold bars!"),
+      vehicleSearchResult: L("ПЕС «БАВОВНА» ЗІРВАВ ДНО БАГАЖНИКА: Дві спортивні сумки набиті пачками 100 💵 купюр і золотими злитками!", "DOG SEARCH: False trunk floor packed with 100 💵 bill bricks & gold bars!"),
       greeting: L("«Тихо, командире... Обшуки в Києві почалися годину тому. Мені треба зникнути до світанку.»", "'Quiet, commander... Raids started in Kyiv an hour ago. I must vanish before dawn.'"),
-      interrogationReply: L("«Слухай уважно: $95 000 тобі на руки просто зараз! Купиш віллу в Іспанії! Тільки пропусти!»", "'Listen closely: $95,000 cash in your hand right now! Buy a villa in Spain! Just let me pass!'"),
+      interrogationReply: L("«Слухай уважно: 95 000 💵 тобі на руки просто зараз! Купиш віллу в Іспанії! Тільки пропусти!»", "'Listen closely: 95,000 💵 cash in your hand right now! Buy a villa in Spain! Just let me pass!'"),
       intimidateReply: L("«*Холодно дивиться* Гроші або куля в спину від моїх людей — обирай мудро.»", "'*Cold stare* Take the cash or face my people — choose wisely.'"),
       coffeeReply: L("«В останній раз таку каву пив на заправці під Києвом...»", "'Last time I had coffee like this was outside Kyiv...'"),
       arrestFull: L("СПЕЦОПЕРАЦІЯ РОКУ! Ти затримав топ-корупціонера з мільйонами в багажнику! СБК в захваті!", "ARREST OF THE YEAR! You caught the top corrupt official fleeing with millions!"),
@@ -2327,7 +2363,7 @@
         interrogationReply: L("«Перевіряйте хоч двічі, усі печатки з мого міста справжні!»", "'Check twice if you wish, everything is genuine!'"),
         intimidateReply: L("«Ой... ну навіщо так гримати? Всі папери ж в порядку!»", "'Whoa... why bang on the window? All papers are clean!'"),
         coffeeReply: giveTip
-          ? L("«О, золота ви людина! На вулиці дубак. Тримайте 50 ₴ на поповнення термоса!»", "'Thank you kindly! It's freezing out there — take 50 ₴ for the thermos!'")
+          ? L("«О, золота ви людина! На вулиці дубак. Тримайте 50 🪙 на поповнення термоса!»", "'Thank you kindly! It's freezing out there — take 50 🪙 for the thermos!'")
           : L("«Дякую щиро за теплу каву, легкої зміни вам!»", "'Thank you for the warm coffee, have a smooth shift!'"),
         coffeeTip: giveTip ? 50 : 0,
         arrestFull: L("Ти заарештував абсолютно чесного мандрівника!", "Guards awkwardly detain an innocent traveler!"),
@@ -2368,7 +2404,7 @@
         greeting: isExpired
           ? L(`«Ой, добрий день! Так поспішали з м. ${city.uk} на рейс до Варшавки!»`, `'Hello! Rushing from ${city.en} for Varshavka!'`)
           : L("«Добрий день! Їду на тиждень, думав, по біометричному без довідки пускають!»", "'Good day! Thought biometric passport was enough without a permit!'"),
-        interrogationReply: L("«Та це ж дрібниця, не присікуйтеся... Може, 350 ₴ на каву вирішать питання?»", "'Just a minor slip-up... Maybe 350 ₴ solves it?'"),
+        interrogationReply: L("«Та це ж дрібниця, не присікуйтеся... Може, 350 🪙 на каву вирішать питання?»", "'Just a minor slip-up... Maybe 350 🪙 solves it?'"),
         intimidateReply: L("«*Нервово ковтає* Та я ж тільки формальність проґавив, не кличте СБК!»", "'*Gulps* It's just a paperwork slip, don't call SBK!'"),
         coffeeReply: L("«Дякую за каву... ну то ви закриєте очі на папери?»", "'Thanks for the coffee... so we good?'"),
         arrestFull: L("Ти викликав спецназ за формальну помилку — достатньо було натиснути ✖ ВІДМОВИТИ!", "Overkill! A simple DENY stamp was required."),
@@ -2414,8 +2450,8 @@
         includeDecl: daySpec.requireVehicleDecl,
         declaredCargo: L("Спортивна сумка, одяг", "Gym bag, clothes"),
         greeting: L("«Вітаю! Ось свіженька довідка з круглою мокрою печаткою!»", "'Hello! Fresh exemption certificate with a wet round seal!'"),
-        interrogationReply: L("«Ну... в Телеграмі порадили! Візьми 480 ₴ у конверті — печатку ж ніхто не роздивиться!»", "'Bought it online! Take 480 ₴ — nobody inspects the seal!'"),
-        intimidateReply: L("«*Виступає піт* Та директор клініки клявся, що довідка пройде! Даю 480 ₴!»", "'*Sweats* The clinic swore it would pass! Take 480 ₴!'"),
+        interrogationReply: L("«Ну... в Телеграмі порадили! Візьми 480 🪙 у конверті — печатку ж ніхто не роздивиться!»", "'Bought it online! Take 480 🪙 — nobody inspects the seal!'"),
+        intimidateReply: L("«*Виступає піт* Та директор клініки клявся, що довідка пройде! Даю 480 🪙!»", "'*Sweats* The clinic swore it would pass! Take 480 🪙!'"),
         coffeeReply: L("«Дякую за каву... тільки під УФ-лампу цю довідку не суньте, вона... екологічна!»", "'Thanks for coffee... please keep it out of UV light!'"),
         arrestFull: L("Власника липової довідки затримано за використання підробленої печатки!", "Forged seal user arrested!"),
         arrestToned: L("Порушника з фіктивною печаткою затримано.", "Forged seal traveler detained."),
@@ -2448,7 +2484,7 @@
         includeDecl: daySpec.requireVehicleDecl,
         declaredCargo: L("Особисті речі", "Personal effects"),
         greeting: L("«Добрий день! Ось мій паспорт... я трохи змінився за останній рік після відпустки.»", "'Hello! Here is my passport... I look a bit different since last summer.'"),
-        interrogationReply: L("«Ну взяв паспорт брата/сестри, бо свій загубив! Візьми 520 ₴ і закрий очі!»", "'Borrowed a relative's passport! Take 520 ₴!'"),
+        interrogationReply: L("«Ну взяв паспорт брата/сестри, бо свій загубив! Візьми 520 🪙 і закрий очі!»", "'Borrowed a relative's passport! Take 520 🪙!'"),
         intimidateReply: L("«*Очі бігають* Та пластична операція! Хто тепер у фото дивиться?!»", "'*Eyes dart* Had a makeover! Who even checks photos?!'"),
         coffeeReply: L("«Дякую за каву... перегорніть сторінку швидше!»", "'Thanks... please flip the passport page!'"),
         arrestFull: L("Підміна особи викрита — чужий паспорт вилучено, а водія затримано!", "Passport impersonation busted!"),
@@ -2486,7 +2522,7 @@
         includeDecl: daySpec.requireVehicleDecl,
         declaredCargo: L("Ліки, валіза", "Medicine, suitcase"),
         greeting: L("«Добрий день! Довідку зробили прямо перед виїздом — усе легально!»", "'Hello! Permit issued right before departure — all legal!'"),
-        interrogationReply: L("«Тьфу, в друкарні прізвище переплутали! Бери 500 ₴, не присікуйся!»", "'Damn, typo in the name! Take 500 ₴ and let me roll!'"),
+        interrogationReply: L("«Тьфу, в друкарні прізвище переплутали! Бери 500 🪙, не присікуйся!»", "'Damn, typo in the name! Take 500 🪙 and let me roll!'"),
         intimidateReply: L("«*Тремтить* Це... це подвійне прізвище! Чи кума...»", "'*Stammers* It's my... second surname!'"),
         coffeeReply: L("«Спасибі за каву... і прізвище не звіряйте сильно, гаразд?»", "'Thanks... no need to compare surnames closely!'"),
         arrestFull: L("Чужа куплена довідка викрита — афериста пакує контррозвідка!", "Mismatched documents seized!"),
@@ -2534,7 +2570,7 @@
         declaredCargo: L("Особисті речі водія", "Driver personal luggage"),
         vehicleSearchResult: L("Звірка VIN-коду: номери перебито болгаркою! Автомобіль у розшуку Інтерполу як «двійник»!", "VIN Check: Grinder marks on chassis! Stolen cloned car!"),
         greeting: L("«Вітаю, інспекторе! Переганяю машину по довіреності, колір... ну, під ліхтарем може здаватися іншим!»", "'Greetings! Driving on power-of-attorney, the paint... uh, looks different under streetlamps!'"),
-        interrogationReply: L("«Слухай, на СТО пофарбували вчора й не вписали! Ось 650 ₴ — не перевіряй техпаспорт!»", "'Repainted it yesterday! Take 650 ₴ and ignore the title!'"),
+        interrogationReply: L("«Слухай, на СТО пофарбували вчора й не вписали! Ось 650 🪙 — не перевіряй техпаспорт!»", "'Repainted it yesterday! Take 650 🪙 and ignore the title!'"),
         intimidateReply: L("«*Різко закриває вікно наполовину* Це... це плівка-хамелеон!»", "'*Rolls window halfway up* It's... chameleon wrap!'"),
         coffeeReply: L("«Дякую! Гаряча кава краще за будь-яке СТО!»", "'Thanks! Better than any mechanic!'"),
         arrestFull: L("Авто-двійника з перебитими номерами конфісковано, водія затримано!", "Cloned vehicle confiscated and driver arrested!"),
@@ -2573,7 +2609,7 @@
         declaredCargo: cCase.decl,
         vehicleSearchResult: cCase.found,
         greeting: L(`«Салют, шефе! Звичайні речі з м. ${city.uk}, усе по декларації!»`, `'Hello boss! Ordinary cargo from ${city.en}, all declared!'`),
-        interrogationReply: L("«Навіщо пса кликати, він мені сумки подряпає! Лови 600 ₴!»", "'No need for the sniffer dog, it scratches my bags! Catch 600 ₴!'"),
+        interrogationReply: L("«Навіщо пса кликати, він мені сумки подряпає! Лови 600 🪙!»", "'No need for the sniffer dog, it scratches my bags! Catch 600 🪙!'"),
         intimidateReply: L("«*Здригнувся, коли пес підійшов* Заберіть «Бавовну» від багажника!»", "'*Flinches as dog nears* Keep Bavovna away from the trunk!'"),
         coffeeReply: L("«Дякую... а собака вашу каву любить? Може, заберете її в будку?»", "'Thanks... keep your dog inside with the coffee, okay?'"),
         arrestFull: L("Контрабандиста взято на гарячому за допомогою пса «Бавовни»!", "Smuggler busted red-handed by sniffer dog Bavovna!"),
@@ -2624,7 +2660,7 @@
         includeDecl: daySpec.requireVehicleDecl,
         declaredCargo: L("Рюкзак, документи", "Backpack"),
         greeting: L("«Добрий день! З телефоном щось глючить — але ось паперова довідка, чесно!»", "'Hello! Phone app is glitching — but here is my paper permit!'"),
-        interrogationReply: L("«Та то база Облік+ зависла! Ось 700 ₴ — не натискай 🚨 АРЕШТ!»", "'The Oblik+ server must be down! Take 700 ₴ — don't press 🚨 DETAIN!'"),
+        interrogationReply: L("«Та то база Облік+ зависла! Ось 700 🪙 — не натискай 🚨 АРЕШТ!»", "'The Oblik+ server must be down! Take 700 🪙 — don't press 🚨 DETAIN!'"),
         intimidateReply: L("«*Різко ховає телефон у кишеню* Батарея сіла, нічого сканувати!»", "'*Hides phone* Battery died, can't scan!'"),
         coffeeReply: L("«О, дякую... ви тільки інтернет на планшеті вимкніть!»", "'Thanks... maybe turn off tablet Wi-Fi!'"),
         arrestFull: L("Реєстр «Облік+» підтвердив статус у розшуку — порушника передано групі реагування!", "Oblik+ confirmed wanted status — detained!"),
@@ -3530,6 +3566,7 @@
     if (!offer) return null;
     const currency = offer.currency === "USD" ? "USD" : "UAH";
     const modMult = state.sandboxMod ? (state.sandboxMod.bribeMult || 1) : 1;
+    const jacketMult = (state.ownedAssets && state.ownedAssets.includes("balenci_jacket")) ? 1.15 : 1.0;
     let rankScale = 1;
     if (currency === "USD" && !offer.isStingTrap) {
       const d = state.daySpec ? state.daySpec.dayNumber : 1;
@@ -3538,15 +3575,48 @@
       else if (d >= 3) rankScale = 3;
       else rankScale = 1;
     }
-    const amt = Math.round(offer.amount * rankScale * modMult);
+    const amt = Math.round(offer.amount * rankScale * modMult * jacketMult);
     return {
       amount: amt,
       currency,
-      symbol: currency === "USD" ? "$" : "₴",
-      display: currency === "USD" ? `$${amt.toLocaleString("en-US")}` : `${amt.toLocaleString("en-US")} ₴`,
+      symbol: currency === "USD" ? "💵" : "🪙",
+      display: currency === "USD" ? `${amt.toLocaleString("en-US")} 💵` : `${amt.toLocaleString("en-US")} 🪙`,
       isInstant: Boolean(offer.instantOffer),
       requiresDiscovery: Boolean(offer.requiresDiscovery)
     };
+  }
+
+  function getAssetCostUah(asset) {
+    return asset.currency === "USD" ? asset.cost * USD_UAH_RATE : asset.cost;
+  }
+
+  function canAffordAsset(asset) {
+    const totalWealthUah = state.money + state.usd * USD_UAH_RATE;
+    return totalWealthUah >= getAssetCostUah(asset);
+  }
+
+  function payForAsset(asset) {
+    const neededUah = getAssetCostUah(asset);
+    if (asset.currency === "USD") {
+      if (state.usd >= asset.cost) {
+        state.usd -= asset.cost;
+        return;
+      }
+      const shortUsd = asset.cost - state.usd;
+      state.usd = 0;
+      state.money = Math.max(0, state.money - shortUsd * USD_UAH_RATE);
+    } else {
+      if (state.money >= neededUah) {
+        state.money -= neededUah;
+        return;
+      }
+      const shortUah = neededUah - state.money;
+      state.money = 0;
+      const usdToSpend = Math.ceil(shortUah / USD_UAH_RATE);
+      const changeUah = usdToSpend * USD_UAH_RATE - shortUah;
+      state.usd = Math.max(0, state.usd - usdToSpend);
+      state.money += changeUah;
+    }
   }
 
   function saveStateToStorage() {
@@ -3674,7 +3744,7 @@
         id: "SBK_COLONEL",
         title: L("🕵️ Таємний Полковник СБК («Кордон-7»)", "🕵️ Covert SBK Colonel ('Border-7')"),
         salary: 1800,
-        perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 ₴ • -8% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 ₴ • -8% NABK/day"),
+        perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 🪙 • -8% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 🪙 • -8% NABK/day"),
         dogCost: 0,
         freeFirstMistake: true,
         dailyRiskHeal: 8
@@ -3685,7 +3755,7 @@
         id: "SBK_AGENT",
         title: L("🕵️ Негласний агент СБК («Кордон-7»)", "🕵️ Undercover SBK Agent ('Border-7')"),
         salary: 1200,
-        perkLabel: L("🔓 Перк: +1 200 ₴/арешт • Пес -4с", "🔓 Perk: +1,200 ₴/arrest • Dog -4s"),
+        perkLabel: L("🔓 Перк: +1 200 🪙/арешт • Пес -4с", "🔓 Perk: +1,200 🪙/arrest • Dog -4s"),
         dogCost: 4,
         freeFirstMistake: false,
         dailyRiskHeal: 4
@@ -3708,7 +3778,7 @@
         id: "CHIEF_CUSTOMS",
         title: L("Старший офіцер митниці", "Chief Customs Officer"),
         salary: 1400,
-        perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 ₴ • -5% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 ₴ • -5% NABK/day"),
+        perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 🪙 • -5% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 🪙 • -5% NABK/day"),
         dogCost: 0,
         freeFirstMistake: true,
         dailyRiskHeal: 5
@@ -3719,7 +3789,7 @@
         id: "DEPUTY_PALYCH",
         title: L("Заступник Пал Палича", "Palych's Deputy"),
         salary: 1100,
-        perkLabel: L("🔓 Перки: 1-ша помилка 0 ₴ • Пес -4с", "🔓 Perks: 1st Mistake 0 ₴ • Dog -4s"),
+        perkLabel: L("🔓 Перки: 1-ша помилка 0 🪙 • Пес -4с", "🔓 Perks: 1st Mistake 0 🪙 • Dog -4s"),
         dogCost: 4,
         freeFirstMistake: true,
         dailyRiskHeal: 0
@@ -3843,7 +3913,7 @@
     const meta = getMetaPerkFlags();
     const baseSec = state.isSandbox ? 300 : 270;
     const modDelta = state.sandboxMod ? (state.sandboxMod.shiftSecDelta || 0) : 0;
-    const bonusSec = (state.ownedAssets.includes("espresso_machine") ? 35 : 0) + meta.shiftTimeBonus + modDelta;
+    const bonusSec = (state.ownedAssets.includes("espresso_machine") ? 35 : 0) + (state.ownedAssets.includes("porsche_911") ? 35 : 0) + meta.shiftTimeBonus + modDelta;
     state.phase = "BOOTH_SHIFT";
     state.shiftSec = Math.max(150, baseSec + bonusSec);
     state.travelerIdx = 0;
@@ -3984,14 +4054,14 @@
         detainBonus += 1500;
         state.nabkRisk = Math.max(0, state.nabkRisk - 30);
         shytomyrBonusToast = L(
-          "🧦 ОРДЕН ШИТОМИРА (12/12): Усі 12 легенд міста в зборі! +1500 ₴ на картку, імунітет і відкрито секретний титул Мера!",
-          "🧦 ORDER OF SHYTOMYR (12/12): All 12 city legends welcomed! +1500 ₴ & Secret Mayor title unlocked!"
+          "🧦 ОРДЕН ШИТОМИРА (12/12): Усі 12 легенд міста в зборі! +1500 🪙 на картку, імунітет і відкрито секретний титул Мера!",
+          "🧦 ORDER OF SHYTOMYR (12/12): All 12 city legends welcomed! +1500 🪙 & Secret Mayor title unlocked!"
         );
       } else if (state.shytomyrFriendsMet.length > 0 && state.shytomyrFriendsMet.length % 3 === 0) {
         detainBonus += 300;
         shytomyrBonusToast = L(
-          `🧦 ЗЕМЛЯЦЬКИЙ ПІДГІН (${globalShytomyr.length}/12): Громада Шитомира передала +300 ₴ на каву!`,
-          `🧦 SHYTOMYR GIFT (${globalShytomyr.length}/12): +300 ₴ for shift coffee!`
+          `🧦 ЗЕМЛЯЦЬКИЙ ПІДГІН (${globalShytomyr.length}/12): Громада Шитомира передала +300 🪙 на каву!`,
+          `🧦 SHYTOMYR GIFT (${globalShytomyr.length}/12): +300 🪙 for shift coffee!`
         );
       }
     }
@@ -4081,7 +4151,8 @@
     }
 
     const boughtAnyHome = state.purchasedExpensesToday.length > 0;
-    state.familyMorale = Math.max(0, Math.min(100, state.familyMorale + (boughtAnyHome ? 0 : -6)));
+    const yachtMorale = state.ownedAssets.includes("monako_yacht") ? 10 : 0;
+    state.familyMorale = Math.max(0, Math.min(100, state.familyMorale + (boughtAnyHome ? 0 : -6) + yachtMorale));
 
     if (state.escapeFund >= getEscapeTarget() && state.tolikRep >= getEscapeTolikRep() && !state.tolikEscapeOffered) {
       state.tolikEscapeOffered = true;
@@ -4163,14 +4234,14 @@
     if (!dlg) return;
     document.getElementById("siren-dialog-title").textContent = tr(L("🚨 ПОВІТРЯНА ТРИВОГА НА ПУНКТІ!", "🚨 AIR-RAID SIREN AT CHECKPOINT!"), state.lang);
     document.getElementById("siren-dialog-desc").textContent = tr(
-      L("У небі над чергою помічено «мопед». За інструкцією треба спуститися в укриття (-35с часу зміни), або можна продовжити роботу під «швидкі чайові» (+150 ₴, +ризик).",
-        "A drone is buzzing over the queue. Go to the shelter (-35s shift time, +SBK rep) or keep working for express tips (+150 ₴, +risk)."),
+      L("У небі над чергою помічено «мопед». За інструкцією треба спуститися в укриття (-35с часу зміни), або можна продовжити роботу під «швидкі чайові» (+150 🪙, +ризик).",
+        "A drone is buzzing over the queue. Go to the shelter (-35s shift time, +SBK rep) or keep working for express tips (+150 🪙, +risk)."),
       state.lang
     );
     const bShelter = document.getElementById("btn-siren-shelter");
     const bWork = document.getElementById("btn-siren-work");
     bShelter.textContent = tr(L("🛡 Піти в укриття (-35с, +повага СБК)", "🛡 Go to Shelter (-35s, +SBK Rep)"), state.lang);
-    bWork.textContent = tr(L("💵 Працювати під сиреною (+150 ₴)", "💵 Keep Working Under Siren (+150 ₴)"), state.lang);
+    bWork.textContent = tr(L("💵 Працювати під сиреною (+150 🪙)", "💵 Keep Working Under Siren (+150 🪙)"), state.lang);
 
     bShelter.onclick = () => {
       audio.playTap();
@@ -4246,14 +4317,14 @@
       id: "sbk_undercover_recruitment",
       title: L("🕵️ ВЕРБУВАННЯ СБК: ПОЗИВНИЙ «КОРДОН-7»", "🕵️ SBK RECRUITMENT: CALLSIGN 'BORDER-7'"),
       desc: L(
-        "Майор СБК «Тихий» заходить у будку через службовий вхід і кладе на стіл чорне посвідчення:\n«Інспекторе, ти взяв уже двох серйозних порушників. Нам потрібна своя негласна людина прямо в будці, під носом у Пал Палича та контрабандистів.\n\nПідписуй згоду як Негласний оперативник СБК «Кордон-7»: ти ПРОДОВЖУЄШ працювати на шлагбаумі під прикриттям, але отримуєш +180 ₴ таємного окладу щоранку, +180 ₴ премії за кожного спійманого шпигуна та імунітет від НАБК!»",
-        "SBK Major 'Quiet' enters the booth and places a black folder on your desk:\n'Inspector, you have sharp eyes. We need an undercover operative right here in the booth under Palych's nose.\n\nSign on as Undercover Agent Border-7: you KEEP working the checkpoint under cover, earning +180 ₴ covert pay every morning, +180 ₴ extra bounty per spy detained, and NABK immunity!'"
+        "Майор СБК «Тихий» заходить у будку через службовий вхід і кладе на стіл чорне посвідчення:\n«Інспекторе, ти взяв уже двох серйозних порушників. Нам потрібна своя негласна людина прямо в будці, під носом у Пал Палича та контрабандистів.\n\nПідписуй згоду як Негласний оперативник СБК «Кордон-7»: ти ПРОДОВЖУЄШ працювати на шлагбаумі під прикриттям, але отримуєш +180 🪙 таємного окладу щоранку, +180 🪙 премії за кожного спійманого шпигуна та імунітет від НАБК!»",
+        "SBK Major 'Quiet' enters the booth and places a black folder on your desk:\n'Inspector, you have sharp eyes. We need an undercover operative right here in the booth under Palych's nose.\n\nSign on as Undercover Agent Border-7: you KEEP working the checkpoint under cover, earning +180 🪙 covert pay every morning, +180 🪙 extra bounty per spy detained, and NABK immunity!'"
       ),
       portrait: { gender: "M", skinTone: 0, faceShape: 2, hairStyle: 4, hairColor: 0, facialHair: 0, glasses: 2, headwear: 4, scarOrDetail: 0, expression: 0, specialId: "NONE" },
       options: [
         {
           id: "accept_sbk_agent",
-          label: L("🕵️ Стати негласним агентом СБК «Кордон-7» і продовжити полювання! (+300 ₴ підйомних)", "🕵️ Become Undercover Agent 'Border-7' & keep hunting spies! (+300 ₴ bonus)"),
+          label: L("🕵️ Стати негласним агентом СБК «Кордон-7» і продовжити полювання! (+300 🪙 підйомних)", "🕵️ Become Undercover Agent 'Border-7' & keep hunting spies! (+300 🪙 bonus)"),
           outcome: L("Ти підписав таємну угоду! Тепер ти негласний агент СБК «Кордон-7». Продовжуй працювати в будці й виловлюй ворожих резидентів (ціль: 4 агенти)!", "You signed the covert agreement! You are now Undercover Agent 'Border-7'. Hunt 4 enemy operatives!"),
           moneyDelta: 300, timeDelta: 15, riskDelta: -15, sbkDelta: 20, tolikDelta: 0, palychDelta: 0, moraleDelta: 10,
           onSelect: () => { state.isUndercoverSbkAgent = true; }
@@ -4273,14 +4344,14 @@
       id: "sbk_colonel_climax",
       title: L("🎖️ СПЕЦОПЕРАЦІЯ УСПІШНА: ПОГОНИ ПОЛКОВНИКА СБК!", "🎖️ OPERATION COMPLETE: SBK COLONEL PROMOTION!"),
       desc: L(
-        "Ти ліквідував цілу мережу шпигунів та контрабандистів, працюючи під прикриттям! Майор «Тихий» особисто вручає тобі коробку з погонами Полковника СБК та премію 1 500 ₴:\n\n«Агенте «Кордон-7», штаб у захваті! Ти можеш залишитися на пункті Таємним Куратором кордону (продовжувати гру зі ставкою 320 ₴/людину), або переїхати в Центральний Штаб у Кийграді!»",
-        "You dismantled the spy ring while undercover! Major 'Quiet' hands you Colonel's epaulets and a 1,500 ₴ reward:\n\n'You can STAY at the checkpoint as Secret Sector Commander (keep playing at 320 ₴/traveler) or transfer to Central HQ in Kyihrad!'"
+        "Ти ліквідував цілу мережу шпигунів та контрабандистів, працюючи під прикриттям! Майор «Тихий» особисто вручає тобі коробку з погонами Полковника СБК та премію 1 500 🪙:\n\n«Агенте «Кордон-7», штаб у захваті! Ти можеш залишитися на пункті Таємним Куратором кордону (продовжувати гру зі ставкою 320 🪙/людину), або переїхати в Центральний Штаб у Кийграді!»",
+        "You dismantled the spy ring while undercover! Major 'Quiet' hands you Colonel's epaulets and a 1,500 🪙 reward:\n\n'You can STAY at the checkpoint as Secret Sector Commander (keep playing at 320 🪙/traveler) or transfer to Central HQ in Kyihrad!'"
       ),
       portrait: { gender: "M", skinTone: 0, faceShape: 2, hairStyle: 4, hairColor: 0, facialHair: 0, glasses: 2, headwear: 4, scarOrDetail: 0, expression: 1, specialId: "NONE" },
       options: [
         {
           id: "stay_undercover_colonel",
-          label: L("🕵️ Залишитися в будці Таємним Полковником і ПРОДОВЖУВАТИ ГРУ! (+1500 ₴, ставка 320 ₴)", "🕵️ Stay in booth as Covert Colonel & KEEP PLAYING! (+1500 ₴, 320 ₴ salary)"),
+          label: L("🕵️ Залишитися в будці Таємним Полковником і ПРОДОВЖУВАТИ ГРУ! (+1500 🪙, ставка 320 🪙)", "🕵️ Stay in booth as Covert Colonel & KEEP PLAYING! (+1500 🪙, 320 🪙 salary)"),
           outcome: L("Ти сховав погони полковника в сейф і залишився негласним господарем кордону!", "You locked the Colonel's epaulets in the safe and stayed as covert master of the border!"),
           moneyDelta: 1500, timeDelta: 30, riskDelta: -40, sbkDelta: 30, tolikDelta: 0, palychDelta: 0, moraleDelta: 25
         },
@@ -4362,7 +4433,7 @@
       "🛂 Border Shift: Kraina",
       `🏆 ${tr(epi.title, state.lang)}`,
       `🗄️ Досьє #${epi.comboNumber.toLocaleString()} / ${epi.totalCombos.toLocaleString()} (Титулів: ${epi.unlockedCount}/16)`,
-      `💵 ${tr(L("Готівка", "Cash"), state.lang)}: ${state.money} ₴ | СБК: ${state.sbkRep} | НАБК: ${state.nabkRisk}%`,
+      `💵 ${tr(L("Готівка", "Cash"), state.lang)}: ${state.money} 🪙 | СБК: ${state.sbkRep} | НАБК: ${state.nabkRisk}%`,
       `💎 ${tr(L("Майно", "Assets"), state.lang)}: ${ownedNames}`,
       `👉 ${window.location.href}`
     ].join("\n");
@@ -4585,7 +4656,7 @@
           <div class="stat-box"><div style="font-size:20px;font-weight:900;">${stats.gamesFinished}</div><div style="font-size:11px;">${tr(L("Завершено кар'єр", "Careers Completed"), state.lang)}</div></div>
           <div class="stat-box"><div style="font-size:20px;font-weight:900;">${stats.totalProcessed}</div><div style="font-size:11px;">${tr(L("Оформлено людей", "Travelers Processed"), state.lang)}</div></div>
           <div class="stat-box"><div style="font-size:20px;font-weight:900;">${stats.totalDetained}</div><div style="font-size:11px;">${tr(L("Затримано агентів/контрабанди", "Criminals Detained"), state.lang)}</div></div>
-          <div class="stat-box"><div style="font-size:20px;font-weight:900;">${stats.bestCash} ₴</div><div style="font-size:11px;">${tr(L("Рекорд кешу", "Best Cash"), state.lang)}</div></div>
+          <div class="stat-box"><div style="font-size:20px;font-weight:900;">${stats.bestCash} 🪙</div><div style="font-size:11px;">${tr(L("Рекорд кешу", "Best Cash"), state.lang)}</div></div>
           <div class="stat-box" style="grid-column:span 2;"><div style="font-size:17px;font-weight:900;">27 648</div><div style="font-size:11px;">${tr(L("Унікальних комбінацій досьє долі в грі", "Unique Epilogue Combinations"), state.lang)}</div></div>
         `;
         wrap.appendChild(box);
@@ -4621,7 +4692,7 @@
           ` : ""}
           <section class="card-slate">
             <h2 style="color:#E0B145;font-size:13px;margin-bottom:4px;">${tr(L("🎖️ РАНГ І ПЕРКИ:", "🎖️ RANK & ACTIVE PERKS:"), state.lang)}</h2>
-            <p style="font-size:12.5px;font-weight:700;color:#FFE082;">${tr(rk.title, state.lang)} (${rk.salary} ₴/${tr(L("оформ.", "proc."), state.lang)})</p>
+            <p style="font-size:12.5px;font-weight:700;color:#FFE082;">${tr(rk.title, state.lang)} (${rk.salary} 🪙/${tr(L("оформ.", "proc."), state.lang)})</p>
             <p style="font-size:11.5px;color:#B0BEC5;margin-top:2px;">${tr(rk.perkLabel, state.lang)}</p>
             ${activeMeta.length > 0 ? `<p style="font-size:11px;color:#81C784;margin-top:4px;">⚡ ${tr(L("Мета-перки Архіву:", "Archive Perks:"), state.lang)} ${activeMeta.map(p => tr(p.title, state.lang)).join(" • ")}</p>` : ""}
           </section>
@@ -4660,12 +4731,17 @@
       );
       const bribeLocked = Boolean(state.bribeAccepted && (!t.bribeOffer || !t.bribeOffer.isFriendlyGift));
       const hasSbkTablet = state.ownedAssets.includes("sbk_database_tablet");
+      const hasIphon = state.ownedAssets.includes("iphon_17_pro");
 
       let tabletBadge = "";
       if (hasSbkTablet) {
         if (t.isWantedTarget) tabletBadge = `<div style="background:#B71C1C;color:#FFF;padding:3px 7px;border-radius:4px;font-size:10.5px;font-weight:700;">💻 БАЗА СБК: 🚨 ОСОБА В РОЗШУКУ</div>`;
         else if (t.storyTag === "NABK_STING") tabletBadge = `<div style="background:#E65100;color:#FFF;padding:3px 7px;border-radius:4px;font-size:10.5px;font-weight:700;">💻 БАЗА СБК: ⚠️ Виявлено мікрофон НАБК!</div>`;
         else if (t.storyTag === "INTEL_ALLY") tabletBadge = `<div style="background:#1565C0;color:#FFF;padding:3px 7px;border-radius:4px;font-size:10.5px;font-weight:700;">💻 БАЗА СБК: 🦅 Допуск ГУР/СБК підтверджено</div>`;
+      }
+      if (hasIphon) {
+        if (t.violations.some(v => v.code === "INVALID_QR_CODE")) tabletBadge += `<div style="background:#4A148C;color:#FFF;padding:3px 7px;border-radius:4px;font-size:10.5px;font-weight:700;">📱 АЙФОН-БОТ: ❌ QR «Облік+» НЕДІЙСНИЙ!</div>`;
+        else if (t.violations.some(v => v.code === "PHOTO_MISMATCH")) tabletBadge += `<div style="background:#4A148C;color:#FFF;padding:3px 7px;border-radius:4px;font-size:10.5px;font-weight:700;">📱 АЙФОН-БОТ: ⚠️ Фото в паспорті підмінене!</div>`;
       }
 
       let activeSpeech = t.greeting;
@@ -4677,7 +4753,7 @@
         <header class="top-bar">
           <div class="row-between">
             <span id="hud-timer" style="color:${state.shiftSec < 40 ? "#FF8A80" : "#E0B145"};font-weight:700;font-size:13px;">${tr(L("День", "Day"), state.lang)} ${state.daySpec.dayNumber} • ⏱ ${state.shiftSec}s</span>
-            <span style="color:#81C784;font-weight:800;font-size:13px;">💵 ${state.money} ₴${state.usd > 0 ? ` • 💲 $${state.usd.toLocaleString("en-US")}` : ""}</span>
+            <span style="color:#81C784;font-weight:800;font-size:13px;">💵 ${state.money} 🪙${state.usd > 0 ? ` • 💵 ${state.usd.toLocaleString("en-US")}` : ""}</span>
             <span style="font-size:12px;">${tr(L("Черга", "Queue"), state.lang)}: ${state.travelerIdx + 1}/${state.queue.length}</span>
             <div style="display:flex;gap:4px;">
               <button type="button" id="hud-music" class="btn-outline" style="padding:3px 7px;" aria-label="Toggle music">${audio.musicEnabled ? "🔊" : "🔇"}</button>
@@ -4693,7 +4769,7 @@
         ${state.lastFeedback ? `
           <div class="toast-banner" style="background:${state.lastFeedback.ok ? "#1B5E20" : "#7F0000"};">
             <span><strong>${tr(state.lastFeedback.title, state.lang)}:</strong> ${tr(state.lastFeedback.detail, state.lang)}</span>
-            <strong style="color:#E0B145;white-space:nowrap;">${state.lastFeedback.moneyDelta >= 0 ? "+" + state.lastFeedback.moneyDelta : state.lastFeedback.moneyDelta} ₴</strong>
+            <strong style="color:#E0B145;white-space:nowrap;">${state.lastFeedback.moneyDelta >= 0 ? "+" + state.lastFeedback.moneyDelta : state.lastFeedback.moneyDelta} 🪙</strong>
           </div>
         ` : ""}
 
@@ -4878,7 +4954,7 @@
         if (!state.coffeeTipGiven && t.coffeeTip > 0) {
           state.coffeeTipGiven = true;
           const meta = getMetaPerkFlags();
-          const cMult = state.sandboxMod ? (state.sandboxMod.coffeeMult || 1) : 1;
+          const cMult = (state.sandboxMod ? (state.sandboxMod.coffeeMult || 1) : 1) * (state.ownedAssets.includes("balenci_jacket") ? 1.25 : 1);
           const tip = Math.round(t.coffeeTip * cMult) + (state.ownedAssets.includes("espresso_machine") ? 35 : 0) + meta.coffeeTipBonus;
           state.money += tip;
           state.lastFeedback = {
@@ -4957,23 +5033,23 @@
           <h1 style="color:#E0B145;font-size:22px;">${tr(L(`ЗМІНУ ЗАВЕРШЕНО • ДЕНЬ ${state.daySpec.dayNumber}`, `SHIFT COMPLETE • DAY ${state.daySpec.dayNumber}`), state.lang)}</h1>
           <section class="card-slate" style="display:flex;flex-direction:column;gap:6px;font-size:14px;">
             <div>${tr(L("Оформлено мандрівників", "Travelers Processed"), state.lang)}: <strong>${state.shiftProcessed}</strong></div>
-            <div style="color:#81C784;">${tr(L("Без помилок", "Correct Decisions"), state.lang)}: <strong>${state.shiftCorrect} (+${salary} ₴)</strong></div>
+            <div style="color:#81C784;">${tr(L("Без помилок", "Correct Decisions"), state.lang)}: <strong>${state.shiftCorrect} (+${salary} 🪙)</strong></div>
             <div style="color:#64B5F6;">${tr(L("Затримано порушників", "Detained Targets"), state.lang)}: <strong>${state.shiftDetained}</strong></div>
-            <div style="color:#FF8A80;">${tr(L("Штрафи за помилки", "Protocol Fines"), state.lang)}: <strong>-${state.shiftFinesTotal} ₴</strong></div>
-            <div style="color:#E0B145;">${tr(L("Конверти та підгони", "Envelopes & Tips"), state.lang)}: <strong>+${state.shiftBribesTotal} ₴</strong></div>
+            <div style="color:#FF8A80;">${tr(L("Штрафи за помилки", "Protocol Fines"), state.lang)}: <strong>-${state.shiftFinesTotal} 🪙</strong></div>
+            <div style="color:#E0B145;">${tr(L("Конверти та підгони", "Envelopes & Tips"), state.lang)}: <strong>+${state.shiftBribesTotal} 🪙</strong></div>
             <hr style="border:none;border-top:1px solid #555;margin:4px 0;">
-            <div style="color:#E0B145;font-size:18px;font-weight:800;">${tr(L("У гаманці зараз", "Current Cash"), state.lang)}: ${state.money} ₴</div>
+            <div style="color:#E0B145;font-size:18px;font-weight:800;">${tr(L("У гаманці зараз", "Current Cash"), state.lang)}: ${state.money} 🪙</div>
           </section>
           <section class="card-slate" style="background:#33291F;">
             <h2 style="color:#E0B145;font-size:16px;margin-bottom:6px;">${tr(L("🧢 ПАЛ ПАЛИЧ ЧЕКАЄ НА «ЧАСТКУ»", "🧢 PAL PALYCH EXPECTS HIS CUT"), state.lang)}</h2>
             <p style="font-size:13px;line-height:1.4;">${tr(L(
-              `«Поклади ${cut} ₴ у шухляду — і я прикрию твої грішки перед штабом та НАБК.» ${state.ownedAssets.includes("rolex_watch") ? "(Знижка -50% завдяки твоєму золотому «Кролексу»!)" : ""}`,
-              `'Put ${cut} ₴ in my drawer and I'll cover your slip-ups.' ${state.ownedAssets.includes("rolex_watch") ? "(50% discount from your Gold Krolex!)" : ""}`
+              `«Поклади ${cut} 🪙 у шухляду — і я прикрию твої грішки перед штабом та НАБК.» ${state.ownedAssets.includes("rolex_watch") ? "(Знижка -50% завдяки твоєму золотому «Кролексу»!)" : ""}`,
+              `'Put ${cut} 🪙 in my drawer and I'll cover your slip-ups.' ${state.ownedAssets.includes("rolex_watch") ? "(50% discount from your Gold Krolex!)" : ""}`
             ), state.lang)}</p>
           </section>
         </div>
         <div style="display:flex;flex-direction:column;gap:8px;">
-          <button type="button" id="btn-pay-palych" class="btn-primary-green" ${state.money < cut ? "disabled" : ""}>${tr(L(`Занести Паличу ${cut} ₴ (-ризик НАБК, +дах)`, `Pay Palych ${cut} ₴ (-NABK Risk, +Boss Rep)`), state.lang)}</button>
+          <button type="button" id="btn-pay-palych" class="btn-primary-green" ${state.money < cut ? "disabled" : ""}>${tr(L(`Занести Паличу ${cut} 🪙 (-ризик НАБК, +дах)`, `Pay Palych ${cut} 🪙 (-NABK Risk, +Boss Rep)`), state.lang)}</button>
           <button type="button" id="btn-refuse-palych" class="btn-outline" style="width:100%;padding:12px;color:#FF8A80;border-color:#FF8A80;">${tr(L("Послати Палича і залишити всі гроші собі!", "Skip paying Palych and keep all cash!"), state.lang)}</button>
         </div>
       `;
@@ -5008,15 +5084,15 @@
         <div style="display:flex;flex-direction:column;gap:10px;flex:1;">
           <h1 style="color:#E0B145;font-size:20px;">${tr(L(`🌙 ВЕЧІР УДОМА (Після Дня ${state.daySpec.dayNumber})`, `🌙 EVENING AT HOME (After Day ${state.daySpec.dayNumber})`), state.lang)}</h1>
           <section class="card-slate" style="display:flex;flex-direction:column;gap:4px;font-size:13px;">
-            <div style="color:#81C784;font-size:16px;font-weight:700;">💵 ${tr(L("Готівка вдома", "Cash on Hand"), state.lang)}: ${state.money.toLocaleString("en-US")} ₴${state.usd > 0 ? ` • 💲 $${state.usd.toLocaleString("en-US")}` : ""}</div>
+            <div style="color:#81C784;font-size:16px;font-weight:700;">💵 ${tr(L("Готівка вдома", "Cash on Hand"), state.lang)}: ${state.money.toLocaleString("en-US")} 🪙${state.usd > 0 ? ` • 💵 ${state.usd.toLocaleString("en-US")}` : ""}</div>
             <div style="display:flex;gap:6px;flex-wrap:wrap;margin:2px 0;">
-              ${state.usd > 0 ? `<button type="button" id="btn-exchange-usd" class="btn-mustard" style="flex:1;padding:6px 8px;font-size:11.5px;">💱 ${tr(L(`Здати $${state.usd.toLocaleString("en-US")} → +${(state.usd * USD_UAH_RATE).toLocaleString("en-US")} ₴`, `Sell $${state.usd.toLocaleString("en-US")} → +${(state.usd * USD_UAH_RATE).toLocaleString("en-US")} ₴`), state.lang)}</button>` : ""}
-              ${state.money >= USD_UAH_RATE * 100 ? `<button type="button" id="btn-buy-usd" class="btn-outline" style="flex:1;padding:6px 8px;font-size:11.5px;">💵 ${tr(L(`Купити $100 (${(USD_UAH_RATE * 100).toLocaleString("en-US")} ₴)`, `Buy $100 (${(USD_UAH_RATE * 100).toLocaleString("en-US")} ₴)`), state.lang)}</button>` : ""}
+              ${state.usd > 0 ? `<button type="button" id="btn-exchange-usd" class="btn-mustard" style="flex:1;padding:6px 8px;font-size:11.5px;">💱 ${tr(L(`Здати 💵 ${state.usd.toLocaleString("en-US")} → +${(state.usd * USD_UAH_RATE).toLocaleString("en-US")} 🪙`, `Sell 💵 ${state.usd.toLocaleString("en-US")} → +${(state.usd * USD_UAH_RATE).toLocaleString("en-US")} 🪙`), state.lang)}</button>` : ""}
+              ${state.money >= USD_UAH_RATE * 100 ? `<button type="button" id="btn-buy-usd" class="btn-outline" style="flex:1;padding:6px 8px;font-size:11.5px;">💵 ${tr(L(`Купити 100 💵 (${(USD_UAH_RATE * 100).toLocaleString("en-US")} 🪙)`, `Buy 100 💵 (${(USD_UAH_RATE * 100).toLocaleString("en-US")} 🪙)`), state.lang)}</button>` : ""}
             </div>
-            ${rent > 0 ? `<div style="color:#81C784;font-weight:700;">🏢 ${tr(L("Пасивний дохід та оклад СБК", "Passive & Covert Income"), state.lang)}: +${rent} ₴/${tr(L("ранок", "morning"), state.lang)}</div>` : ""}
+            ${rent > 0 ? `<div style="color:#81C784;font-weight:700;">🏢 ${tr(L("Пасивний дохід та оклад СБК", "Passive & Covert Income"), state.lang)}: +${rent} 🪙/${tr(L("ранок", "morning"), state.lang)}</div>` : ""}
             <div style="color:#64B5F6;font-weight:700;">🎖️ ${tr(rk.title, state.lang)}${state.isUndercoverSbkAgent ? ` (${tr(L("Спіймано агентури", "Operatives caught"), state.lang)}: ${state.spiesCaughtAsAgent}/4)` : ""}</div>
             <div>🏠 ${tr(L("Настрій сім'ї", "Family Morale"), state.lang)}: ${state.familyMorale}% | 🕵️ НАБК: <span style="color:${state.nabkRisk >= 60 ? "#FF5252" : "#FFF"};">${state.nabkRisk}%</span> | СБК: ${state.sbkRep}</div>
-            <div style="color:#E0B145;font-weight:700;">🚐 ${tr(L("Фонд утечі", "Escape Fund"), state.lang)}: ${state.escapeFund} / ${getEscapeTarget()} ₴ (${tr(L("Толік", "Tolik"), state.lang)}: ${state.tolikRep}/${getEscapeTolikRep()})</div>
+            <div style="color:#E0B145;font-weight:700;">🚐 ${tr(L("Фонд утечі", "Escape Fund"), state.lang)}: ${state.escapeFund} / ${getEscapeTarget()} 🪙 (${tr(L("Толік", "Tolik"), state.lang)}: ${state.tolikRep}/${getEscapeTolikRep()})</div>
           </section>
 
           <div class="row-between">
@@ -5074,7 +5150,7 @@
             <div style="flex:1;">
               <div style="font-size:13px;font-weight:700;">${tr(exp.title, state.lang)}</div>
               <div style="color:#CFD8DC;font-size:11px;">${tr(exp.subtitle, state.lang)}</div>
-              <div style="color:#E0B145;font-size:12px;font-weight:800;">${exp.cost} ₴</div>
+              <div style="color:#E0B145;font-size:12px;font-weight:800;">${exp.cost} 🪙</div>
             </div>
           `;
           const b = document.createElement("button");
@@ -5100,8 +5176,12 @@
         ASSET_UPGRADES.forEach(asset => {
           const owned = state.ownedAssets.includes(asset.id);
           const isUsd = asset.currency === "USD";
-          const canBuy = !owned && (isUsd ? state.usd >= asset.cost : state.money >= asset.cost);
-          const priceStr = isUsd ? `$${asset.cost.toLocaleString("en-US")}` : `${asset.cost.toLocaleString("en-US")} ₴`;
+          const canBuy = !owned && canAffordAsset(asset);
+          const uahEq = getAssetCostUah(asset);
+          const usdEq = Math.ceil(uahEq / USD_UAH_RATE);
+          const priceStr = isUsd
+            ? `${asset.cost.toLocaleString("en-US")} 💵 (≈ ${uahEq.toLocaleString("en-US")} 🪙)`
+            : `${asset.cost.toLocaleString("en-US")} 🪙 (≈ ${usdEq.toLocaleString("en-US")} 💵)`;
           const card = document.createElement("div");
           card.className = "card-slate row-between";
           if (owned) card.style.backgroundColor = "#1B5E20";
@@ -5119,8 +5199,7 @@
           b.textContent = owned ? tr(L("Куплено", "Owned"), state.lang) : tr(L("Купити", "Buy"), state.lang);
           b.addEventListener("click", () => {
             audio.playBribe();
-            if (isUsd) state.usd -= asset.cost;
-            else state.money -= asset.cost;
+            payForAsset(asset);
             state.ownedAssets.push(asset.id);
             state.tolikRep = Math.min(100, state.tolikRep + asset.tolikBoost);
             state.palychRep = Math.min(100, state.palychRep + asset.palychBoost);
@@ -5170,7 +5249,7 @@
 
             <div class="menu-stats-pill">
               <span>🏆 ${tr(L("Відкрито кінцівок", "Endings Discovered"), state.lang)}: <strong>${epi.unlockedCount}/16</strong></span>
-              <span>💵 ${state.money} ₴${state.usd > 0 ? ` • 💲 $${state.usd.toLocaleString("en-US")}` : ""} • СБК ${state.sbkRep}</span>
+              <span>💵 ${state.money} 🪙${state.usd > 0 ? ` • 💵 ${state.usd.toLocaleString("en-US")}` : ""} • СБК ${state.sbkRep}</span>
             </div>
           </div>
 
