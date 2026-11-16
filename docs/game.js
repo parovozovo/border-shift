@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v3.0";
+  const BUILD_VERSION = "v3.1";
   let confirmResetArmed = false;
 
   // Fallback for older Safari lacking CanvasRenderingContext2D.roundRect
@@ -4204,7 +4204,8 @@
       encounterTriggered: false,
       activeEndingId: null,
       usd: 0,
-      campaignFlags: {}
+      campaignFlags: {},
+      factionFinaleDone: false
     });
     if (!sandbox) saveCampaignCheckpoint(1);
     saveStateToStorage();
@@ -4490,6 +4491,11 @@
 
     const nextIdx = state.dayIndex + 1;
     if (!state.isSandbox && nextIdx >= ACT_ONE_DAYS.length && !forceContinueFromCampaign) {
+      if (!state.factionFinaleDone) {
+        state.factionFinaleDone = true;
+        openFactionFinaleModal();
+        return;
+      }
       openCampaignMilestoneModal();
       return;
     }
@@ -4555,6 +4561,46 @@
     );
     guide.style.whiteSpace = "pre-line";
     bodyEl.appendChild(guide);
+    dlg.showModal();
+  }
+
+  function openWantedDossierModal() {
+    const dlg = document.getElementById("wanted-dialog");
+    const listEl = document.getElementById("wanted-dialog-list");
+    const titleEl = document.getElementById("wanted-dialog-title");
+    const subEl = document.getElementById("wanted-dialog-sub");
+    if (!dlg || !listEl) return;
+    titleEl.textContent = tr(L("🎯 ДОВІДНИК РОЗШУКУ СБК / ВСП", "🎯 SBK / VSP WANTED DOSSIER"), state.lang);
+    subEl.textContent = tr(
+      L("Ці особи їдуть у поточній черзі. У них гарантовано є порушення в документах або контрабанда!",
+        "These targets are in today's queue — all carry real document or smuggling violations!"),
+      state.lang
+    );
+    listEl.innerHTML = "";
+    const targets = state.queue.filter(t => t && t.isWantedTarget && !t.shouldBeApproved).slice(0, 3);
+    if (targets.length === 0) {
+      const p = document.createElement("p");
+      p.style.fontSize = "12.5px";
+      p.textContent = tr(L("Сьогодні особливих орієнтувань у черзі немає — перевіряйте загальні правила.", "No special wanted targets in this shift — follow standard directives."), state.lang);
+      listEl.appendChild(p);
+    } else {
+      targets.forEach((wt, idx) => {
+        const card = document.createElement("div");
+        card.style.cssText = "display:flex;gap:10px;align-items:center;background:#263238;padding:8px;border-radius:8px;border:1px solid #FF5252;";
+        const cid = `wanted-mug-${idx}`;
+        card.innerHTML = `
+          <canvas id="${cid}" width="64" height="64" style="width:56px;height:56px;background:#D7CCC8;border-radius:6px;flex-shrink:0;"></canvas>
+          <div style="flex:1;font-size:12px;">
+            <div style="color:#FF8A80;font-weight:800;">${tr(L(`Ціль #${idx + 1}`, `Target #${idx + 1}`), state.lang)}: ${tr(wt.fullName, state.lang)}</div>
+            <div style="color:#CFD8DC;margin-top:2px;">🚘 ${tr(wt.vehicleDesc, state.lang)}</div>
+            <div style="color:#FFE082;font-size:11px;margin-top:2px;">⚠️ ${tr(wt.violations[0] ? wt.violations[0].title : L("Підозрілі документи", "Suspicious papers"), state.lang)}</div>
+          </div>
+        `;
+        listEl.appendChild(card);
+        const c = document.getElementById(cid);
+        if (c) drawPortrait(c.getContext("2d"), wt.portrait, 32, 62, 0.44);
+      });
+    }
     dlg.showModal();
   }
 
@@ -4693,6 +4739,109 @@
         }
       ]
     });
+  }
+
+  function openFactionFinaleModal() {
+    let mission;
+    if (state.sbkRep >= 70 && state.sbkRep >= state.tolikRep && state.sbkRep >= state.palychRep) {
+      mission = {
+        id: "faction_finale_sbk",
+        title: L("🦅 ФІНАЛЬНА СПЕЦМІСІЯ СБК ТА ГУР-М: «ПЕРЕХВАТ-7»", "🦅 SBK & GUR-M FINALE: 'INTERCEPT-7'"),
+        desc: L(
+          "Твоя репутація у розвідки на максимумі! Майор «Тихий» пропонує фінальну операцію на Дені 7: затримати озброєний кортеж резидента ФСМ на сусідньому лісовому виїзді.",
+          "Your intel standing is at its peak! Major 'Quiet' offers a final operation on Day 7: intercept an armed FSM resident convoy!"
+        ),
+        portrait: { gender: "M", skinTone: 0, faceShape: 2, hairStyle: 4, hairColor: 0, facialHair: 0, glasses: 2, headwear: 4, scarOrDetail: 0, expression: 1, specialId: "NONE" },
+        options: [
+          {
+            id: "finale_sbk_raid",
+            label: L("🫡 Очолити штурм із ГУР-М (+4 000 🪙, +2 500 💵, +25 СБК)", "🫡 Lead the GUR-M raid (+4,000 🪙, +2,500 💵, +25 SBK)"),
+            outcome: L("Блискуче захоплення! Спецслужби вручають нагороду та очищають досьє!", "Flawless capture! Intel awards you and clears your dossier!"),
+            moneyDelta: 4000, timeDelta: 0, riskDelta: -25, sbkDelta: 25, tolikDelta: 0, palychDelta: 0, moraleDelta: 15,
+            onSelect: () => { state.usd += 2500; unlockAgencyBadge("GUR_FALCON"); openCampaignMilestoneModal(); return true; }
+          },
+          {
+            id: "finale_sbk_cover",
+            label: L("📡 Прикрити операцію з КПП (+2 000 🪙, +10 СБК)", "📡 Provide checkpoint cover (+2,000 🪙, +10 SBK)"),
+            outcome: L("Усе пройшло тихо й без втрат!", "Smooth and clean!"),
+            moneyDelta: 2000, timeDelta: 0, riskDelta: -10, sbkDelta: 10, tolikDelta: 0, palychDelta: 0, moraleDelta: 10,
+            onSelect: () => { openCampaignMilestoneModal(); return true; }
+          }
+        ]
+      };
+    } else if (state.tolikRep >= 60 && state.tolikRep >= state.palychRep) {
+      mission = {
+        id: "faction_finale_tolik",
+        title: L("🚐 ФІНАЛЬНА МІСІЯ СИНДИКАТУ ТОЛІКА: «ЗАХІД-ЕКСПРЕС»", "🚐 TOLIK SYNDICATE FINALE: 'WEST-EXPRESS'"),
+        desc: L(
+          "Толік довіряє тобі на всі 100%! Опівночі він жене 3 фури з контрабандою й просить підняти шлагбаум востаннє за частку в 18 000 💵.",
+          "Tolik trusts you 100%! At midnight he's rolling 3 smuggling trucks through and offers an 18,000 💵 cut."
+        ),
+        portrait: { gender: "M", skinTone: 1, faceShape: 2, hairStyle: 1, hairColor: 1, facialHair: 2, glasses: 1, headwear: 3, scarOrDetail: 0, expression: 1, specialId: "TOLIK_COURIER" },
+        options: [
+          {
+            id: "finale_tolik_pass",
+            label: L("💵 Пропустити конвой Толіка (+18 000 💵, +22% НАБК)", "💵 Wave Tolik's convoy (+18,000 💵, +22% NABK)"),
+            outcome: L("Фури пролетіли за хвилину, а в кишені хрустять пачки баксіків!", "Trucks cleared in a minute, pockets heavy with cash!"),
+            moneyDelta: 0, timeDelta: 0, riskDelta: 22, sbkDelta: -15, tolikDelta: 30, palychDelta: 0, moraleDelta: 10,
+            onSelect: () => { state.usd += 18000; openCampaignMilestoneModal(); return true; }
+          },
+          {
+            id: "finale_tolik_bust",
+            label: L("🚨 Злити конвой СБК (+6 000 🪙, -25% НАБК)", "🚨 Tip off SBK (+6,000 🪙, -25% NABK)"),
+            outcome: L("СБК перехоплює фури, Толік у люті, але твоя репутація чиста!", "SBK seizes the trucks! Tolik is furious, your record is spotless!"),
+            moneyDelta: 6000, timeDelta: 0, riskDelta: -25, sbkDelta: 30, tolikDelta: -40, palychDelta: 0, moraleDelta: 0,
+            onSelect: () => { unlockAgencyBadge("SBK_SHIELD"); openCampaignMilestoneModal(); return true; }
+          }
+        ]
+      };
+    } else if (state.palychRep >= 65) {
+      mission = {
+        id: "faction_finale_palych",
+        title: L("🧢 ФІНАЛЬНА МІСІЯ ПАЛ ПАЛИЧА: «ВЕЛИКИЙ КОШТОРИС»", "🧢 PALYCH FINALE: 'THE GRAND BUDGET'"),
+        desc: L(
+          "Пал Палич задоволений твоєю вірністю! Перед ревізією з Києва він пропонує тихо списати «генераторний бюджет» навпіл (+8 000 💵).",
+          "Palych appreciates your loyalty! Before the Kyiv audit, he offers to split a 'generator fund' (+8,000 💵)."
+        ),
+        portrait: { gender: "M", skinTone: 1, faceShape: 3, hairStyle: 0, hairColor: 0, facialHair: 0, glasses: 0, headwear: 4, scarOrDetail: 0, expression: 1, specialId: "PALYCH_BOSS" },
+        options: [
+          {
+            id: "finale_palych_split",
+            label: L("🤝 Розпилити бюджет із Паличем (+8 000 💵, +15% НАБК)", "🤝 Split budget with Palych (+8,000 💵, +15% NABK)"),
+            outcome: L("Частка на руках, Палич тисне руку!", "Share pocketed, Palych salutes you!"),
+            moneyDelta: 0, timeDelta: 0, riskDelta: 15, sbkDelta: 0, tolikDelta: 0, palychDelta: 25, moraleDelta: 15,
+            onSelect: () => { state.usd += 8000; openCampaignMilestoneModal(); return true; }
+          },
+          {
+            id: "finale_palych_clean",
+            label: L("📋 Відмовитися й подати чесний звіт (+3 500 🪙, -10% НАБК)", "📋 Refuse & file clean audit (+3,500 🪙, -10% NABK)"),
+            outcome: L("Палич бурчить, але поважає принциповість.", "Palych grumbles but respects your spine."),
+            moneyDelta: 3500, timeDelta: 0, riskDelta: -10, sbkDelta: 10, tolikDelta: 0, palychDelta: -15, moraleDelta: 10,
+            onSelect: () => { openCampaignMilestoneModal(); return true; }
+          }
+        ]
+      };
+    } else {
+      mission = {
+        id: "faction_finale_honest",
+        title: L("🏠 ФІНАЛЬНА ПОДЯКА: «ЧЕСНИЙ РУБІЖ»", "🏠 FINALE: 'HONORABLE SERVICE'"),
+        desc: L(
+          "Інспекція з Києва відзначила твій КПП за витримку та порядок! Громада і командування вручають премію й подяку сім'ї.",
+          "Kyiv command commends your checkpoint for discipline and honor!"
+        ),
+        portrait: { gender: "F", skinTone: 0, faceShape: 0, hairStyle: 2, hairColor: 3, facialHair: 0, glasses: 1, headwear: 0, scarOrDetail: 0, expression: 1, specialId: "NONE" },
+        options: [
+          {
+            id: "finale_honest_accept",
+            label: L("🏅 Прийняти державну подяку (+7 500 🪙, -15% НАБК, +20% сім'я)", "🏅 Accept commendation (+7,500 🪙, -15% NABK, +20% family)"),
+            outcome: L("Родина пишається тобою!", "Your family is proud of you!"),
+            moneyDelta: 7500, timeDelta: 0, riskDelta: -15, sbkDelta: 15, tolikDelta: 0, palychDelta: 10, moraleDelta: 20,
+            onSelect: () => { unlockAgencyBadge("NABK_CLEAN"); openCampaignMilestoneModal(); return true; }
+          }
+        ]
+      };
+    }
+    openEncounterModal(mission);
   }
 
   function openCampaignMilestoneModal() {
@@ -5141,8 +5290,9 @@
             </div>
             <span style="font-size:11.5px;">${tr(L("Черга", "Queue"), state.lang)}: ${state.travelerIdx + 1}/${state.queue.length}</span>
             <div style="display:flex;gap:4px;">
-              <button type="button" id="hud-music" class="btn-outline" style="padding:3px 7px;" aria-label="Toggle music">${audio.musicEnabled ? "🔊" : "🔇"}</button>
-              <button type="button" id="hud-rules" class="btn-outline" style="padding:3px 7px;">${tr(L("📋 Правила", "📋 Rules"), state.lang)}</button>
+              <button type="button" id="hud-music" class="btn-outline" style="padding:3px 6px;" aria-label="Toggle music">${audio.musicEnabled ? "🔊" : "🔇"}</button>
+              <button type="button" id="hud-wanted" class="btn-outline" style="padding:3px 6px;border-color:#FF5252;color:#FFCDD2;">🎯 ${tr(L("Розшук", "Wanted"), state.lang)}</button>
+              <button type="button" id="hud-rules" class="btn-outline" style="padding:3px 6px;">${tr(L("📋 Правила", "📋 Rules"), state.lang)}</button>
             </div>
           </div>
           <div class="row-between" style="font-size:11px;color:#B0BEC5;">
@@ -5418,6 +5568,7 @@
       });
 
       document.getElementById("hud-music").addEventListener("click", () => { audio.ensureCtx(); audio.musicEnabled = !audio.musicEnabled; render(); });
+      document.getElementById("hud-wanted").addEventListener("click", () => { audio.playTap(); openWantedDossierModal(); });
       document.getElementById("hud-rules").addEventListener("click", () => { audio.playTap(); openRulesModal(); });
       document.getElementById("btn-interrogate").addEventListener("click", () => {
         audio.playTap();

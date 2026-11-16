@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Border Shift">
   <link rel="manifest" href="./manifest.json">
-  <link rel="stylesheet" href="./styles.css?v=3.0">
+  <link rel="stylesheet" href="./styles.css?v=3.1">
   <title>Border Shift: Kraina</title>
 </head>
 <body>
@@ -20,6 +20,16 @@
     <div id="rules-dialog-body" style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;"></div>
     <form method="dialog">
       <button type="submit" value="close" class="btn-mustard" style="width: 100%; padding: 10px;" autofocus>Зрозуміло / Got it</button>
+    </form>
+  </dialog>
+
+  <!-- Native modal dialog for Wanted Mugshot Dossier (light-dismissable) -->
+  <dialog id="wanted-dialog" closedby="any" aria-labelledby="wanted-dialog-title">
+    <h2 id="wanted-dialog-title" style="color: #FF5252; font-size: 18px;">🎯 ДОВІДНИК РОЗШУКУ СБК</h2>
+    <p id="wanted-dialog-sub" style="font-size: 12px; color: #CFD8DC;">Орієнтування на зміну: у цих осіб гарантовані порушення в документах або багажі.</p>
+    <div id="wanted-dialog-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+    <form method="dialog">
+      <button type="submit" value="close" class="btn-mustard" style="width: 100%; padding: 10px;" autofocus>Закрити довідник</button>
     </form>
   </dialog>
 
@@ -43,6 +53,6 @@
     <div id="encounter-options" style="display: flex; flex-direction: column; gap: 8px;"></div>
   </dialog>
 
-  <script src="./game.js?v=3.0"></script>
+  <script src="./game.js?v=3.1"></script>
 </body>
 </html>
