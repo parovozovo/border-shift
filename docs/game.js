@@ -2202,7 +2202,13 @@
         passportFields: [
           { label: L("ПІБ", "Full Name"), value: fullName, disc: null },
           { label: L("Вік / Стать", "Age / Sex"), value: L(`${age} р. • ${gender === "M" ? "ЧОЛ" : "ЖІН"}`, `${age} y/o • ${gender}`), disc: null },
-          { label: L("Напрямок", "Direction"), value: dir === "EXIT" ? L("ВИЇЗД → Поландія", "EXIT → Polandia") : L(`В'ЇЗД → ${city.uk}`, `ENTRY → ${city.en}`), disc: null },
+          { label: L("Напрямок", "Direction"), value: dir === "EXIT" ? pick([
+            L("ВИЇЗД → Поландія (КПП «Ягодин-Люкс»)", "EXIT → Polandia ('Yahodyn-Lux')"),
+            L("ВИЇЗД → Карпатія (КПП «Тиса-Драйв»)", "EXIT → Karpatia ('Tysa-Drive')"),
+            L("ВИЇЗД → Унія (КПП «Шегині-Спрінт»)", "EXIT → Unia ('Shehyni-Sprint')"),
+            L("ВИЇЗД → Буковина (КПП «Порубне-Експрес»)", "EXIT → Bukovyna ('Porubne')"),
+            L("ВИЇЗД → Молдавія (КПП «Паланка-Південь»)", "EXIT → Moldavia ('Palanka')")
+          ]) : L(`В'ЇЗД → м. ${city.uk}`, `ENTRY → ${city.en}`), disc: null },
           { label: L("Дійсний до", "Valid Until"), value: L(`${randInt(10, 28)}.0${randInt(1, 9)}.${randInt(2027, 2033)}`, `20${randInt(27, 33)}-0${randInt(1, 9)}-${randInt(10, 28)}`), disc: null }
         ],
         extraDocs,
@@ -2542,7 +2548,7 @@
     const restPool = shuffle(availShytomyr.filter(s => globalSeen.has(s.tag)));
     const orderedShytomyr = unseenGlobally.concat(restPool);
 
-    const pickCount = daySpec.extraShytomyr ? 3 : ((daySpec.dayNumber >= 2 && Math.random() < 0.7) ? 2 : 1);
+    const pickCount = daySpec.extraShytomyr ? 2 : (Math.random() < 0.45 ? 1 : 0);
     for (let i = 0; i < Math.min(pickCount, orderedShytomyr.length); i++) {
       const leg = orderedShytomyr[i];
       usedShytomyrRun.add(leg.tag);
@@ -2617,168 +2623,125 @@
     const w = canvas.width, h = canvas.height;
     ctx.clearRect(0, 0, w, h);
 
-    // 1. Twilight Carpathian Sky Gradient
-    const sky = ctx.createLinearGradient(0, 0, 0, h * 0.66);
-    sky.addColorStop(0, "#080D12");
-    sky.addColorStop(0.55, "#152329");
-    sky.addColorStop(1, "#2A3D36");
+    // 1. Deep Evening Border Sky
+    const sky = ctx.createLinearGradient(0, 0, 0, h * 0.65);
+    sky.addColorStop(0, "#091017");
+    sky.addColorStop(0.55, "#162630");
+    sky.addColorStop(1, "#2A3C38");
     ctx.fillStyle = sky;
     ctx.fillRect(0, 0, w, h);
 
-    // Subtle twinkling stars & Crescent Moon
-    [[34, 18], [88, 32], [142, 14], [214, 26], [284, 16], [336, 30], [398, 22]].forEach(([sx, sy], i) => {
-      const alpha = 0.45 + 0.4 * Math.sin(tSec * 1.8 + i * 1.3);
+    // Subtle stars + Moon
+    [[42, 20], [112, 34], [184, 15], [268, 28], [344, 18], [406, 26]].forEach(([sx, sy], i) => {
+      const alpha = 0.35 + 0.35 * Math.sin(tSec * 1.6 + i * 1.4);
       ctx.fillStyle = `rgba(255, 248, 225, ${alpha.toFixed(2)})`;
       ctx.fillRect(sx, sy, 1.8, 1.8);
     });
     ctx.beginPath();
-    ctx.arc(w * 0.87, 29, 12, 0, Math.PI * 2);
-    ctx.fillStyle = "#F4E9C9";
+    ctx.arc(w * 0.13, 30, 11, 0, Math.PI * 2);
+    ctx.fillStyle = "#EFE2BD";
     ctx.fill();
     ctx.beginPath();
-    ctx.arc(w * 0.87 + 4.5, 26, 11, 0, Math.PI * 2);
-    ctx.fillStyle = "#0F1A20";
+    ctx.arc(w * 0.13 + 4, 27, 10, 0, Math.PI * 2);
+    ctx.fillStyle = "#111C24";
     ctx.fill();
 
-    // 2. Layered Carpathian Ridge + Pine Silhouette
-    ctx.fillStyle = "#16201C";
+    // 2. Smooth Layered Mountain Horizon
+    ctx.fillStyle = "#1A2925";
     ctx.beginPath();
     ctx.moveTo(0, h * 0.64);
-    ctx.lineTo(w * 0.18, h * 0.44);
-    ctx.lineTo(w * 0.42, h * 0.56);
-    ctx.lineTo(w * 0.68, h * 0.41);
-    ctx.lineTo(w, h * 0.55);
+    ctx.quadraticCurveTo(w * 0.16, h * 0.38, w * 0.36, h * 0.56);
+    ctx.quadraticCurveTo(w * 0.56, h * 0.34, w * 0.78, h * 0.54);
+    ctx.quadraticCurveTo(w * 0.90, h * 0.44, w, h * 0.58);
     ctx.lineTo(w, h * 0.64);
     ctx.closePath();
     ctx.fill();
 
-    ctx.fillStyle = "#0D1411";
-    ctx.beginPath();
-    ctx.moveTo(0, h * 0.63);
-    for (let x = 0; x <= w; x += 15) {
-      const peak = (x % 30 === 0) ? 22 : ((x % 45 === 0) ? 16 : 11);
-      ctx.lineTo(x + 7.5, h * 0.63 - peak);
-      ctx.lineTo(x + 15, h * 0.63);
-    }
-    ctx.closePath();
-    ctx.fill();
+    // Distant treeline band
+    ctx.fillStyle = "#111A17";
+    ctx.fillRect(0, h * 0.57, w, h * 0.08);
 
-    // 3. Animated Sweeping Searchlight Beam from Watchtower
-    const towerX = 48, towerY = 42;
-    const sweepOffset = Math.sin(tSec * 0.65) * 75;
-    const beamTargetX = w * 0.62 + sweepOffset;
-    const beamGrad = ctx.createLinearGradient(towerX, towerY, beamTargetX, h * 0.92);
-    beamGrad.addColorStop(0, "rgba(255, 232, 140, 0.36)");
-    beamGrad.addColorStop(1, "rgba(255, 232, 140, 0.0)");
-    ctx.fillStyle = beamGrad;
-    ctx.beginPath();
-    ctx.moveTo(towerX + 6, towerY + 2);
-    ctx.lineTo(beamTargetX + 52, h * 0.94);
-    ctx.lineTo(beamTargetX - 48, h * 0.94);
-    ctx.closePath();
-    ctx.fill();
-
-    // 4. Watchtower Silhouette (ВИШКА ДПСК)
-    ctx.fillStyle = "#161B18";
-    ctx.fillRect(towerX - 15, towerY - 12, 30, 18);
-    ctx.fillRect(towerX - 19, towerY - 17, 38, 6);
-    ctx.fillStyle = "#E0B145";
-    ctx.fillRect(towerX - 8, towerY - 7, 16, 7);
-    ctx.strokeStyle = "#161B18";
-    ctx.lineWidth = 3.2;
-    ctx.beginPath();
-    ctx.moveTo(towerX - 11, towerY + 6); ctx.lineTo(towerX - 20, h * 0.72);
-    ctx.moveTo(towerX + 11, towerY + 6); ctx.lineTo(towerX + 20, h * 0.72);
-    ctx.moveTo(towerX - 15, towerY + 34); ctx.lineTo(towerX + 15, towerY + 34);
-    ctx.stroke();
-
-    // 5. Wet Asphalt Frontier Highway
-    ctx.fillStyle = "#1E2422";
+    // 3. Frontier Highway Asphalt
+    const roadGrad = ctx.createLinearGradient(0, h * 0.63, 0, h);
+    roadGrad.addColorStop(0, "#1E2523");
+    roadGrad.addColorStop(1, "#121615");
+    ctx.fillStyle = roadGrad;
     ctx.fillRect(0, h * 0.63, w, h * 0.37);
-    ctx.fillStyle = "#141816";
-    ctx.fillRect(0, h * 0.63, w, 4);
-    ctx.strokeStyle = "#627068";
-    ctx.setLineDash([14, 10]);
+    ctx.fillStyle = "#2F3A35";
+    ctx.fillRect(0, h * 0.63, w, 2.5);
+
+    ctx.strokeStyle = "rgba(224, 177, 69, 0.38)";
+    ctx.setLineDash([16, 12]);
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(0, h * 0.84); ctx.lineTo(w, h * 0.84);
+    ctx.moveTo(0, h * 0.85);
+    ctx.lineTo(w, h * 0.85);
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // 6. Concrete Stele Sign ("KRAINA") on shoulder
-    ctx.fillStyle = "#3E4A44";
-    ctx.fillRect(w * 0.17, h * 0.50, 18, 28);
+    // 4. Checkpoint Canopy & Booth on Right
+    ctx.fillStyle = "#24302A";
+    ctx.fillRect(w * 0.68, h * 0.34, w * 0.27, h * 0.36);
+    ctx.fillStyle = "#141B18";
+    ctx.fillRect(w * 0.64, h * 0.28, w * 0.34, 11);
+    // Warm lit booth window + inspector silhouette
+    ctx.fillStyle = "#E0B145";
+    ctx.fillRect(w * 0.73, h * 0.42, 54, 28);
+    ctx.fillStyle = "#2A2018";
+    ctx.beginPath(); ctx.arc(w * 0.79, h * 0.55, 6.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillRect(w * 0.768, h * 0.61, 16, 9);
+
+    // Checkpoint flag stripe (Blue / Yellow)
     ctx.fillStyle = "#1565C0";
-    ctx.fillRect(w * 0.17, h * 0.53, 18, 5);
+    ctx.fillRect(w * 0.66, h * 0.34, 4, 12);
     ctx.fillStyle = "#FBC02D";
-    ctx.fillRect(w * 0.17, h * 0.58, 18, 5);
+    ctx.fillRect(w * 0.66, h * 0.34 + 12, 4, 12);
 
-    // 7. Queued Vehicles on Road (front SUV + rear Sedan) with glowing headlights
-    // Rear Sedan (subtle headlights)
-    ctx.fillStyle = "#202A30";
-    ctx.beginPath(); ctx.roundRect(w * 0.25, h * 0.60, 62, 22, 5); ctx.fill();
-    ctx.fillStyle = "#151D22";
-    ctx.beginPath(); ctx.roundRect(w * 0.28, h * 0.54, 40, 10, 4); ctx.fill();
-    ctx.fillStyle = "#FF5252";
-    ctx.fillRect(w * 0.25 + 2, h * 0.66, 4, 4);
-    ctx.fillStyle = "#FFF59D";
-    ctx.beginPath(); ctx.arc(w * 0.25 + 58, h * 0.69, 3, 0, Math.PI * 2); ctx.fill();
-
-    // Lead Black Beha SUV at Barrier
-    ctx.fillStyle = "#14191C";
-    ctx.beginPath(); ctx.roundRect(w * 0.45, h * 0.58, 96, 32, 6); ctx.fill();
-    ctx.fillStyle = "#232F36";
-    ctx.beginPath(); ctx.roundRect(w * 0.48, h * 0.49, 64, 15, 5); ctx.fill();
-    // Wheels
-    ctx.fillStyle = "#0B0D0E";
-    [w * 0.49, w * 0.62].forEach(wx => {
-      ctx.beginPath(); ctx.arc(wx, h * 0.58 + 30, 7, 0, Math.PI * 2); ctx.fill();
-    });
-    // Warm amber headlight cones on asphalt
-    const headGrad = ctx.createLinearGradient(w * 0.67, h * 0.72, w * 0.80, h * 0.78);
-    headGrad.addColorStop(0, "rgba(255, 243, 148, 0.36)");
-    headGrad.addColorStop(1, "rgba(255, 243, 148, 0)");
+    // 5. Lead SUV at the Gate + Warm Headlight Cone
+    const carX = w * 0.25, carY = h * 0.60;
+    const headGrad = ctx.createLinearGradient(carX + 94, carY + 22, carX + 185, carY + 28);
+    headGrad.addColorStop(0, "rgba(255, 240, 150, 0.34)");
+    headGrad.addColorStop(1, "rgba(255, 240, 150, 0)");
     ctx.fillStyle = headGrad;
     ctx.beginPath();
-    ctx.moveTo(w * 0.67, h * 0.70);
-    ctx.lineTo(w * 0.80, h * 0.66);
-    ctx.lineTo(w * 0.80, h * 0.83);
+    ctx.moveTo(carX + 94, carY + 18);
+    ctx.lineTo(carX + 185, carY + 12);
+    ctx.lineTo(carX + 185, carY + 38);
+    ctx.lineTo(carX + 94, carY + 26);
     ctx.closePath();
     ctx.fill();
+
+    // SUV Body
+    ctx.fillStyle = "#1A2328";
+    ctx.beginPath(); ctx.roundRect(carX, carY + 10, 96, 26, 6); ctx.fill();
+    ctx.fillStyle = "#28353C";
+    ctx.beginPath(); ctx.roundRect(carX + 12, carY, 62, 14, 5); ctx.fill();
+    ctx.fillStyle = "#0F161A";
+    ctx.beginPath(); ctx.roundRect(carX + 18, carY + 3, 48, 8, 2); ctx.fill();
+    // Wheels
+    ctx.fillStyle = "#0B0D0E";
+    [carX + 20, carX + 76].forEach(wx => {
+      ctx.beginPath(); ctx.arc(wx, carY + 35, 7, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#78909C";
+      ctx.beginPath(); ctx.arc(wx, carY + 35, 3, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#0B0D0E";
+    });
+    // Taillight & Headlight
+    ctx.fillStyle = "#FF5252";
+    ctx.fillRect(carX + 1, carY + 15, 4, 5);
     ctx.fillStyle = "#FFF59D";
-    ctx.beginPath(); ctx.arc(w * 0.45 + 90, h * 0.72, 3.8, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(carX + 92, carY + 20, 3.5, 0, Math.PI * 2); ctx.fill();
 
-    // 8. Inspector Booth (ПОСТ № 04) on Right + Pal Palych Standing at Gate
-    ctx.fillStyle = "#26302B";
-    ctx.fillRect(w * 0.77, h * 0.34, 86, 80);
-    ctx.fillStyle = "#161E1A";
-    ctx.fillRect(w * 0.75, h * 0.29, 94, 9);
-    // Warm amber lit window + interior inspector silhouette
-    ctx.fillStyle = "#DFAF42";
-    ctx.fillRect(w * 0.80, h * 0.43, 48, 30);
-    ctx.fillStyle = "#2A2018";
-    ctx.beginPath(); ctx.arc(w * 0.85, h * 0.56, 7.5, 0, Math.PI * 2); ctx.fill();
-    ctx.fillRect(w * 0.825, h * 0.63, 17, 10);
-
-    // Pal Palych standing outside beside the barrier post with clipboard
-    const px = w * 0.72, py = h * 0.67;
-    ctx.fillStyle = "#2E4032";
-    ctx.fillRect(px - 6, py, 12, 20);
-    ctx.fillStyle = "#DCAE88";
-    ctx.beginPath(); ctx.arc(px, py - 5, 5, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = "#1E2D24";
-    ctx.fillRect(px - 7, py - 11, 14, 4);
-
-    // 9. Red-and-White Barrier Arm + Pulsing Beacon
-    const barPostX = w * 0.30, barY = h * 0.65;
+    // 6. Red-and-White Barrier Gate in front of the SUV
+    const barPostX = w * 0.56, barY = h * 0.63;
     ctx.fillStyle = "#37474F";
-    ctx.fillRect(barPostX, h * 0.56, 12, 36);
-    const pulse = 0.55 + 0.45 * Math.sin(tSec * 4.2);
+    ctx.fillRect(barPostX, h * 0.54, 10, 36);
+    const pulse = 0.5 + 0.5 * Math.sin(tSec * 4.0);
     ctx.fillStyle = `rgba(255, 23, 68, ${pulse.toFixed(2)})`;
-    ctx.beginPath(); ctx.arc(barPostX + 6, h * 0.55, 4.5, 0, Math.PI * 2); ctx.fill();
-    for (let s = 0; s < 10; s++) {
-      ctx.fillStyle = s % 2 === 0 ? "#B82323" : "#ECEFF1";
-      ctx.fillRect(barPostX + 12 + s * 17, barY, 17, 6);
+    ctx.beginPath(); ctx.arc(barPostX + 5, h * 0.52, 4, 0, Math.PI * 2); ctx.fill();
+    for (let s = 0; s < 6; s++) {
+      ctx.fillStyle = s % 2 === 0 ? "#C62828" : "#ECEFF1";
+      ctx.fillRect(barPostX + 10 + s * 14, barY, 14, 5.5);
     }
   }
 
@@ -3094,25 +3057,25 @@
   // ★ DYNAMIC COLOR & SHAPE TRANSPORT ART IN BOOTH WINDOW ★
   function drawTransportInBooth(ctx, w, h, shape, bodyColor, roofColor) {
     ctx.save();
-    const cx = w * 0.54;
-    const groundY = h * 0.62;
+    const cx = w * 0.28;
+    const groundY = h * 0.84;
 
     if (shape === "ON_FOOT") {
-      // Draw two iconic red-white-blue checkered bazaar bags "Мрія Перекупа"!
-      [cx - 32, cx + 18].forEach((bx, idx) => {
-        const bw = 24, bh = 22, by = groundY - bh + (idx * 2);
+      // Two iconic red-white-blue checkered bazaar bags "Мрія Перекупа"!
+      [cx - 26, cx + 4].forEach((bx, idx) => {
+        const bw = 20, bh = 18, by = groundY - bh + (idx * 2);
         ctx.fillStyle = "#1565C0";
         ctx.fillRect(bx, by, bw, bh);
         ctx.fillStyle = "#C62828";
-        ctx.fillRect(bx + 4, by, 5, bh);
-        ctx.fillRect(bx + 14, by, 5, bh);
+        ctx.fillRect(bx + 3, by, 4, bh);
+        ctx.fillRect(bx + 12, by, 4, bh);
         ctx.fillStyle = "#ECEFF1";
-        ctx.fillRect(bx, by + 6, bw, 4);
-        ctx.fillRect(bx, by + 14, bw, 4);
+        ctx.fillRect(bx, by + 5, bw, 3);
+        ctx.fillRect(bx, by + 11, bw, 3);
         ctx.strokeStyle = "#111";
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 1.8;
         ctx.beginPath();
-        ctx.arc(bx + bw / 2, by, 6, Math.PI, 0);
+        ctx.arc(bx + bw / 2, by, 5, Math.PI, 0);
         ctx.stroke();
       });
       ctx.restore();
@@ -3120,116 +3083,117 @@
     }
 
     if (shape === "BICYCLE") {
-      // Draw bicycle + burlap potato sack in bodyColor!
-      const wr = 11;
-      const lx = cx - 26, rx = cx + 22, wy = groundY - wr;
-      ctx.strokeStyle = "#1B1B1B";
-      ctx.lineWidth = 2.4;
+      const wr = 9.5;
+      const lx = cx - 22, rx = cx + 18, wy = groundY - wr;
+      ctx.strokeStyle = "#14181A";
+      ctx.lineWidth = 2.2;
       [lx, rx].forEach(wx => {
         ctx.beginPath(); ctx.arc(wx, wy, wr, 0, Math.PI * 2); ctx.stroke();
       });
-      // Painted frame
       ctx.strokeStyle = bodyColor;
-      ctx.lineWidth = 3.2;
+      ctx.lineWidth = 3;
       ctx.beginPath();
-      ctx.moveTo(lx, wy); ctx.lineTo(cx - 2, wy); ctx.lineTo(rx - 6, wy - 18); ctx.lineTo(lx + 8, wy - 14); ctx.closePath();
-      ctx.moveTo(rx, wy); ctx.lineTo(rx - 8, wy - 24); ctx.lineTo(rx - 15, wy - 25);
+      ctx.moveTo(lx, wy); ctx.lineTo(cx - 2, wy); ctx.lineTo(rx - 5, wy - 15); ctx.lineTo(lx + 6, wy - 12); ctx.closePath();
+      ctx.moveTo(rx, wy); ctx.lineTo(rx - 7, wy - 20); ctx.lineTo(rx - 13, wy - 21);
       ctx.stroke();
-      // Burlap sack on rear rack
       ctx.fillStyle = "#C5A880";
       ctx.strokeStyle = "#4E342E";
-      ctx.lineWidth = 1.5;
-      ctx.beginPath(); ctx.ellipse(lx + 4, wy - 14, 10, 7, -0.15, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.ellipse(lx + 3, wy - 12, 8, 5.5, -0.15, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
       ctx.restore();
       return;
     }
 
     if (shape === "E_SCOOTER") {
-      const lx = cx - 20, rx = cx + 18, wy = groundY - 6;
-      ctx.fillStyle = "#1B1B1B";
-      [lx, rx].forEach(wx => { ctx.beginPath(); ctx.arc(wx, wy, 5.5, 0, Math.PI * 2); ctx.fill(); });
+      const lx = cx - 18, rx = cx + 16, wy = groundY - 5;
+      ctx.fillStyle = "#14181A";
+      [lx, rx].forEach(wx => { ctx.beginPath(); ctx.arc(wx, wy, 5, 0, Math.PI * 2); ctx.fill(); });
       ctx.fillStyle = bodyColor;
-      ctx.fillRect(lx, wy - 5, rx - lx, 5);
+      ctx.fillRect(lx, wy - 4, rx - lx, 4);
       ctx.strokeStyle = bodyColor;
-      ctx.lineWidth = 3.5;
-      ctx.beginPath(); ctx.moveTo(rx - 2, wy - 4); ctx.lineTo(rx - 8, wy - 36); ctx.lineTo(rx - 14, wy - 36); ctx.stroke();
-      // LED beam
+      ctx.lineWidth = 3.2;
+      ctx.beginPath(); ctx.moveTo(rx - 2, wy - 3); ctx.lineTo(rx - 6, wy - 30); ctx.lineTo(rx - 12, wy - 30); ctx.stroke();
       ctx.fillStyle = "#FFF59D";
-      ctx.beginPath(); ctx.arc(rx - 3, wy - 33, 3, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(rx - 2, wy - 27, 2.8, 0, Math.PI * 2); ctx.fill();
       ctx.restore();
       return;
     }
 
-    // Cars / Buses / Vans / Hearses / Pickups painted dynamically in bodyColor & roofColor!
+    // Cars / Buses / Vans / Hearses / Pickups parked clearly in the left booth lane!
     const isTall = shape === "MINIBUS" || shape === "HEARSE" || shape === "BUS";
     const isSuv = shape === "SUV" || shape === "G_WAGON" || shape === "PICKUP";
-    const vw = shape === "BUS" ? w * 0.78 : (isTall ? w * 0.72 : w * 0.68);
-    const vh = shape === "BUS" ? 44 : (isTall ? 38 : (isSuv ? 34 : (shape === "SPORT" ? 26 : 30)));
-    const vx = w * 0.16;
-    const vy = groundY - vh - 6;
+    const vw = shape === "BUS" ? w * 0.50 : (isTall ? w * 0.47 : w * 0.45);
+    const vh = shape === "BUS" ? 38 : (isTall ? 33 : (isSuv ? 30 : (shape === "SPORT" ? 23 : 26)));
+    const vx = 8;
+    const vy = groundY - vh - 5;
+
+    // Ground shadow
+    ctx.fillStyle = "rgba(0,0,0,0.32)";
+    ctx.beginPath();
+    ctx.ellipse(vx + vw / 2, groundY - 1, vw * 0.48, 4, 0, 0, Math.PI * 2);
+    ctx.fill();
 
     // Lower body
     ctx.fillStyle = bodyColor;
-    ctx.strokeStyle = "#14181A";
-    ctx.lineWidth = 1.8;
+    ctx.strokeStyle = "#121618";
+    ctx.lineWidth = 1.6;
     ctx.beginPath();
-    ctx.roundRect(vx, vy + (isTall ? 2 : 10), vw, vh - (isTall ? 2 : 10), shape === "G_WAGON" ? 3 : 8);
+    ctx.roundRect(vx, vy + (isTall ? 2 : 9), vw, vh - (isTall ? 2 : 9), shape === "G_WAGON" ? 3 : 7);
     ctx.fill();
     ctx.stroke();
 
     // Upper Cabin / Roof
     if (!isTall) {
-      const cabX = shape === "PICKUP" ? vx + vw * 0.16 : vx + vw * 0.18;
+      const cabX = shape === "PICKUP" ? vx + vw * 0.14 : vx + vw * 0.16;
       const cabW = shape === "PICKUP" ? vw * 0.44 : vw * 0.60;
       ctx.fillStyle = roofColor || bodyColor;
       ctx.beginPath();
-      ctx.roundRect(cabX, vy, cabW, shape === "SPORT" ? 13 : 16, shape === "G_WAGON" ? 2 : 7);
+      ctx.roundRect(cabX, vy, cabW, shape === "SPORT" ? 11 : 14, shape === "G_WAGON" ? 2 : 6);
       ctx.fill();
       ctx.stroke();
     }
 
-    // Sport spoiler
     if (shape === "SPORT") {
       ctx.fillStyle = "#111";
-      ctx.fillRect(vx + vw - 10, vy + 4, 11, 3);
+      ctx.fillRect(vx + 1, vy + 4, 9, 2.5);
     }
-    // Retro roof rack
     if (shape === "RETRO") {
       ctx.strokeStyle = "#CFD8DC";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(vx + vw * 0.25, vy - 5, vw * 0.42, 5);
+      ctx.lineWidth = 1.8;
+      ctx.strokeRect(vx + vw * 0.24, vy - 4, vw * 0.42, 4);
     }
-    // Hearse cross on side window
     if (shape === "HEARSE") {
       ctx.fillStyle = "#E0B145";
-      ctx.fillRect(vx + vw * 0.74, vy + 10, 3, 13);
-      ctx.fillRect(vx + vw * 0.74 - 4, vy + 14, 11, 3);
+      ctx.fillRect(vx + vw * 0.72, vy + 9, 2.5, 11);
+      ctx.fillRect(vx + vw * 0.72 - 3.5, vy + 13, 9.5, 2.5);
     }
 
     // Windows
     ctx.fillStyle = "#1B262C";
     if (shape === "BUS") {
       for (let wi = 0; wi < 4; wi++) {
-        ctx.fillRect(vx + 10 + wi * (vw * 0.22), vy + 6, vw * 0.17, 14);
+        ctx.fillRect(vx + 7 + wi * (vw * 0.22), vy + 5, vw * 0.17, 12);
       }
     } else {
       ctx.beginPath();
-      ctx.roundRect(vx + vw * 0.22, vy + 4, vw * (shape === "PICKUP" ? 0.34 : 0.48), 11, 3);
+      ctx.roundRect(vx + vw * 0.20, vy + 3.5, vw * (shape === "PICKUP" ? 0.34 : 0.48), 9.5, 2.5);
       ctx.fill();
     }
 
     // Wheels
-    ctx.fillStyle = "#141618";
-    [vx + vw * 0.2, vx + vw * 0.8].forEach(wx => {
-      ctx.beginPath(); ctx.arc(wx, groundY - 5, isSuv ? 8 : 6.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#111315";
+    [vx + vw * 0.22, vx + vw * 0.78].forEach(wx => {
+      ctx.beginPath(); ctx.arc(wx, groundY - 4, isSuv ? 7 : 5.8, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = "#90A4AE";
-      ctx.beginPath(); ctx.arc(wx, groundY - 5, 3, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = "#141618";
+      ctx.beginPath(); ctx.arc(wx, groundY - 4, 2.6, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#111315";
     });
 
-    // Headlight glow
+    // Headlight (front right facing barrier) + Taillight (left)
     ctx.fillStyle = "#FFF59D";
-    ctx.fillRect(vx + 2, groundY - 14, 5, 4);
+    ctx.fillRect(vx + vw - 5, groundY - 12, 4, 3.5);
+    ctx.fillStyle = "#FF5252";
+    ctx.fillRect(vx + 1, groundY - 12, 3.5, 3.5);
     ctx.restore();
   }
 
@@ -3244,57 +3208,74 @@
     const dayNumber = opts.dayNumber || 1;
     const barrierState = opts.barrierState || "CLOSED";
 
-    // Sky
-    ctx.fillStyle = sirenActive ? "#6B2D2B" : (droneWarning ? "#5D4037" : (dayNumber >= 4 ? "#4F5D65" : "#6C7D84"));
-    ctx.fillRect(0, 0, w, h * 0.46);
+    // Sky & subtle distant tree line
+    const skyGrad = ctx.createLinearGradient(0, 0, 0, h * 0.44);
+    skyGrad.addColorStop(0, sirenActive ? "#5A1F1E" : (droneWarning ? "#4E342E" : (dayNumber >= 4 ? "#263238" : "#37474F")));
+    skyGrad.addColorStop(1, sirenActive ? "#7D2C2B" : (droneWarning ? "#6D4C41" : "#546E7A"));
+    ctx.fillStyle = skyGrad;
+    ctx.fillRect(0, 0, w, h * 0.44);
 
-    // Radar drone dot/triangle
-    const dx = w * 0.78, dy = h * 0.13;
+    // Distant horizon forest silhouette
+    ctx.fillStyle = "#1F2A24";
+    ctx.fillRect(0, h * 0.36, w, h * 0.08);
+
+    // Drone alert ONLY during active warning / siren
     if (droneWarning || sirenActive) {
+      const dx = w * 0.44, dy = h * 0.14;
       ctx.fillStyle = "rgba(255, 23, 68, 0.38)";
-      ctx.beginPath(); ctx.arc(dx, dy + 2, 22, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(dx, dy + 1, 14, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#FFCDD2";
+      ctx.beginPath();
+      ctx.moveTo(dx, dy - 5); ctx.lineTo(dx + 11, dy + 5); ctx.lineTo(dx - 11, dy + 5); ctx.closePath();
+      ctx.fill();
     }
-    ctx.fillStyle = (droneWarning || sirenActive) ? "#FFCDD2" : "#1F262A";
-    ctx.beginPath();
-    ctx.moveTo(dx, dy - 7); ctx.lineTo(dx + 22, dy + 7); ctx.lineTo(dx - 22, dy + 7); ctx.closePath();
-    ctx.fill();
 
-    // Asphalt yard
-    ctx.fillStyle = "#48524D";
-    ctx.fillRect(0, h * 0.36, w, h * 0.64);
+    // Asphalt yard & road marking
+    ctx.fillStyle = "#3E4743";
+    ctx.fillRect(0, h * 0.43, w, h * 0.57);
+    ctx.strokeStyle = "rgba(255,255,255,0.2)";
+    ctx.setLineDash([10, 8]);
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(0, h * 0.66); ctx.lineTo(w * 0.56, h * 0.66); ctx.stroke();
+    ctx.setLineDash([]);
 
     if (barrierState === "SBK_ARREST_FLASH") {
       ctx.fillStyle = "rgba(21, 101, 192, 0.38)";
-      ctx.beginPath(); ctx.arc(w * 0.22, h * 0.42, w * 0.24, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(w * 0.22, h * 0.42, w * 0.22, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = "rgba(213, 0, 0, 0.38)";
-      ctx.beginPath(); ctx.arc(w * 0.78, h * 0.42, w * 0.24, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(w * 0.78, h * 0.42, w * 0.22, 0, Math.PI * 2); ctx.fill();
     }
 
-    // Draw actual transport parked behind traveler in its EXACT paint color & body type!
-    drawTransportInBooth(ctx, w, h, opts.transportShape || "SEDAN", opts.colorHex || "#607D8B", opts.roofHex || "#455A64");
-
-    // Barrier & Traffic light
-    const barY = h * 0.49;
-    ctx.fillStyle = "#37474F";
-    ctx.fillRect(w * 0.04, barY - 14, 14, 42);
+    // Barrier gate behind car on left/mid lane
+    const barY = h * 0.50;
+    ctx.fillStyle = "#263238";
+    ctx.fillRect(w * 0.03, barY - 12, 10, 38);
     ctx.fillStyle = barrierState === "OPEN_APPROVED" ? "#00E676" : (barrierState === "SBK_ARREST_FLASH" ? "#2979FF" : "#FF1744");
-    ctx.beginPath(); ctx.arc(w * 0.04 + 7, barY - 6, 4.5, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(w * 0.03 + 5, barY - 6, 3.5, 0, Math.PI * 2); ctx.fill();
 
     for (let s = 0; s < 6; s++) {
-      const sy = barrierState === "OPEN_APPROVED" ? barY - (s + 1) * 6 : barY;
+      const sy = barrierState === "OPEN_APPROVED" ? barY - (s + 1) * 5 : barY;
       ctx.fillStyle = s % 2 === 0 ? "#C62828" : "#ECEFF1";
-      ctx.fillRect(w * 0.08 + s * (w * 0.08), sy, w * 0.08, 8);
+      ctx.fillRect(w * 0.08 + s * (w * 0.075), sy, w * 0.075, 6);
     }
 
-    // Traveler portrait
-    drawPortrait(ctx, opts.portrait, w * 0.5, h * 0.98, 0.95, {
+    // Draw UNOBSTRUCTED transport on left lane in its EXACT paint color & body type!
+    drawTransportInBooth(ctx, w, h, opts.transportShape || "SEDAN", opts.colorHex || "#607D8B", opts.roofHex || "#455A64");
+
+    // Booth counter divider & Traveler portrait on RIGHT window!
+    ctx.fillStyle = "rgba(20, 24, 22, 0.42)";
+    ctx.fillRect(w * 0.55, 0, w * 0.45, h);
+    ctx.fillStyle = "#263238";
+    ctx.fillRect(w * 0.54, 0, 3, h);
+
+    drawPortrait(ctx, opts.portrait, w * 0.77, h * 0.99, 0.84, {
       reactionState: opts.reactionState,
       uvActive: opts.uvActive
     });
 
     // UV Spotlight Beam over booth window!
     if (opts.uvActive) {
-      const uvGrad = ctx.createRadialGradient(w * 0.5, h * 0.55, 8, w * 0.5, h * 0.55, w * 0.65);
+      const uvGrad = ctx.createRadialGradient(w * 0.75, h * 0.55, 8, w * 0.75, h * 0.55, w * 0.55);
       uvGrad.addColorStop(0, "rgba(179, 136, 255, 0.34)");
       uvGrad.addColorStop(1, "rgba(49, 27, 146, 0.25)");
       ctx.fillStyle = uvGrad;
@@ -3303,18 +3284,17 @@
 
     // Visual Coffee Cup on sill if COFFEE_GIVEN!
     if (opts.reactionState === "COFFEE_GIVEN") {
-      const cx = w * 0.82, cy = h * 0.84;
+      const cx = w * 0.58, cy = h * 0.84;
       ctx.fillStyle = "#ECEFF1";
       ctx.strokeStyle = "#4E342E";
       ctx.lineWidth = 1.5;
-      ctx.fillRect(cx, cy, 14, 18);
-      ctx.strokeRect(cx, cy, 14, 18);
+      ctx.fillRect(cx, cy, 13, 16);
+      ctx.strokeRect(cx, cy, 13, 16);
       ctx.fillStyle = "#5D4037";
-      ctx.fillRect(cx - 1, cy - 3, 16, 4);
-      // Steam wisps
+      ctx.fillRect(cx - 1, cy - 3, 15, 3.5);
       ctx.strokeStyle = "rgba(255,255,255,0.75)";
-      ctx.beginPath(); ctx.moveTo(cx + 4, cy - 6); ctx.lineTo(cx + 6, cy - 13); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(cx + 10, cy - 5); ctx.lineTo(cx + 11, cy - 14); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx + 4, cy - 6); ctx.lineTo(cx + 6, cy - 12); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx + 9, cy - 5); ctx.lineTo(cx + 10, cy - 13); ctx.stroke();
     }
 
     // Sniffer dog Bavovna peeking at bottom-left when inspected!
