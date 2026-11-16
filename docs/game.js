@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v3.1";
+  const BUILD_VERSION = "v3.2";
   let confirmResetArmed = false;
 
   // Fallback for older Safari lacking CanvasRenderingContext2D.roundRect
@@ -4120,7 +4120,8 @@
   }
 
   function getEffectiveBossCut() {
-    const base = Math.max(800, (state.daySpec.bossCut || 200) * 5);
+    const bribeShare = state.shiftBribesTotal > 0 ? Math.round(state.shiftBribesTotal * 0.20) : 0;
+    const base = Math.min(18000, Math.max(600, 600 + bribeShare));
     return state.ownedAssets.includes("rolex_watch") ? Math.round(base * 0.5) : base;
   }
 
@@ -4205,7 +4206,9 @@
       activeEndingId: null,
       usd: 0,
       campaignFlags: {},
-      factionFinaleDone: false
+      factionFinaleDone: false,
+      reprimands: 0,
+      underSurveillance: false
     });
     if (!sandbox) saveCampaignCheckpoint(1);
     saveStateToStorage();
@@ -4294,6 +4297,7 @@
     state.sirenActive = false;
     if (state.shiftBribesTotal === 0 && state.shiftProcessed >= 5) {
       unlockAgencyBadge("NABK_CLEAN");
+      state.underSurveillance = false;
     }
     state.tonightBills = pickTonightBills();
     saveStateToStorage();
@@ -5296,7 +5300,7 @@
             </div>
           </div>
           <div class="row-between" style="font-size:11px;color:#B0BEC5;">
-            <span style="color:${state.nabkRisk >= 60 ? "#FF5252" : "#B0BEC5"};">НАБК:${state.nabkRisk}%${state.isUndercoverSbkAgent ? ` | 🕵️Кордон-7 (${state.spiesCaughtAsAgent}/4)` : ""}</span>
+            <span style="color:${state.nabkRisk >= 60 || state.underSurveillance || state.reprimands > 0 ? "#FF5252" : "#B0BEC5"};">НАБК:${state.nabkRisk}%${state.reprimands > 0 ? ` | ⚠️${state.reprimands}/3` : ""}${state.underSurveillance ? " | 👁️НАГЛЯД" : ""}${state.isUndercoverSbkAgent ? ` | 🕵️(${state.spiesCaughtAsAgent}/4)` : ""}</span>
             <span>${tr(L("Палич", "Palych"), state.lang)}:${state.palychRep} | ${tr(L("Толік", "Tolik"), state.lang)}:${state.tolikRep} | СБК:${state.sbkRep}</span>
           </div>
         </header>
@@ -5631,7 +5635,8 @@
             state.shiftBribesTotal += bribeInfo.amount;
           }
           if (!t.bribeOffer.isFriendlyGift) {
-            const riskJump = t.bribeOffer.nabkRiskJump || (t.bribeOffer.isStingTrap ? 35 : (t.bribeOffer.syndicateFavor ? 6 : 8));
+            const baseJump = t.bribeOffer.nabkRiskJump || (t.bribeOffer.isStingTrap ? 35 : (t.bribeOffer.syndicateFavor ? 6 : 8));
+            const riskJump = state.underSurveillance ? Math.round(baseJump * 1.5) : baseJump;
             state.nabkRisk = Math.min(100, state.nabkRisk + riskJump);
           } else {
             state.familyMorale = Math.min(100, state.familyMorale + 5);
@@ -5671,13 +5676,13 @@
           </section>
         </div>
         <div style="display:flex;flex-direction:column;gap:8px;">
-          <button type="button" id="btn-pay-palych" class="btn-primary-green" ${state.money < cut ? "disabled" : ""}>${tr(L(`Занести Паличу ${cut} 🪙 (-ризик НАБК, +дах)`, `Pay Palych ${cut} 🪙 (-NABK Risk, +Boss Rep)`), state.lang)}</button>
-          <button type="button" id="btn-refuse-palych" class="btn-outline" style="width:100%;padding:12px;color:#FF8A80;border-color:#FF8A80;">${tr(L("Послати Палича і залишити всі гроші собі!", "Skip paying Palych and keep all cash!"), state.lang)}</button>
+          <button type="button" id="btn-pay-palych" class="btn-primary-green" ${(state.money + state.usd * USD_UAH_RATE) < cut ? "disabled" : ""}>${tr(L(`Занести Паличу ${cut.toLocaleString("en-US")} 🪙 (-ризик НАБК, +дах)`, `Pay Palych ${cut.toLocaleString("en-US")} 🪙 (-NABK Risk, +Boss Rep)`), state.lang)}</button>
+          <button type="button" id="btn-refuse-palych" class="btn-outline" style="width:100%;padding:12px;color:#FF8A80;border-color:#FF8A80;">${tr(L("Не платити Паличу (Ризик догани / нагляду!)", "Refuse Palych (Risk reprimand / surveillance!)"), state.lang)}</button>
         </div>
       `;
       document.getElementById("btn-pay-palych").addEventListener("click", () => {
         audio.playBribe();
-        state.money -= cut;
+        payForAsset({ currency: "UAH", cost: cut });
         state.palychRep = Math.min(100, state.palychRep + 12);
         state.nabkRisk = Math.max(0, state.nabkRisk - 8);
         state.purchasedExpensesToday = [];
@@ -5688,7 +5693,15 @@
       document.getElementById("btn-refuse-palych").addEventListener("click", () => {
         audio.playDeny();
         state.palychRep = Math.max(0, state.palychRep - 15);
-        if (state.shiftBribesTotal > 0) state.nabkRisk = Math.min(100, state.nabkRisk + 10);
+        if (state.shiftBribesTotal > 0 || state.shiftMistakes > 0) {
+          state.nabkRisk = Math.min(100, state.nabkRisk + 12);
+          state.reprimands = (state.reprimands || 0) + 1;
+          state.underSurveillance = true;
+          if (state.reprimands >= 3) {
+            triggerEnding("FIRED_LOSER");
+            return;
+          }
+        }
         state.purchasedExpensesToday = [];
         state.phase = "HOME_EVENING";
         saveStateToStorage();
@@ -5765,6 +5778,42 @@
       const listEl = document.getElementById("evening-items-list");
       const billsToShow = (state.tonightBills && state.tonightBills.length > 0) ? state.tonightBills : DYNAMIC_EVENING_BILLS.slice(0, 3);
       if (state.eveningTab === 0) {
+        if ((state.reprimands > 0 || state.underSurveillance || state.nabkRisk >= 25) && !state.purchasedExpensesToday.includes("krysha_bribe")) {
+          const kCost = 2200 + state.nabkRisk * 75 + (state.reprimands || 0) * 1500;
+          const canK = (state.money + state.usd * USD_UAH_RATE) >= kCost;
+          const kCard = document.createElement("div");
+          kCard.className = "card-slate row-between";
+          kCard.style.borderLeft = "4px solid #E0B145";
+          kCard.innerHTML = `
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:800;color:#FFE082;">🤝 ${tr(L("Занести за «Кришу» (Зняти Догану / Нагляд / -25% НАБК)", "Pay 'Krysha' Protector (Clear Reprimand / Watch / -25% NABK)"), state.lang)}</div>
+              <div style="color:#CFD8DC;font-size:11px;">${tr(L(`Догани: ${state.reprimands}/3 • ${state.underSurveillance ? "👁️ Нагляд АКТИВНИЙ" : "Нагляду немає"}`, `Reprimands: ${state.reprimands}/3`), state.lang)}</div>
+              <div style="color:#E0B145;font-size:12px;font-weight:800;">${kCost.toLocaleString("en-US")} 🪙 (≈ ${Math.ceil(kCost / USD_UAH_RATE)} 💵)</div>
+            </div>
+          `;
+          const kb = document.createElement("button");
+          kb.type = "button";
+          kb.className = "btn-mustard";
+          kb.disabled = !canK;
+          kb.textContent = tr(L("Занести", "Bribe"), state.lang);
+          kb.addEventListener("click", () => {
+            payForAsset({ currency: "UAH", cost: kCost });
+            state.purchasedExpensesToday.push("krysha_bribe");
+            if (state.nabkRisk >= 70 && Math.random() < 0.25) {
+              audio.playDeny();
+              state.nabkRisk = Math.min(100, state.nabkRisk + 15);
+            } else {
+              audio.playBribe();
+              state.underSurveillance = false;
+              state.reprimands = Math.max(0, (state.reprimands || 0) - 1);
+              state.nabkRisk = Math.max(0, state.nabkRisk - 25);
+            }
+            saveStateToStorage();
+            render();
+          });
+          kCard.appendChild(kb);
+          listEl.appendChild(kCard);
+        }
         billsToShow.forEach(exp => {
           const bought = state.purchasedExpensesToday.includes(exp.id);
           const canBuy = state.money >= exp.cost && !bought;
