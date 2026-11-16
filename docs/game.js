@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v5.2";
+  const BUILD_VERSION = "v5.3";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -1035,6 +1035,75 @@
           moneyDelta: 0, timeDelta: 25, riskDelta: 0, sbkDelta: 0, tolikDelta: 0, palychDelta: 0, moraleDelta: 5
         }
       ]
+    },
+    {
+      id: "showbiz_bus_tour",
+      title: L("🎤 ТУР-АВТОБУС «ЗІРКИ ВАРШАВКИ» БЕЗ ДОЗВОЛІВ", "🎤 'VARSHAVKA STARS' TOUR BUS WITHOUT PERMITS"),
+      desc: L(
+        "Під'їжджає розмальований гастрольний автобус. Продюсер висувається у вікно з окулярами-зірочками:\n«Братику, у нас благодійний корпоратив у Кракові за 2 години! Половина балету забула довідки... Замкни очі — даємо 400 💵 і квитки на VIP-ложу!»",
+        "A flashy tour bus rolls up. The producer leans out in star-shaped shades:\n'Bro, charity corporate gig in Krakiv in 2 hours! Half the crew forgot permits... Take 400 💵 and VIP tickets!'"
+      ),
+      portrait: { gender: "M", skinTone: 0, faceShape: 1, hairStyle: 3, hairColor: 3, facialHair: 1, glasses: 2, headwear: 0, scarOrDetail: 3, expression: 1, specialId: "NONE" },
+      options: [
+        {
+          id: "showbiz_bribe",
+          label: L("💵 Взяти 400 💵 й махнути «Їдьте з богом!» (+400 💵, +12% НАБК, -8 СБК)", "💵 Take 400 💵 and wave them through (+400 💵, +12% NABK, -8 SBK)"),
+          outcome: L("Автобус мчить із гучною музикою, а ти ховаєш 400 💵!", "Tour bus blasts away while you pocket 400 💵!"),
+          moneyDelta: 0, usdDelta: 400, timeDelta: 0, riskDelta: 12, sbkDelta: -8, tolikDelta: 0, palychDelta: 5, moraleDelta: 10
+        },
+        {
+          id: "showbiz_strict",
+          label: L("✖ Розвернути тур-автобус за законом (+1 200 🪙 премії СБК, +12 СБК)", "✖ Turn the tour bus back per protocol (+1,200 🪙 SBK bonus, +12 SBK)"),
+          outcome: L("Продюсер лається в сторіз, але керівництво хвалить за принциповість!", "Producer rants on livestream, but HQ praises your discipline!"),
+          moneyDelta: 1200, timeDelta: 0, riskDelta: -5, sbkDelta: 12, tolikDelta: 0, palychDelta: -5, moraleDelta: 0
+        }
+      ]
+    },
+    {
+      id: "prosecutor_fishing_trip",
+      title: L("🎣 ПРОКУРОР ОБЛАСТІ «НА РИБАЛКУ В КАРПАТІЮ»", "🎣 REGIONAL PROSECUTOR 'FISHING TRIP'"),
+      desc: L(
+        "На тонованому Крузері підкочує поважний чолов'яга у камуфляжі з вудками:\n«Синочку, я на коропа в Карпатію. Паспорт є, а от реєстр «Облік+» у мене... засекречений! Не затримуй держслужбовця.»",
+        "A tinted Cruiser rolls up with a VIP in fishing camo:\n'Son, heading to Karpatia for carp. My Oblik+ status is... classified! Don't stall a prosecutor.'"
+      ),
+      portrait: { gender: "M", skinTone: 1, faceShape: 3, hairStyle: 2, hairColor: 4, facialHair: 2, glasses: 1, headwear: 1, scarOrDetail: 0, expression: 2, specialId: "NONE" },
+      options: [
+        {
+          id: "prosecutor_pass",
+          label: L("🤝 Пропустити прокурора (+600 💵 «на снасті», +15 Палич, +14% НАБК)", "🤝 Wave prosecutor through (+600 💵 'for tackle', +15 Palych, +14% NABK)"),
+          outcome: L("Прокурор кидає на панель 600 💵: «Якщо НАБК дзвонитиме — скажи, що я твій дядько.»", "He tosses 600 💵 on the desk: 'If NABK calls, say I am your uncle.'"),
+          moneyDelta: 0, usdDelta: 600, timeDelta: 0, riskDelta: 14, sbkDelta: -10, tolikDelta: 0, palychDelta: 15, moraleDelta: 0
+        },
+        {
+          id: "prosecutor_nabk",
+          label: L("⚖️ Вимагати документи й злити в НАБК (+1 500 🪙, -12% НАБК, +15 СБК)", "⚖️ Demand docs & tip off NABK (+1,500 🪙, -12% NABK, +15 SBK)"),
+          outcome: L("НАБК миттєво фіксує «рибалку»! Ти чистий перед законом і маєш премію!", "NABK logs the stunt! Clean record and bonus!"),
+          moneyDelta: 1500, timeDelta: 0, riskDelta: -12, sbkDelta: 15, tolikDelta: 0, palychDelta: -10, moraleDelta: 5
+        }
+      ]
+    },
+    {
+      id: "lost_diplomatic_case",
+      title: L("💼 ЗАБУТА ДИПЛОМАТИЧНА ВАЛІЗА БІЛЯ ШЛАГБАУМА", "💼 UNATTENDED DIPLOMATIC CASE AT BARRIER"),
+      desc: L(
+        "Після проїзду кортежу на узбіччі залишився сріблястий кейс без наклейок. Всередині чути тикання... або просто пахне новими купюрами.",
+        "After a convoy passed, a silver case sits unattended by the barrier. Looks expensive — or suspicious."
+      ),
+      portrait: { gender: "M", skinTone: 0, faceShape: 2, hairStyle: 4, hairColor: 0, facialHair: 0, glasses: 2, headwear: 4, scarOrDetail: 0, expression: 0, specialId: "NONE" },
+      options: [
+        {
+          id: "case_sbk",
+          label: L("🛡️ Передати кейс саперам СБК (+1 400 🪙, +15 СБК, -8% НАБК)", "🛡️ Hand case to SBK EOD team (+1,400 🪙, +15 SBK, -8% NABK)"),
+          outcome: L("Усередині були секретні документи посла! Тобі виписують премію за пильність!", "Inside were embassy docs! Bounty awarded for vigilance!"),
+          moneyDelta: 1400, timeDelta: -5, riskDelta: -8, sbkDelta: 15, tolikDelta: 0, palychDelta: 0, moraleDelta: 5
+        },
+        {
+          id: "case_peek",
+          label: L("💰 Тихо відкрити кейс (Ризик! +900 💵 або -20с і +15% НАБК)", "💰 Peek inside quietly (+900 💵 or -20s & +15% NABK)"),
+          outcome: L("У кейсі лежало 900 💵 готівкою — ти встиг забрати до приїзду охорони!", "900 💵 cash inside — pocketed before security returned!"),
+          moneyDelta: 0, usdDelta: 900, timeDelta: -10, riskDelta: 15, sbkDelta: -5, tolikDelta: 0, palychDelta: 0, moraleDelta: 0
+        }
+      ]
     }
   ];
 
@@ -1732,13 +1801,17 @@
     L("Богдан", "Bohdan"), L("Тарас", "Taras"), L("Олександр", "Oleksandr"), L("Микола", "Mykola"),
     L("Василь", "Vasyl"), L("Ігор", "Ihor"), L("Роман", "Roman"), L("Сергій", "Serhii"),
     L("Артем", "Artem"), L("Максим", "Maksym"), L("Денис", "Denys"), L("Руслан", "Ruslan"),
-    L("Назар", "Nazar"), L("Віталій", "Vitalii"), L("Степан", "Stepan"), L("Юрій", "Yurii")
+    L("Назар", "Nazar"), L("Віталій", "Vitalii"), L("Степан", "Stepan"), L("Юрій", "Yurii"),
+    L("Остап", "Ostap"), L("Ярослав", "Yaroslav"), L("Дмитро", "Dmytro"), L("Андрій", "Andrii"),
+    L("Вадим", "Vadym"), L("Павло", "Pavlo"), L("Гліб", "Hlib"), L("Тимофій", "Tymofii")
   ];
   const FEMALE_FIRST = [
     L("Оксана", "Oksana"), L("Наталія", "Nataliia"), L("Ірина", "Iryna"), L("Марія", "Mariia"),
     L("Катерина", "Kateryna"), L("Софія", "Sofiia"), L("Юлія", "Yuliia"), L("Аліна", "Alina"),
     L("Вікторія", "Viktoriia"), L("Дарина", "Daryna"), L("Олена", "Olena"), L("Соломія", "Solomiia"),
-    L("Христина", "Khrystyna"), L("Людмила", "Liudmyla"), L("Тетяна", "Tetiana")
+    L("Христина", "Khrystyna"), L("Людмила", "Liudmyla"), L("Тетяна", "Tetiana"),
+    L("Злата", "Zlata"), L("Мирослава", "Myroslava"), L("Вероніка", "Veronika"), L("Анна", "Anna"),
+    L("Діана", "Diana"), L("Лариса", "Larysa"), L("Світлана", "Svitlana"), L("Божена", "Bozhena")
   ];
   const LAST_NAMES = [
     L("Коваленко", "Kovalenko"), L("Бондаренко", "Bondarenko"), L("Ткаченко", "Tkachenko"),
@@ -1746,7 +1819,10 @@
     L("Поліщук", "Polishchuk"), L("Савченко", "Savchenko"), L("Мельник", "Melnyk"),
     L("Лисенко", "Lysenko"), L("Марченко", "Marchenko"), L("Павленко", "Pavlenko"),
     L("Гаврилюк", "Havryliuk"), L("Захарчук", "Zakharchuk"), L("Гончаренко", "Honcharenko"),
-    L("Демчук", "Demchuk"), L("Романюк", "Romaniuk"), L("Сидоренко", "Sydorenko")
+    L("Демчук", "Demchuk"), L("Романюк", "Romaniuk"), L("Сидоренко", "Sydorenko"),
+    L("Мороз", "Moroz"), L("Коваль", "Koval"), L("Литвин", "Lytvyn"),
+    L("Сорока", "Soroka"), L("Вовк", "Vovk"), L("Крамар", "Kramar"),
+    L("Бабій", "Babii"), L("Гнатюк", "Hnatiuk"), L("Чумак", "Chumak"), L("Мазур", "Mazur")
   ];
 
   // 24 GTA-style Parody Cities & Places (m. Шитомир reserved exclusively for the 3 legends!)
@@ -2748,7 +2824,10 @@
     L("«Добрий вечір! Їдемо з оркестром на благодійний концерт, у багажнику контрабас!»", "'Good evening! Orchestra heading to a charity concert, double bass in the trunk!'"),
     L("«Ой, тримайте папери! Поспішаю на весілля племінниці — там триповерховий торт на задньому сидінні!»", "'Here are my papers! Rushing to a wedding with a 3-tier cake in back!'"),
     L("«Повертаюся з Польщі додому в %CITY%, везу гуманітарні павербанки та турнікети!»", "'Returning home to %CITY%, bringing powerbanks & tourniquets!'"),
-    L("«Вітаю! Їду забирати маму з вокзалу в Поландії, ось усі документи!»", "'Hello! Picking up mom at the station, all documents ready!'")
+    L("«Вітаю! Їду забирати маму з вокзалу в Поландії, ось усі документи!»", "'Hello! Picking up mom at the station, all documents ready!'"),
+    L("«Добрий день! Їду на конференцію вчителів з м. %CITY%, ось запрошення.»", "'Good day! Heading to a teachers conference from %CITY%.'"),
+    L("«Вітаю, інспекторе! Перевожу притулкових котиків до нової родини, ветпаспорти є!»", "'Hi inspector! Taking shelter cats to a new family, vet passports ready!'"),
+    L("«Я кондитер із %CITY%, везу торт на весілля племінниці в Кракові!»", "'Pastry chef from %CITY% delivering a wedding cake to Krakiv!'")
   ];
   const HONEST_GREETINGS_M = [
     L("«Бажаю здоров'я! Усі довідки оформлені офіційно через ЦНАП м. %CITY%.»", "'Greetings! Official exemption issued in %CITY%.'"),
@@ -2758,7 +2837,10 @@
     L("«Їду на міжнародну виставку в Унію, багатодітний батько — усі 3 свідоцтва маю!»", "'Heading to an expo in Unia — father of 3, all papers ready!'"),
     L("«Супроводжую батька на лікування до Карпатії, ось офіційний висновок ЛКК.»", "'Escorting my father for treatment in Karpatia, official medical papers here.'"),
     L("«Повертаюсь із-за кордону, везу старлінки та спальники для громади!»", "'Returning from abroad with Starlinks and sleeping bags for our town!'"),
-    L("«Бажаю спокійної зміни! Везу насіння та саджанці яблунь додому в %CITY%.»", "'Quiet shift to you! Bringing apple tree saplings home to %CITY%.'")
+    L("«Бажаю спокійної зміни! Везу насіння та саджанці яблунь додому в %CITY%.»", "'Quiet shift to you! Bringing apple tree saplings home to %CITY%.'"),
+    L("«Їду на ремонтний завод у Поландію по офіційному бронюванню, ось витяг!»", "'Heading to a repair plant in Polandia on official critical exemption!'"),
+    L("«Дід уже на пенсії, їду до онуків у гості з м. %CITY% — паспорти в ідеалі!»", "'Retired grandpa visiting grandkids from %CITY% — papers spotless!'"),
+    L("«Везу комплектуючі до сонячних станцій для лікарні в %CITY%, документи чисті.»", "'Hauling solar station parts for %CITY% hospital, all docs clean!'")
   ];
   const HONEST_CARGOS = [
     L("Особисті валізи, термос, плед", "Personal suitcases, thermos & blanket"),
@@ -2800,7 +2882,19 @@
     { decl: L("Туристичні намети й каремати", "Camping tents & mats"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ У НАМЕТАХ: 6 тепловізорів подвійного призначення без документів!", "DOG SEARCH: 6 undeclared thermal optics inside tent rolls!"), bribeAmount: 3200, currency: "USD" },
     { decl: L("Книжки з кулінарії та журнали", "Cookbooks & magazines"), found: L("ПЕС «БАВОВНА» ВИРВАВ ОБКЛАДИНКУ: Порожнисті томи набиті контрабандними золотими ланцюжками!", "DOG SEARCH: Hollowed books stuffed with gold chains!"), bribeAmount: 2200, currency: "USD" },
     { decl: L("Пластикові каністри з водою", "Plastic water jerrycans"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА КАНИСТРИ: Замість води — 60 літрів підпільного спирту!", "DOG SEARCH: 60 liters of bootleg spirit inside water cans!"), bribeAmount: 200, currency: "USD" },
-    { decl: L("Акваріумні фільтри та трубки", "Aquarium filters & tubes"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ ТЕРАРІУМ: Контрабанда екзотичних хамелеонів та рідкісних папуг!", "DOG SEARCH: Smuggled exotic chameleons & rare parrots!"), bribeAmount: 1100, currency: "USD" }
+    { decl: L("Акваріумні фільтри та трубки", "Aquarium filters & tubes"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ ТЕРАРІУМ: Контрабанда екзотичних хамелеонів та рідкісних папуг!", "DOG SEARCH: Smuggled exotic chameleons & rare parrots!"), bribeAmount: 1100, currency: "USD" },
+    { decl: L("Мікрохвильовки на ремонт (4 шт.)", "Broken microwaves for repair"), found: L("ПЕС «БАВОВНА» РОЗКРИВ КОРПУСИ: Усередині мікрохвильовок сховані 10 ігрових відеокарт RTX!", "DOG SEARCH: Microwave shells hide 10 high-end RTX GPUs!"), bribeAmount: 2600, currency: "USD" },
+    { decl: L("Спальні мішки та туристичні каремати", "Sleeping bags & camp mats"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА СПАЛЬНИКИ: Під купою речей ховаються двоє нелегалів без документів!", "DOG SEARCH: 2 undocumented stowaways hiding under sleeping bags!"), bribeAmount: 3400, currency: "USD" },
+    { decl: L("Консервована тушонка домашня (3 ящики)", "Homemade canned stew (3 crates)"), found: L("ПЕС «БАВОВНА» ПОЧУВ ПОРОХ: У банках під жиром — набої та мисливські гільзи!", "DOG SEARCH: Stew cans conceal undeclared ammo!"), bribeAmount: 350, currency: "USD" },
+    { decl: L("Футляри для спортивного взуття", "Sneaker boxes"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ ПІДРОБКИ: 80 пар палених кросівок без акцизу та мита!", "DOG SEARCH: 80 pairs of counterfeit designer sneakers!"), bribeAmount: 240, currency: "USD" },
+    { decl: L("Скринька з «дідівськими нагородами»", "Box of 'grandpa trinkets'"), found: L("ПЕС «БАВОВНА» РОЗКУСИВ КЕЙС: Викрадене скіфське золото та античні амфори!", "DOG SEARCH: Looted Scythian gold & ancient amphoras!"), bribeAmount: 3800, currency: "USD" },
+    { decl: L("Упаковки прального порошку (12 пачок)", "Laundry detergent packs (12 pcs)"), found: L("ПЕС «БАВОВНА» ЗАЧХАВ: У пачках порошку — підпільні стимулятори та заборонені пігулки!", "DOG SEARCH: Detergent bags hide illicit narcotics!"), bribeAmount: 2900, currency: "USD" },
+    { decl: L("Коробки з сувенірними годинниками", "Souvenir watch boxes"), found: L("ПЕС «БАВОВНА» ПІДНЯВ ОБШИВКУ: 15 оригінальних швейцарських хронометрів на 100к+!", "DOG SEARCH: 15 luxury Swiss watches hidden in lining!"), bribeAmount: 3100, currency: "USD" },
+    { decl: L("Баки з-під тосолу та антифризу", "Antifreeze canisters"), found: L("ПЕС «БАВОВНА» ВИЯВИВ ДВОСТІННІ БАКИ: Контрабандне срібло в гранулах (12 кг)!", "DOG SEARCH: Double-walled cans packed with 12kg silver pellets!"), bribeAmount: 2100, currency: "USD" },
+    { decl: L("Клітки для перевезення голубів", "Pigeon transport cages"), found: L("ПЕС «БАВОВНА» ПІДНЯВ БРЕЗЕНТ: 4 рідкісні соколи-балобани для арабських шейхів!", "DOG SEARCH: 4 smuggled rare falcons for collectors!"), bribeAmount: 3300, currency: "USD" },
+    { decl: L("Старий розібраний мопед на запчастини", "Disassembled old moped parts"), found: L("ПЕС «БАВОВНА» ПОГРИЗ РАМУ: У бензобаку сховані 15 блоків електронних цигарок!", "DOG SEARCH: Fuel tank stuffed with 15 cartons of illicit vapes!"), bribeAmount: 190, currency: "USD" },
+    { decl: L("Музичні колонки концертної сцени", "Concert stage speakers"), found: L("ПЕС «БАВОВНА» ЗІРВАВ СІТКУ КОЛОНКИ: Усередині сабвуфера сидить ухилянт із рюкзаком!", "DOG SEARCH: Hollowed subwoofer hides an evader with a backpack!"), bribeAmount: 2800, currency: "USD" },
+    { decl: L("Коробки з телевізійними антенами", "TV antenna boxes"), found: L("ПЕС «БАВОВНА» РОЗДЕР КАРТОН: 5 нелегальних терміналів супутникового зв'язку на продаж!", "DOG SEARCH: 5 undeclared satellite terminals for resale!"), bribeAmount: 1900, currency: "USD" }
   ];
 
   function createProceduralTraveler(daySpec) {
@@ -2941,7 +3035,11 @@
         { diag: L("Психосоматична алергія на зелену фарбу", "Green pigment allergy"), clinic: L("Студія краси «Нігтики Левгорода»", "Beauty Salon") },
         { diag: L("Денний бакалавр магії та тарології", "Bachelor of Tarot Studies"), clinic: L("Академія Крипти і Гороскопів", "Tarot & Crypto Academy") },
         { diag: L("Плоскостопість за висновком кінолога", "Flat feet per dog groomer"), clinic: L("Ветклініка «Пухнастий Хвіст»", "Vet Clinic 'Fluffy Tail'") },
-        { diag: L("Станція техобслуговування", "Critical auto washing"), clinic: L("Автомийка «Піна-Люкс Офшорія»", "Carwash 'Foam-Lux'") }
+        { diag: L("Станція техобслуговування", "Critical auto washing"), clinic: L("Автомийка «Піна-Люкс Офшорія»", "Carwash 'Foam-Lux'") },
+        { diag: L("Спадковий маг 7-го рівня", "7th-tier hereditary mage"), clinic: L("Інститут Астрології і Чакр", "Astrology & Chakra Inst.") },
+        { diag: L("Критичний дегустатор шаурми", "Critical shawarma taster"), clinic: L("Мережа «Лаваш-Імперія»", "Lavash Empire LLC") },
+        { diag: L("Курси підвищення кваліфікації в Мальдівах", "Maldives upskilling course"), clinic: L("Турфірма «Втеча-Люкс»", "Travel Agency 'Escape-Lux'") },
+        { diag: L("Хронічна непереносимість черг", "Chronic queue intolerance"), clinic: L("Масажний салон «Тай-Блаженство»", "Spa 'Thai-Bliss'") }
       ];
       const fc = pick(fakes);
       const offerBribe1 = Math.random() < 0.5;
@@ -3319,8 +3417,12 @@
     { cat: "Митниця", shape: "SUV", car: L("«Беха Х7 Конфіскат»", "'Beha X7 Confiscate'"), cargo: L("Коробки з конфіскованими гаджетами", "Seized gadget crates"), usd: 6000, risk: 22, greet: L("«Свій до свого! Я зі складу митниці, їду в Монаківку інвентаризувати фури!»", "'One of yours! Customs warehouse chief off to Monakivka!'") },
     { cat: "Фінанси", shape: "SPORT", car: L("«Стріла-Купе GT»", "'Strila-Coupe GT'"), cargo: L("Апаратні крипто-гаманці та сервери", "Hardware crypto wallets"), usd: 8500, risk: 25, greet: L("«Слухай, у мого банку завтра забирають ліцензію — мені кров з носу треба за кордон!»", "'Listen, my bank loses its license tomorrow — I gotta cross tonight!'") },
     { cat: "Феміда", shape: "SUV", car: L("«Лексус-Крейсер LX»", "'Leksus-Cruiser LX'"), cargo: L("Мантія та кейс з «вироками»", "Judge robe & briefcase"), usd: 7000, risk: 24, greet: L("«Я недоторканний суддя у відставці! Куди ти дивишся? Шлагбаум вгору!»", "'Retired high judge! Raise the barrier at once!'") },
-    { cat: "Силовики", shape: "G_WAGON", car: L("«Гелік-Прокурор 500»", "'Gelik-Prosecutor 500'"), cargo: L("Справи на олігархів (усе «закрито»)", "Closed oligarch case files"), usd: 60000, risk: 28, greet: L("«Екс-прокурор району на зв'язку! Краще не перевіряй мій техпаспорт — домовимось!»", "'Ex-district prosecutor here! Better not inspect too closely!'") },
-    { cat: "Шоу-біз", shape: "SPORT", car: L("«Електро-Комета Стрім»", "'Electro-Comet Stream'"), cargo: L("Кільцева лампа і гайд «Як стати мільйонером»", "Ring light & course guides"), usd: 6000, risk: 12, greet: L("«Йоу! Я топ-коуч успішного успіху! Лечу знімати рілси в Поландію!»", "'Yo! Top success coach flying to shoot reels!'") }
+    { cat: "Силовики", shape: "G_WAGON", car: L("«Гелік-Прокурор 500»", "'Gelik-Prosecutor 500'"), cargo: L("Справи на олігархів (усе «закрито»)", "Closed oligarch case files"), usd: 8500, risk: 26, greet: L("«Екс-прокурор району на зв'язку! Краще не перевіряй мій техпаспорт — домовимось!»", "'Ex-district prosecutor here! Better not inspect too closely!'") },
+    { cat: "Шоу-біз", shape: "SPORT", car: L("«Електро-Комета Стрім»", "'Electro-Comet Stream'"), cargo: L("Кільцева лампа і гайд «Як стати мільйонером»", "Ring light & course guides"), usd: 2800, risk: 12, greet: L("«Йоу! Я топ-коуч успішного успіху! Лечу знімати рілси в Поландію!»", "'Yo! Top success coach flying to shoot reels!'") },
+    { cat: "МСЕК-Еліт", shape: "SUV", car: L("«Порш Кабан S»", "'Porsh Kaban S'"), cargo: L("Пачки чистих бланків довідок та печатки", "Blank disability forms & seals"), usd: 7800, risk: 25, greet: L("«Тихо, колего! Я голова комісії МСЕК — їду в Алікантово на реабілітацію!»", "'Quiet! Head of medical board heading to Alikantovo for rehab!'") },
+    { cat: "Енергетика", shape: "G_WAGON", car: L("«Гелік-Кубик V8»", "'Gelik-Kubik V8'"), cargo: L("Кейс із тендерними контрактами", "Rigged grid tender files"), usd: 9200, risk: 26, greet: L("«У мене завтра аудит НАБК по трансформаторах — не тримай на шлагбаумі!»", "'NABK audit on transformers tomorrow — open the gate!'") },
+    { cat: "Агро-Барон", shape: "PICKUP", car: L("«Рам-Трактор 1500»", "'Ram-Tractor 1500'"), cargo: L("Зернові накладні й мішки готівки", "Grain invoices & cash bags"), usd: 5400, risk: 20, greet: L("«Я половину області засіяв! Їду в Поландію купувати комбайн!»", "'I planted half the region! Heading to Polandia for a harvester!'") },
+    { cat: "Політтехнолог", shape: "SEDAN", car: L("«Ауді А8 Броня»", "'Audi A8 Armor'"), cargo: L("Ботоферма в багажнику, 50 смартфонів", "Bot-farm in trunk, 50 phones"), usd: 6200, risk: 22, greet: L("«Без зайвого шуму — вибори скоро, лечу до шефа на стратегічну нараду!»", "'Keep it quiet — flying to the boss for campaign strategy!'") }
   ];
 
   function createDiverseVipEscapee() {
