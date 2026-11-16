@@ -29,6 +29,8 @@
   const EPILOGUE_SAVE_KEY = "border_shift_epilogues_v1";
   const SHYTOMYR_SAVE_KEY = "border_shift_shytomyr_v1";
   const STATS_SAVE_KEY = "border_shift_stats_v1";
+  const CAMPAIGN_CHECKPOINTS_KEY = "border_shift_campaign_checkpoints_v1";
+  const USD_UAH_RATE = 41;
 
   // Discrepancy catalog with clear DENY vs DETAIN hints
   const DISCREPANCY = {
@@ -1808,7 +1810,7 @@
       coffeeReply: L("«Фу, та це ж розчинна з термоса? Ну... хоч гаряча, спасибі.»", "'Ugh, thermos coffee? Well... at least it is hot.'"),
       arrestFull: L("Мажор кричить у телефон «Батя, мене пакують за відмову виїзду!», але ти перестарався — достатньо було відмови!", "You detained a VIP over a missing permit when a simple DENY sufficed!"),
       arrestToned: L("Перевищення сили — достатньо було натиснути ✖ ВІДМОВИТИ.", "Excessive force — should have pressed DENY."),
-      bribeOffer: { amount: 1000, isStingTrap: false, syndicateFavor: false },
+      bribeOffer: { amount: 600, currency: "USD", instantOffer: true, isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.AGE_RESTRICTION_NO_PERMIT],
       storyTag: "DEPUTY_SON"
@@ -1865,7 +1867,7 @@
       coffeeReply: L("«Дякую... тільки, будь ласка, не бризніть на лацкан піджака, там... чутлива електроніка!»", "'Thanks... please don't spill on my lapel, sensitive... fabric!'"),
       arrestFull: L("Ти затримав його, хоча він іще не вчинив злочину в межах документів — достатньо ✖ ВІДМОВИТИ!", "Should just press DENY without touching his marked bills!"),
       arrestToned: L("Агента не вдалося зловити на злочині — треба було ✖ ВІДМОВИТИ.", "Should press DENY cleanly."),
-      bribeOffer: { amount: 500, isStingTrap: true, syndicateFavor: false },
+      bribeOffer: { amount: 400, currency: "USD", instantOffer: true, isStingTrap: true, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.AGE_RESTRICTION_NO_PERMIT],
       storyTag: "NABK_STING"
@@ -1903,7 +1905,7 @@
       coffeeReply: L("«Хм, а непогана кава. У Монаківці така по 20 євро.»", "'Decent espresso. Costs 20 euros in Monakivka.'"),
       arrestFull: L("Контррозвідка СБК затримує псевдо-дипломата з липовим мандатом на «Геліку»!", "SBK arrests the fake diplomat with a bogus Duchy seal!"),
       arrestToned: L("Затримано особу з підробленим дипломатичним документом.", "Detained for forged diplomatic papers."),
-      bribeOffer: { amount: 900, isStingTrap: false, syndicateFavor: false },
+      bribeOffer: { amount: 1200, currency: "USD", instantOffer: true, isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.FAKE_ISSUER_SEAL],
       isWantedTarget: true,
@@ -1944,7 +1946,7 @@
       arrestFull: L("Псевдоволонтера пакують у бус СБК під його ж власний стрім!", "The fake charity influencer gets cuffed on his own livestream!"),
       arrestToned: L("Затримано за комерційну контрабанду під виглядом гуманітарки.", "Detained for commercial smuggling under false charity guise."),
       hasContraband: true,
-      bribeOffer: { amount: 600, isStingTrap: false, syndicateFavor: false },
+      bribeOffer: { amount: 3400, currency: "UAH", requiresDiscovery: true, isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.CONTRABAND_CARGO],
       storyTag: "FAKE_BLOGGER"
@@ -2071,7 +2073,7 @@
       arrestFull: L("Група СБК вилітає з будки й пакує коригувальника! Майор «Тихий» виписує тобі премію!", "SBK tackles the spotter and awards you a combat bonus!"),
       arrestToned: L("Підозрюваного у диверсійній діяльності затримано.", "Suspected saboteur detained."),
       hasContraband: true,
-      bribeOffer: { amount: 900, isStingTrap: false, syndicateFavor: false },
+      bribeOffer: { amount: 1500, currency: "USD", requiresDiscovery: true, isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.WANTED_CRIMINAL_OR_SPY, DISCREPANCY.CONTRABAND_CARGO],
       isWantedTarget: true,
@@ -2102,7 +2104,7 @@
       arrestFull: L("Контррозвідка СБК арештовує контрабандиста військової електроніки разом із фургоном!", "SBK arrests the military chip smuggler and impounds the van!"),
       arrestToned: L("Контрабандну партію мікроелектроніки затримано.", "Smuggled military electronics seized."),
       hasContraband: true,
-      bribeOffer: { amount: 850, isStingTrap: false, syndicateFavor: false },
+      bribeOffer: { amount: 3500, currency: "USD", requiresDiscovery: true, isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.CONTRABAND_CARGO, DISCREPANCY.FAKE_ISSUER_SEAL],
       isWantedTarget: true,
@@ -2130,9 +2132,14 @@
     L("Мед у трьохлітрових банках та рушники", "Honey jars & embroidered towels")
   ];
   const CONTRABAND_COVERS = [
-    { decl: L("Старі дерев'яні меблі та килими", "Antique wooden furniture & rugs"), found: L("ПЕС «БАВОВНА» РОЗГРИЗ ОБШИВКУ: У ніжках столу сховано 50 блоків контрабандних сигарет!", "DOG SEARCH: Table legs packed with 50 smuggled cigarette cartons!") },
-    { decl: L("Мішки з будівельним гіпсом та шпаклівкою", "Sacks of construction plaster"), found: L("ПЕС «БАВОВНА» РОЗКОПАВ ГІПС: Усередині мішків — каміння нелегального бурштину з Бурштинівки на $35 000!", "DOG SEARCH: Sacks hide $35,000 of raw Burshtynivka amber!") },
-    { decl: L("Запасні автомобільні шини (4 шт.)", "Spare car tires (4 pcs)"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА ЗАПАСКУ: Всередині покришок заховані пачки нелегальної валюти та підроблені паспорти!", "DOG SEARCH: Tires stuffed with undeclared cash and forged passports!") }
+    { decl: L("Старі дерев'яні меблі та килими", "Antique wooden furniture & rugs"), found: L("ПЕС «БАВОВНА» РОЗГРИЗ ОБШИВКУ: У ніжках столу сховано 50 блоків контрабандних сигарет!", "DOG SEARCH: Table legs packed with 50 smuggled cigarette cartons!"), bribeAmount: 2400, currency: "UAH" },
+    { decl: L("Мішки з будівельним гіпсом та шпаклівкою", "Sacks of construction plaster"), found: L("ПЕС «БАВОВНА» РОЗКОПАВ ГІПС: Усередині мішків — каміння нелегального бурштину з Бурштинівки!", "DOG SEARCH: Sacks hide raw Burshtynivka amber!"), bribeAmount: 1800, currency: "USD" },
+    { decl: L("Запасні автомобільні шини (4 шт.)", "Spare car tires (4 pcs)"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА ЗАПАСКУ: Всередині покришок заховані пачки нелегальної валюти та чужі паспорти!", "DOG SEARCH: Tires stuffed with undeclared cash and forged passports!"), bribeAmount: 2500, currency: "USD" },
+    { decl: L("Паливні баки та запчастини до фур", "Fuel cans & truck spare parts"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ ТАЙНИК: Під сидінням 400 л краденого дизелю та паливні талони!", "DOG SEARCH: Stolen diesel & black-market fuel coupons under the seat!"), bribeAmount: 3200, currency: "UAH" },
+    { decl: L("Коробки з «гуманітарним одягом»", "Boxes of 'humanitarian clothes'"), found: L("ПЕС «БАВОВНА» ПОРВАВ СКОТЧ: У коробках сховані підсанкційні мікрочіпи й комплектуючі до дронів!", "DOG SEARCH: Boxes hide sanctioned microchips & drone parts!"), bribeAmount: 4200, currency: "USD" },
+    { decl: L("Рулони килимів від бабусі", "Rolled vintage carpets"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ СХОВАНКУ: Усередині рулонів — старовинні ікони та срібні монети на вивіз!", "DOG SEARCH: Rolled carpets conceal antique icons & silver coins!"), bribeAmount: 2800, currency: "USD" },
+    { decl: L("Металобрухт на переробку", "Scrap metal for recycling"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА БАГАЖНИК: Під лахміттям вирізані автокаталізатори та бухти мідного кабелю!", "DOG SEARCH: Stolen catalytic converters & copper cables under rags!"), bribeAmount: 2900, currency: "UAH" },
+    { decl: L("Подарункові кошики з шоколадом", "Gift baskets with chocolate"), found: L("ПЕС «БАВОВНА» ЗІРВАВ ФАЛЬШ-ДНО: Під цукерками — ящики безакцизного алкоголю та вейпів!", "DOG SEARCH: False bottom packed with untaxed liquor & vapes!"), bribeAmount: 3600, currency: "UAH" }
   ];
 
   function createProceduralTraveler(daySpec) {
@@ -2417,7 +2424,7 @@
         coffeeReply: L("«Дякую! Гаряча кава краще за будь-яке СТО!»", "'Thanks! Better than any mechanic!'"),
         arrestFull: L("Авто-двійника з перебитими номерами конфісковано, водія затримано!", "Cloned vehicle confiscated and driver arrested!"),
         arrestToned: L("Виявлено невідповідність транспорту техпаспорту.", "Vehicle mismatch detained."),
-        bribeOffer: { amount: 650, isStingTrap: false, syndicateFavor: false },
+        bribeOffer: { amount: 3200, currency: "UAH", requiresDiscovery: true, isStingTrap: false, syndicateFavor: false },
         shouldBeApproved: false,
         violations: [DISCREPANCY.VEHICLE_MISMATCH]
       });
@@ -2457,7 +2464,7 @@
         arrestFull: L("Контрабандиста взято на гарячому за допомогою пса «Бавовни»!", "Smuggler busted red-handed by sniffer dog Bavovna!"),
         arrestToned: L("Вилучено контрабандний вантаж.", "Contraband cargo seized."),
         hasContraband: true,
-        bribeOffer: { amount: 600, isStingTrap: false, syndicateFavor: false },
+        bribeOffer: { amount: cCase.bribeAmount, currency: cCase.currency, requiresDiscovery: true, isStingTrap: false, syndicateFavor: false },
         shouldBeApproved: false,
         violations: [DISCREPANCY.CONTRABAND_CARGO]
       });
@@ -3387,8 +3394,61 @@
     eveningTab: 0,
     archiveTab: 0,
     encounterTriggered: false,
-    activeEndingId: null
+    activeEndingId: null,
+    usd: 0,
+    campaignFlags: {}
   };
+
+  function loadCampaignCheckpoints() {
+    try { return JSON.parse(localStorage.getItem(CAMPAIGN_CHECKPOINTS_KEY) || "{}"); } catch (_) { return {}; }
+  }
+
+  function saveCampaignCheckpoint(dayNum) {
+    if (state.isSandbox || dayNum < 1 || dayNum > 5) return;
+    try {
+      const cps = loadCampaignCheckpoints();
+      cps["day_" + dayNum] = JSON.parse(JSON.stringify(state));
+      localStorage.setItem(CAMPAIGN_CHECKPOINTS_KEY, JSON.stringify(cps));
+    } catch (_) {}
+  }
+
+  function restoreCampaignCheckpoint(dayNum) {
+    try {
+      const cps = loadCampaignCheckpoints();
+      const snap = cps["day_" + dayNum];
+      if (!snap) return false;
+      state = Object.assign(state, snap);
+      state.phase = "MORNING_BRIEFING";
+      saveStateToStorage();
+      render();
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function getComputedBribe(offer) {
+    if (!offer) return null;
+    const currency = offer.currency === "USD" ? "USD" : "UAH";
+    const modMult = state.sandboxMod ? (state.sandboxMod.bribeMult || 1) : 1;
+    let rankScale = 1;
+    if (currency === "USD" && !offer.isStingTrap) {
+      const d = state.daySpec ? state.daySpec.dayNumber : 1;
+      if (state.sbkColonelPromoted || d >= 8) rankScale = 25;
+      else if (d >= 5) rankScale = 8;
+      else if (d >= 3) rankScale = 3;
+      else rankScale = 1;
+    }
+    const amt = Math.round(offer.amount * rankScale * modMult);
+    return {
+      amount: amt,
+      currency,
+      symbol: currency === "USD" ? "$" : "₴",
+      display: currency === "USD" ? `$${amt.toLocaleString("en-US")}` : `${amt.toLocaleString("en-US")} ₴`,
+      isInstant: Boolean(offer.instantOffer),
+      requiresDiscovery: Boolean(offer.requiresDiscovery)
+    };
+  }
 
   function saveStateToStorage() {
     try {
@@ -3668,8 +3728,11 @@
       tolikEscapeOffered: false,
       eveningTab: 0,
       encounterTriggered: false,
-      activeEndingId: null
+      activeEndingId: null,
+      usd: 0,
+      campaignFlags: {}
     });
+    if (!sandbox) saveCampaignCheckpoint(1);
     saveStateToStorage();
     render();
   }
@@ -3759,6 +3822,9 @@
 
     const isApprove = decisionType === "APPROVE";
     const isDetain = decisionType === "DETAIN";
+    if (state.bribeAccepted && !isApprove && (!t.bribeOffer || !t.bribeOffer.isFriendlyGift)) {
+      return;
+    }
     const requiresDetain = t.isWantedTarget || t.violations.some(v => v.requiresDetention);
     const excessiveDetain = isDetain && !t.shouldBeApproved && !requiresDetain;
 
@@ -3833,6 +3899,12 @@
       if (isApprove) state.tolikRep = Math.min(100, state.tolikRep + 20);
       else if (isDetain) state.tolikRep = Math.max(0, state.tolikRep - 25);
     }
+
+    if (!state.campaignFlags) state.campaignFlags = {};
+    if (t.storyTag === "DEPUTY_SON" && isApprove) state.campaignFlags.letDeputyPass = true;
+    if (t.storyTag === "SABOTEUR" && isDetain && ruleCorrect) state.campaignFlags.caughtSpotter = true;
+    if (t.storyTag === "AUNT_HALYA" && isApprove) state.campaignFlags.helpedHalya = true;
+    if (t.storyTag === "NABK_STING" && !isApprove && !state.bribeAccepted) state.campaignFlags.refusedNabk = true;
 
     const netMoney = salaryDelta + detainBonus - fineDelta;
     state.money += netMoney;
@@ -3938,6 +4010,7 @@
     state.shiftBribesTotal = 0;
     state.shiftFinesTotal = 0;
     state.phase = "MORNING_BRIEFING";
+    if (!state.isSandbox) saveCampaignCheckpoint(state.daySpec.dayNumber);
     saveStateToStorage();
     render();
   }
@@ -4279,6 +4352,17 @@
             <button type="button" id="btn-open-archive" class="btn-outline" style="width:100%;padding:9px;color:#3E2723;border-color:#8C7A5B;background:rgba(255,255,255,0.45);">
               ${tr(L("🗄️ АРХІВ ТА КОЛЕКЦІЯ (Що можна відкрити)", "🗄️ ARCHIVE & COLLECTION (Unlockables)"), state.lang)}
             </button>
+            ${(() => {
+              const cps = loadCampaignCheckpoints();
+              const days = [1, 2, 3, 4, 5].filter(d => cps["day_" + d]);
+              if (days.length === 0) return "";
+              return `<div style="background:rgba(27,25,22,0.08);border:1px dashed #8C7A5B;border-radius:6px;padding:6px 8px;">
+                <div style="font-size:11px;font-weight:800;color:#3E2723;margin-bottom:5px;">⏪ ${tr(L("ГІЛКИ КАМПАНІЇ (Повернутися в День):", "CAMPAIGN BRANCHES (Replay from Day):"), state.lang)}</div>
+                <div style="display:flex;gap:5px;flex-wrap:wrap;">
+                  ${days.map(d => `<button type="button" class="btn-outline camp-cp-btn" data-cp-day="${d}" style="padding:4px 8px;font-size:11px;color:#2E2820;border-color:#8C7A5B;background:rgba(255,255,255,0.65);">${tr(L(`День ${d}`, `Day ${d}`), state.lang)}</button>`).join("")}
+                </div>
+              </div>`;
+            })()}
           </div>
 
           <p class="menu-disclaimer">
@@ -4295,6 +4379,12 @@
       document.getElementById("btn-start-camp").addEventListener("click", () => { audio.playApprove(); startNewGame(false); });
       document.getElementById("btn-start-sand").addEventListener("click", () => { audio.playApprove(); startNewGame(true); });
       document.getElementById("btn-open-archive").addEventListener("click", () => { audio.playTap(); state.phase = "ARCHIVE"; render(); });
+      document.querySelectorAll(".camp-cp-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          audio.playApprove();
+          restoreCampaignCheckpoint(Number(btn.getAttribute("data-cp-day")));
+        });
+      });
       return;
     }
 
@@ -4398,6 +4488,14 @@
       const d = state.daySpec;
       const rk = getRank();
       const activeMeta = getActiveMetaPerks().filter(p => p.unlocked);
+      const cf = state.campaignFlags || {};
+      const warNotes = [];
+      if (!state.isSandbox && d.dayNumber >= 2) {
+        if (cf.letDeputyPass) warNotes.push(tr(L("• Мажор, якого ти пропустив, похвалився зв'язками — НАБК посилило нагляд (+ризик).", "• The VIP you let pass bragged — NABK heightened scrutiny."), state.lang));
+        if (cf.caughtSpotter) warNotes.push(tr(L("• СБК відзначило арешт коригувальника — контррозвідка прикриває твій тил.", "• SBK commended your spotter arrest — intel has your back."), state.lang));
+        if (cf.helpedHalya) warNotes.push(tr(L("• Тітка Галя передала домашні пиріжки й теплі шкарпетки для зміни.", "• Aunt Halya sent warm pies and socks to the booth."), state.lang));
+        if (cf.refusedNabk) warNotes.push(tr(L("• У базі НАБК зафіксовано чисту відмову від провокації.", "• Clean refusal logged in NABK audit dossier."), state.lang));
+      }
       root.innerHTML = `
         <div style="display:flex;flex-direction:column;gap:10px;flex:1;">
           <p style="color:#E0B145;font-family:monospace;font-size:13px;">${tr(d.dateLabel, state.lang)}</p>
@@ -4406,6 +4504,12 @@
             <h2 style="color:#E0B145;font-size:12px;margin-bottom:4px;">${tr(L("📻 РАДІОЕФІР РАНКУ", "📻 MORNING RADIO BROADCAST"), state.lang)}</h2>
             <p style="font-size:13px;color:#CFD8DC;">${tr(d.radioNews, state.lang)}</p>
           </section>
+          ${warNotes.length > 0 ? `
+            <section class="card-slate" style="border-left:4px solid #E0B145;">
+              <h2 style="color:#E0B145;font-size:12.5px;margin-bottom:4px;">${tr(L("📌 ВІЙНА І ЗМІНИ — НАСЛІДКИ РІШЕНЬ:", "📌 WAR & SHIFTS — CONSEQUENCES:"), state.lang)}</h2>
+              ${warNotes.map(n => `<p style="font-size:12px;color:#CFD8DC;margin-bottom:2px;">${n}</p>`).join("")}
+            </section>
+          ` : ""}
           <section class="card-slate">
             <h2 style="color:#E0B145;font-size:13px;margin-bottom:4px;">${tr(L("🎖️ РАНГ І ПЕРКИ:", "🎖️ RANK & ACTIVE PERKS:"), state.lang)}</h2>
             <p style="font-size:12.5px;font-weight:700;color:#FFE082;">${tr(rk.title, state.lang)} (${rk.salary} ₴/${tr(L("оформ.", "proc."), state.lang)})</p>
@@ -4439,7 +4543,13 @@
       const rk = getRank();
       const dogSecCost = state.ownedAssets.includes("uv_endoscope") ? 0 : rk.dogCost;
       const searchCost = dogSecCost === 0 ? "0s" : `-${dogSecCost}s`;
-      const bribeAmount = t.bribeOffer ? Math.round(t.bribeOffer.amount * (state.sandboxMod ? state.sandboxMod.bribeMult || 1 : 1)) : 0;
+      const bribeInfo = getComputedBribe(t.bribeOffer);
+      const bribeVisible = Boolean(
+        bribeInfo &&
+        !state.bribeAccepted &&
+        (bribeInfo.isInstant || state.vehicleInspected || state.spottedCodes.length > 0 || state.interrogated)
+      );
+      const bribeLocked = Boolean(state.bribeAccepted && (!t.bribeOffer || !t.bribeOffer.isFriendlyGift));
       const hasSbkTablet = state.ownedAssets.includes("sbk_database_tablet");
 
       let tabletBadge = "";
@@ -4458,7 +4568,7 @@
         <header class="top-bar">
           <div class="row-between">
             <span id="hud-timer" style="color:${state.shiftSec < 40 ? "#FF8A80" : "#E0B145"};font-weight:700;font-size:13px;">${tr(L("День", "Day"), state.lang)} ${state.daySpec.dayNumber} • ⏱ ${state.shiftSec}s</span>
-            <span style="color:#81C784;font-weight:800;font-size:14px;">💵 ${state.money} ₴</span>
+            <span style="color:#81C784;font-weight:800;font-size:13px;">💵 ${state.money} ₴${state.usd > 0 ? ` • 💲 $${state.usd.toLocaleString("en-US")}` : ""}</span>
             <span style="font-size:12px;">${tr(L("Черга", "Queue"), state.lang)}: ${state.travelerIdx + 1}/${state.queue.length}</span>
             <div style="display:flex;gap:4px;">
               <button type="button" id="hud-music" class="btn-outline" style="padding:3px 7px;" aria-label="Toggle music">${audio.musicEnabled ? "🔊" : "🔇"}</button>
@@ -4491,9 +4601,9 @@
               <div style="color:#B0BEC5;font-size:11px;margin-bottom:4px;">🚘 ${tr(t.vehicleDesc, state.lang)}</div>
               <p style="font-size:11.5px;line-height:1.35;">${tr(activeSpeech, state.lang)}</p>
             </div>
-            ${t.bribeOffer && !state.bribeAccepted ? `
+            ${bribeVisible ? `
               <button type="button" id="btn-take-bribe" style="background:${t.bribeOffer.isFriendlyGift ? "#1B5E20" : "#6D4C41"};color:#E0B145;padding:5px 8px;font-size:11px;width:100%;margin-top:4px;">
-                ${t.bribeOffer.isFriendlyGift ? tr(L(`🤝 ВЗЯТИ ПІДГОН НА КАВУ (+${bribeAmount} ₴)`, `🤝 ACCEPT GIFT (+${bribeAmount} ₴)`), state.lang) : tr(L(`✉️ ВЗЯТИ КОНВЕРТ (+${bribeAmount} ₴)`, `✉️ TAKE ENVELOPE (+${bribeAmount} ₴)`), state.lang)}
+                ${t.bribeOffer.isFriendlyGift ? tr(L(`🤝 ВЗЯТИ ПІДГОН НА КАВУ (+${bribeInfo.display})`, `🤝 ACCEPT GIFT (+${bribeInfo.display})`), state.lang) : tr(L(`✉️ ВЗЯТИ КОНВЕРТ (+${bribeInfo.display})`, `✉️ TAKE ENVELOPE (+${bribeInfo.display})`), state.lang)}
               </button>
             ` : (state.bribeAccepted ? `<div style="color:#81C784;font-size:11px;font-weight:700;margin-top:4px;">${tr(L("✔ У кишені (тисни ✔ ПРОПУСТИТИ)", "✔ Pocketed (press ✔ APPROVE)"), state.lang)}</div>` : "")}
           </div>
@@ -4548,8 +4658,8 @@
 
         <footer class="stamps-bar">
           <button type="button" id="stamp-approve" class="btn-primary-green" style="padding:11px 4px;font-size:12.5px;">${tr(L("✔ ПРОПУСТИТИ", "✔ APPROVE"), state.lang)}</button>
-          <button type="button" id="stamp-deny" class="btn-primary-red" style="padding:11px 4px;font-size:12.5px;">${tr(L("✖ ВІДМОВИТИ", "✖ DENY"), state.lang)}</button>
-          <button type="button" id="stamp-detain" class="btn-primary-blue" style="padding:11px 4px;font-size:12px;">${tr(L("🚨 СБК / АРЕШТ", "🚨 DETAIN"), state.lang)}</button>
+          <button type="button" id="stamp-deny" class="btn-primary-red" style="padding:11px 4px;font-size:12.5px;${bribeLocked ? "opacity:0.4;cursor:not-allowed;" : ""}" ${bribeLocked ? "disabled" : ""}>${bribeLocked ? tr(L("🔒 Взято", "🔒 Paid"), state.lang) : tr(L("✖ ВІДМОВИТИ", "✖ DENY"), state.lang)}</button>
+          <button type="button" id="stamp-detain" class="btn-primary-blue" style="padding:11px 4px;font-size:12px;${bribeLocked ? "opacity:0.4;cursor:not-allowed;" : ""}" ${bribeLocked ? "disabled" : ""}>${bribeLocked ? tr(L("🔒 Взято", "🔒 Paid"), state.lang) : tr(L("🚨 СБК / АРЕШТ", "🚨 DETAIN"), state.lang)}</button>
         </footer>
       `;
 
@@ -4702,12 +4812,17 @@
       });
 
       const bribeBtn = document.getElementById("btn-take-bribe");
-      if (bribeBtn) {
+      if (bribeBtn && bribeInfo) {
         bribeBtn.addEventListener("click", () => {
           audio.playBribe();
           state.bribeAccepted = true;
-          state.money += bribeAmount;
-          state.shiftBribesTotal += bribeAmount;
+          if (bribeInfo.currency === "USD") {
+            state.usd += bribeInfo.amount;
+            state.shiftBribesTotal += bribeInfo.amount * USD_UAH_RATE;
+          } else {
+            state.money += bribeInfo.amount;
+            state.shiftBribesTotal += bribeInfo.amount;
+          }
           if (!t.bribeOffer.isFriendlyGift) {
             state.nabkRisk = Math.min(100, state.nabkRisk + (t.bribeOffer.isStingTrap ? 35 : (t.bribeOffer.syndicateFavor ? 6 : 8)));
           } else {
@@ -4783,7 +4898,8 @@
         <div style="display:flex;flex-direction:column;gap:10px;flex:1;">
           <h1 style="color:#E0B145;font-size:20px;">${tr(L(`🌙 ВЕЧІР УДОМА (Після Дня ${state.daySpec.dayNumber})`, `🌙 EVENING AT HOME (After Day ${state.daySpec.dayNumber})`), state.lang)}</h1>
           <section class="card-slate" style="display:flex;flex-direction:column;gap:4px;font-size:13px;">
-            <div style="color:#81C784;font-size:16px;font-weight:700;">💵 ${tr(L("Готівка вдома", "Cash on Hand"), state.lang)}: ${state.money} ₴</div>
+            <div style="color:#81C784;font-size:16px;font-weight:700;">💵 ${tr(L("Готівка вдома", "Cash on Hand"), state.lang)}: ${state.money} ₴${state.usd > 0 ? ` • 💲 $${state.usd.toLocaleString("en-US")}` : ""}</div>
+            ${state.usd > 0 ? `<button type="button" id="btn-exchange-usd" class="btn-mustard" style="padding:6px 10px;font-size:12px;margin:2px 0;">💱 ${tr(L(`Обміняти $${state.usd.toLocaleString("en-US")} у гривні (+${(state.usd * USD_UAH_RATE).toLocaleString("en-US")} ₴, курс ${USD_UAH_RATE})`, `Exchange $${state.usd.toLocaleString("en-US")} to UAH (+${(state.usd * USD_UAH_RATE).toLocaleString("en-US")} ₴)`), state.lang)}</button>` : ""}
             ${rent > 0 ? `<div style="color:#81C784;font-weight:700;">🏢 ${tr(L("Пасивний дохід та оклад СБК", "Passive & Covert Income"), state.lang)}: +${rent} ₴/${tr(L("ранок", "morning"), state.lang)}</div>` : ""}
             <div style="color:#64B5F6;font-weight:700;">🎖️ ${tr(rk.title, state.lang)}${state.isUndercoverSbkAgent ? ` (${tr(L("Спіймано агентури", "Operatives caught"), state.lang)}: ${state.spiesCaughtAsAgent}/4)` : ""}</div>
             <div>🏠 ${tr(L("Настрій сім'ї", "Family Morale"), state.lang)}: ${state.familyMorale}% | 🕵️ НАБК: <span style="color:${state.nabkRisk >= 60 ? "#FF5252" : "#FFF"};">${state.nabkRisk}%</span> | СБК: ${state.sbkRep}</div>
@@ -4805,6 +4921,16 @@
 
       document.getElementById("tab-home-0").addEventListener("click", () => { audio.playTap(); state.eveningTab = 0; render(); });
       document.getElementById("tab-home-1").addEventListener("click", () => { audio.playTap(); state.eveningTab = 1; render(); });
+      const exchBtn = document.getElementById("btn-exchange-usd");
+      if (exchBtn) {
+        exchBtn.addEventListener("click", () => {
+          audio.playBribe();
+          state.money += state.usd * USD_UAH_RATE;
+          state.usd = 0;
+          saveStateToStorage();
+          render();
+        });
+      }
       if (canRetire) {
         document.getElementById("btn-retire-career").addEventListener("click", () => { audio.playApprove(); triggerEnding(null); });
       }
@@ -4914,10 +5040,22 @@
             </div>
 
             <div class="menu-stats-pill">
-              <span>🏆 ${tr(L("Відкрито титулів", "Titles Discovered"), state.lang)}: <strong>${epi.unlockedCount}/16</strong></span>
-              <span>💵 ${state.money} ₴ • СБК ${state.sbkRep}</span>
+              <span>🏆 ${tr(L("Відкрито кінцівок", "Endings Discovered"), state.lang)}: <strong>${epi.unlockedCount}/16</strong></span>
+              <span>💵 ${state.money} ₴${state.usd > 0 ? ` • 💲 $${state.usd.toLocaleString("en-US")}` : ""} • СБК ${state.sbkRep}</span>
             </div>
           </div>
+
+          ${(() => {
+            const cps = loadCampaignCheckpoints();
+            const days = [1, 2, 3, 4, 5].filter(d => cps["day_" + d]);
+            if (days.length === 0) return "";
+            return `<section class="card-slate" style="padding:10px;">
+              <div style="font-size:12px;font-weight:800;color:#E0B145;margin-bottom:6px;">⏪ ${tr(L("ПОДАЛЬШІ ГІЛКИ — ПЕРЕГРАТИ З ДНЯ:", "REPLAY FROM CHECKPOINT DAY:"), state.lang)}</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                ${days.map(d => `<button type="button" class="btn-outline end-cp-btn" data-cp-day="${d}" style="padding:6px 10px;font-size:12px;">${tr(L(`День ${d}`, `Day ${d}`), state.lang)}</button>`).join("")}
+              </div>
+            </section>`;
+          })()}
 
           <button type="button" id="btn-share-result" class="stamp-action-btn stamp-action-gold">
             <span>${tr(L("📲 ПОДІЛИТИСЯ ДОСЬЄ З ДРУЗЯМИ", "📲 SHARE DOSSIER WITH FRIENDS"), state.lang)}</span>
@@ -4929,6 +5067,12 @@
           </button>
         </div>
       `;
+      document.querySelectorAll(".end-cp-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          audio.playApprove();
+          restoreCampaignCheckpoint(Number(btn.getAttribute("data-cp-day")));
+        });
+      });
       document.getElementById("btn-share-result").addEventListener("click", () => { audio.playTap(); shareResultCard(); });
       document.getElementById("btn-restart").addEventListener("click", () => { audio.playTap(); state.phase = "MAIN_MENU"; render(); });
     }
