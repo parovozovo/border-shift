@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v4.0";
+  const BUILD_VERSION = "v4.1";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -4567,6 +4567,12 @@
     state.selectedDocIdx = 0;
     state.sirenActive = false;
     state.sirenResolved = false;
+    const sirenChance = (state.sandboxMod && state.sandboxMod.forceSiren)
+      ? 1
+      : (state.daySpec.dayNumber >= 4 ? 0.65 : 0.40);
+    state.shiftHasSiren = Math.random() < sirenChance;
+    state.sirenTriggerSec = state.shiftHasSiren ? (110 + Math.floor(Math.random() * 105)) : -1;
+    state.sirenPauseSec = 18 + Math.floor(Math.random() * 15);
     state.encounterTriggered = false;
     state.radioDispatch = null;
     state.barrierState = "CLOSED";
@@ -4608,7 +4614,7 @@
     if (encDialog && encDialog.open) return;
 
     state.shiftSec = Math.max(0, state.shiftSec - 1);
-    if (state.daySpec.hasSiren && !state.sirenResolved && !state.sirenActive && state.shiftSec === 200) {
+    if (state.shiftHasSiren && !state.sirenResolved && !state.sirenActive && state.shiftSec <= state.sirenTriggerSec) {
       state.sirenActive = true;
       audio.playSiren();
       openSirenModal();
@@ -4972,33 +4978,47 @@
   function openSirenModal() {
     const dlg = document.getElementById("siren-dialog");
     if (!dlg) return;
-    document.getElementById("siren-dialog-title").textContent = tr(L("🚨 ПОВІТРЯНА ТРИВОГА НА ПУНКТІ!", "🚨 AIR-RAID SIREN AT CHECKPOINT!"), state.lang);
+    const pauseSec = state.sirenPauseSec || 24;
+    const rebSec = Math.max(6, Math.round(pauseSec * 0.4));
+    const hasSbkLink = state.sbkRep >= 45;
+    const canPayFuel = state.money >= 200;
+
+    document.getElementById("siren-dialog-title").textContent = tr(L("🚨 ПОВІТРЯНА ТРИВОГА: КПП ЗАКРИТО!", "🚨 AIR-RAID SIREN: CHECKPOINT CLOSED!"), state.lang);
     document.getElementById("siren-dialog-desc").textContent = tr(
-      L("У небі над чергою помічено «мопед». За інструкцією треба спуститися в укриття (-35с часу зміни), або можна продовжити роботу під «швидкі чайові» (+150 🪙, +ризик).",
-        "A drone is buzzing over the queue. Go to the shelter (-35s shift time, +SBK rep) or keep working for express tips (+150 🪙, +risk)."),
+      L(`Над пунктом кружляє «мопед»! Шлагбаум заблоковано, оформлення черги зупинено на ${pauseSec}с, поки ППО не дасть відбій.`,
+        `A drone is circling over the checkpoint! Traffic is halted for ${pauseSec}s until air-defense clears the sky.`),
       state.lang
     );
     const bShelter = document.getElementById("btn-siren-shelter");
     const bWork = document.getElementById("btn-siren-work");
-    bShelter.textContent = tr(L("🛡 Піти в укриття (-35с, +повага СБК)", "🛡 Go to Shelter (-35s, +SBK Rep)"), state.lang);
-    bWork.textContent = tr(L("💵 Працювати під сиреною (+150 🪙)", "💵 Keep Working Under Siren (+150 🪙)"), state.lang);
+    bShelter.textContent = tr(L(`🛡 В укриття — перечекати (-${pauseSec}s, +5 СБК)`, `🛡 Take Shelter (-${pauseSec}s, +5 SBK)`), state.lang);
+    bWork.disabled = !hasSbkLink && !canPayFuel;
+    if (hasSbkLink) {
+      bWork.textContent = tr(L(`📡 Викликати мобільне ППО/РЕБ (-${rebSec}s, зв'язки СБК)`, `📡 Call Mobile Air-Defense (-${rebSec}s, SBK link)`), state.lang);
+    } else if (canPayFuel) {
+      bWork.textContent = tr(L(`⛽ Запустити генератор РЕБ (-${rebSec}s, -200 🪙)`, `⛽ Run EW Jammer Generator (-${rebSec}s, -200 🪙)`), state.lang);
+    } else {
+      bWork.textContent = tr(L(`📡 РЕБ недоступний (треба СБК ≥ 45 або 200 🪙)`, `📡 Jammer unavailable (need SBK ≥ 45 or 200 🪙)`), state.lang);
+    }
 
     bShelter.onclick = () => {
       audio.playTap();
       state.sirenActive = false;
       state.sirenResolved = true;
-      state.shiftSec = Math.max(10, state.shiftSec - 35);
+      state.shiftSec = Math.max(8, state.shiftSec - pauseSec);
       state.sbkRep = Math.min(100, state.sbkRep + 5);
       dlg.close();
       render();
     };
     bWork.onclick = () => {
-      audio.playBribe();
+      if (!hasSbkLink && !canPayFuel) return;
+      audio.playTap();
       state.sirenActive = false;
       state.sirenResolved = true;
-      state.money += 150;
-      state.shiftBribesTotal += 150;
-      state.nabkRisk = Math.min(100, state.nabkRisk + 6);
+      state.shiftSec = Math.max(8, state.shiftSec - rebSec);
+      if (!hasSbkLink) {
+        state.money = Math.max(0, state.money - 200);
+      }
       dlg.close();
       render();
     };
@@ -5607,7 +5627,7 @@
       const t = state.queue[state.travelerIdx];
       if (!t) { finishShift(); return; }
       const doc = t.documents[state.selectedDocIdx] || t.documents[0];
-      const droneWarning = state.daySpec.hasSiren && !state.sirenResolved && !state.sirenActive && state.shiftSec >= 201 && state.shiftSec <= 218;
+      const droneWarning = state.shiftHasSiren && !state.sirenResolved && !state.sirenActive && state.shiftSec > state.sirenTriggerSec && state.shiftSec <= state.sirenTriggerSec + 14;
       const spottedObjs = t.violations.filter(v => state.spottedCodes.includes(v.code));
       const needsArrest = spottedObjs.some(v => v.requiresDetention);
       const photoSpotted = state.spottedCodes.includes("PHOTO_MISMATCH");
