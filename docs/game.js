@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v2.11";
+  const BUILD_VERSION = "v2.12";
   let confirmResetArmed = false;
 
   // Fallback for older Safari lacking CanvasRenderingContext2D.roundRect
@@ -2412,12 +2412,12 @@
         greeting: isExpired
           ? L(`«Ой, добрий день! Так поспішали з м. ${city.uk} на рейс до Варшавки!»`, `'Hello! Rushing from ${city.en} for Varshavka!'`)
           : L("«Добрий день! Їду на тиждень, думав, по біометричному без довідки пускають!»", "'Good day! Thought biometric passport was enough without a permit!'"),
-        interrogationReply: L("«Та це ж дрібниця, не присікуйтеся... Може, 350 🪙 на каву вирішать питання?»", "'Just a minor slip-up... Maybe 350 🪙 solves it?'"),
+        interrogationReply: L("«Будь ласка, пане інспекторе! По-доброму прошу — квитки згоряють, пропустіть по-людськи!»", "'Please, Inspector! Asking kindly — our tickets expire, let us through!'"),
         intimidateReply: L("«*Нервово ковтає* Та я ж тільки формальність проґавив, не кличте СБК!»", "'*Gulps* It's just a paperwork slip, don't call SBK!'"),
-        coffeeReply: L("«Дякую за каву... ну то ви закриєте очі на папери?»", "'Thanks for the coffee... so we good?'"),
+        coffeeReply: L("«Дякую за каву... будь ласка, увійдіть у становище!»", "'Thanks for the coffee... please understand my situation!'"),
         arrestFull: L("Ти викликав спецназ за формальну помилку — достатньо було натиснути ✖ ВІДМОВИТИ!", "Overkill! A simple DENY stamp was required."),
         arrestToned: L("Перевищення сили — треба було ✖ ВІДМОВИТИ.", "Should have pressed DENY."),
-        bribeOffer: { amount: 350, isStingTrap: false, syndicateFavor: false },
+        bribeOffer: null,
         shouldBeApproved: false,
         violations: [disc]
       });
@@ -2436,6 +2436,7 @@
         { diag: L("Станція техобслуговування", "Critical auto washing"), clinic: L("Автомийка «Піна-Люкс Офшорія»", "Carwash 'Foam-Lux'") }
       ];
       const fc = pick(fakes);
+      const offerBribe1 = Math.random() < 0.5;
       return buildTravelerFromParts({
         fullName, age, gender: "M", portrait, transport: trMeta,
         passportFields: [
@@ -2458,12 +2459,14 @@
         includeDecl: daySpec.requireVehicleDecl,
         declaredCargo: L("Спортивна сумка, одяг", "Gym bag, clothes"),
         greeting: L("«Вітаю! Ось свіженька довідка з круглою мокрою печаткою!»", "'Hello! Fresh exemption certificate with a wet round seal!'"),
-        interrogationReply: L("«Ну... в Телеграмі порадили! Візьми 480 🪙 у конверті — печатку ж ніхто не роздивиться!»", "'Bought it online! Take 480 🪙 — nobody inspects the seal!'"),
-        intimidateReply: L("«*Виступає піт* Та директор клініки клявся, що довідка пройде! Даю 480 🪙!»", "'*Sweats* The clinic swore it would pass! Take 480 🪙!'"),
+        interrogationReply: offerBribe1
+          ? L("«Ну... в Телеграмі порадили! Візьми 800 💵 у конверті — печатку ж ніхто не роздивиться!»", "'Bought it online! Take 800 💵 — nobody inspects the seal!'")
+          : L("«Клянусь, мені цю довідку юрист пообіцяв як офіційну! Пропустіть по-доброму, я сам став жертвою!»", "'I swear a lawyer told me this was valid! Please let me pass, I was scammed!'"),
+        intimidateReply: L("«*Виступає піт* Та директор клініки клявся, що довідка справжня!»", "'*Sweats* The clinic swore it was real!'"),
         coffeeReply: L("«Дякую за каву... тільки під УФ-лампу цю довідку не суньте, вона... екологічна!»", "'Thanks for coffee... please keep it out of UV light!'"),
         arrestFull: L("Власника липової довідки затримано за використання підробленої печатки!", "Forged seal user arrested!"),
         arrestToned: L("Порушника з фіктивною печаткою затримано.", "Forged seal traveler detained."),
-        bribeOffer: { amount: 480, isStingTrap: false, syndicateFavor: false },
+        bribeOffer: offerBribe1 ? { amount: 800, currency: "USD", requiresDiscovery: true, nabkRiskJump: 12, isStingTrap: false, syndicateFavor: false } : null,
         shouldBeApproved: false,
         violations: [DISCREPANCY.FAKE_ISSUER_SEAL]
       });
@@ -2479,6 +2482,7 @@
       const fakePhoto = randomPortrait(oppositeGender);
       fakePhoto.hairColor = (realPortrait.hairColor + 2) % 5;
       fakePhoto.facialHair = oppositeGender === "M" ? 4 : 0;
+      const offerBribe2 = Math.random() < 0.45;
       return buildTravelerFromParts({
         fullName, age, gender,
         portrait: realPortrait,
@@ -2492,12 +2496,14 @@
         includeDecl: daySpec.requireVehicleDecl,
         declaredCargo: L("Особисті речі", "Personal effects"),
         greeting: L("«Добрий день! Ось мій паспорт... я трохи змінився за останній рік після відпустки.»", "'Hello! Here is my passport... I look a bit different since last summer.'"),
-        interrogationReply: L("«Ну взяв паспорт брата/сестри, бо свій загубив! Візьми 520 🪙 і закрий очі!»", "'Borrowed a relative's passport! Take 520 🪙!'"),
+        interrogationReply: offerBribe2
+          ? L("«Ну взяв паспорт родича, бо свій загубив! Візьми 1 200 💵 і закрий очі!»", "'Borrowed a relative's passport! Take 1,200 💵!'")
+          : L("«Будь ласка, свій паспорт згорів у пожежі, узяв документ брата/сестри! Зрозумійте по-людськи!»", "'Please, my own passport burned, I took my sibling's! Have mercy!'"),
         intimidateReply: L("«*Очі бігають* Та пластична операція! Хто тепер у фото дивиться?!»", "'*Eyes dart* Had a makeover! Who even checks photos?!'"),
         coffeeReply: L("«Дякую за каву... перегорніть сторінку швидше!»", "'Thanks... please flip the passport page!'"),
         arrestFull: L("Підміна особи викрита — чужий паспорт вилучено, а водія затримано!", "Passport impersonation busted!"),
         arrestToned: L("Використано чужий документ — затримано.", "Stolen ID detained."),
-        bribeOffer: { amount: 520, isStingTrap: false, syndicateFavor: false },
+        bribeOffer: offerBribe2 ? { amount: 1200, currency: "USD", requiresDiscovery: true, nabkRiskJump: 14, isStingTrap: false, syndicateFavor: false } : null,
         shouldBeApproved: false,
         violations: [DISCREPANCY.PHOTO_MISMATCH]
       });
@@ -2509,6 +2515,7 @@
       const otherName = randomFullName("M");
       const age = randInt(26, 48);
       const portrait = randomPortrait("M");
+      const offerBribe3 = Math.random() < 0.4;
       return buildTravelerFromParts({
         fullName, age, gender: "M", portrait, transport: trMeta,
         passportFields: [
@@ -2530,12 +2537,14 @@
         includeDecl: daySpec.requireVehicleDecl,
         declaredCargo: L("Ліки, валіза", "Medicine, suitcase"),
         greeting: L("«Добрий день! Довідку зробили прямо перед виїздом — усе легально!»", "'Hello! Permit issued right before departure — all legal!'"),
-        interrogationReply: L("«Тьфу, в друкарні прізвище переплутали! Бери 500 🪙, не присікуйся!»", "'Damn, typo in the name! Take 500 🪙 and let me roll!'"),
+        interrogationReply: offerBribe3
+          ? L("«Тьфу, в друкарні прізвище переплутали! Бери 900 💵, не присікуйся!»", "'Damn, typo in the name! Take 900 💵 and let me roll!'")
+          : L("«Вибачте, у ЦНАП помилково вписали інше прізвище! Пропустіть по-доброму, я звичайний водій!»", "'Sorry, clerk made a typo in my surname! Please let me pass, just a regular driver!'"),
         intimidateReply: L("«*Тремтить* Це... це подвійне прізвище! Чи кума...»", "'*Stammers* It's my... second surname!'"),
         coffeeReply: L("«Спасибі за каву... і прізвище не звіряйте сильно, гаразд?»", "'Thanks... no need to compare surnames closely!'"),
         arrestFull: L("Чужа куплена довідка викрита — афериста пакує контррозвідка!", "Mismatched documents seized!"),
         arrestToned: L("Виявлено розбіжність ПІБ у документах.", "Name mismatch detained."),
-        bribeOffer: { amount: 500, isStingTrap: false, syndicateFavor: false },
+        bribeOffer: offerBribe3 ? { amount: 900, currency: "USD", requiresDiscovery: true, nabkRiskJump: 12, isStingTrap: false, syndicateFavor: false } : null,
         shouldBeApproved: false,
         violations: [DISCREPANCY.NAME_MISMATCH]
       });
@@ -2634,46 +2643,49 @@
       const fullName = randomFullName("M");
       const age = randInt(23, 50);
       const portrait = randomPortrait("M");
-      return buildTravelerFromParts({
-        fullName, age, gender: "M", portrait, transport: trMeta,
-        passportFields: [
-          { label: L("ПІБ", "Full Name"), value: fullName, disc: null },
-          { label: L("Вік / Стать", "Age / Sex"), value: L(`${age} р. • ЧОЛ`, `${age} y/o • M`), disc: null },
-          { label: L("Дійсний до", "Valid Until"), value: L("05.05.2030", "2030-05-05"), disc: null }
-        ],
-        extraDocs: [
-          {
-            type: "EXEMPTION_CERT",
-            title: L("ДОВІДКА ПРО ВІДСТРОЧКУ", "EXEMPTION CERTIFICATE"),
-            subtitle: L("Державна установа", "State Authority"),
-            fields: [
-              { label: L("Особа", "Holder"), value: fullName, disc: null },
-              { label: L("Підстава", "Basis"), value: L("Бронювання підприємства", "Enterprise Exemption"), disc: null }
-            ],
-            sealText: L("ЦНАП / ДПСК", "CNAP / SBGS"),
-            sealDisc: null
-          },
-          {
-            type: "MILITARY_ID",
-            title: L("Е-ДОКУМЕНТ «ОБЛІК+»", "E-MILITARY ID 'OBLIK+'"),
-            subtitle: L("Цифровий реєстр", "Digital Registry"),
-            fields: [
-              { label: L("ПІБ", "Full Name"), value: fullName, disc: null },
-              { label: L("Статус QR", "QR Status"), value: L("QR-ERR-409 • ВІЙСЬКОВИЙ РОЗШУК", "QR-ERR-409 • REGISTRY WANTED"), disc: DISCREPANCY.INVALID_QR_CODE }
-            ],
-            sealText: L("ЗБОЙ СИНХРОНІЗАЦІЇ", "SYNC FAILED"),
-            sealDisc: DISCREPANCY.INVALID_QR_CODE
-          }
-        ],
-        includeDecl: daySpec.requireVehicleDecl,
-        declaredCargo: L("Рюкзак, документи", "Backpack"),
-        greeting: L("«Добрий день! З телефоном щось глючить — але ось паперова довідка, чесно!»", "'Hello! Phone app is glitching — but here is my paper permit!'"),
-        interrogationReply: L("«Та то база Облік+ зависла! Ось 700 🪙 — не натискай 🚨 АРЕШТ!»", "'The Oblik+ server must be down! Take 700 🪙 — don't press 🚨 DETAIN!'"),
-        intimidateReply: L("«*Різко ховає телефон у кишеню* Батарея сіла, нічого сканувати!»", "'*Hides phone* Battery died, can't scan!'"),
-        coffeeReply: L("«О, дякую... ви тільки інтернет на планшеті вимкніть!»", "'Thanks... maybe turn off tablet Wi-Fi!'"),
-        arrestFull: L("Реєстр «Облік+» підтвердив статус у розшуку — порушника передано групі реагування!", "Oblik+ confirmed wanted status — detained!"),
-        arrestToned: L("Затримано за недійсним кодом у реєстрі «Облік+».", "Detained for wanted Oblik+ code."),
-        bribeOffer: { amount: 700, isStingTrap: false, syndicateFavor: false },
+        const offerBribe6 = Math.random() < 0.5;
+        return buildTravelerFromParts({
+          fullName, age, gender: "M", portrait, transport: trMeta,
+          passportFields: [
+            { label: L("ПІБ", "Full Name"), value: fullName, disc: null },
+            { label: L("Вік / Стать", "Age / Sex"), value: L(`${age} р. • ЧОЛ`, `${age} y/o • M`), disc: null },
+            { label: L("Дійсний до", "Valid Until"), value: L("05.05.2030", "2030-05-05"), disc: null }
+          ],
+          extraDocs: [
+            {
+              type: "EXEMPTION_CERT",
+              title: L("ДОВІДКА ПРО ВІДСТРОЧКУ", "EXEMPTION CERTIFICATE"),
+              subtitle: L("Державна установа", "State Authority"),
+              fields: [
+                { label: L("Особа", "Holder"), value: fullName, disc: null },
+                { label: L("Підстава", "Basis"), value: L("Бронювання підприємства", "Enterprise Exemption"), disc: null }
+              ],
+              sealText: L("ЦНАП / ДПСК", "CNAP / SBGS"),
+              sealDisc: null
+            },
+            {
+              type: "MILITARY_ID",
+              title: L("Е-ДОКУМЕНТ «ОБЛІК+»", "E-MILITARY ID 'OBLIK+'"),
+              subtitle: L("Цифровий реєстр", "Digital Registry"),
+              fields: [
+                { label: L("ПІБ", "Full Name"), value: fullName, disc: null },
+                { label: L("Статус QR", "QR Status"), value: L("QR-ERR-409 • ВІЙСЬКОВИЙ РОЗШУК", "QR-ERR-409 • REGISTRY WANTED"), disc: DISCREPANCY.INVALID_QR_CODE }
+              ],
+              sealText: L("ЗБОЙ СИНХРОНІЗАЦІЇ", "SYNC FAILED"),
+              sealDisc: DISCREPANCY.INVALID_QR_CODE
+            }
+          ],
+          includeDecl: daySpec.requireVehicleDecl,
+          declaredCargo: L("Рюкзак, документи", "Backpack"),
+          greeting: L("«Добрий день! З телефоном щось глючить — але ось паперова довідка, чесно!»", "'Hello! Phone app is glitching — but here is my paper permit!'"),
+          interrogationReply: offerBribe6
+            ? L("«Та то база Облік+ зависла! Ось 1 100 💵 — не натискай 🚨 АРЕШТ!»", "'The Oblik+ server must be down! Take 1,100 💵 — don't press 🚨 DETAIN!'")
+            : L("«Це помилка сервера Облік+, клянусь! У мене ж паперова довідка на руках — пропустіть по-доброму!»", "'It's an Oblik+ server glitch, I swear! Look at my paper permit — please!'"),
+          intimidateReply: L("«*Різко ховає телефон у кишеню* Батарея сіла, нічого сканувати!»", "'*Hides phone* Battery died, can't scan!'"),
+          coffeeReply: L("«О, дякую... ви тільки інтернет на планшеті вимкніть!»", "'Thanks... maybe turn off tablet Wi-Fi!'"),
+          arrestFull: L("Реєстр «Облік+» підтвердив статус у розшуку — порушника передано групі реагування!", "Oblik+ confirmed wanted status — detained!"),
+          arrestToned: L("Затримано за недійсним кодом у реєстрі «Облік+».", "Detained for wanted Oblik+ code."),
+          bribeOffer: offerBribe6 ? { amount: 1100, currency: "USD", requiresDiscovery: true, nabkRiskJump: 14, isStingTrap: false, syndicateFavor: false } : null,
         shouldBeApproved: false,
         violations: [DISCREPANCY.INVALID_QR_CODE]
       });
