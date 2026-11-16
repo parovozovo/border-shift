@@ -1,6 +1,4 @@
 {
-  "version": 2,
-  "public": true,
   "rewrites": [
     { "source": "/", "destination": "/docs/index.html" },
     { "source": "/manifest.json", "destination": "/docs/manifest.json" },
