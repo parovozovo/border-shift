@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1E2420">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Border Shift">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="stylesheet" href="./styles.css">
+  <title>Border Shift: Kraina</title>
+</head>
+<body>
+  <main id="app-shell" aria-live="polite"></main>
+
+  <!-- Native modal dialog for Rules (light-dismissable) -->
+  <dialog id="rules-dialog" closedby="any" aria-labelledby="rules-dialog-title">
+    <h2 id="rules-dialog-title" style="color: #E0B145; font-size: 18px;">Директиви на зміну</h2>
+    <div id="rules-dialog-body" style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;"></div>
+    <form method="dialog">
+      <button type="submit" value="close" class="btn-mustard" style="width: 100%; padding: 10px;" autofocus>Зрозуміло / Got it</button>
+    </form>
+  </dialog>
+
+  <!-- Native modal dialog for Air-Raid Siren -->
+  <dialog id="siren-dialog" closedby="none" aria-labelledby="siren-dialog-title">
+    <h2 id="siren-dialog-title" style="color: #FF5252; font-size: 18px; text-align: center;">🚨 ПОВІТРЯНА ТРИВОГА!</h2>
+    <p id="siren-dialog-desc" style="font-size: 13px; line-height: 1.45; text-align: center;"></p>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <button type="button" id="btn-siren-shelter" class="btn-primary-blue" autofocus></button>
+      <button type="button" id="btn-siren-work" class="btn-primary-red"></button>
+    </div>
+  </dialog>
+
+  <!-- Native modal dialog for Mid-Shift Special Encounters -->
+  <dialog id="encounter-dialog" closedby="none" aria-labelledby="encounter-dialog-title">
+    <h2 id="encounter-dialog-title" style="color: #E0B145; font-size: 18px; text-align: center;"></h2>
+    <div style="display: flex; justify-content: center;">
+      <canvas id="encounter-canvas" width="90" height="90" style="width: 76px; height: 76px; border-radius: 6px; background: #D7CCC8; border: 1.5px solid #4E342E;"></canvas>
+    </div>
+    <p id="encounter-dialog-desc" style="font-size: 13px; line-height: 1.45; white-space: pre-line;"></p>
+    <div id="encounter-options" style="display: flex; flex-direction: column; gap: 8px;"></div>
+  </dialog>
+
+  <script src="./game.js"></script>
+</body>
+</html>

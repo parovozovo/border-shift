@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "public": true,
+  "rewrites": [
+    { "source": "/", "destination": "/docs/index.html" },
+    { "source": "/manifest.json", "destination": "/docs/manifest.json" },
+    { "source": "/styles.css", "destination": "/docs/styles.css" },
+    { "source": "/game.js", "destination": "/docs/game.js" }
+  ]
+}

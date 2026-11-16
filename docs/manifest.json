@@ -1,0 +1,10 @@
+{
+  "name": "Border Shift: Kraina",
+  "short_name": "Border Shift",
+  "description": "Сатиричний симулятор прикордонника у вигаданій країні Kraina (2022–2025)",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1E2420",
+  "theme_color": "#1E2420",
+  "orientation": "portrait"
+}
