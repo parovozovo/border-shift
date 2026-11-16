@@ -57,10 +57,12 @@ enum class SpecialCharacterId {
     GRANDPA_STEPAN,
     VOLUNTEER_OLYA,
     DEPUTY_SON_MAJORS,
-    AUNT_HALYA
+    AUNT_HALYA,
+    SHYTOMYR_BRO
 }
 
 data class PortraitSpec(
+    val isFemale: Boolean = false,
     val skinTone: Int = 0,          // 0..3
     val faceShape: Int = 0,         // 0..3 (round, square, long, chubby)
     val hairStyle: Int = 0,         // 0..5 (short, receding, bun, long, buzz, curly)

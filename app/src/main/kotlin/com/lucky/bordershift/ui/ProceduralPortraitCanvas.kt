@@ -268,7 +268,8 @@ private fun DrawScope.drawPortraitInRegion(
         SpecialCharacterId.VOLUNTEER_OLYA -> Color(0xFF556B2F)
         SpecialCharacterId.DEPUTY_SON_MAJORS -> Color(0xFFB8860B)
         SpecialCharacterId.AUNT_HALYA -> Color(0xFF5C6BC0)
-        else -> Color(0xFF5D4037)
+        SpecialCharacterId.SHYTOMYR_BRO -> Color(0xFF1565C0)
+        else -> if (portrait.isFemale) Color(0xFF7E4A5C) else Color(0xFF5D4037)
     }
 
     val skin = skinColors[portrait.skinTone % skinColors.size]
@@ -276,8 +277,33 @@ private fun DrawScope.drawPortraitInRegion(
     val outline = Color(0xFF1B1B1B)
 
     // Shoulders / Coat
-    val shoulderW = 128f * scale
+    val shoulderW = (if (portrait.isFemale) 114f else 128f) * scale
     val shoulderH = 54f * scale
+
+    // Head dimensions
+    val headW = if (portrait.isFemale) {
+        64f * scale
+    } else {
+        when (portrait.faceShape % 4) {
+            1 -> 74f * scale
+            2 -> 66f * scale
+            3 -> 80f * scale
+            else -> 72f * scale
+        }
+    }
+    val headH = (if (portrait.isFemale) 76f else 82f) * scale
+    val headTop = bottomY - shoulderH - headH + 4f * scale
+
+    // Long flowing back hair for females
+    if (portrait.isFemale && portrait.headwear != 2) {
+        drawRoundRect(
+            color = hair,
+            topLeft = Offset(centerX - headW * 0.72f, headTop + 6f * scale),
+            size = Size(headW * 1.44f, headH + 30f * scale),
+            cornerRadius = CornerRadius(28f * scale, 28f * scale)
+        )
+    }
+
     drawRoundRect(
         color = coatColors,
         topLeft = Offset(centerX - shoulderW / 2f, bottomY - shoulderH),
@@ -306,21 +332,12 @@ private fun DrawScope.drawPortraitInRegion(
     }
 
     // Neck
+    val neckW = (if (portrait.isFemale) 22f else 30f) * scale
     drawRect(
         color = skin,
-        topLeft = Offset(centerX - 15f * scale, bottomY - shoulderH - 14f * scale),
-        size = Size(30f * scale, 22f * scale)
+        topLeft = Offset(centerX - neckW / 2f, bottomY - shoulderH - 14f * scale),
+        size = Size(neckW, 22f * scale)
     )
-
-    // Head dimensions
-    val headW = when (portrait.faceShape % 4) {
-        1 -> 74f * scale
-        2 -> 64f * scale
-        3 -> 80f * scale
-        else -> 70f * scale
-    }
-    val headH = 82f * scale
-    val headTop = bottomY - shoulderH - headH + 4f * scale
 
     // Floral headscarf background (if headwear == 2)
     if (portrait.headwear == 2) {
@@ -332,30 +349,43 @@ private fun DrawScope.drawPortraitInRegion(
         )
     }
 
-    // Ears
+    // Ears + Female Earrings
     drawCircle(
         color = skin,
-        radius = 9f * scale,
+        radius = 8.5f * scale,
         center = Offset(centerX - headW * 0.52f, headTop + headH * 0.52f)
     )
     drawCircle(
         color = skin,
-        radius = 9f * scale,
+        radius = 8.5f * scale,
         center = Offset(centerX + headW * 0.52f, headTop + headH * 0.52f)
     )
+    if (portrait.isFemale) {
+        drawCircle(
+            color = Color(0xFFFFD54F),
+            radius = 4.2f * scale,
+            center = Offset(centerX - headW * 0.54f, headTop + headH * 0.62f)
+        )
+        drawCircle(
+            color = Color(0xFFFFD54F),
+            radius = 4.2f * scale,
+            center = Offset(centerX + headW * 0.54f, headTop + headH * 0.62f)
+        )
+    }
 
     // Head base
+    val headCorner = (if (portrait.isFemale) 34f else 22f) * scale
     drawRoundRect(
         color = skin,
         topLeft = Offset(centerX - headW / 2f, headTop),
         size = Size(headW, headH),
-        cornerRadius = CornerRadius(28f * scale, 28f * scale)
+        cornerRadius = CornerRadius(headCorner, headCorner)
     )
     drawRoundRect(
         color = outline,
         topLeft = Offset(centerX - headW / 2f, headTop),
         size = Size(headW, headH),
-        cornerRadius = CornerRadius(28f * scale, 28f * scale),
+        cornerRadius = CornerRadius(headCorner, headCorner),
         style = Stroke(width = 3f * scale)
     )
 
@@ -363,12 +393,24 @@ private fun DrawScope.drawPortraitInRegion(
     if (portrait.headwear == 0 || portrait.headwear == 3) {
         drawRoundRect(
             color = hair,
-            topLeft = Offset(centerX - headW * 0.52f, headTop - 6f * scale),
-            size = Size(headW * 1.04f, headH * 0.30f),
+            topLeft = Offset(centerX - headW * 0.54f, headTop - 6f * scale),
+            size = Size(headW * 1.08f, headH * 0.30f),
             cornerRadius = CornerRadius(20f * scale, 20f * scale)
         )
-        if (portrait.hairStyle == 2) {
-            // Top bun (e.g. Volunteer Olya)
+        if (portrait.isFemale) {
+            drawRect(
+                color = hair,
+                topLeft = Offset(centerX - headW * 0.56f, headTop + 8f * scale),
+                size = Size(9f * scale, headH * 0.64f)
+            )
+            drawRect(
+                color = hair,
+                topLeft = Offset(centerX + headW * 0.47f, headTop + 8f * scale),
+                size = Size(9f * scale, headH * 0.64f)
+            )
+        }
+        if (portrait.hairStyle == 2 || portrait.isFemale) {
+            // Top bun
             drawCircle(
                 color = hair,
                 radius = 14f * scale,
@@ -491,9 +533,9 @@ private fun DrawScope.drawPortraitInRegion(
         )
     }
 
-    // Mustache / Facial Hair
+    // Mustache / Facial Hair & Lips
     val mouthY = headTop + headH * 0.76f
-    if (portrait.facialHair == 2 || portrait.facialHair == 4) {
+    if (!portrait.isFemale && (portrait.facialHair == 2 || portrait.facialHair == 4)) {
         val mWidth = if (portrait.facialHair == 4) 38f * scale else 26f * scale
         drawRoundRect(
             color = hair,
@@ -501,7 +543,7 @@ private fun DrawScope.drawPortraitInRegion(
             size = Size(mWidth, 9f * scale),
             cornerRadius = CornerRadius(6f * scale, 6f * scale)
         )
-    } else if (portrait.facialHair == 3) {
+    } else if (!portrait.isFemale && portrait.facialHair == 3) {
         drawRoundRect(
             color = hair,
             topLeft = Offset(centerX - headW * 0.36f, mouthY - 6f * scale),
@@ -510,11 +552,33 @@ private fun DrawScope.drawPortraitInRegion(
         )
     }
 
-    // Mouth line
-    drawLine(
-        color = outline,
-        start = Offset(centerX - 11f * scale, mouthY),
-        end = Offset(centerX + 11f * scale, mouthY - if (portrait.expression == 1) 3f * scale else 0f),
-        strokeWidth = 2.8f * scale
-    )
+    if (portrait.isFemale) {
+        // Eyelashes
+        drawLine(
+            color = outline,
+            start = Offset(centerX - eyeOffsetX - 5f * scale, eyeY - 3f * scale),
+            end = Offset(centerX - eyeOffsetX - 9f * scale, eyeY - 7f * scale),
+            strokeWidth = 2.2f * scale
+        )
+        drawLine(
+            color = outline,
+            start = Offset(centerX + eyeOffsetX + 5f * scale, eyeY - 3f * scale),
+            end = Offset(centerX + eyeOffsetX + 9f * scale, eyeY - 7f * scale),
+            strokeWidth = 2.2f * scale
+        )
+        // Full rose lips
+        drawRoundRect(
+            color = Color(0xFFD85A6C),
+            topLeft = Offset(centerX - 9f * scale, mouthY - 4f * scale),
+            size = Size(18f * scale, 8.5f * scale),
+            cornerRadius = CornerRadius(6f * scale, 6f * scale)
+        )
+    } else {
+        drawLine(
+            color = outline,
+            start = Offset(centerX - 11f * scale, mouthY),
+            end = Offset(centerX + 11f * scale, mouthY - if (portrait.expression == 1) 3f * scale else 0f),
+            strokeWidth = 2.8f * scale
+        )
+    }
 }

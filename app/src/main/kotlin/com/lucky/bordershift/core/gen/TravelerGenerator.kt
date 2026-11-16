@@ -64,6 +64,9 @@ class TravelerGenerator(seed: Long = 42L) {
 
     fun generateDailyQueue(daySpec: DayRuleSpec, count: Int = 7): List<Traveler> {
         val list = mutableListOf<Traveler>()
+        // Include one of the 3 Shytomyr Legends (Belke, Korotukha, Denysenko) every shift!
+        list += createShytomyrLegend(daySpec, (daySpec.dayNumber - 1) % 3)
+
         // Include signature memorable encounters per day + procedural mix
         when (daySpec.dayNumber) {
             1 -> {
@@ -139,15 +142,122 @@ class TravelerGenerator(seed: Long = 42L) {
 
     private fun randomPortrait(gender: Gender): PortraitSpec {
         return PortraitSpec(
+            isFemale = (gender == Gender.FEMALE),
             skinTone = rng.nextInt(4),
             faceShape = rng.nextInt(4),
             hairStyle = if (gender == Gender.FEMALE) rng.nextInt(2, 4) else rng.nextInt(0, 3),
             hairColor = rng.nextInt(5),
             facialHair = if (gender == Gender.MALE) rng.nextInt(0, 4) else 0,
             glasses = if (rng.nextInt(4) == 0) rng.nextInt(1, 4) else 0,
-            headwear = if (rng.nextInt(5) == 0) rng.nextInt(1, 4) else 0,
+            headwear = if (gender == Gender.FEMALE) 0 else if (rng.nextInt(5) == 0) rng.nextInt(1, 4) else 0,
             scarOrDetail = 0,
             expression = rng.nextInt(0, 3)
+        )
+    }
+
+    fun createShytomyrLegend(daySpec: DayRuleSpec, which: Int): Traveler {
+        val friendName: LText
+        val age: Int
+        val greetingText: LText
+        val cargoText: LText
+        val vehText: LText
+        val portrait: PortraitSpec
+
+        when (which % 3) {
+            0 -> {
+                friendName = LText("Євген Бельке", "Yevhen Belke")
+                age = 32
+                vehText = LText("Люксова «Таврія-Нова» на дисках BBS («ШИТОМИР-777»)", "Tuned Tavria-Nova ('SHYTOMYR-777')")
+                cargoText = LText("400 пар елітних шитомирських шкарпеток та казан дерунів зі сметаною", "400 pairs of elite Shytomyr socks & hot deruny")
+                greetingText = LText(
+                    "«Опа, братан! Ти шо, своїх не впізнаєш?! Це ж я, Жека Бельке з Шитомира! Везу в Унію стратегічний запас шитомирських шкарпеток, став зелений штамп по-братськи!»",
+                    "'Whoa bro! Don't you recognize your own people?! It's Zheka Belke from Shytomyr! Stamp me green like a brother!'"
+                )
+                portrait = PortraitSpec(skinTone = 0, faceShape = 1, hairStyle = 0, hairColor = 1, facialHair = 1, glasses = 2, scarOrDetail = 3, expression = 1, specialId = SpecialCharacterId.SHYTOMYR_BRO)
+            }
+            1 -> {
+                friendName = LText("Андрій Коротуха", "Andrii Korotukha")
+                age = 31
+                vehText = LText("Тонований джип на номерах «КОРОТУХА»", "Tuned SUV ('KOROTUKHA')")
+                cargoText = LText("Надувний рожевий фламінго, 3 старлінки та шитомирське морозиво", "Inflatable pink flamingo, 3 Starlinks & Shytomyr ice cream")
+                greetingText = LText(
+                    "«Та ну нафіг, які люди в будці! Братан, це ж я — Андрюха Коротуха з Шитомира! Ти ж мене знаєш! Їду в Польщу забрати тепловізори і PS5 по акції. Відкривай шлагбаум!»",
+                    "'No way, look who's in the booth! Bro, it's Andrii Korotukha from Shytomyr! You know me! Open the barrier!'"
+                )
+                portrait = PortraitSpec(skinTone = 1, faceShape = 0, hairStyle = 2, hairColor = 0, facialHair = 2, headwear = 1, expression = 1, specialId = SpecialCharacterId.SHYTOMYR_BRO)
+            }
+            else -> {
+                friendName = LText("Діма Денисенко", "Dima Denysenko")
+                age = 31
+                vehText = LText("Білий бус Mercedes із сабвуфером на весь кордон", "White Mercedes Van blasting bass")
+                cargoText = LText("Мангал із нержавійки, мішок вугілля та запчастини для пікапів", "Stainless steel BBQ grill, charcoal & pickup parts")
+                greetingText = LText(
+                    "«Йоу, братан, здорово! Це ж Дімон Денисенко! Ти шо, забув, як ми в Шитомирі тусили?! Дивись у паспорт — м. Шитомир, 31 рік, усе чітко! Штампуй зеленим!»",
+                    "'Yo bro, what's up! It's Dima Denysenko from Shytomyr! Check the passport — born in Shytomyr, 31 y/o! Stamp it green!'"
+                )
+                portrait = PortraitSpec(skinTone = 0, faceShape = 2, hairStyle = 4, hairColor = 1, facialHair = 1, glasses = 1, expression = 1, specialId = SpecialCharacterId.SHYTOMYR_BRO)
+            }
+        }
+
+        val docs = listOf(
+            DocumentCard(
+                id = "PASS-SHYTOMYR-$which",
+                type = DocType.PASSPORT,
+                title = LText("ПАСПОРТ KRAINA (ВІП)", "KRAINA PASSPORT (VIP)"),
+                subtitle = LText("Місце народження: м. ШИТОМИР 🧦", "Place of Birth: SHYTOMYR CITY 🧦"),
+                fields = listOf(
+                    DocField("name", LText("ПІБ", "Full Name"), friendName),
+                    DocField("age", LText("Вік / Стать", "Age / Sex"), LText("$age р. • ЧОЛ", "$age y/o • M")),
+                    DocField("origin", LText("Походження", "Origin"), LText("м. Шитомир (Свої люди)", "Shytomyr City (Homie Status)")),
+                    DocField("exp", LText("Дійсний до", "Valid Until"), LText("Безстроково", "Indefinite"))
+                ),
+                sealText = LText("МАГІСТРАТ М. ШИТОМИР • СВОЇ", "SHYTOMYR MAGISTRATE • VERIFIED")
+            ),
+            DocumentCard(
+                id = "EXEMPT-SHYTOMYR-$which",
+                type = DocType.EXEMPTION_CERT,
+                title = LText("МАНДАТ ШИТОМИРСЬКОГО БРАТСТВА", "SHYTOMYR BROTHERHOOD MANDATE"),
+                subtitle = LText("Спецдозвіл на перетин усіх шлагбаумів", "All-Border Crossing Permit"),
+                fields = listOf(
+                    DocField("holder", LText("Особа", "Holder"), friendName),
+                    DocField("reason", LText("Підстава", "Basis"), LText("Почесний громадянин м. Шитомир (Особистий кент інспектора)", "Honorary Citizen of Shytomyr"))
+                ),
+                sealText = LText("ПЕЧАТКА ШИТОМИРА • ДІЙСНА", "SEAL OF SHYTOMYR • VALID")
+            ),
+            DocumentCard(
+                id = "VEH-SHYTOMYR-$which",
+                type = DocType.VEHICLE_CUSTOMS,
+                title = LText("МИТНА ДЕКЛАРАЦІЯ АВТО", "VEHICLE CUSTOMS DECLARATION"),
+                subtitle = vehText,
+                fields = listOf(
+                    DocField("driver", LText("Водій", "Driver"), friendName),
+                    DocField("cargo", LText("Вантаж", "Cargo"), cargoText)
+                ),
+                sealText = LText("МИТНИЦЯ ШИТОМИР", "SHYTOMYR CUSTOMS")
+            )
+        )
+
+        return Traveler(
+            id = nextId(),
+            fullName = friendName,
+            age = age,
+            gender = Gender.MALE,
+            direction = Direction.EXIT_TO_UNIA,
+            role = HiddenRole.HONEST_CITIZEN,
+            portrait = portrait,
+            passportPortrait = portrait,
+            documents = docs,
+            greeting = greetingText,
+            interrogationReply = LText("«Та свої ж люди з Шитомира, братан! Натискай ✔ ПРОПУСТИТИ!»", "'We're your homies from Shytomyr, bro! Hit ✔ APPROVE!'"),
+            vehicleDescription = vehText,
+            vehicleSearchResult = cargoText,
+            arrestSceneFull = LText("Ти навіщось затримав власного кента з Шитомира!", "You detained your own homie from Shytomyr!"),
+            arrestSceneTonedDown = LText("Знайомого з Шитомира затримано.", "Your friend from Shytomyr was detained."),
+            hasHiddenContraband = false,
+            bribeOffer = null,
+            shouldBeApproved = true,
+            validViolations = emptySet(),
+            storyTag = "SHYTOMYR_$which"
         )
     }
 
@@ -574,6 +684,7 @@ class TravelerGenerator(seed: Long = 42L) {
             specialId = SpecialCharacterId.AUNT_HALYA
         )
         val sisterPassportPortrait = PortraitSpec(
+            isFemale = true,
             skinTone = 1,
             faceShape = 0,
             hairStyle = 3,
@@ -1132,6 +1243,7 @@ class TravelerGenerator(seed: Long = 42L) {
     fun createVolunteerOlya(daySpec: DayRuleSpec): Traveler {
         val fullName = LText("Ковальчук Ольга Сергіївна", "Olha Kovalchuk")
         val portrait = PortraitSpec(
+            isFemale = true,
             skinTone = 0,
             faceShape = 0,
             hairStyle = 2, // bun
