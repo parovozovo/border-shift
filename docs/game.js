@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v4.2";
+  const BUILD_VERSION = "v4.4";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -963,7 +963,7 @@
           id: "demand_bureaucracy",
           label: L("📋 Вимагати повного митного оформлення за інструкцією (-15с часу, +10 Палич)", "📋 Demand full customs paperwork by the book (-15s time, +10 Palych)"),
           outcome: L("Спецпризначенці крізь зуби чекають 15 хвилин, поки ти заповнюєш папірці.", "The operatives grind their teeth waiting while you fill out forms."),
-          moneyDelta: 500, timeDelta: -15, riskDelta: 0, sbkDelta: -10, tolikDelta: 0, palychDelta: 10, moraleDelta: 0
+          moneyDelta: 0, timeDelta: -15, riskDelta: 0, sbkDelta: -10, tolikDelta: 0, palychDelta: 10, moraleDelta: 0
         }
       ]
     },
@@ -971,22 +971,22 @@
       id: "double_agent_cipher",
       title: L("🕵️ ПЕРЕХОПЛЕНИЙ ЗВ'ЯЗКОВИЙ ФЕДЕРАЦІЇ", "🕵️ INTERCEPTED FEDERATION COURIER"),
       desc: L(
-        "Чоловік у сірому плащі нахиляється до вікна й шепоче пароль:\n«Скажіть, по чому сьогодні бринза в Буковельську?.. Ось флешка з графіком руху ешелонів. Мовчки пропустите — у конверті 800 🪙. Або тисніть тривожну кнопку СБК під столом!»",
-        "A man in a grey trenchcoat whispers a cipher at the glass:\n'What is the price of cheese in Bukovelsk today?.. Here is a flash drive with train schedules. Wave me through for 800 🪙 — or hit the hidden SBK alarm under your desk!'"
+        "Чоловік у сірому плащі нахиляється до вікна й шепоче пароль:\n«Скажіть, по чому сьогодні бринза в Буковельську?.. Ось флешка з графіком руху ешелонів. Мовчки пропустите — у конверті 1 200 💵. Або тисніть тривожну кнопку СБК під столом!»",
+        "A man in a grey trenchcoat whispers a cipher at the glass:\n'What is the price of cheese in Bukovelsk today?.. Here is a flash drive with train schedules. Wave me through for 1,200 💵 — or hit the hidden SBK alarm under your desk!'"
       ),
       portrait: { gender: "M", skinTone: 0, faceShape: 2, hairStyle: 4, hairColor: 0, facialHair: 0, glasses: 2, headwear: 1, scarOrDetail: 0, expression: 1, specialId: "NONE" },
       options: [
         {
           id: "report_to_sbk",
-          label: L("🚨 Натиснути кнопку СБК і взяти шпигуна на гарячому (+400 🪙 премії, +25 СБК)", "🚨 Press SBK alarm & capture spy red-handed (+400 🪙 reward, +25 SBK)"),
-          outcome: L("Група захоплення СБК миттєво пакує агента! Майор «Тихий» виписує тобі 400 🪙 премії та знімає всі питання НАБК.", "SBK strike team tackles the spy in seconds! Major Quiet awards you 400 🪙 and clears your file."),
-          moneyDelta: 400, timeDelta: 0, riskDelta: -12, sbkDelta: 25, tolikDelta: 0, palychDelta: 5, moraleDelta: 10
+          label: L("🚨 Натиснути кнопку СБК і взяти шпигуна на гарячому (+1 800 🪙 премії, +25 СБК)", "🚨 Press SBK alarm & capture spy red-handed (+1,800 🪙 reward, +25 SBK)"),
+          outcome: L("Група захоплення СБК миттєво пакує агента! Майор «Тихий» виписує тобі 1 800 🪙 премії та знімає всі питання НАБК.", "SBK strike team tackles the spy in seconds! Major Quiet awards you 1,800 🪙 and clears your file."),
+          moneyDelta: 1800, timeDelta: 0, riskDelta: -12, sbkDelta: 25, tolikDelta: 0, palychDelta: 5, moraleDelta: 10
         },
         {
           id: "fake_double_game",
-          label: L("🎭 Підмінити флешку на дезінформацію СБК і забрати його 800 🪙! (+800 🪙, +15 СБК)", "🎭 Swap drive with SBK disinfo AND pocket his 800 🪙! (+800 🪙, +15 SBK)"),
-          outcome: L("Вищий пілотаж! Ворожа розвідка отримала фальшиві координати муляжів, а 800 🪙 залишилися у твоїй кишені!", "Masterclass! Enemy intel got decoy coordinates while you kept the 800 🪙 cash!"),
-          moneyDelta: 800, timeDelta: -10, riskDelta: 5, sbkDelta: 15, tolikDelta: 0, palychDelta: 0, moraleDelta: 5
+          label: L("💵 Взяти його 1 200 💵 і тихо пропустити (+1 200 💵, +18% НАБК, -10 СБК)", "💵 Take his 1,200 💵 and wave him through (+1,200 💵, +18% NABK, -10 SBK)"),
+          outcome: L("Ти сховав зелені купюри в кишеню, а шпигун зник за шлагбаумом. СБК косо поглядає на камери...", "You pocketed the greenbacks as the spy slipped past. SBK eyes the CCTV..."),
+          moneyDelta: 0, usdDelta: 1200, timeDelta: -5, riskDelta: 18, sbkDelta: -10, tolikDelta: 0, palychDelta: 5, moraleDelta: 0
         }
       ]
     },
@@ -994,16 +994,16 @@
       id: "palych_drawer_raid",
       title: L("🧢 ПАЛ ПАЛИЧ ПЕРЕВІРЯЄ ШУХЛЯДУ!", "🧢 PAL PALYCH BARGED INTO THE BOOTH!"),
       desc: L(
-        "Пал Палич зачиняє двері будки на шпінгалет і стукає кулаком по столу:\n«Так, інспекторе! Мені сорока на хвості принесла, що сьогодні повз мою касу жирні конверти пливуть. Відкривай шухляду або ділися по-братськи!»",
-        "Pal Palych bolts the booth door and slams his fist on your desk:\n'Alright inspector! A little bird told me fat envelopes are bypassing my desk today. Open the drawer or share like a brother!'"
+        "Пал Палич зачиняє двері будки на шпінгалет і стукає кулаком по столу:\n«Так, інспекторе! Мені сорока на хвості принесла, що сьогодні повз мою касу жирні конверти пливуть. Занось 50 💵 або показуй порожню шухляду!»",
+        "Pal Palych bolts the booth door and slams his fist on your desk:\n'Alright inspector! A little bird told me fat envelopes are bypassing my desk today. Slip me 50 💵 or show me an empty drawer!'"
       ),
       portrait: { gender: "M", skinTone: 1, faceShape: 3, hairStyle: 0, hairColor: 0, facialHair: 0, glasses: 0, headwear: 4, scarOrDetail: 0, expression: 3, specialId: "PALYCH_BOSS" },
       options: [
         {
           id: "pay_palych_on_spot",
-          label: L("💵 Відстібнути 200 🪙 «на коньяк» (+15 Палич, -10% ризик НАБК)", "💵 Slip him 200 🪙 'for cognac' (+15 Palych, -10% NABK risk)"),
-          outcome: L("Палич ховає купюри в кашкет: «Оце розмова дорослих людей! Працюй спокійно.»", "Palych tucks the bills into his cap: 'Now that is grown-up talk! Carry on.'"),
-          moneyDelta: -200, timeDelta: 0, riskDelta: -10, sbkDelta: 0, tolikDelta: 0, palychDelta: 15, moraleDelta: 0
+          label: L("💵 Відстібнути 50 💵 «на коньяк» (+15 Палич, -10% ризик НАБК)", "💵 Slip him 50 💵 'for cognac' (+15 Palych, -10% NABK risk)"),
+          outcome: L("Палич ховає зелений папірець у кашкет: «Оце розмова дорослих людей! Працюй спокійно.»", "Palych tucks the bill into his cap: 'Now that is grown-up talk! Carry on.'"),
+          moneyDelta: 0, usdDelta: -50, timeDelta: 0, riskDelta: -10, sbkDelta: 0, tolikDelta: 0, palychDelta: 15, moraleDelta: 0
         },
         {
           id: "show_empty_hands",
@@ -1024,9 +1024,9 @@
       options: [
         {
           id: "trust_cat",
-          label: L("🦴 Дати тваринам ковбаси й розкрити подвійне дно фури (+380 🪙 премії СБК!)", "🦴 Feed pets sausage & tear open the truck bed (+380 🪙 SBK reward!)"),
-          outcome: L("У схованці під підлогою знайдено 50 блоків контрабандної електроніки! СБК виписує 380 🪙 премії!", "Hidden under the floor were 50 crates of smuggled electronics! SBK pays 380 🪙!"),
-          moneyDelta: 380, timeDelta: 0, riskDelta: -5, sbkDelta: 12, tolikDelta: 0, palychDelta: 0, moraleDelta: 8
+          label: L("🦴 Дати тваринам ковбаси й розкрити подвійне дно фури (+1 600 🪙 премії СБК!)", "🦴 Feed pets sausage & tear open the truck bed (+1,600 🪙 SBK reward!)"),
+          outcome: L("У схованці під підлогою знайдено 50 блоків контрабандної електроніки! СБК виписує 1 600 🪙 премії!", "Hidden under the floor were 50 crates of smuggled electronics! SBK pays 1,600 🪙!"),
+          moneyDelta: 1600, timeDelta: 0, riskDelta: -5, sbkDelta: 12, tolikDelta: 0, palychDelta: 0, moraleDelta: 8
         },
         {
           id: "pet_and_work",
@@ -4332,32 +4332,15 @@
   }
 
   function canAffordAsset(asset) {
-    if (isStrictUahAsset(asset)) return state.money >= asset.cost;
-    const totalWealthUah = state.money + state.usd * USD_UAH_RATE;
-    return totalWealthUah >= getAssetCostUah(asset);
+    if (asset.currency === "USD") return state.usd >= asset.cost;
+    return state.money >= getAssetCostUah(asset);
   }
 
   function payForAsset(asset) {
-    const neededUah = getAssetCostUah(asset);
     if (asset.currency === "USD") {
-      if (state.usd >= asset.cost) {
-        state.usd -= asset.cost;
-        return;
-      }
-      const shortUsd = asset.cost - state.usd;
-      state.usd = 0;
-      state.money = Math.max(0, state.money - shortUsd * USD_UAH_RATE);
+      state.usd = Math.max(0, state.usd - asset.cost);
     } else {
-      if (state.money >= neededUah) {
-        state.money -= neededUah;
-        return;
-      }
-      const shortUah = neededUah - state.money;
-      state.money = 0;
-      const usdToSpend = Math.ceil(shortUah / USD_UAH_RATE);
-      const changeUah = usdToSpend * USD_UAH_RATE - shortUah;
-      state.usd = Math.max(0, state.usd - usdToSpend);
-      state.money += changeUah;
+      state.money = Math.max(0, state.money - getAssetCostUah(asset));
     }
   }
 
@@ -4560,9 +4543,9 @@
   }
 
   function getEffectiveBossCut() {
-    const bribeShare = state.shiftBribesTotal > 0 ? Math.round(state.shiftBribesTotal * 0.20) : 0;
-    const base = Math.min(18000, Math.max(600, 600 + bribeShare));
-    return state.ownedAssets.includes("rolex_watch") ? Math.round(base * 0.5) : base;
+    const bribeUsd = state.shiftBribesTotal > 0 ? Math.round((state.shiftBribesTotal * 0.22) / USD_UAH_RATE) : 0;
+    const baseUsd = Math.min(450, Math.max(25, 25 + bribeUsd));
+    return state.ownedAssets.includes("rolex_watch") ? Math.max(10, Math.round(baseUsd * 0.5)) : baseUsd;
   }
 
   function getPassiveRent() {
@@ -5159,9 +5142,13 @@
       btn.className = "btn-secondary";
       btn.style.color = "#E0B145";
       btn.textContent = tr(opt.label, state.lang);
+      if (opt.usdDelta && opt.usdDelta < 0 && state.usd < Math.abs(opt.usdDelta)) {
+        btn.disabled = true;
+      }
       btn.addEventListener("click", () => {
         audio.playBribe();
         state.money = Math.max(0, state.money + opt.moneyDelta);
+        if (opt.usdDelta) state.usd = Math.max(0, state.usd + opt.usdDelta);
         state.shiftSec = Math.max(10, state.shiftSec + opt.timeDelta);
         state.nabkRisk = Math.max(0, Math.min(100, state.nabkRisk + opt.riskDelta));
         state.sbkRep = Math.max(0, Math.min(100, state.sbkRep + opt.sbkDelta));
@@ -6269,7 +6256,8 @@
     }
 
     if (state.phase === "SHIFT_SUMMARY") {
-      const cut = getEffectiveBossCut();
+      const hasShiftBribes = state.shiftBribesTotal > 0;
+      const cutUsd = hasShiftBribes ? getEffectiveBossCut() : 0;
       const salary = state.shiftCorrect * getRank().salary;
       root.innerHTML = `
         <div style="display:flex;flex-direction:column;gap:12px;flex:1;">
@@ -6279,37 +6267,51 @@
             <div style="color:#81C784;">${tr(L("Без помилок", "Correct Decisions"), state.lang)}: <strong>${state.shiftCorrect} (+${salary} 🪙)</strong></div>
             <div style="color:#64B5F6;">${tr(L("Затримано порушників", "Detained Targets"), state.lang)}: <strong>${state.shiftDetained}</strong></div>
             <div style="color:#FF8A80;">${tr(L("Штрафи за помилки", "Protocol Fines"), state.lang)}: <strong>-${state.shiftFinesTotal} 🪙</strong></div>
-            <div style="color:#E0B145;">${tr(L("Конверти та підгони", "Envelopes & Tips"), state.lang)}: <strong>+${state.shiftBribesTotal} 🪙</strong></div>
+            <div style="color:#E0B145;">${tr(L("Конверти та підгони", "Envelopes & Tips"), state.lang)}: <strong>+${state.shiftBribesTotal} 🪙 (екв.)</strong></div>
             <hr style="border:none;border-top:1px solid #555;margin:4px 0;">
-            <div style="color:#E0B145;font-size:18px;font-weight:800;">${tr(L("У гаманці зараз", "Current Cash"), state.lang)}: ${state.money} 🪙</div>
+            <div style="color:#E0B145;font-size:16px;font-weight:800;">${tr(L("У гаманці зараз", "Current Cash"), state.lang)}: ${state.money.toLocaleString("en-US")} 🪙 • <span style="color:#81C784;">${state.usd.toLocaleString("en-US")} 💵</span></div>
           </section>
           <section class="card-slate" style="background:#33291F;">
-            <h2 style="color:#E0B145;font-size:16px;margin-bottom:6px;">${tr(L("🧢 ПАЛ ПАЛИЧ ЧЕКАЄ НА «ЧАСТКУ»", "🧢 PAL PALYCH EXPECTS HIS CUT"), state.lang)}</h2>
-            <p style="font-size:13px;line-height:1.4;">${tr(L(
-              `«Поклади ${cut} 🪙 у шухляду — і я прикрию твої грішки перед штабом та НАБК.» ${state.ownedAssets.includes("rolex_watch") ? "(Знижка -50% завдяки твоєму золотому «Кролексу»!)" : ""}`,
-              `'Put ${cut} 🪙 in my drawer and I'll cover your slip-ups.' ${state.ownedAssets.includes("rolex_watch") ? "(50% discount from your Gold Krolex!)" : ""}`
-            ), state.lang)}</p>
+            <h2 style="color:#E0B145;font-size:16px;margin-bottom:6px;">${tr(hasShiftBribes ? L("🧢 ПАЛ ПАЛИЧ ЧЕКАЄ НА «ЧАСТКУ» (У 💵)", "🧢 PAL PALYCH EXPECTS HIS CUT (IN 💵)") : L("🧢 ПАЛ ПАЛИЧ: «Сьогодні без конвертів?»", "🧢 PAL PALYCH: 'Clean shift today?'"), state.lang)}</h2>
+            <p style="font-size:13px;line-height:1.4;">${hasShiftBribes
+              ? tr(L(
+                  `«Поклади ${cutUsd} 💵 у шухляду — і я прикрию твої грішки перед штабом та НАБК. Гривні не носіть, тільки зелені!» ${state.ownedAssets.includes("rolex_watch") ? "(Знижка -50% завдяки твоєму золотому «Кролексу»!)" : ""}`,
+                  `'Put ${cutUsd} 💵 in my drawer and I'll cover your slip-ups. Dollars only!' ${state.ownedAssets.includes("rolex_watch") ? "(50% discount from your Gold Krolex!)" : ""}`
+                ), state.lang)
+              : tr(L(
+                  "«Конвертів сьогодні не брав, тож доларів у шухляду не вимагаю. Іди додому, але без косяків на наступній зміні!»",
+                  "'No envelopes taken today, so I won't demand dollars. Go rest, just watch your mistakes!'"
+                ), state.lang)
+            }</p>
           </section>
         </div>
         <div style="display:flex;flex-direction:column;gap:8px;">
-          <button type="button" id="btn-pay-palych" class="btn-primary-green" ${(state.money + state.usd * USD_UAH_RATE) < cut ? "disabled" : ""}>${tr(L(`Занести Паличу ${cut.toLocaleString("en-US")} 🪙 (-ризик НАБК, +дах)`, `Pay Palych ${cut.toLocaleString("en-US")} 🪙 (-NABK Risk, +Boss Rep)`), state.lang)}</button>
-          <button type="button" id="btn-refuse-palych" class="btn-outline" style="width:100%;padding:12px;color:#FF8A80;border-color:#FF8A80;">${tr(L("Не платити Паличу (Ризик догани / нагляду!)", "Refuse Palych (Risk reprimand / surveillance!)"), state.lang)}</button>
+          ${hasShiftBribes ? `
+            <button type="button" id="btn-pay-palych" class="btn-primary-green" ${state.usd < cutUsd ? "disabled" : ""}>${tr(L(`Занести Паличу ${cutUsd.toLocaleString("en-US")} 💵 (-ризик НАБК, +дах)`, `Pay Palych ${cutUsd.toLocaleString("en-US")} 💵 (-NABK Risk, +Boss Rep)`), state.lang)}</button>
+            <button type="button" id="btn-refuse-palych" class="btn-outline" style="width:100%;padding:12px;color:#FF8A80;border-color:#FF8A80;">${tr(L("Не платити Паличу (Ризик догани / нагляду!)", "Refuse Palych (Risk reprimand / surveillance!)"), state.lang)}</button>
+          ` : `
+            <button type="button" id="btn-refuse-palych" class="btn-primary-green">${tr(L("Завершити зміну (хабарів не брав) →", "Finish Shift (No Bribes) →"), state.lang)}</button>
+          `}
         </div>
       `;
-      document.getElementById("btn-pay-palych").addEventListener("click", () => {
-        audio.playBribe();
-        payForAsset({ currency: "UAH", cost: cut });
-        state.palychRep = Math.min(100, state.palychRep + 12);
-        state.nabkRisk = Math.max(0, state.nabkRisk - 8);
-        state.purchasedExpensesToday = [];
-        state.phase = "HOME_EVENING";
-        saveStateToStorage();
-        render();
-      });
+      const payPalychBtn = document.getElementById("btn-pay-palych");
+      if (payPalychBtn) {
+        payPalychBtn.addEventListener("click", () => {
+          if (state.usd < cutUsd) return;
+          audio.playBribe();
+          state.usd -= cutUsd;
+          state.palychRep = Math.min(100, state.palychRep + 12);
+          state.nabkRisk = Math.max(0, state.nabkRisk - 8);
+          state.purchasedExpensesToday = [];
+          state.phase = "HOME_EVENING";
+          saveStateToStorage();
+          render();
+        });
+      }
       document.getElementById("btn-refuse-palych").addEventListener("click", () => {
         audio.playDeny();
         state.palychRep = Math.max(0, state.palychRep - 15);
-        if (state.shiftBribesTotal > 0 || state.shiftMistakes > 0) {
+        if (state.shiftBribesTotal > 0 || state.shiftMistakes >= 5) {
           state.nabkRisk = Math.min(100, state.nabkRisk + 12);
           if (!state.isUndercoverSbkAgent || state.nabkRisk >= 60) {
             state.reprimands = (state.reprimands || 0) + 1;
@@ -6441,9 +6443,9 @@
       const billsToShow = (state.tonightBills && state.tonightBills.length > 0) ? state.tonightBills : DYNAMIC_EVENING_BILLS.slice(0, 3);
       if (state.eveningTab === 0) {
         if ((state.reprimands > 0 || state.underSurveillance || state.nabkRisk >= 25) && !state.purchasedExpensesToday.includes("krysha_bribe")) {
-          const baseK = 2200 + state.nabkRisk * 75 + (state.reprimands || 0) * 1500;
-          const kCost = state.isUndercoverSbkAgent ? Math.round(baseK * 0.65) : baseK;
-          const canK = (state.money + state.usd * USD_UAH_RATE) >= kCost;
+          const baseKUsd = Math.max(55, Math.round((2200 + state.nabkRisk * 75 + (state.reprimands || 0) * 1500) / USD_UAH_RATE));
+          const kCostUsd = state.isUndercoverSbkAgent ? Math.round(baseKUsd * 0.65) : baseKUsd;
+          const canK = state.usd >= kCostUsd;
           const kCard = document.createElement("div");
           kCard.className = "card-slate row-between";
           kCard.style.borderLeft = "4px solid #E0B145";
@@ -6451,7 +6453,7 @@
             <div style="flex:1;">
               <div style="font-size:13px;font-weight:800;color:#FFE082;">🤝 ${tr(L("Занести за «Кришу» (Зняти Догану / Нагляд / -25% НАБК)", "Pay 'Krysha' Protector (Clear Reprimand / Watch / -25% NABK)"), state.lang)}</div>
               <div style="color:#CFD8DC;font-size:11px;">${tr(L(`Догани: ${state.reprimands}/3 • ${state.underSurveillance ? "👁️ Нагляд АКТИВНИЙ" : "Нагляду немає"}`, `Reprimands: ${state.reprimands}/3`), state.lang)}</div>
-              <div style="color:#E0B145;font-size:12px;font-weight:800;">${kCost.toLocaleString("en-US")} 🪙 (≈ ${Math.ceil(kCost / USD_UAH_RATE)} 💵)</div>
+              <div style="color:#81C784;font-size:12px;font-weight:800;">${kCostUsd.toLocaleString("en-US")} 💵</div>
             </div>
           `;
           const kb = document.createElement("button");
@@ -6460,7 +6462,8 @@
           kb.disabled = !canK;
           kb.textContent = tr(L("Занести", "Bribe"), state.lang);
           kb.addEventListener("click", () => {
-            payForAsset({ currency: "UAH", cost: kCost });
+            if (state.usd < kCostUsd) return;
+            state.usd -= kCostUsd;
             state.purchasedExpensesToday.push("krysha_bribe");
             unlockDiscovery("DISC_KRYSHA");
             if (state.nabkRisk >= 70 && Math.random() < 0.25) {
@@ -6509,7 +6512,7 @@
         billsToShow.forEach(exp => {
           const bought = state.purchasedExpensesToday.includes(exp.id);
           const isUsdExp = exp.currency === "USD";
-          const canBuy = !bought && (isUsdExp ? (state.usd >= exp.cost || (state.money + state.usd * USD_UAH_RATE) >= exp.cost * USD_UAH_RATE) : state.money >= exp.cost);
+          const canBuy = !bought && (isUsdExp ? state.usd >= exp.cost : state.money >= exp.cost);
           const priceStr = isUsdExp ? `${exp.cost.toLocaleString("en-US")} 💵` : `${exp.cost.toLocaleString("en-US")} 🪙`;
           const card = document.createElement("div");
           card.className = "card-slate row-between";
@@ -6557,7 +6560,7 @@
           const strictUah = isStrictUahAsset(asset);
           const priceStr = isUsd
             ? `${asset.cost.toLocaleString("en-US")} 💵 (≈ ${uahEq.toLocaleString("en-US")} 🪙)`
-            : (strictUah ? `${asset.cost.toLocaleString("en-US")} 🪙 (${tr(L("тільки чесні 🪙", "honest 🪙 only"), state.lang)})` : `${asset.cost.toLocaleString("en-US")} 🪙 (≈ ${usdEq.toLocaleString("en-US")} 💵)`);
+            : (strictUah ? `${asset.cost.toLocaleString("en-US")} 🪙` : `${asset.cost.toLocaleString("en-US")} 🪙 (≈ ${usdEq.toLocaleString("en-US")} 💵)`);
           const card = document.createElement("div");
           card.className = "card-slate row-between";
           if (owned) card.style.backgroundColor = "#1B5E20";
