@@ -2,6 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
+  const BUILD_VERSION = "v2.9";
 
   // Fallback for older Safari lacking CanvasRenderingContext2D.roundRect
   if (typeof CanvasRenderingContext2D !== "undefined" && !CanvasRenderingContext2D.prototype.roundRect) {
@@ -4716,6 +4717,10 @@
           <p class="menu-disclaimer">
             ${tr(L("18+ Сатирична художня вигадка: установи, міста й події вигадані • Змінити тон можна вгорі", "18+ Satirical work of fiction: cities, names & agencies are fictional • Toggle mode above"), state.lang)}
           </p>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-family:monospace;font-size:10.5px;color:#5D4037;margin-top:2px;">
+            <span>Версія: <strong>${BUILD_VERSION}</strong></span>
+            <button type="button" id="btn-force-refresh" class="btn-outline" style="padding:2px 7px;font-size:10px;color:#3E2723;border-color:#8C7A5B;">🔄 ${tr(L("Оновити кеш", "Force Refresh"), state.lang)}</button>
+          </div>
         </section>
       `;
 
@@ -4727,6 +4732,9 @@
       document.getElementById("btn-start-camp").addEventListener("click", () => { audio.playApprove(); startNewGame(false); });
       document.getElementById("btn-start-sand").addEventListener("click", () => { audio.playApprove(); startNewGame(true); });
       document.getElementById("btn-open-archive").addEventListener("click", () => { audio.playTap(); state.phase = "ARCHIVE"; render(); });
+      document.getElementById("btn-force-refresh").addEventListener("click", () => {
+        window.location.href = window.location.pathname + "?v=" + Date.now();
+      });
       document.querySelectorAll(".camp-cp-btn").forEach(btn => {
         btn.addEventListener("click", () => {
           audio.playApprove();
