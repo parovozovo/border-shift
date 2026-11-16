@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v3.7";
+  const BUILD_VERSION = "v3.8";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -494,6 +494,62 @@
       title: L("🎿 Сімейні вихідні в аквапарку Буковельська (+22% сім'я, -5% стресу НАБК)", "🎿 Family weekend at Bukovelsk spa resort (+22% family)"),
       subtitle: L("Справжнє перезавантаження між важкими змінами", "Real reset between intense shifts"),
       cost: 1600, morale: 22, escape: 0, riskDelta: -5, sbkDelta: 5
+    },
+    {
+      id: "midnight_shawarma_crawl",
+      minDay: 1, chance: 0.85, currency: "UAH",
+      title: L("🥙 Нічний рейд по шаурмі з псом «Бавовною» (+12% сім'я, +5 СБК)", "🥙 Midnight Shawarma Run with Bavovna (+12% family, +5 SBK)"),
+      subtitle: L("Смачно, ситно й пес у захваті!", "Tasty, filling, and Bavovna approves!"),
+      cost: 700, morale: 12, escape: 0, riskDelta: 0, sbkDelta: 5
+    },
+    {
+      id: "midnight_fishing",
+      minDay: 2, chance: 0.65, currency: "UAH",
+      title: L("🎣 Нічна рибалка на Тетереві з Пал Паличем (+20 Палич, -8% НАБК)", "🎣 Night Fishing with Pal Palych (+20 Palych, -8% NABK)"),
+      subtitle: L("Спільна юшка на березі зближує краще за будь-який звіт", "Riverbank fish soup beats any paperwork"),
+      cost: 1300, morale: 8, escape: 0, riskDelta: -8, sbkDelta: 0, palychDelta: 20
+    },
+    {
+      id: "donate_drones_crew",
+      minDay: 2, chance: 0.6, currency: "UAH",
+      title: L("🚁 Нічний збір на FPV-рій для розвідки ГУР-М (+28 СБК, -10% НАБК)", "🚁 Fund FPV Drone Swarm for GUR-M (+28 SBK, -10% NABK)"),
+      subtitle: L("Хлопці на передку передають подяку й прикривають твій тил", "Frontline scouts appreciate the gear"),
+      cost: 2800, morale: 15, escape: 0, riskDelta: -10, sbkDelta: 28
+    },
+    {
+      id: "underground_mma",
+      minDay: 2, chance: 0.5, currency: "USD",
+      title: L("🥊 Підпільні бої «Митниця vs Контрабас» (+22 Толік, +12% сім'я)", "🥊 Underground Fight Night: Customs vs Smugglers (+22 Tolik)"),
+      subtitle: L("Ставиш на Толікового бійця — повага в синдикаті зростає (+5% НАБК)", "Syndicate street cred rises (+5% NABK)"),
+      cost: 350, morale: 12, escape: 0, riskDelta: 5, sbkDelta: 0, tolikDelta: 22
+    },
+    {
+      id: "fake_auction_painting",
+      minDay: 3, chance: 0.45, currency: "USD",
+      title: L("🖼️ Купити картину «Козак Мамай на крипто-полотні» (+30% сім'я)", "🖼️ Buy 'Kozak Mamai on Crypto-Canvas' (+30% family)"),
+      subtitle: L("Дружина в захваті, а критики кажуть, що це чистий авангард", "Wife loves it, critics call it pure avant-garde"),
+      cost: 1100, morale: 30, escape: 0, riskDelta: -6, sbkDelta: 0
+    },
+    {
+      id: "vip_sauna_delegates",
+      minDay: 3, chance: 0.22, isRare: true, currency: "USD",
+      title: L("🧖 VIP-сауна з делегатами Карпатії (+25 Палич, +15 Толік, +15% сім'я)", "🧖 VIP Sauna with Karpatia Delegates (+25 Palych, +15 Tolik)"),
+      subtitle: L("✨ Рідкісна нічна подія (22% шанс): усі важливі питання вирішуються в парі!", "✨ Rare event (22% chance): deals sealed in steam!"),
+      cost: 950, morale: 15, escape: 0, riskDelta: 4, sbkDelta: 0, palychDelta: 25, tolikDelta: 15
+    },
+    {
+      id: "hack_registry_night",
+      minDay: 4, chance: 0.19, isRare: true, currency: "USD",
+      title: L("💻 Замовити «Сірого Хакера» почистити логи КПП (-35% НАБК, -1 Догана!)", "💻 Hire 'Gray Hacker' to wipe checkpoint logs (-35% NABK, -1 Reprimand!)"),
+      subtitle: L("✨ Рідкісна подія Дня 4+ (19% шанс): зникають навіть старі догани!", "✨ Rare Day 4+ event (19% chance): even reprimands vanish!"),
+      cost: 1800, morale: 0, escape: 0, riskDelta: -35, sbkDelta: 0, reprimandHeal: 1
+    },
+    {
+      id: "smuggler_treasure_map",
+      minDay: 4, chance: 0.17, isRare: true, currency: "USD",
+      title: L("🗺️ Купити в Толіка «карту забутого складу» (+2 400 💵 заначки!)", "🗺️ Buy 'Forgotten Stash Map' from Tolik (+2,400 💵 haul!)"),
+      subtitle: L("✨ Рідкісна подія Дня 4+ (17% шанс): за 700 💵 відкопуєш старий сейф!", "✨ Rare Day 4+ event (17% chance): dig up an old stash!"),
+      cost: 700, morale: 10, escape: 0, riskDelta: 8, sbkDelta: 0, usdReward: 2400
     }
   ];
 
@@ -646,6 +702,54 @@
       cost: 240000, passiveIncome: 0, passiveUsd: 3800, dailyRisk: 5, tolikBoost: 15, palychBoost: 15, moraleBoost: 30
     },
     {
+      id: "parrot_kesha",
+      category: "TECH",
+      currency: "UAH",
+      onlyUah: true,
+      icon: "🦜",
+      title: L("Говорящий папуга «Майор Кеша» у будку", "Talking Parrot 'Major Kesha' in Booth"),
+      subtitle: L("Кричить «ПІДМІНА!» при чужому фото в паспорті, -3% НАБК/день +10% сім'ї!", "Squawks on fake passport photos, -3% daily NABK +10% family!"),
+      cost: 9500, passiveIncome: 0, passiveUsd: 0, dailyRisk: -3, tolikBoost: 0, palychBoost: 5, moraleBoost: 10
+    },
+    {
+      id: "steppe_ebike",
+      category: "TECH",
+      currency: "UAH",
+      onlyUah: true,
+      icon: "🏍️",
+      title: L("Електро-байк «Степовий Вітер»", "Electric Bike 'Steppe Wind'"),
+      subtitle: L("+18с до кожної зміни (об'їжджаєш затори), 0% ризику НАБК!", "+18s shift time (skip traffic), 0% NABK risk!"),
+      cost: 19500, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 5, palychBoost: 5, moraleBoost: 10
+    },
+    {
+      id: "blogger_minivan",
+      category: "REALTY",
+      currency: "UAH",
+      onlyUah: true,
+      icon: "🚐",
+      title: L("Мінівен «Тік-Ток Блогер-Мобіль»", "'Tik-Tok Blogger-Mobile' Minivan"),
+      subtitle: L("Реклама прикордонних лайфхаків: +1 100 🪙 щоранку +15% щастя сім'ї!", "Ad revenue: +1,100 🪙 every morning +15% family morale!"),
+      cost: 38000, passiveIncome: 1100, passiveUsd: 0, dailyRisk: 0, tolikBoost: 10, palychBoost: 0, moraleBoost: 15
+    },
+    {
+      id: "simba_zoo",
+      category: "REALTY",
+      currency: "USD",
+      icon: "🦁",
+      title: L("Міні-зоопарк із ручним левом «Сімба» на дачі", "Backyard Mini-Zoo with Pet Lion 'Simba'"),
+      subtitle: L("Приносить +3 200 🪙 щоранку від квитків +30% щастя сім'ї!", "Yields +3,200 🪙 ticket income every morning +30% family!"),
+      cost: 95000, passiveIncome: 3200, passiveUsd: 0, dailyRisk: 4, tolikBoost: 15, palychBoost: 10, moraleBoost: 30
+    },
+    {
+      id: "monako_hypercar",
+      category: "LUXURY",
+      currency: "USD",
+      icon: "🏎️",
+      title: L("Гіперкар «Фурія-V12 Монаківка»", "Hypercar 'Furia-V12 Monakivka'"),
+      subtitle: L("+40с до кожної зміни, +35 Толіку, +25 Паличу та +25% сім'ї!", "+40s shift time, +35 Tolik, +25 Palych & +25% family!"),
+      cost: 165000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 6, tolikBoost: 35, palychBoost: 25, moraleBoost: 25
+    },
+    {
       id: "spain_villa",
       category: "REALTY",
       currency: "USD",
@@ -720,6 +824,24 @@
       title: L("Золоте джакузі на верхній палубі", "Gold Deck Jacuzzi"),
       subtitle: L("+900 💵 чартерного доходу щоранку!", "+900 💵 extra charter income every morning!"),
       cost: 25000, passiveIncome: 0, passiveUsd: 900, dailyRisk: 2, tolikBoost: 10, palychBoost: 5, moraleBoost: 15
+    },
+    {
+      id: "addon_gold_cage",
+      parentId: "parrot_kesha",
+      currency: "UAH",
+      icon: "🎙️",
+      title: L("Золота клітка + мікрофон для «Кеші»", "Gold Cage & Mic for 'Kesha'"),
+      subtitle: L("+25 🪙 до кожних чайових за каву (Кеша розважає чергу)!", "+25 🪙 coffee tip bonus (Kesha entertains the line)!"),
+      cost: 4800, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 10
+    },
+    {
+      id: "addon_nitro_spoiler",
+      parentId: "monako_hypercar",
+      currency: "USD",
+      icon: "🔥",
+      title: L("Нітро-турбіна та карбоновий спойлер", "Nitro Turbine & Carbon Spoiler"),
+      subtitle: L("Ще +20с до кожної зміни та +15 поваги Толіка!", "Extra +20s shift time & +15 Tolik rep!"),
+      cost: 18000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 2, tolikBoost: 15, palychBoost: 5, moraleBoost: 5
     },
     {
       id: "addon_vineyard",
@@ -4391,7 +4513,7 @@
     const meta = getMetaPerkFlags();
     const baseSec = state.isSandbox ? 300 : 270;
     const modDelta = state.sandboxMod ? (state.sandboxMod.shiftSecDelta || 0) : 0;
-    const bonusSec = (state.ownedAssets.includes("espresso_machine") ? 35 : 0) + (state.ownedAssets.includes("porsche_911") ? 35 : 0) + (state.ownedAssets.includes("lanos_sport") ? 20 : 0) + (state.ownedAssets.includes("addon_migalka") ? 15 : 0) + meta.shiftTimeBonus + modDelta;
+    const bonusSec = (state.ownedAssets.includes("espresso_machine") ? 35 : 0) + (state.ownedAssets.includes("porsche_911") ? 35 : 0) + (state.ownedAssets.includes("lanos_sport") ? 20 : 0) + (state.ownedAssets.includes("steppe_ebike") ? 18 : 0) + (state.ownedAssets.includes("monako_hypercar") ? 40 : 0) + (state.ownedAssets.includes("addon_nitro_spoiler") ? 20 : 0) + (state.ownedAssets.includes("addon_migalka") ? 15 : 0) + meta.shiftTimeBonus + modDelta;
     state.phase = "BOOTH_SHIFT";
     state.shiftSec = Math.max(150, baseSec + bonusSec);
     state.travelerIdx = 0;
@@ -5451,6 +5573,9 @@
         if (t.storyTag === "FSM_SPY") tabletBadge += `<div style="background:#311B92;color:#FFF;padding:3px 7px;border-radius:4px;font-size:10.5px;font-weight:700;">🛰️ ОКО-КПП OSINT: 🚨 Профіль ФСМ виявлено!</div>`;
         else if (t.violations.some(v => v.code === "NAME_MISMATCH")) tabletBadge += `<div style="background:#311B92;color:#FFF;padding:3px 7px;border-radius:4px;font-size:10.5px;font-weight:700;">🛰️ ОКО-КПП OSINT: ⚠️ Розбіжність ПІБ!</div>`;
       }
+      if (state.ownedAssets.includes("parrot_kesha") && t.violations.some(v => v.code === "PHOTO_MISMATCH")) {
+        tabletBadge += `<div style="background:#2E7D32;color:#FFF;padding:3px 7px;border-radius:4px;font-size:10.5px;font-weight:700;">🦜 МАЙОР КЕША: «КАР-Р! ПІДМІНА ФОТО! ПІДМІНА!»</div>`;
+      }
 
       let activeSpeech = t.greeting;
       if (state.reactionState === "INTIMIDATED") activeSpeech = t.intimidateReply || t.interrogationReply;
@@ -5709,7 +5834,7 @@
           state.coffeeTipGiven = true;
           const meta = getMetaPerkFlags();
           const cMult = (state.sandboxMod ? (state.sandboxMod.coffeeMult || 1) : 1) * (state.ownedAssets.includes("balenci_jacket") ? 1.25 : 1);
-          const tip = Math.round(t.coffeeTip * cMult) + (state.ownedAssets.includes("espresso_machine") ? 35 : 0) + (state.ownedAssets.includes("addon_syrup_bar") ? 40 : 0) + meta.coffeeTipBonus;
+          const tip = Math.round(t.coffeeTip * cMult) + (state.ownedAssets.includes("espresso_machine") ? 35 : 0) + (state.ownedAssets.includes("addon_syrup_bar") ? 40 : 0) + (state.ownedAssets.includes("addon_gold_cage") ? 25 : 0) + meta.coffeeTipBonus;
           state.money += tip;
           state.lastFeedback = {
             ok: true,
@@ -6092,6 +6217,7 @@
             if (isUsdExp) payForAsset({ currency: "USD", cost: exp.cost });
             else state.money -= exp.cost;
             if (exp.usdReward) state.usd += exp.usdReward;
+            if (exp.reprimandHeal) state.reprimands = Math.max(0, (state.reprimands || 0) - exp.reprimandHeal);
             if (exp.tolikDelta) state.tolikRep = Math.max(0, Math.min(100, state.tolikRep + exp.tolikDelta));
             if (exp.palychDelta) state.palychRep = Math.max(0, Math.min(100, state.palychRep + exp.palychDelta));
             state.familyMorale = Math.max(0, Math.min(100, state.familyMorale + exp.morale));
