@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v5.7";
+  const BUILD_VERSION = "v6.0";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -5779,100 +5779,92 @@
     if (state.phase === "MAIN_MENU") {
       const canResume = hasSavedGame();
       const unlockedCount = loadUnlockedArchetypes().length;
+      const shytCount = loadUnlockedShytomyr().length;
+      const shieldSvg = `<svg width="36" height="36" viewBox="0 0 64 64" style="flex-shrink:0;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.7));"><path d="M32 4L56 14v18c0 14-10 24-24 28C18 56 8 46 8 32V14L32 4z" fill="#1B3B2B" stroke="#E0B145" stroke-width="3"/><rect x="14" y="28" width="36" height="7" rx="2" fill="#C62828"/><rect x="22" y="28" width="8" height="7" fill="#ECEFF1"/><rect x="38" y="28" width="8" height="7" fill="#ECEFF1"/><polygon points="32,11 35,19 43,19 36,23 38,31 32,26 26,31 28,23 21,19 29,19" fill="#E0B145"/></svg>`;
+
       root.innerHTML = `
-        <div class="menu-control-strip">
-          <button type="button" id="menu-lang" class="ctrl-pill">${state.lang === "UK" ? "🇺🇦 УКР" : "🇬🇧 ENG"}</button>
-          <button type="button" id="menu-music" class="ctrl-pill" aria-label="Toggle music">${audio.musicEnabled ? tr(L("🔊 Звук ON", "🔊 Audio ON"), state.lang) : tr(L("🔇 Звук OFF", "🔇 Muted"), state.lang)}</button>
-          <button type="button" id="menu-mode" class="ctrl-pill">${state.contentMode === "FULL_18_PLUS" ? tr(L("🔞 18+ Повний", "🔞 18+ Uncut"), state.lang) : tr(L("🛡 М'який", "🛡 Toned-Down"), state.lang)}</button>
-        </div>
-
-        <div class="menu-panorama-box">
-          <canvas id="menu-canvas" width="436" height="186"></canvas>
-          <div class="menu-panorama-badge">${tr(L("ДПСК • КПП «ЗАХІД-KRAINA» • ПОСТ №04", "SBGS • CHECKPOINT 'WEST-KRAINA' • GATE 04"), state.lang)}</div>
-        </div>
-
-        <div class="dossier-tab">${tr(L("ОСОБОВА СПРАВА № 04-КР", "PERSONNEL DOSSIER #04-KR"), state.lang)}</div>
-        <section class="dossier-folder">
-          <div class="dossier-stamp-red">${tr(L("ТАЄМНО", "CLASSIFIED"), state.lang)}</div>
-          <div>
-            <h1 style="font-size:25px;font-weight:900;letter-spacing:0.6px;color:#1B1916;font-family:Georgia, serif;">BORDER SHIFT: KRAINA</h1>
-            <p style="font-size:12px;color:#5C4B32;font-weight:700;">${tr(L("Ситуаційний центр прикордонного контролю та контррозвідки", "Border Control & Counter-Intelligence Post Simulator"), state.lang)}</p>
-          </div>
-
-          <div class="dossier-order-card">
-            <div class="dossier-order-header">
-              <span>${tr(L("НАКАЗ ПРО ПРИЗНАЧЕННЯ", "ASSIGNMENT ORDER"), state.lang)}</span>
-              <span>2022 — 2025</span>
-            </div>
-            <p style="font-size:12.5px;line-height:1.45;color:#2E2820;">
-              ${tr(L(
-                "Ти заступаєш на прикордонний шлагбаум країни Kraina. Звіряй документи, перевіряй транспорт біля вікна, реагуй на подорожніх — і сам обирай свій шлях.",
-                "Take command of the checkpoint booth on Kraina's western frontier. Check IDs, inspect transport & luggage, read reactions — and forge your own fate."
-              ), state.lang)}
-            </p>
-            <div class="menu-stats-pill">
-              <span>🗄️ ${tr(L("Титули Долі", "Fate Titles"), state.lang)}: <strong>${unlockedCount}/16</strong></span>
-              <span>🧦 ${tr(L("Шитомир", "Shytomyr"), state.lang)}: <strong>${loadUnlockedShytomyr().length}/${SHYTOMYR_LEGENDS.length}</strong></span>
-            </div>
-          </div>
-
-          <div style="display:flex;flex-direction:column;gap:8px;margin-top:2px;">
-            ${canResume ? `
-              <button type="button" id="btn-resume" class="stamp-action-btn stamp-action-gold">
-                <div class="stamp-btn-text">
-                  <span>${tr(L("⏯ ПРОДОВЖИТИ ЗБЕРЕЖЕНУ ЗМІНУ", "⏯ RESUME SAVED SHIFT"), state.lang)}</span>
-                  <span class="stamp-btn-sub">${tr(L("Повернутися на поточний день служби", "Continue your saved border progress"), state.lang)}</span>
+        <div class="game-menu-wrap">
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div class="game-menu-hero">
+              <canvas id="menu-canvas" width="436" height="196"></canvas>
+              <div class="game-menu-hero-overlay">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <span style="font-size:10px;font-weight:800;color:#E0B145;background:rgba(0,0,0,0.55);padding:3px 8px;border-radius:4px;border:1px solid rgba(224,177,69,0.35);">
+                    ${tr(L("КПП «ЗАХІД-04» • ДПСК KRAINA", "GATE 04 • SBGS KRAINA"), state.lang)}
+                  </span>
+                  <div style="display:flex;gap:5px;">
+                    <button type="button" id="menu-lang" class="ctrl-pill">${state.lang === "UK" ? "🇺🇦 UA" : "🇬🇧 EN"}</button>
+                    <button type="button" id="menu-music" class="ctrl-pill" aria-label="Toggle music">${audio.musicEnabled ? "🔊" : "🔇"}</button>
+                  </div>
                 </div>
-                <span>→</span>
+                <div class="game-menu-brand">
+                  ${shieldSvg}
+                  <div>
+                    <div class="game-menu-title">BORDER SHIFT: KRAINA</div>
+                    <div class="game-menu-sub">${tr(L("Симулятор прикордонного контролю, контрабанди та вибору", "Border control, smuggling & choices simulator"), state.lang)}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="game-menu-actions">
+              ${canResume ? `
+                <button type="button" id="btn-resume" class="game-btn game-btn-gold">
+                  <div>
+                    <div style="font-size:14px;font-weight:900;">⏯ ${tr(L("ПРОДОВЖИТИ ЗМІНУ", "RESUME SHIFT"), state.lang)}</div>
+                    <div style="font-size:11px;opacity:0.82;">${tr(L("Повернутися до збереженого дня", "Continue your saved shift"), state.lang)}</div>
+                  </div>
+                  <span style="font-size:18px;">→</span>
+                </button>
+              ` : ""}
+              <button type="button" id="btn-start-camp" class="game-btn game-btn-primary">
+                <div>
+                  <div style="font-size:14px;font-weight:900;">🛂 ${tr(L("КАМПАНІЯ (7 ДНІВ + КАР'ЄРА)", "STORY CAMPAIGN (7 DAYS)"), state.lang)}</div>
+                  <div style="font-size:11px;opacity:0.82;">${tr(L("Сюжетні події, вербування, вибори та фінал", "Story events, factions, choices & finale"), state.lang)}</div>
+                </div>
+                <span style="font-size:18px;">▶</span>
               </button>
-            ` : ""}
-            <button type="button" id="btn-start-camp" class="stamp-action-btn stamp-action-green">
-              <div class="stamp-btn-text">
-                <span>${tr(L("▶ ПОЧАТИ КАМПАНІЮ (2022–2024)", "▶ START STORY CAMPAIGN"), state.lang)}</span>
-                <span class="stamp-btn-sub">${tr(L("5 ключових етапів історії з вибором продовження", "5 pivotal shifts with career continuation option"), state.lang)}</span>
-              </div>
-              <span>✔</span>
-            </button>
-            <button type="button" id="btn-start-sand" class="stamp-action-btn stamp-action-ink">
-              <div class="stamp-btn-text">
-                <span>${tr(L("∞ ВІЛЬНА СЛУЖБА (ПІСОЧНИЦЯ + РАНГИ)", "∞ ENDLESS CAREER (SANDBOX)"), state.lang)}</span>
-                <span class="stamp-btn-sub">${tr(L("Нескінченна кар'єра, випадкові укази й підвищення", "Endless shifts, daily decrees & rank promotions"), state.lang)}</span>
-              </div>
-              <span>♾</span>
-            </button>
-            <button type="button" id="btn-open-archive" class="btn-outline" style="width:100%;padding:9px;color:#3E2723;border-color:#8C7A5B;background:rgba(255,255,255,0.45);">
-              ${tr(L("🗄️ АРХІВ ТА КОЛЕКЦІЯ (Що можна відкрити)", "🗄️ ARCHIVE & COLLECTION (Unlockables)"), state.lang)}
-            </button>
-            ${(() => {
-              const cps = loadCampaignCheckpoints();
-              const days = [1, 2, 3, 4, 5, 6, 7].filter(d => cps["day_" + d]);
-              if (days.length === 0) return "";
-              return `<div style="background:rgba(27,25,22,0.08);border:1px dashed #8C7A5B;border-radius:6px;padding:6px 8px;">
-                <div style="font-size:11px;font-weight:800;color:#3E2723;margin-bottom:5px;">⏪ ${tr(L("ГІЛКИ КАМПАНІЇ (Повернутися в День):", "CAMPAIGN BRANCHES (Replay from Day):"), state.lang)}</div>
-                <div style="display:flex;gap:5px;flex-wrap:wrap;">
-                  ${days.map(d => `<button type="button" class="btn-outline camp-cp-btn" data-cp-day="${d}" style="padding:4px 8px;font-size:11px;color:#2E2820;border-color:#8C7A5B;background:rgba(255,255,255,0.65);">${tr(L(`День ${d}`, `Day ${d}`), state.lang)}</button>`).join("")}
+              <button type="button" id="btn-start-sand" class="game-btn">
+                <div>
+                  <div style="font-size:14px;font-weight:900;">♾️ ${tr(L("ВІЛЬНА СЛУЖБА (СЕНДБОКС)", "ENDLESS SANDBOX"), state.lang)}</div>
+                  <div style="font-size:11px;opacity:0.82;">${tr(L("Випадкові укази, ранги та нескінченні зміни", "Random daily decrees, ranks & endless shifts"), state.lang)}</div>
                 </div>
-              </div>`;
-            })()}
-          </div>
-
-          <p class="menu-disclaimer">
-            ${tr(L("18+ Сатирична художня вигадка: установи, міста й події вигадані • Змінити тон можна вгорі", "18+ Satirical work of fiction: cities, names & agencies are fictional • Toggle mode above"), state.lang)}
-          </p>
-          <div style="display:flex;justify-content:space-between;align-items:center;font-family:monospace;font-size:10.5px;color:#5D4037;margin-top:2px;gap:6px;flex-wrap:wrap;">
-            <span>Версія: <strong>${BUILD_VERSION}</strong></span>
-            <div style="display:flex;gap:5px;">
-              <button type="button" id="btn-reset-progress" class="btn-outline" style="padding:2px 7px;font-size:10px;color:${confirmResetArmed ? "#B71C1C" : "#5D4037"};border-color:${confirmResetArmed ? "#B71C1C" : "#8C7A5B"};font-weight:${confirmResetArmed ? "800" : "600"};">${confirmResetArmed ? tr(L("⚠️ Точно скинути?", "⚠️ Confirm Wipe?"), state.lang) : tr(L("🗑️ Скинути прогрес", "🗑️ Reset Progress"), state.lang)}</button>
-              <button type="button" id="btn-force-refresh" class="btn-outline" style="padding:2px 7px;font-size:10px;color:#3E2723;border-color:#8C7A5B;">🔄 ${tr(L("Оновити кеш", "Force Refresh"), state.lang)}</button>
+                <span style="font-size:18px;">∞</span>
+              </button>
+              <button type="button" id="btn-open-archive" class="game-btn" style="padding:10px 14px;">
+                <div>
+                  <div style="font-size:13px;font-weight:800;">🗄️ ${tr(L("АРХІВ ТА КОЛЕКЦІЯ", "ARCHIVE & COLLECTION"), state.lang)}</div>
+                  <div style="font-size:10.5px;opacity:0.75;">${tr(L(`Титули: ${unlockedCount}/16 • Шитомир: ${shytCount}/${SHYTOMYR_LEGENDS.length}`, `Titles: ${unlockedCount}/16 • Shytomyr: ${shytCount}/${SHYTOMYR_LEGENDS.length}`), state.lang)}</div>
+                </div>
+                <span style="font-size:15px;">📂</span>
+              </button>
+              ${(() => {
+                const cps = loadCampaignCheckpoints();
+                const days = [1, 2, 3, 4, 5, 6, 7].filter(d => cps["day_" + d]);
+                if (days.length === 0) return "";
+                return `<div style="background:rgba(255,255,255,0.04);border:1px solid #354039;border-radius:8px;padding:7px 9px;">
+                  <div style="font-size:10.5px;font-weight:800;color:#E0B145;margin-bottom:5px;">⏪ ${tr(L("Швидкий старт із дня кампанії:", "Replay Campaign Day:"), state.lang)}</div>
+                  <div style="display:flex;gap:5px;flex-wrap:wrap;">
+                    ${days.map(d => `<button type="button" class="btn-outline camp-cp-btn" data-cp-day="${d}" style="padding:3px 8px;font-size:11px;">${tr(L(`День ${d}`, `Day ${d}`), state.lang)}</button>`).join("")}
+                  </div>
+                </div>`;
+              })()}
             </div>
           </div>
-        </section>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;font-family:monospace;font-size:10.5px;color:#90A4AE;border-top:1px solid #2A332D;padding-top:8px;gap:6px;flex-wrap:wrap;">
+            <span>Border Shift • <strong>${BUILD_VERSION}</strong></span>
+            <div style="display:flex;gap:6px;">
+              <button type="button" id="btn-reset-progress" class="btn-outline" style="padding:3px 8px;font-size:10px;color:${confirmResetArmed ? "#FF5252" : "#B0BEC5"};border-color:${confirmResetArmed ? "#FF5252" : "#455A64"};">${confirmResetArmed ? tr(L("⚠️ Точно скинути?", "⚠️ Confirm Wipe?"), state.lang) : tr(L("🗑️ Скинути", "🗑️ Reset"), state.lang)}</button>
+              <button type="button" id="btn-force-refresh" class="btn-outline" style="padding:3px 8px;font-size:10px;">🔄 ${tr(L("Оновити", "Refresh"), state.lang)}</button>
+            </div>
+          </div>
+        </div>
       `;
 
       startMenuPanoramaLoop();
       document.getElementById("menu-lang").addEventListener("click", () => { state.lang = state.lang === "UK" ? "EN" : "UK"; render(); });
       document.getElementById("menu-music").addEventListener("click", () => { audio.ensureCtx(); audio.musicEnabled = !audio.musicEnabled; render(); });
-      document.getElementById("menu-mode").addEventListener("click", () => { state.contentMode = state.contentMode === "FULL_18_PLUS" ? "TONED_DOWN" : "FULL_18_PLUS"; render(); });
       if (canResume) document.getElementById("btn-resume").addEventListener("click", () => { audio.playApprove(); loadSavedGame(); });
       document.getElementById("btn-start-camp").addEventListener("click", () => { audio.playApprove(); startNewGame(false); });
       document.getElementById("btn-start-sand").addEventListener("click", () => { audio.playApprove(); startNewGame(true); });
@@ -6826,12 +6818,13 @@
             <div style="color:#E0B145;font-weight:700;">🚐 ${tr(L("Фонд утечі", "Escape Fund"), state.lang)}: ${state.escapeFund.toLocaleString("en-US")} / ${getEscapeTarget().toLocaleString("en-US")} 💵 (${tr(L("Толік", "Tolik"), state.lang)}: ${state.tolikRep}/${getEscapeTolikRep()})</div>
           </section>
 
-          <div class="row-between">
-            <button type="button" id="tab-home-0" class="${state.eveningTab === 0 ? "btn-mustard" : "btn-secondary"}" style="flex:1;padding:9px;">${tr(L("🏠 Вечірні справи (Опційно)", "🏠 Evening Choices"), state.lang)}</button>
-            <button type="button" id="tab-home-1" class="${state.eveningTab === 1 ? "btn-mustard" : "btn-secondary"}" style="flex:1;padding:9px;">${tr(L(`💎 Магазин Активів (${state.ownedAssets.length}/${ASSET_UPGRADES.length})`, `💎 Assets Shop (${state.ownedAssets.length}/${ASSET_UPGRADES.length})`), state.lang)}</button>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;">
+            <button type="button" id="tab-home-0" class="${state.eveningTab === 0 ? "btn-mustard" : "btn-secondary"}" style="padding:8px 4px;font-size:11.5px;">🏠 ${tr(L("Справи", "Choices"), state.lang)}</button>
+            <button type="button" id="tab-home-2" class="${state.eveningTab === 2 ? "btn-mustard" : "btn-secondary"}" style="padding:8px 4px;font-size:11.5px;">🤝 ${tr(L("Підкуп", "Bribes"), state.lang)}</button>
+            <button type="button" id="tab-home-1" class="${state.eveningTab === 1 ? "btn-mustard" : "btn-secondary"}" style="padding:8px 4px;font-size:11.5px;">💎 ${tr(L(`Магазин (${state.ownedAssets.length}/${ASSET_UPGRADES.length})`, `Shop (${state.ownedAssets.length}/${ASSET_UPGRADES.length})`), state.lang)}</button>
           </div>
 
-          <div id="evening-items-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+          <div id="evening-items-list" class="evening-scroll-list"></div>
         </div>
         <div style="display:flex;flex-direction:column;gap:6px;">
           ${canRetire ? `<button type="button" id="btn-retire-career" class="btn-outline" style="width:100%;padding:10px;">${tr(L("📜 ПІТИ У ВІДСТАВКУ ТА ПІДБИТИ ПІДСУМКИ КАР'ЄРИ", "📜 RETIRE & VIEW PERSONAL EPILOGUE"), state.lang)}</button>` : ""}
@@ -6841,6 +6834,7 @@
 
       document.getElementById("tab-home-0").addEventListener("click", () => { audio.playTap(); state.eveningTab = 0; render(); });
       document.getElementById("tab-home-1").addEventListener("click", () => { audio.playTap(); state.eveningTab = 1; render(); });
+      document.getElementById("tab-home-2").addEventListener("click", () => { audio.playTap(); state.eveningTab = 2; render(); });
       document.getElementById("btn-exch-flip").addEventListener("click", () => {
         audio.playTap();
         state.exchDir = (state.exchDir === "UAH_TO_USD") ? "USD_TO_UAH" : "UAH_TO_USD";
@@ -6893,7 +6887,7 @@
 
       const listEl = document.getElementById("evening-items-list");
       const billsToShow = (state.tonightBills && state.tonightBills.length > 0) ? state.tonightBills : DYNAMIC_EVENING_BILLS.slice(0, 3);
-      if (state.eveningTab === 0) {
+      if (state.eveningTab === 2) {
         if (state.eveningToast) {
           const toastDiv = document.createElement("div");
           toastDiv.className = "toast-banner";
@@ -6902,91 +6896,6 @@
           listEl.appendChild(toastDiv);
         }
 
-        // Faction Bribes in USD (with realistic chance of failure if relations are bad!)
-        const factionBribes = [
-          {
-            id: "bribe_sbk",
-            icon: "🕵️",
-            title: L("Підкупити куратора СБК (+24 СБК, -10% НАБК)", "Bribe SBK Handler (+24 SBK, -10% NABK)"),
-            cost: state.sbkRep < 35 ? 600 : 320,
-            chance: state.sbkRep < 35 ? 0.45 : (state.sbkRep < 60 ? 0.72 : 0.90),
-            onSuccess: () => { state.sbkRep = Math.min(100, state.sbkRep + 24); state.nabkRisk = Math.max(0, state.nabkRisk - 10); },
-            onFail: () => { state.sbkRep = Math.max(0, state.sbkRep - 10); state.nabkRisk = Math.min(100, state.nabkRisk + 12); }
-          },
-          {
-            id: "bribe_palych",
-            icon: "🧢",
-            title: L("Підкупити Пал Палича (+22 Палич, -1 догана)", "Bribe Pal Palych (+22 Palych, -1 reprimand)"),
-            cost: (state.reprimands || 0) >= 2 ? 320 : 160,
-            chance: (state.palychRep < 30 || (state.reprimands || 0) >= 2) ? 0.55 : 0.88,
-            onSuccess: () => { state.palychRep = Math.min(100, state.palychRep + 22); state.reprimands = Math.max(0, (state.reprimands || 0) - 1); },
-            onFail: () => { state.palychRep = Math.max(0, state.palychRep - 8); }
-          },
-          {
-            id: "bribe_tolik",
-            icon: "🚐",
-            title: L("Задобрити Толіка (+25 Толік — ближче до втечі)", "Grease Tolik (+25 Tolik rep)"),
-            cost: state.tolikRep < 30 ? 400 : 220,
-            chance: state.tolikRep < 30 ? 0.50 : 0.88,
-            onSuccess: () => { state.tolikRep = Math.min(100, state.tolikRep + 25); },
-            onFail: () => { state.tolikRep = Math.max(0, state.tolikRep - 8); }
-          },
-          {
-            id: "bribe_nabk",
-            icon: "⚖️",
-            title: L("Підмазати ревізора НАБК (-25% НАБК, зняти нагляд)", "Bribe NABK Auditor (-25% NABK, clear watch)"),
-            cost: state.nabkRisk >= 65 ? 850 : 450,
-            chance: state.nabkRisk >= 70 ? 0.45 : (state.underSurveillance ? 0.60 : 0.80),
-            onSuccess: () => { state.nabkRisk = Math.max(0, state.nabkRisk - 25); state.underSurveillance = false; },
-            onFail: () => { state.nabkRisk = Math.min(100, state.nabkRisk + 15); }
-          }
-        ];
-        const bWrap = document.createElement("details");
-        bWrap.style.cssText = "background:#1E2420;border:1px solid #4E342E;border-radius:6px;padding:6px 8px;";
-        const bSum = document.createElement("summary");
-        bSum.style.cssText = "cursor:pointer;font-size:12px;font-weight:800;color:#FFAB91;";
-        bSum.textContent = tr(L("💼 Підкупити служби / фракції за 💵 (є ризик провалу!)", "💼 Bribe Agencies / Factions in 💵 (can fail!)"), state.lang);
-        bWrap.appendChild(bSum);
-        const bList = document.createElement("div");
-        bList.style.cssText = "display:flex;flex-direction:column;gap:5px;margin-top:6px;";
-        factionBribes.forEach(fb => {
-          const used = state.purchasedExpensesToday.includes(fb.id);
-          const pct = Math.round(fb.chance * 100);
-          const row = document.createElement("div");
-          row.style.cssText = "display:flex;justify-content:space-between;align-items:center;gap:6px;background:rgba(0,0,0,0.25);padding:5px 7px;border-radius:5px;";
-          row.innerHTML = `
-            <div style="flex:1;">
-              <div style="font-size:11.5px;font-weight:700;">${fb.icon} ${tr(fb.title, state.lang)}</div>
-              <div style="font-size:10.5px;color:#CFD8DC;">${fb.cost} 💵 • ${tr(L(`Шанс успіху: ${pct}%`, `Success chance: ${pct}%`), state.lang)}</div>
-            </div>
-          `;
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "btn-mustard";
-          btn.style.fontSize = "11px";
-          btn.disabled = used || state.usd < fb.cost;
-          btn.textContent = used ? tr(L("Спроба була", "Tried"), state.lang) : tr(L("Підкупити", "Bribe"), state.lang);
-          btn.addEventListener("click", () => {
-            if (state.usd < fb.cost || used) return;
-            state.usd -= fb.cost;
-            state.purchasedExpensesToday.push(fb.id);
-            if (Math.random() < fb.chance) {
-              audio.playBribe();
-              fb.onSuccess();
-              state.eveningToast = { ok: true, text: L(`✅ Підкуп вдався (${fb.icon})! Домовленості оновлено.`, `✅ Bribe succeeded (${fb.icon})!`) };
-            } else {
-              audio.playDeny();
-              fb.onFail();
-              state.eveningToast = { ok: false, text: L(`❌ ПРОВАЛ підкупу (${fb.icon})! Гроші згоріли, стосунки погіршились.`, `❌ Bribe FAILED (${fb.icon})! Cash lost, relations dropped.`) };
-            }
-            saveStateToStorage();
-            render();
-          });
-          row.appendChild(btn);
-          bList.appendChild(row);
-        });
-        bWrap.appendChild(bList);
-        listEl.appendChild(bWrap);
         if ((state.reprimands > 0 || state.underSurveillance || state.nabkRisk >= 25) && !state.purchasedExpensesToday.includes("krysha_bribe")) {
           const baseKUsd = Math.max(55, Math.round((2200 + state.nabkRisk * 75 + (state.reprimands || 0) * 1500) / USD_UAH_RATE));
           const kCostUsd = state.isUndercoverSbkAgent ? Math.round(baseKUsd * 0.65) : baseKUsd;
@@ -7026,6 +6935,82 @@
           kCard.appendChild(kb);
           listEl.appendChild(kCard);
         }
+
+        const factionBribes = [
+          {
+            id: "bribe_sbk",
+            icon: "🕵️",
+            title: L("Підкупити куратора СБК (+24 СБК, -10% НАБК)", "Bribe SBK Handler (+24 SBK, -10% NABK)"),
+            cost: state.sbkRep < 35 ? 600 : 320,
+            chance: state.sbkRep < 35 ? 0.45 : (state.sbkRep < 60 ? 0.72 : 0.90),
+            onSuccess: () => { state.sbkRep = Math.min(100, state.sbkRep + 24); state.nabkRisk = Math.max(0, state.nabkRisk - 10); },
+            onFail: () => { state.sbkRep = Math.max(0, state.sbkRep - 10); state.nabkRisk = Math.min(100, state.nabkRisk + 12); }
+          },
+          {
+            id: "bribe_palych",
+            icon: "🧢",
+            title: L("Підкупити Пал Палича (+22 Палич, -1 догана)", "Bribe Pal Palych (+22 Palych, -1 reprimand)"),
+            cost: (state.reprimands || 0) >= 2 ? 320 : 160,
+            chance: (state.palychRep < 30 || (state.reprimands || 0) >= 2) ? 0.55 : 0.88,
+            onSuccess: () => { state.palychRep = Math.min(100, state.palychRep + 22); state.reprimands = Math.max(0, (state.reprimands || 0) - 1); },
+            onFail: () => { state.palychRep = Math.max(0, state.palychRep - 8); }
+          },
+          {
+            id: "bribe_tolik",
+            icon: "🚐",
+            title: L("Задобрити Толіка (+25 Толік — ближче до втечі)", "Grease Tolik (+25 Tolik rep)"),
+            cost: state.tolikRep < 30 ? 400 : 220,
+            chance: state.tolikRep < 30 ? 0.50 : 0.88,
+            onSuccess: () => { state.tolikRep = Math.min(100, state.tolikRep + 25); },
+            onFail: () => { state.tolikRep = Math.max(0, state.tolikRep - 8); }
+          },
+          {
+            id: "bribe_nabk",
+            icon: "⚖️",
+            title: L("Підмазати ревізора НАБК (-25% НАБК, зняти нагляд)", "Bribe NABK Auditor (-25% NABK, clear watch)"),
+            cost: state.nabkRisk >= 65 ? 850 : 450,
+            chance: state.nabkRisk >= 70 ? 0.45 : (state.underSurveillance ? 0.60 : 0.80),
+            onSuccess: () => { state.nabkRisk = Math.max(0, state.nabkRisk - 25); state.underSurveillance = false; },
+            onFail: () => { state.nabkRisk = Math.min(100, state.nabkRisk + 15); }
+          }
+        ];
+        factionBribes.forEach(fb => {
+          const used = state.purchasedExpensesToday.includes(fb.id);
+          const pct = Math.round(fb.chance * 100);
+          const row = document.createElement("div");
+          row.className = "card-slate row-between";
+          row.innerHTML = `
+            <div style="flex:1;">
+              <div style="font-size:12.5px;font-weight:700;">${fb.icon} ${tr(fb.title, state.lang)}</div>
+              <div style="font-size:11px;color:#CFD8DC;">${fb.cost} 💵 • ${tr(L(`Шанс успіху: ${pct}%`, `Success chance: ${pct}%`), state.lang)}</div>
+            </div>
+          `;
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "btn-mustard";
+          btn.style.fontSize = "11px";
+          btn.disabled = used || state.usd < fb.cost;
+          btn.textContent = used ? tr(L("Спроба була", "Tried"), state.lang) : tr(L("Підкупити", "Bribe"), state.lang);
+          btn.addEventListener("click", () => {
+            if (state.usd < fb.cost || used) return;
+            state.usd -= fb.cost;
+            state.purchasedExpensesToday.push(fb.id);
+            if (Math.random() < fb.chance) {
+              audio.playBribe();
+              fb.onSuccess();
+              state.eveningToast = { ok: true, text: L(`✅ Підкуп вдався (${fb.icon})! Домовленості оновлено.`, `✅ Bribe succeeded (${fb.icon})!`) };
+            } else {
+              audio.playDeny();
+              fb.onFail();
+              state.eveningToast = { ok: false, text: L(`❌ ПРОВАЛ підкупу (${fb.icon})! Гроші згоріли, стосунки погіршились.`, `❌ Bribe FAILED (${fb.icon})! Cash lost, relations dropped.`) };
+            }
+            saveStateToStorage();
+            render();
+          });
+          row.appendChild(btn);
+          listEl.appendChild(row);
+        });
+      } else if (state.eveningTab === 0) {
         if (state.escapeFund < getEscapeTarget()) {
           const escStep = 1000;
           const canEsc = state.usd >= escStep;
@@ -7096,28 +7081,30 @@
           listEl.appendChild(card);
         });
       } else {
-        const curCat = state.shopCat || "ALL";
+        const curCat = (state.shopCat && state.shopCat !== "ALL") ? state.shopCat : "TECH";
         const cats = [
-          { id: "ALL", label: L("Усі", "All") },
           { id: "TECH", label: L("🔦 Техніка", "🔦 Gear") },
           { id: "AUTO", label: L("🚗 Авто", "🚗 Auto") },
-          { id: "REALTY", label: L("🏠 Дім/Бізнес", "🏠 Realty") },
+          { id: "REALTY", label: L("🏠 Дім", "🏠 Realty") },
           { id: "LUXURY", label: L("🕶️ Тінь", "🕶️ Shadow") }
         ];
         const catBar = document.createElement("div");
-        catBar.style.cssText = "display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px;";
+        catBar.className = "shop-cat-grid";
         cats.forEach(c => {
           const cb = document.createElement("button");
           cb.type = "button";
           cb.className = curCat === c.id ? "btn-mustard" : "btn-secondary";
-          cb.style.cssText = "padding:4px 8px;font-size:10.5px;";
           cb.textContent = tr(c.label, state.lang);
           cb.addEventListener("click", () => { audio.playTap(); state.shopCat = c.id; render(); });
           catBar.appendChild(cb);
         });
         listEl.appendChild(catBar);
 
-        ASSET_UPGRADES.filter(a => curCat === "ALL" || a.category === curCat || (curCat === "AUTO" && (a.id === "porsche_911" || a.id === "steppe_ebike" || a.id === "monako_hypercar"))).forEach(asset => {
+        const filteredAssets = ASSET_UPGRADES
+          .filter(a => a.category === curCat || (curCat === "AUTO" && (a.id === "porsche_911" || a.id === "steppe_ebike" || a.id === "monako_hypercar")))
+          .sort((a, b) => Number(state.ownedAssets.includes(a.id)) - Number(state.ownedAssets.includes(b.id)));
+
+        filteredAssets.forEach(asset => {
           const owned = state.ownedAssets.includes(asset.id);
           const isUsd = asset.currency === "USD";
           const canBuy = !owned && canAffordAsset(asset);
