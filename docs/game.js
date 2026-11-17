@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v6.7";
+  const BUILD_VERSION = "v7.0";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -2019,6 +2019,9 @@
     { shape: "PICKUP", name: L("«Пікап Міцубісі Л200»", "'Pickup L200'"), isCar: true },
     { shape: "PICKUP", name: L("«Пікап Ніссан Навара»", "'Pickup Navara'"), isCar: true },
     { shape: "BUS", name: L("«Ікарус-Міжнародний»", "'Ikarus Express Coach'"), isCar: true },
+    { shape: "TRUCK", name: L("Фура «ДАФ Магістраль 480»", "'DAF Highway 480' Semi-Truck"), isCar: true },
+    { shape: "ARMORED", name: L("Броньовик «Інкасатор-Спец»", "'Armored Cash-Van'"), isCar: true },
+    { shape: "MOTORCYCLE", name: L("Мотоцикл «Ява-350 Люкс»", "'Jawa-350 Lux' Motorcycle"), isCar: false },
     { shape: "BICYCLE", name: L("Велосипед «Україна-Спорт» з мішком картоплі", "'Ukraina' Bicycle (with potato sack)"), isCar: false },
     { shape: "E_SCOOTER", name: L("Електросамокат «Вжух-Про 3000» з павербанком", "'Vzhykh-Pro 3000' E-Scooter"), isCar: false },
     { shape: "ON_FOOT", name: L("Пішки з двома баулами «Мрія Перекупа»", "On Foot with Bazaar Plaid Bags"), isCar: false }
@@ -2058,18 +2061,19 @@
   function randomPortrait(gender) {
     return {
       gender,
-      skinTone: randInt(0, 3),
-      faceShape: gender === "F" ? randInt(0, 1) : randInt(1, 3),
-      hairStyle: randInt(0, 4),
-      hairColor: randInt(0, 4),
-      facialHair: gender === "M" ? randInt(0, 4) : 0,
-      glasses: Math.random() < 0.25 ? randInt(1, 3) : 0,
-      headwear: gender === "F" ? (Math.random() < 0.16 ? 2 : 0) : (Math.random() < 0.22 ? 1 : 0),
-      scarOrDetail: 0,
-      expression: randInt(0, 2),
-      lipColor: gender === "F" ? randInt(0, 2) : 0,
-      earrings: gender === "F" ? randInt(1, 2) : 0,
-      outfitStyle: randInt(0, 3),
+      skinTone: randInt(0, 5),
+      faceShape: gender === "F" ? randInt(0, 2) : randInt(1, 4),
+      hairStyle: randInt(0, 7),
+      hairColor: randInt(0, 6),
+      facialHair: gender === "M" ? randInt(0, 6) : 0,
+      glasses: Math.random() < 0.28 ? randInt(1, 4) : 0,
+      headwear: gender === "F" ? (Math.random() < 0.22 ? pick([2, 5]) : 0) : (Math.random() < 0.26 ? pick([1, 3, 4, 5]) : 0),
+      scarOrDetail: Math.random() < 0.14 ? randInt(1, 3) : 0,
+      expression: randInt(0, 3),
+      lipColor: gender === "F" ? randInt(0, 3) : 0,
+      earrings: gender === "F" ? randInt(1, 3) : 0,
+      outfitStyle: randInt(0, 5),
+      freckles: Math.random() < 0.18,
       specialId: "NONE"
     };
   }
@@ -3891,12 +3895,20 @@
   // ★ DISTINCT MALE VS FEMALE PORTRAIT + VISUAL REACTIONS RENDERER ★
   function drawPortrait(ctx, p, cx, bottomY, scale, opts = {}) {
     const isFemale = p.gender === "F";
-    const skinColors = ["#F2CCB0", "#E8C3A2", "#DCAE88", "#F7DAC6"];
-    const hairColors = ["#231F20", "#5D3A24", "#8D9499", "#E2B24A", "#9E3B24"];
-    const lipColors = ["#D85A6C", "#C23B52", "#E06D53"];
+    const isLive = !!opts.isLive;
+    const tSec = opts.timeSec || 0;
+    const breathY = isLive ? Math.sin(tSec * 2.1) * 1.4 * scale : 0;
+    const headBob = isLive ? Math.sin(tSec * 2.1 - 0.5) * 1.1 * scale : 0;
+    const blinkCycle = (tSec + ((p.skinTone || 0) * 0.7)) % 3.8;
+    const isBlinking = isLive && opts.reactionState !== "INTIMIDATED" && blinkCycle > 3.65;
+
+    const skinColors = ["#F6D5BD", "#ECC5A4", "#DDA982", "#FAE2CE", "#C98F68", "#F1C4A7"];
+    const shadowColors = ["#DFB495", "#D2A37E", "#BE865D", "#E6C2A7", "#A9714C", "#D6A381"];
+    const hairColors = ["#1D1A1B", "#5A3722", "#8E969C", "#E4B54C", "#9E3B24", "#D8C090", "#3B2820"];
+    const lipColors = ["#D85A6C", "#B8293D", "#E06D53", "#9E3B56"];
     const outfitPalette = isFemale
-      ? ["#7E4A5C", "#3949AB", "#2E7D32", "#5D4037"]
-      : ["#4E433B", "#263238", "#37474F", "#4A553B"];
+      ? ["#7E4A5C", "#3949AB", "#2E7D32", "#5D4037", "#8E24AA", "#00695C"]
+      : ["#4E433B", "#263238", "#37474F", "#4A553B", "#283593", "#3E2723"];
     const coatMap = {
       PALYCH_BOSS: "#3A4D39",
       TOLIK_SMUGGLER: "#1C1F22",
@@ -3906,53 +3918,109 @@
       SHYTOMYR_BRO: "#1565C0",
       NABK_AGENT: "#2C353D"
     };
-    const skin = skinColors[(p.skinTone || 0) % skinColors.length];
+    const skinIdx = (p.skinTone || 0) % skinColors.length;
+    const skin = skinColors[skinIdx];
+    const skinShade = shadowColors[skinIdx];
     const hair = hairColors[(p.hairColor || 0) % hairColors.length];
-    const coat = coatMap[p.specialId] || outfitPalette[(p.outfitStyle || 0) % outfitPalette.length];
+    const outfitIdx = (p.outfitStyle || 0) % outfitPalette.length;
+    const coat = coatMap[p.specialId] || outfitPalette[outfitIdx];
 
     ctx.save();
-    ctx.strokeStyle = "#1B1B1B";
-    ctx.lineWidth = 2.4 * scale;
+    ctx.strokeStyle = "#171717";
+    ctx.lineWidth = 2.2 * scale;
 
-    const hw = (isFemale ? 58 : 66) * scale;
-    const hh = (isFemale ? 70 : 76) * scale;
-    const sw = (isFemale ? 104 : 120) * scale;
+    const fs = p.faceShape || 0;
+    const hw = (isFemale ? (fs === 2 ? 60 : 56) : (fs === 4 ? 70 : (fs === 2 ? 62 : 66))) * scale;
+    const hh = (isFemale ? 70 : (fs === 1 ? 78 : 74)) * scale;
+    const sw = (isFemale ? 106 : 124) * scale;
     const sh = 46 * scale;
-    const hTop = bottomY - sh - hh + 4 * scale;
+    const hTop = bottomY - sh - hh + 4 * scale + headBob;
 
-    // 1. FEMALE BACK LONG HAIR
+    // 1. FEMALE BACK HAIR (multiple silhouettes!)
     if (isFemale && p.headwear !== 2) {
+      const hSt = (p.hairStyle || 0) % 6;
       ctx.fillStyle = hair;
-      ctx.beginPath();
-      ctx.roundRect(cx - hw * 0.72, hTop + 6 * scale, hw * 1.44, hh + 28 * scale, 26 * scale);
-      ctx.fill();
-      ctx.stroke();
+      if (hSt === 4) {
+        // Two side braids/pigtails
+        ctx.beginPath();
+        ctx.roundRect(cx - hw * 0.72, hTop + 14 * scale, 14 * scale, hh + 18 * scale, 7 * scale);
+        ctx.roundRect(cx + hw * 0.72 - 14 * scale, hTop + 14 * scale, 14 * scale, hh + 18 * scale, 7 * scale);
+        ctx.fill(); ctx.stroke();
+      } else if (hSt !== 5 && hSt !== 1) {
+        const backH = hSt === 2 ? hh * 0.88 : hh + 28 * scale;
+        ctx.beginPath();
+        ctx.roundRect(cx - hw * 0.74, hTop + 6 * scale, hw * 1.48, backH, (hSt === 3 ? 32 : 22) * scale);
+        ctx.fill(); ctx.stroke();
+      }
     }
 
-    // 2. Shoulders / Coat
+    // 2. Shoulders / Coat with depth & outfit styles
+    const coatY = bottomY - sh + breathY;
     ctx.fillStyle = coat;
     ctx.beginPath();
-    ctx.roundRect(cx - sw / 2, bottomY - sh, sw, sh + 10, 22 * scale);
+    ctx.roundRect(cx - sw / 2, coatY, sw, sh + 14, 22 * scale);
     ctx.fill();
     ctx.stroke();
+
+    // Coat shading & lapels
+    ctx.fillStyle = "rgba(0,0,0,0.16)";
+    ctx.beginPath();
+    ctx.roundRect(cx - sw / 2, coatY + sh * 0.55, sw, sh * 0.55, 10 * scale);
+    ctx.fill();
 
     if (isFemale) {
       ctx.fillStyle = "#F5E6D3";
       ctx.beginPath();
-      ctx.moveTo(cx - 16 * scale, bottomY - sh);
-      ctx.lineTo(cx + 16 * scale, bottomY - sh);
-      ctx.lineTo(cx, bottomY - sh + 22 * scale);
+      ctx.moveTo(cx - 16 * scale, coatY);
+      ctx.lineTo(cx + 16 * scale, coatY);
+      ctx.lineTo(cx, coatY + 23 * scale);
       ctx.closePath();
       ctx.fill();
-    } else if (p.outfitStyle === 2 || p.specialId === "NABK_AGENT") {
-      // Tie / shirt collar for suit look
+      if (outfitIdx === 4) {
+        // Vyshyvanka geometric embroidery
+        ctx.fillStyle = "#C62828";
+        ctx.fillRect(cx - 3 * scale, coatY + 12 * scale, 6 * scale, 18 * scale);
+      }
+    } else if (outfitIdx === 2 || p.specialId === "NABK_AGENT") {
+      // Suit + tie
       ctx.fillStyle = "#ECEFF1";
       ctx.beginPath();
-      ctx.moveTo(cx - 14 * scale, bottomY - sh);
-      ctx.lineTo(cx + 14 * scale, bottomY - sh);
-      ctx.lineTo(cx, bottomY - sh + 18 * scale);
+      ctx.moveTo(cx - 15 * scale, coatY);
+      ctx.lineTo(cx + 15 * scale, coatY);
+      ctx.lineTo(cx, coatY + 22 * scale);
       ctx.closePath();
       ctx.fill();
+      ctx.fillStyle = p.specialId === "NABK_AGENT" ? "#B71C1C" : "#263238";
+      ctx.beginPath();
+      ctx.moveTo(cx - 4 * scale, coatY + 5 * scale);
+      ctx.lineTo(cx + 4 * scale, coatY + 5 * scale);
+      ctx.lineTo(cx + 2 * scale, coatY + 26 * scale);
+      ctx.lineTo(cx - 2 * scale, coatY + 26 * scale);
+      ctx.closePath();
+      ctx.fill();
+    } else if (outfitIdx === 0) {
+      // Hoodie drawstrings
+      ctx.strokeStyle = "#ECEFF1";
+      ctx.lineWidth = 2 * scale;
+      ctx.beginPath();
+      ctx.moveTo(cx - 10 * scale, coatY + 4 * scale); ctx.lineTo(cx - 11 * scale, coatY + 24 * scale);
+      ctx.moveTo(cx + 10 * scale, coatY + 4 * scale); ctx.lineTo(cx + 11 * scale, coatY + 24 * scale);
+      ctx.stroke();
+      ctx.strokeStyle = "#171717";
+      ctx.lineWidth = 2.2 * scale;
+    } else if (outfitIdx === 4) {
+      // Men's vyshyvanka collar
+      ctx.fillStyle = "#FAF6EC";
+      ctx.fillRect(cx - 12 * scale, coatY, 24 * scale, 24 * scale);
+      ctx.fillStyle = "#B71C1C";
+      ctx.fillRect(cx - 3 * scale, coatY + 3 * scale, 6 * scale, 20 * scale);
+    } else {
+      // Jacket zipper
+      ctx.strokeStyle = "#90A4AE";
+      ctx.lineWidth = 2 * scale;
+      ctx.beginPath(); ctx.moveTo(cx, coatY + 2 * scale); ctx.lineTo(cx, coatY + sh); ctx.stroke();
+      ctx.strokeStyle = "#171717";
+      ctx.lineWidth = 2.2 * scale;
     }
 
     // Gold chain
@@ -3960,31 +4028,33 @@
       ctx.strokeStyle = "#FFD54F";
       ctx.lineWidth = 4 * scale;
       ctx.beginPath();
-      ctx.arc(cx, bottomY - sh + 6 * scale, 20 * scale, 0.15 * Math.PI, 0.85 * Math.PI);
+      ctx.arc(cx, coatY + 6 * scale, 20 * scale, 0.15 * Math.PI, 0.85 * Math.PI);
       ctx.stroke();
-      ctx.strokeStyle = "#1B1B1B";
-      ctx.lineWidth = 2.4 * scale;
+      ctx.strokeStyle = "#171717";
+      ctx.lineWidth = 2.2 * scale;
     }
 
     // Secret NABK UV Camera Lapel Glint!
     if (opts.uvActive && p.specialId === "NABK_AGENT") {
       ctx.fillStyle = "#FF1744";
       ctx.beginPath();
-      ctx.arc(cx - 22 * scale, bottomY - sh + 18 * scale, 4.5 * scale, 0, Math.PI * 2);
+      ctx.arc(cx - 22 * scale, coatY + 18 * scale, 4.5 * scale, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = "#FF80AB";
       ctx.lineWidth = 1.5 * scale;
       ctx.beginPath();
-      ctx.arc(cx - 22 * scale, bottomY - sh + 18 * scale, 9 * scale, 0, Math.PI * 2);
+      ctx.arc(cx - 22 * scale, coatY + 18 * scale, 9 * scale, 0, Math.PI * 2);
       ctx.stroke();
-      ctx.strokeStyle = "#1B1B1B";
-      ctx.lineWidth = 2.4 * scale;
+      ctx.strokeStyle = "#171717";
+      ctx.lineWidth = 2.2 * scale;
     }
 
-    // 3. Neck
+    // 3. Neck with chin shadow
     const neckW = (isFemale ? 20 : 28) * scale;
     ctx.fillStyle = skin;
-    ctx.fillRect(cx - neckW / 2, bottomY - sh - 12 * scale, neckW, 18 * scale);
+    ctx.fillRect(cx - neckW / 2, coatY - 12 * scale, neckW, 18 * scale);
+    ctx.fillStyle = skinShade;
+    ctx.fillRect(cx - neckW / 2, coatY - 12 * scale, neckW, 7 * scale);
 
     // Floral headscarf background
     if (p.headwear === 2) {
@@ -3992,30 +4062,41 @@
       ctx.beginPath();
       ctx.roundRect(cx - hw * 0.68, hTop - 7 * scale, hw * 1.36, hh * 1.18, 30 * scale);
       ctx.fill();
+      ctx.stroke();
     }
 
-    // 4. Ears + Female Earrings
+    // 4. Ears + Earrings
     const earY = hTop + hh * 0.54;
     ctx.fillStyle = skin;
     ctx.beginPath();
     ctx.arc(cx - hw * 0.52, earY, 7 * scale, 0, Math.PI * 2);
     ctx.arc(cx + hw * 0.52, earY, 7 * scale, 0, Math.PI * 2);
     ctx.fill();
+    ctx.stroke();
 
-    if (isFemale) {
-      ctx.fillStyle = "#FFD54F";
+    if (isFemale && (p.earrings || 1) > 0) {
+      ctx.fillStyle = (p.earrings === 2) ? "#E0E0E0" : "#FFD54F";
       ctx.beginPath();
-      ctx.arc(cx - hw * 0.54, earY + 7 * scale, 4 * scale, 0, Math.PI * 2);
-      ctx.arc(cx + hw * 0.54, earY + 7 * scale, 4 * scale, 0, Math.PI * 2);
+      ctx.arc(cx - hw * 0.54, earY + 7 * scale, 3.8 * scale, 0, Math.PI * 2);
+      ctx.arc(cx + hw * 0.54, earY + 7 * scale, 3.8 * scale, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // 5. Head contour
+    // 5. Head contour (varied shapes!)
+    const headRadius = (isFemale ? 28 : (fs === 2 ? 28 : (fs === 1 ? 14 : 20))) * scale;
     ctx.fillStyle = skin;
     ctx.beginPath();
-    ctx.roundRect(cx - hw / 2, hTop, hw, hh, (isFemale ? 30 : 18) * scale);
+    ctx.roundRect(cx - hw / 2, hTop, hw, hh, headRadius);
     ctx.fill();
     ctx.stroke();
+
+    // Cheekbone / jawline shading
+    ctx.fillStyle = skinShade;
+    ctx.globalAlpha = 0.35;
+    ctx.beginPath();
+    ctx.roundRect(cx - hw / 2 + 3 * scale, hTop + hh * 0.72, hw - 6 * scale, hh * 0.24, 12 * scale);
+    ctx.fill();
+    ctx.globalAlpha = 1;
 
     if (isFemale) {
       ctx.fillStyle = "rgba(229, 115, 115, 0.28)";
@@ -4025,59 +4106,146 @@
       ctx.fill();
     }
 
-    // 6. Hair & Headwear
+    if (p.freckles) {
+      ctx.fillStyle = "rgba(121, 85, 72, 0.45)";
+      [-0.24, -0.18, 0.18, 0.24].forEach(fx => {
+        ctx.beginPath();
+        ctx.arc(cx + hw * fx, hTop + hh * 0.57, 1.3 * scale, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    // 6. Hair & Headwear (much richer styles!)
+    const hSt = (p.hairStyle || 0) % 8;
     if (isFemale) {
       ctx.fillStyle = hair;
       ctx.beginPath();
       ctx.roundRect(cx - hw * 0.55, hTop - 7 * scale, hw * 1.1, hh * 0.28, 18 * scale);
       ctx.fill();
-      if ((p.hairStyle || 0) % 2 === 0 && p.headwear !== 2) {
+      if ((hSt === 1 || hSt === 0) && p.headwear !== 2) {
+        // Top bun
         ctx.beginPath();
         ctx.arc(cx, hTop - 11 * scale, 13 * scale, 0, Math.PI * 2);
+        ctx.fill(); ctx.stroke();
+      } else if (hSt === 2 && p.headwear !== 2) {
+        // Side bangs / bob
+        ctx.beginPath();
+        ctx.moveTo(cx - hw * 0.52, hTop + 6 * scale);
+        ctx.quadraticCurveTo(cx, hTop + 20 * scale, cx + hw * 0.52, hTop + 6 * scale);
+        ctx.lineTo(cx + hw * 0.52, hTop - 6 * scale);
+        ctx.lineTo(cx - hw * 0.52, hTop - 6 * scale);
+        ctx.closePath();
         ctx.fill();
       }
-      ctx.fillRect(cx - hw * 0.56, hTop + 8 * scale, 9 * scale, hh * 0.65);
-      ctx.fillRect(cx + hw * 0.47, hTop + 8 * scale, 9 * scale, hh * 0.65);
-    } else if (p.headwear === 0 || p.headwear === 3) {
+      ctx.fillRect(cx - hw * 0.56, hTop + 8 * scale, 9 * scale, hh * 0.62);
+      ctx.fillRect(cx + hw * 0.47, hTop + 8 * scale, 9 * scale, hh * 0.62);
+    } else if (p.headwear === 0) {
       ctx.fillStyle = hair;
-      ctx.beginPath();
-      ctx.roundRect(cx - hw * 0.52, hTop - 5 * scale, hw * 1.04, hh * 0.24, 12 * scale);
-      ctx.fill();
-    } else if (p.headwear === 1) {
-      ctx.fillStyle = "#4E4B3E";
-      ctx.beginPath();
-      ctx.roundRect(cx - hw * 0.58, hTop - 7 * scale, hw * 1.16, 20 * scale, 10 * scale);
-      ctx.fill();
-    } else if (p.headwear === 4) {
-      ctx.fillStyle = "#2E473B";
-      ctx.beginPath();
-      ctx.roundRect(cx - hw * 0.62, hTop - 12 * scale, hw * 1.24, 22 * scale, 7 * scale);
-      ctx.fill();
-      ctx.fillStyle = "#FFCA28";
-      ctx.beginPath();
-      ctx.arc(cx, hTop - 2 * scale, 4.5 * scale, 0, Math.PI * 2);
-      ctx.fill();
+      if (hSt === 3) {
+        // Receding / bald top with side hair + shine!
+        ctx.fillRect(cx - hw * 0.53, hTop + 8 * scale, 7 * scale, hh * 0.34);
+        ctx.fillRect(cx + hw * 0.46, hTop + 8 * scale, 7 * scale, hh * 0.34);
+        ctx.fillStyle = "rgba(255,255,255,0.4)";
+        ctx.beginPath(); ctx.ellipse(cx - 10 * scale, hTop + 8 * scale, 7 * scale, 3 * scale, -0.3, 0, Math.PI * 2); ctx.fill();
+      } else if (hSt === 2) {
+        // Curly afro/fluffy hair
+        for (let ci = -2; ci <= 2; ci++) {
+          ctx.beginPath(); ctx.arc(cx + ci * 12 * scale, hTop + 2 * scale, 12 * scale, 0, Math.PI * 2); ctx.fill();
+        }
+      } else if (hSt === 5) {
+        // Messy spiky hair
+        ctx.beginPath();
+        ctx.moveTo(cx - hw * 0.52, hTop + 10 * scale);
+        ctx.lineTo(cx - hw * 0.32, hTop - 12 * scale);
+        ctx.lineTo(cx - hw * 0.08, hTop - 4 * scale);
+        ctx.lineTo(cx + hw * 0.14, hTop - 14 * scale);
+        ctx.lineTo(cx + hw * 0.36, hTop - 5 * scale);
+        ctx.lineTo(cx + hw * 0.52, hTop + 10 * scale);
+        ctx.closePath();
+        ctx.fill();
+      } else {
+        ctx.beginPath();
+        ctx.roundRect(cx - hw * 0.53, hTop - 6 * scale, hw * 1.06, hh * 0.25, 12 * scale);
+        ctx.fill();
+      }
     }
 
-    // 7. Eyes + Eyelashes + Sweat drops if Intimidated
+    if (p.headwear === 1) {
+      // Baseball Cap with visor
+      ctx.fillStyle = "#3E4A3F";
+      ctx.beginPath();
+      ctx.roundRect(cx - hw * 0.56, hTop - 9 * scale, hw * 1.12, 22 * scale, 12 * scale);
+      ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "#263228";
+      ctx.beginPath();
+      ctx.roundRect(cx - hw * 0.42, hTop + 7 * scale, hw * 0.98, 7 * scale, 4 * scale);
+      ctx.fill(); ctx.stroke();
+    } else if (p.headwear === 3) {
+      // Warm knit beanie
+      ctx.fillStyle = "#6D4C41";
+      ctx.beginPath();
+      ctx.roundRect(cx - hw * 0.56, hTop - 12 * scale, hw * 1.12, 25 * scale, 14 * scale);
+      ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "#4E342E";
+      ctx.beginPath();
+      ctx.roundRect(cx - hw * 0.58, hTop + 5 * scale, hw * 1.16, 10 * scale, 4 * scale);
+      ctx.fill(); ctx.stroke();
+    } else if (p.headwear === 4) {
+      // Border guard / officer peaked cap
+      ctx.fillStyle = "#2E473B";
+      ctx.beginPath();
+      ctx.roundRect(cx - hw * 0.62, hTop - 13 * scale, hw * 1.24, 23 * scale, 7 * scale);
+      ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "#FFCA28";
+      ctx.beginPath();
+      ctx.arc(cx, hTop - 3 * scale, 4.5 * scale, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (p.headwear === 5) {
+      // Stylish fedora / beret
+      ctx.fillStyle = "#37474F";
+      ctx.beginPath();
+      ctx.roundRect(cx - hw * 0.70, hTop + 4 * scale, hw * 1.40, 6 * scale, 3 * scale);
+      ctx.roundRect(cx - hw * 0.45, hTop - 13 * scale, hw * 0.90, 19 * scale, 8 * scale);
+      ctx.fill(); ctx.stroke();
+    }
+
+    // 7. Eyes + Eyebrows + Blink + Nose + Sweat drops
     const eyeY = hTop + hh * 0.44;
     const eyeOx = hw * 0.22;
     const eyeR = (opts.reactionState === "INTIMIDATED" ? 7.0 : 5.8) * scale;
-    ctx.fillStyle = "#FFFFFF";
-    ctx.beginPath();
-    ctx.arc(cx - eyeOx, eyeY, eyeR, 0, Math.PI * 2);
-    ctx.arc(cx + eyeOx, eyeY, eyeR, 0, Math.PI * 2);
-    ctx.fill();
 
-    const pupR = (opts.reactionState === "INTIMIDATED" ? 2.1 : 3.0) * scale;
-    ctx.fillStyle = isFemale ? "#2E4053" : "#1B1B1B";
-    ctx.beginPath();
-    ctx.arc(cx - eyeOx, eyeY, pupR, 0, Math.PI * 2);
-    ctx.arc(cx + eyeOx, eyeY, pupR, 0, Math.PI * 2);
-    ctx.fill();
+    if (isBlinking) {
+      ctx.strokeStyle = "#171717";
+      ctx.lineWidth = 2.4 * scale;
+      ctx.beginPath();
+      ctx.moveTo(cx - eyeOx - 6 * scale, eyeY); ctx.lineTo(cx - eyeOx + 6 * scale, eyeY);
+      ctx.moveTo(cx + eyeOx - 6 * scale, eyeY); ctx.lineTo(cx + eyeOx + 6 * scale, eyeY);
+      ctx.stroke();
+    } else {
+      ctx.fillStyle = "#FFFFFF";
+      ctx.beginPath();
+      ctx.arc(cx - eyeOx, eyeY, eyeR, 0, Math.PI * 2);
+      ctx.arc(cx + eyeOx, eyeY, eyeR, 0, Math.PI * 2);
+      ctx.fill();
+
+      const irisColors = ["#2E4053", "#4E342E", "#1B5E20", "#1B1B1B"];
+      ctx.fillStyle = irisColors[(p.skinTone + (p.hairColor || 0)) % irisColors.length];
+      const pupR = (opts.reactionState === "INTIMIDATED" ? 2.4 : 3.4) * scale;
+      ctx.beginPath();
+      ctx.arc(cx - eyeOx, eyeY, pupR, 0, Math.PI * 2);
+      ctx.arc(cx + eyeOx, eyeY, pupR, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Eye highlight glint!
+      ctx.fillStyle = "#FFFFFF";
+      ctx.beginPath();
+      ctx.arc(cx - eyeOx + 1.2 * scale, eyeY - 1.2 * scale, 1.2 * scale, 0, Math.PI * 2);
+      ctx.arc(cx + eyeOx + 1.2 * scale, eyeY - 1.2 * scale, 1.2 * scale, 0, Math.PI * 2);
+      ctx.fill();
+    }
 
     if (isFemale) {
-      ctx.strokeStyle = "#1B1B1B";
+      ctx.strokeStyle = "#171717";
       ctx.lineWidth = 2 * scale;
       ctx.beginPath();
       ctx.moveTo(cx - eyeOx - 5 * scale, eyeY - 3 * scale);
@@ -4097,63 +4265,102 @@
     } else {
       ctx.strokeStyle = hair;
       ctx.lineWidth = 3.5 * scale;
+      const browTilt = (p.expression === 2 || opts.reactionState === "INTIMIDATED") ? 2.5 * scale : 0;
       ctx.beginPath();
-      ctx.moveTo(cx - eyeOx - 8 * scale, eyeY - 9 * scale);
-      ctx.lineTo(cx - eyeOx + 8 * scale, eyeY - 10 * scale);
-      ctx.moveTo(cx + eyeOx - 8 * scale, eyeY - 10 * scale);
-      ctx.lineTo(cx + eyeOx + 8 * scale, eyeY - 9 * scale);
+      ctx.moveTo(cx - eyeOx - 8 * scale, eyeY - 9 * scale - browTilt);
+      ctx.lineTo(cx - eyeOx + 8 * scale, eyeY - 10 * scale + browTilt);
+      ctx.moveTo(cx + eyeOx - 8 * scale, eyeY - 10 * scale + browTilt);
+      ctx.lineTo(cx + eyeOx + 8 * scale, eyeY - 9 * scale - browTilt);
       ctx.stroke();
     }
 
-    // Glasses
-    ctx.strokeStyle = "#1B1B1B";
+    // Nose with soft shadow
+    ctx.strokeStyle = skinShade;
+    ctx.lineWidth = 2.2 * scale;
+    ctx.beginPath();
+    ctx.moveTo(cx + 1 * scale, eyeY + 3 * scale);
+    ctx.lineTo(cx + 3 * scale, eyeY + 13 * scale);
+    ctx.lineTo(cx - 2 * scale, eyeY + 14 * scale);
+    ctx.stroke();
+
+    // Glasses (4 distinct styles!)
+    ctx.strokeStyle = p.glasses === 4 ? "#E0B145" : "#171717";
     ctx.lineWidth = 2.2 * scale;
     if (p.glasses > 0) {
-      ctx.fillStyle = p.glasses === 2 ? "rgba(16,32,39,0.82)" : "rgba(224,247,250,0.25)";
+      ctx.fillStyle = p.glasses === 2 ? "rgba(16,32,39,0.86)" : "rgba(224,247,250,0.25)";
+      if (p.glasses === 3) {
+        // Round intellectual glasses
+        ctx.beginPath();
+        ctx.arc(cx - eyeOx, eyeY, 9.5 * scale, 0, Math.PI * 2);
+        ctx.arc(cx + eyeOx, eyeY, 9.5 * scale, 0, Math.PI * 2);
+        ctx.fill(); ctx.stroke();
+      } else {
+        ctx.beginPath();
+        ctx.roundRect(cx - eyeOx - 10 * scale, eyeY - 7 * scale, 20 * scale, p.glasses === 4 ? 10 * scale : 14 * scale, 4 * scale);
+        ctx.roundRect(cx + eyeOx - 10 * scale, eyeY - 7 * scale, 20 * scale, p.glasses === 4 ? 10 * scale : 14 * scale, 4 * scale);
+        ctx.fill(); ctx.stroke();
+      }
+      // Bridge
       ctx.beginPath();
-      ctx.roundRect(cx - eyeOx - 10 * scale, eyeY - 7 * scale, 20 * scale, 14 * scale, 4 * scale);
-      ctx.roundRect(cx + eyeOx - 10 * scale, eyeY - 7 * scale, 20 * scale, 14 * scale, 4 * scale);
-      ctx.fill();
+      ctx.moveTo(cx - eyeOx + 10 * scale, eyeY - 1 * scale);
+      ctx.lineTo(cx + eyeOx - 10 * scale, eyeY - 1 * scale);
       ctx.stroke();
     }
 
     // Left cheek scar (glows faintly under UV!)
     if (p.scarOrDetail === 1) {
       ctx.strokeStyle = opts.uvActive ? "#FF4081" : "#B71C1C";
-      ctx.lineWidth = (opts.uvActive ? 3.4 : 2.8) * scale;
+      ctx.lineWidth = (opts.uvActive ? 3.4 : 2.6) * scale;
       ctx.beginPath();
       ctx.moveTo(cx + hw * 0.16, eyeY + 8 * scale);
       ctx.lineTo(cx + hw * 0.34, eyeY + 22 * scale);
       ctx.stroke();
-      ctx.strokeStyle = "#1B1B1B";
+      ctx.strokeStyle = "#171717";
     }
 
-    // Sweat drops when yelled at / intimidated!
+    // Animated sweat drops when yelled at / intimidated!
     if (opts.reactionState === "INTIMIDATED") {
+      const dropSlide = isLive ? ((tSec * 14) % 12) * scale : 0;
       ctx.fillStyle = "#4FC3F7";
       ctx.beginPath();
-      ctx.ellipse(cx + hw * 0.38, eyeY - 10 * scale, 3 * scale, 5 * scale, 0, 0, Math.PI * 2);
+      ctx.ellipse(cx + hw * 0.38, eyeY - 10 * scale + dropSlide, 3 * scale, 5 * scale, 0, 0, Math.PI * 2);
       ctx.fill();
       ctx.beginPath();
-      ctx.ellipse(cx - hw * 0.36, eyeY - 6 * scale, 2.5 * scale, 4 * scale, 0, 0, Math.PI * 2);
+      ctx.ellipse(cx - hw * 0.36, eyeY - 4 * scale + (dropSlide * 0.6), 2.5 * scale, 4 * scale, 0, 0, Math.PI * 2);
       ctx.fill();
     }
 
     // 8. Mustache / Beard & Mouth (Smiles when Coffee Given, O-shape when Intimidated)
     const mouthY = hTop + hh * 0.77;
-    if (!isFemale && (p.facialHair === 2 || p.facialHair === 4)) {
-      const mw = (p.facialHair === 4 ? 36 : 25) * scale;
+    if (!isFemale && p.facialHair > 0) {
       ctx.fillStyle = hair;
-      ctx.beginPath();
-      ctx.roundRect(cx - mw / 2, mouthY - 8 * scale, mw, 8 * scale, 4 * scale);
-      ctx.fill();
-    } else if (!isFemale && p.facialHair === 3) {
-      ctx.fillStyle = hair;
-      ctx.beginPath();
-      ctx.roundRect(cx - hw * 0.34, mouthY - 4 * scale, hw * 0.68, 18 * scale, 9 * scale);
-      ctx.fill();
+      if (p.facialHair === 1) {
+        // Stubble
+        ctx.globalAlpha = 0.25;
+        ctx.beginPath();
+        ctx.roundRect(cx - hw * 0.44, mouthY - 6 * scale, hw * 0.88, 22 * scale, 10 * scale);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      } else if (p.facialHair === 2 || p.facialHair === 4) {
+        const mw = (p.facialHair === 4 ? 38 : 26) * scale;
+        ctx.beginPath();
+        ctx.roundRect(cx - mw / 2, mouthY - 8 * scale, mw, 8 * scale, 4 * scale);
+        ctx.fill();
+      } else if (p.facialHair === 3 || p.facialHair === 5) {
+        // Full beard
+        ctx.beginPath();
+        ctx.roundRect(cx - hw * 0.38, mouthY - 5 * scale, hw * 0.76, p.facialHair === 5 ? 24 * scale : 18 * scale, 10 * scale);
+        ctx.fill();
+      } else if (p.facialHair === 6) {
+        // Goatee
+        ctx.beginPath();
+        ctx.roundRect(cx - 11 * scale, mouthY + 2 * scale, 22 * scale, 14 * scale, 6 * scale);
+        ctx.fill();
+      }
     }
 
+    ctx.strokeStyle = "#171717";
+    ctx.lineWidth = 2.2 * scale;
     if (opts.reactionState === "INTIMIDATED") {
       ctx.fillStyle = "#4E2728";
       ctx.beginPath();
@@ -4178,15 +4385,17 @@
   }
 
   // ★ DYNAMIC COLOR & SHAPE TRANSPORT ART IN BOOTH WINDOW ★
-  function drawTransportInBooth(ctx, w, h, shape, bodyColor, roofColor) {
+  function drawTransportInBooth(ctx, w, h, shape, bodyColor, roofColor, opts = {}) {
     ctx.save();
+    const tSec = opts.timeSec || 0;
+    const isLive = !!opts.isLive;
     const cx = w * 0.28;
     const groundY = h * 0.84;
 
     if (shape === "ON_FOOT") {
-      // Two iconic red-white-blue checkered bazaar bags "Мрія Перекупа"!
+      const sway = isLive ? Math.sin(tSec * 2.5) * 1.2 : 0;
       [cx - 26, cx + 4].forEach((bx, idx) => {
-        const bw = 20, bh = 18, by = groundY - bh + (idx * 2);
+        const bw = 20, bh = 18, by = groundY - bh + (idx * 2) + (idx === 0 ? sway : -sway * 0.5);
         ctx.fillStyle = "#1565C0";
         ctx.fillRect(bx, by, bw, bh);
         ctx.fillStyle = "#C62828";
@@ -4212,6 +4421,9 @@
       ctx.lineWidth = 2.2;
       [lx, rx].forEach(wx => {
         ctx.beginPath(); ctx.arc(wx, wy, wr, 0, Math.PI * 2); ctx.stroke();
+        ctx.strokeStyle = "#78909C"; ctx.lineWidth = 0.9;
+        ctx.beginPath(); ctx.moveTo(wx - wr + 2, wy); ctx.lineTo(wx + wr - 2, wy); ctx.moveTo(wx, wy - wr + 2); ctx.lineTo(wx, wy + wr - 2); ctx.stroke();
+        ctx.strokeStyle = "#14181A"; ctx.lineWidth = 2.2;
       });
       ctx.strokeStyle = bodyColor;
       ctx.lineWidth = 3;
@@ -4242,28 +4454,82 @@
       return;
     }
 
-    // Cars / Buses / Vans / Hearses / Pickups parked clearly in the left booth lane!
-    const isTall = shape === "MINIBUS" || shape === "HEARSE" || shape === "BUS";
+    if (shape === "MOTORCYCLE") {
+      const vib = isLive ? Math.sin(tSec * 22) * 0.6 : 0;
+      const lx = cx - 22, rx = cx + 20, wy = groundY - 8;
+      ctx.fillStyle = "rgba(0,0,0,0.28)";
+      ctx.beginPath(); ctx.ellipse(cx, groundY - 1, 28, 3.5, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = "#111"; ctx.lineWidth = 3.5;
+      [lx, rx].forEach(wx => {
+        ctx.beginPath(); ctx.arc(wx, wy, 7.5, 0, Math.PI * 2); ctx.stroke();
+        ctx.fillStyle = "#B0BEC5"; ctx.beginPath(); ctx.arc(wx, wy, 3, 0, Math.PI * 2); ctx.fill();
+      });
+      ctx.fillStyle = bodyColor;
+      ctx.beginPath();
+      ctx.roundRect(lx + 4, wy - 15 + vib, 30, 9, 4);
+      ctx.fill();
+      ctx.fillStyle = "#263238";
+      ctx.fillRect(lx + 5, wy - 18 + vib, 16, 4);
+      ctx.strokeStyle = "#CFD8DC"; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.moveTo(rx, wy); ctx.lineTo(rx - 7, wy - 21 + vib); ctx.stroke();
+      ctx.fillStyle = "#FFF59D";
+      ctx.beginPath(); ctx.arc(rx - 4, wy - 15 + vib, 3.5, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+      return;
+    }
+
+    // Cars / Buses / Vans / Hearses / Pickups / Trucks / Armored
+    const engineVib = isLive ? Math.sin(tSec * 20) * 0.55 : 0;
+    const isTall = shape === "MINIBUS" || shape === "HEARSE" || shape === "BUS" || shape === "ARMORED" || shape === "TRUCK";
     const isSuv = shape === "SUV" || shape === "G_WAGON" || shape === "PICKUP";
-    const vw = shape === "BUS" ? w * 0.50 : (isTall ? w * 0.47 : w * 0.45);
-    const vh = shape === "BUS" ? 38 : (isTall ? 33 : (isSuv ? 30 : (shape === "SPORT" ? 23 : 26)));
+    const vw = (shape === "BUS" || shape === "TRUCK") ? w * 0.50 : (isTall ? w * 0.47 : w * 0.45);
+    const vh = shape === "BUS" ? 39 : (shape === "TRUCK" ? 41 : (isTall ? 34 : (isSuv ? 31 : (shape === "SPORT" ? 23 : 27))));
     const vx = 8;
-    const vy = groundY - vh - 5;
+    const vy = groundY - vh - 5 + engineVib;
 
     // Ground shadow
-    ctx.fillStyle = "rgba(0,0,0,0.32)";
+    ctx.fillStyle = "rgba(0,0,0,0.36)";
     ctx.beginPath();
-    ctx.ellipse(vx + vw / 2, groundY - 1, vw * 0.48, 4, 0, 0, Math.PI * 2);
+    ctx.ellipse(vx + vw / 2, groundY - 1, vw * 0.49, 4.5, 0, 0, Math.PI * 2);
     ctx.fill();
+
+    // Animated exhaust smoke puffs!
+    if (isLive) {
+      for (let p = 0; p < 3; p++) {
+        const age = ((tSec * 1.3 + p * 0.33) % 1);
+        const ex = vx - 3 - age * 14;
+        const ey = groundY - 9 - age * 10;
+        ctx.fillStyle = `rgba(200, 210, 215, ${(1 - age) * 0.35})`;
+        ctx.beginPath(); ctx.arc(ex, ey, 2 + age * 4, 0, Math.PI * 2); ctx.fill();
+      }
+    }
 
     // Lower body
     ctx.fillStyle = bodyColor;
     ctx.strokeStyle = "#121618";
     ctx.lineWidth = 1.6;
-    ctx.beginPath();
-    ctx.roundRect(vx, vy + (isTall ? 2 : 9), vw, vh - (isTall ? 2 : 9), shape === "G_WAGON" ? 3 : 7);
-    ctx.fill();
-    ctx.stroke();
+    if (shape === "TRUCK") {
+      // Trailer + Cab
+      ctx.beginPath();
+      ctx.roundRect(vx, vy + 3, vw * 0.65, vh - 8, 3);
+      ctx.fill(); ctx.stroke();
+      ctx.fillStyle = roofColor || bodyColor;
+      ctx.beginPath();
+      ctx.roundRect(vx + vw * 0.67, vy + 6, vw * 0.33, vh - 11, 5);
+      ctx.fill(); ctx.stroke();
+      // Exhaust stack
+      ctx.fillStyle = "#90A4AE";
+      ctx.fillRect(vx + vw * 0.64, vy, 3, vh * 0.65);
+    } else {
+      ctx.beginPath();
+      ctx.roundRect(vx, vy + (isTall ? 2 : 9), vw, vh - (isTall ? 2 : 9), (shape === "G_WAGON" || shape === "ARMORED") ? 3 : 7);
+      ctx.fill();
+      ctx.stroke();
+
+      // Subtle glossy highlight strip
+      ctx.fillStyle = "rgba(255,255,255,0.14)";
+      ctx.fillRect(vx + 4, vy + (isTall ? 5 : 11), vw - 8, 3);
+    }
 
     // Upper Cabin / Roof
     if (!isTall) {
@@ -4278,41 +4544,74 @@
 
     if (shape === "SPORT") {
       ctx.fillStyle = "#111";
-      ctx.fillRect(vx + 1, vy + 4, 9, 2.5);
-    }
-    if (shape === "RETRO") {
+      ctx.fillRect(vx + 1, vy + 4, 10, 3);
+    } else if (shape === "RETRO") {
       ctx.strokeStyle = "#CFD8DC";
       ctx.lineWidth = 1.8;
       ctx.strokeRect(vx + vw * 0.24, vy - 4, vw * 0.42, 4);
-    }
-    if (shape === "HEARSE") {
+    } else if (shape === "G_WAGON") {
+      // Rear spare wheel
+      ctx.fillStyle = "#1B1E20";
+      ctx.fillRect(vx - 3, vy + 10, 4, 12);
+    } else if (shape === "ARMORED") {
+      ctx.fillStyle = "#E0B145";
+      ctx.fillRect(vx + 6, vy + 17, vw - 12, 3);
+      ctx.fillStyle = "#2979FF";
+      ctx.fillRect(vx + vw * 0.65, vy - 3, 7, 3);
+    } else if (shape === "HEARSE") {
       ctx.fillStyle = "#E0B145";
       ctx.fillRect(vx + vw * 0.72, vy + 9, 2.5, 11);
       ctx.fillRect(vx + vw * 0.72 - 3.5, vy + 13, 9.5, 2.5);
     }
 
-    // Windows
+    // Windows with diagonal reflection glint!
     ctx.fillStyle = "#1B262C";
     if (shape === "BUS") {
       for (let wi = 0; wi < 4; wi++) {
         ctx.fillRect(vx + 7 + wi * (vw * 0.22), vy + 5, vw * 0.17, 12);
       }
+    } else if (shape === "TRUCK") {
+      ctx.fillRect(vx + vw * 0.74, vy + 9, vw * 0.21, 10);
     } else {
+      const winX = vx + vw * 0.20;
+      const winW = vw * (shape === "PICKUP" ? 0.34 : 0.48);
       ctx.beginPath();
-      ctx.roundRect(vx + vw * 0.20, vy + 3.5, vw * (shape === "PICKUP" ? 0.34 : 0.48), 9.5, 2.5);
+      ctx.roundRect(winX, vy + 3.5, winW, 9.5, 2.5);
       ctx.fill();
+      ctx.strokeStyle = "rgba(255,255,255,0.28)";
+      ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.moveTo(winX + 5, vy + 12); ctx.lineTo(winX + 12, vy + 4); ctx.stroke();
     }
 
-    // Wheels
-    ctx.fillStyle = "#111315";
-    [vx + vw * 0.22, vx + vw * 0.78].forEach(wx => {
-      ctx.beginPath(); ctx.arc(wx, groundY - 4, isSuv ? 7 : 5.8, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = "#90A4AE";
-      ctx.beginPath(); ctx.arc(wx, groundY - 4, 2.6, 0, Math.PI * 2); ctx.fill();
+    // Door handle + bumper trim
+    ctx.fillStyle = "rgba(255,255,255,0.45)";
+    if (shape !== "TRUCK") ctx.fillRect(vx + vw * 0.46, vy + (isTall ? 18 : 16), 5, 1.8);
+
+    // Multi-layered Wheels
+    const wheelXs = shape === "TRUCK" ? [vx + vw * 0.16, vx + vw * 0.42, vx + vw * 0.82] : [vx + vw * 0.22, vx + vw * 0.78];
+    const wr = isSuv ? 7 : 5.8;
+    wheelXs.forEach(wx => {
       ctx.fillStyle = "#111315";
+      ctx.beginPath(); ctx.arc(wx, groundY - 4, wr, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#B0BEC5";
+      ctx.beginPath(); ctx.arc(wx, groundY - 4, wr * 0.48, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#37474F";
+      ctx.beginPath(); ctx.arc(wx, groundY - 4, 1.3, 0, Math.PI * 2); ctx.fill();
     });
 
-    // Headlight (front right facing barrier) + Taillight (left)
+    // Headlight beam + Taillight
+    const beamGrad = ctx.createLinearGradient(vx + vw, groundY - 11, vx + vw + 28, groundY - 7);
+    beamGrad.addColorStop(0, "rgba(255, 245, 157, 0.42)");
+    beamGrad.addColorStop(1, "rgba(255, 245, 157, 0)");
+    ctx.fillStyle = beamGrad;
+    ctx.beginPath();
+    ctx.moveTo(vx + vw - 1, groundY - 12);
+    ctx.lineTo(vx + vw + 26, groundY - 19);
+    ctx.lineTo(vx + vw + 26, groundY - 4);
+    ctx.lineTo(vx + vw - 1, groundY - 8);
+    ctx.closePath();
+    ctx.fill();
+
     ctx.fillStyle = "#FFF59D";
     ctx.fillRect(vx + vw - 5, groundY - 12, 4, 3.5);
     ctx.fillStyle = "#FF5252";
@@ -4330,21 +4629,52 @@
     const droneWarning = !!opts.droneWarning;
     const dayNumber = opts.dayNumber || 1;
     const barrierState = opts.barrierState || "CLOSED";
+    const tSec = opts.timeSec || 0;
+    const isLive = !!opts.isLive;
 
-    // Sky & subtle distant tree line
+    // Sky gradient + moving clouds
     const skyGrad = ctx.createLinearGradient(0, 0, 0, h * 0.44);
-    skyGrad.addColorStop(0, sirenActive ? "#5A1F1E" : (droneWarning ? "#4E342E" : (dayNumber >= 4 ? "#263238" : "#37474F")));
+    skyGrad.addColorStop(0, sirenActive ? "#5A1F1E" : (droneWarning ? "#4E342E" : (dayNumber >= 4 ? "#1E282E" : "#2D3C45")));
     skyGrad.addColorStop(1, sirenActive ? "#7D2C2B" : (droneWarning ? "#6D4C41" : "#546E7A"));
     ctx.fillStyle = skyGrad;
     ctx.fillRect(0, 0, w, h * 0.44);
 
+    // Drifting clouds
+    ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
+    for (let ci = 0; ci < 3; ci++) {
+      const cx = ((tSec * (4 + ci * 1.5) + ci * 75) % (w + 40)) - 20;
+      const cy = 12 + ci * 11;
+      ctx.beginPath(); ctx.ellipse(cx, cy, 22, 6, 0, 0, Math.PI * 2); ctx.fill();
+    }
+
+    // Watchtower + rotating searchlight
+    ctx.fillStyle = "#18211C";
+    ctx.fillRect(w * 0.36, h * 0.16, 4, h * 0.22);
+    ctx.fillRect(w * 0.34, h * 0.14, 9, 7);
+    if (isLive) {
+      const sweep = Math.sin(tSec * 1.4) * 16;
+      const beam = ctx.createLinearGradient(w * 0.38, h * 0.17, w * 0.15 + sweep, h * 0.45);
+      beam.addColorStop(0, "rgba(255, 245, 157, 0.18)");
+      beam.addColorStop(1, "rgba(255, 245, 157, 0)");
+      ctx.fillStyle = beam;
+      ctx.beginPath();
+      ctx.moveTo(w * 0.37, h * 0.17);
+      ctx.lineTo(w * 0.05 + sweep, h * 0.44);
+      ctx.lineTo(w * 0.28 + sweep, h * 0.44);
+      ctx.closePath();
+      ctx.fill();
+    }
+
     // Distant horizon forest silhouette
-    ctx.fillStyle = "#1F2A24";
+    ctx.fillStyle = "#1B2520";
     ctx.fillRect(0, h * 0.36, w, h * 0.08);
+    for (let tx = 4; tx < w * 0.56; tx += 14) {
+      ctx.beginPath(); ctx.moveTo(tx, h * 0.36); ctx.lineTo(tx + 5, h * 0.28); ctx.lineTo(tx + 10, h * 0.36); ctx.fill();
+    }
 
     // Drone alert ONLY during active warning / siren
     if (droneWarning || sirenActive) {
-      const dx = w * 0.44, dy = h * 0.14;
+      const dx = w * 0.44 + (isLive ? Math.sin(tSec * 4) * 5 : 0), dy = h * 0.14;
       ctx.fillStyle = "rgba(255, 23, 68, 0.38)";
       ctx.beginPath(); ctx.arc(dx, dy + 1, 14, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = "#FFCDD2";
@@ -4354,18 +4684,29 @@
     }
 
     // Asphalt yard & road marking
-    ctx.fillStyle = "#3E4743";
+    ctx.fillStyle = "#3A423E";
     ctx.fillRect(0, h * 0.43, w, h * 0.57);
-    ctx.strokeStyle = "rgba(255,255,255,0.2)";
+    ctx.strokeStyle = "rgba(255,255,255,0.22)";
     ctx.setLineDash([10, 8]);
     ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.moveTo(0, h * 0.66); ctx.lineTo(w * 0.56, h * 0.66); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, h * 0.66); ctx.lineTo(w * 0.54, h * 0.66); ctx.stroke();
     ctx.setLineDash([]);
 
+    // Ambient snow / drizzle particles
+    if (isLive) {
+      ctx.fillStyle = "rgba(220, 235, 245, 0.32)";
+      for (let pi = 0; pi < 12; pi++) {
+        const px = ((pi * 31 + tSec * 12) % (w * 0.54));
+        const py = ((pi * 23 + tSec * 36) % h);
+        ctx.fillRect(px, py, 1.6, 3.2);
+      }
+    }
+
     if (barrierState === "SBK_ARREST_FLASH") {
-      ctx.fillStyle = "rgba(21, 101, 192, 0.38)";
+      const flash = isLive ? Math.sin(tSec * 16) > 0 : true;
+      ctx.fillStyle = flash ? "rgba(21, 101, 192, 0.42)" : "rgba(213, 0, 0, 0.42)";
       ctx.beginPath(); ctx.arc(w * 0.22, h * 0.42, w * 0.22, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = "rgba(213, 0, 0, 0.38)";
+      ctx.fillStyle = flash ? "rgba(213, 0, 0, 0.42)" : "rgba(21, 101, 192, 0.42)";
       ctx.beginPath(); ctx.arc(w * 0.78, h * 0.42, w * 0.22, 0, Math.PI * 2); ctx.fill();
     }
 
@@ -4373,7 +4714,8 @@
     const barY = h * 0.50;
     ctx.fillStyle = "#263238";
     ctx.fillRect(w * 0.03, barY - 12, 10, 38);
-    ctx.fillStyle = barrierState === "OPEN_APPROVED" ? "#00E676" : (barrierState === "SBK_ARREST_FLASH" ? "#2979FF" : "#FF1744");
+    const lightColor = barrierState === "OPEN_APPROVED" ? "#00E676" : (barrierState === "SBK_ARREST_FLASH" ? "#2979FF" : "#FF1744");
+    ctx.fillStyle = lightColor;
     ctx.beginPath(); ctx.arc(w * 0.03 + 5, barY - 6, 3.5, 0, Math.PI * 2); ctx.fill();
 
     for (let s = 0; s < 6; s++) {
@@ -4382,21 +4724,23 @@
       ctx.fillRect(w * 0.08 + s * (w * 0.075), sy, w * 0.075, 6);
     }
 
-    // Draw UNOBSTRUCTED transport on left lane in its EXACT paint color & body type!
-    drawTransportInBooth(ctx, w, h, opts.transportShape || "SEDAN", opts.colorHex || "#607D8B", opts.roofHex || "#455A64");
+    // Draw detailed animated transport!
+    drawTransportInBooth(ctx, w, h, opts.transportShape || "SEDAN", opts.colorHex || "#607D8B", opts.roofHex || "#455A64", { timeSec: tSec, isLive });
 
     // Booth counter divider & Traveler portrait on RIGHT window!
-    ctx.fillStyle = "rgba(20, 24, 22, 0.42)";
+    ctx.fillStyle = "rgba(18, 22, 20, 0.46)";
     ctx.fillRect(w * 0.55, 0, w * 0.45, h);
     ctx.fillStyle = "#263238";
     ctx.fillRect(w * 0.54, 0, 3, h);
 
     drawPortrait(ctx, opts.portrait, w * 0.77, h * 0.99, 0.84, {
       reactionState: opts.reactionState,
-      uvActive: opts.uvActive
+      uvActive: opts.uvActive,
+      timeSec: tSec,
+      isLive
     });
 
-    // UV Spotlight Beam over booth window + fluorescent clues!
+    // UV Spotlight Beam over booth window + animated scan line!
     if (opts.uvActive) {
       const uvGrad = ctx.createRadialGradient(w * 0.75, h * 0.55, 8, w * 0.75, h * 0.55, w * 0.55);
       uvGrad.addColorStop(0, "rgba(179, 136, 255, 0.34)");
@@ -4404,9 +4748,15 @@
       ctx.fillStyle = uvGrad;
       ctx.fillRect(0, 0, w, h);
 
+      if (isLive) {
+        const scanY = (tSec * 65) % h;
+        ctx.strokeStyle = "rgba(0, 229, 255, 0.55)";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(0, scanY); ctx.lineTo(w, scanY); ctx.stroke();
+      }
+
       ctx.save();
       if (opts.storyTag === "NABK_STING") {
-        // Hidden lapel wire & micro-camera glowing under UV
         ctx.strokeStyle = "#00E5FF";
         ctx.lineWidth = 1.6;
         ctx.beginPath();
@@ -4431,7 +4781,6 @@
       }
 
       if (opts.hasContraband) {
-        // Fluorescent amber/powder smudges on driver side sill
         ctx.fillStyle = "rgba(118, 255, 3, 0.65)";
         ctx.beginPath(); ctx.arc(w * 0.64, h * 0.88, 3, 0, Math.PI * 2); ctx.fill();
         ctx.beginPath(); ctx.arc(w * 0.67, h * 0.91, 2.2, 0, Math.PI * 2); ctx.fill();
@@ -4439,7 +4788,6 @@
       }
 
       if (opts.hasCloneCar) {
-        // Repainted / welded VIN outline around transport
         ctx.strokeStyle = "#FF4081";
         ctx.setLineDash([4, 3]);
         ctx.lineWidth = 1.5;
@@ -4452,7 +4800,7 @@
       ctx.restore();
     }
 
-    // Visual Coffee Cup on sill if COFFEE_GIVEN!
+    // Visual Coffee Cup with rising steam if COFFEE_GIVEN!
     if (opts.reactionState === "COFFEE_GIVEN") {
       const cx = w * 0.58, cy = h * 0.84;
       ctx.fillStyle = "#ECEFF1";
@@ -4462,28 +4810,27 @@
       ctx.strokeRect(cx, cy, 13, 16);
       ctx.fillStyle = "#5D4037";
       ctx.fillRect(cx - 1, cy - 3, 15, 3.5);
+      const steamShift = isLive ? Math.sin(tSec * 4) * 2 : 0;
       ctx.strokeStyle = "rgba(255,255,255,0.75)";
-      ctx.beginPath(); ctx.moveTo(cx + 4, cy - 6); ctx.lineTo(cx + 6, cy - 12); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(cx + 9, cy - 5); ctx.lineTo(cx + 10, cy - 13); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx + 4, cy - 6); ctx.lineTo(cx + 6 + steamShift, cy - 14); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx + 9, cy - 5); ctx.lineTo(cx + 10 - steamShift, cy - 15); ctx.stroke();
     }
 
-    // Sniffer dog Bavovna peeking at bottom-left when inspected!
+    // Sniffer dog Bavovna peeking at bottom-left with wagging ears!
     if (opts.snifferActive) {
-      const dogX = 24, dogY = h - 18;
+      const wag = isLive ? Math.sin(tSec * 10) * 0.14 : 0;
+      const dogX = 24, dogY = h - 18 + (isLive ? Math.abs(Math.sin(tSec * 6)) * -1.8 : 0);
       ctx.fillStyle = "#B87A42";
       ctx.strokeStyle = "#2E1E11";
       ctx.lineWidth = 1.6;
       ctx.beginPath(); ctx.ellipse(dogX, dogY, 13, 12, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-      // Dog ears
       ctx.fillStyle = "#6D4C2D";
-      ctx.beginPath(); ctx.ellipse(dogX - 11, dogY - 4, 4, 9, 0.2, 0, Math.PI * 2); ctx.fill();
-      ctx.beginPath(); ctx.ellipse(dogX + 11, dogY - 4, 4, 9, -0.2, 0, Math.PI * 2); ctx.fill();
-      // Eyes & nose
+      ctx.beginPath(); ctx.ellipse(dogX - 11, dogY - 4, 4, 9, 0.2 + wag, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(dogX + 11, dogY - 4, 4, 9, -0.2 - wag, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = "#111";
       ctx.beginPath(); ctx.arc(dogX - 4, dogY - 3, 1.8, 0, Math.PI * 2); ctx.fill();
       ctx.beginPath(); ctx.arc(dogX + 4, dogY - 3, 1.8, 0, Math.PI * 2); ctx.fill();
       ctx.beginPath(); ctx.arc(dogX, dogY + 3, 3, 0, Math.PI * 2); ctx.fill();
-      // Badge
       ctx.fillStyle = opts.hasContraband ? "#B71C1C" : "#1B5E20";
       ctx.fillRect(4, h - 42, 62, 14);
       ctx.fillStyle = "#FFF";
@@ -6454,7 +6801,8 @@
       `;
 
       state.justShook = false;
-      drawBoothScene(document.getElementById("booth-canvas"), {
+      const boothCanvasEl = document.getElementById("booth-canvas");
+      const boothSceneOpts = {
         portrait: t.portrait,
         transportShape: t.transportShape,
         colorHex: t.vehicleColorHex,
@@ -6468,8 +6816,34 @@
         snifferActive: state.vehicleInspected,
         hasContraband: t.hasContraband,
         storyTag: t.storyTag,
-        hasCloneCar: t.violations.some(v => v.code === "VEHICLE_MISMATCH")
-      });
+        hasCloneCar: t.violations.some(v => v.code === "VEHICLE_MISMATCH"),
+        isLive: true
+      };
+      if (window._boothAnimRaf) {
+        cancelAnimationFrame(window._boothAnimRaf);
+        window._boothAnimRaf = null;
+      }
+      let lastBoothDraw = 0;
+      function tickBoothAnim(nowTs) {
+        if (state.phase !== "BOOTH_SHIFT" || document.getElementById("booth-canvas") !== boothCanvasEl) {
+          window._boothAnimRaf = null;
+          return;
+        }
+        if (!document.hidden && (!lastBoothDraw || nowTs - lastBoothDraw >= 33)) {
+          lastBoothDraw = nowTs;
+          boothSceneOpts.timeSec = (nowTs || Date.now()) * 0.001;
+          boothSceneOpts.barrierState = state.barrierState;
+          boothSceneOpts.sirenActive = state.sirenActive;
+          boothSceneOpts.uvActive = state.uvActive;
+          boothSceneOpts.reactionState = state.reactionState;
+          boothSceneOpts.snifferActive = state.vehicleInspected;
+          drawBoothScene(boothCanvasEl, boothSceneOpts);
+        }
+        window._boothAnimRaf = requestAnimationFrame(tickBoothAnim);
+      }
+      boothSceneOpts.timeSec = Date.now() * 0.001;
+      drawBoothScene(boothCanvasEl, boothSceneOpts);
+      window._boothAnimRaf = requestAnimationFrame(tickBoothAnim);
 
       const miniC = document.getElementById("passport-mini-canvas");
       if (miniC) {
