@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v6.4";
+  const BUILD_VERSION = "v6.5";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -6269,6 +6269,18 @@
           </div>
           `;
         })() : ""}
+        ${state.vehicleInspected ? (() => {
+          const vehMism = t.violations.find(v => v.code === "VEHICLE_MISMATCH" && state.spottedCodes.includes(v.code));
+          const isAlert = t.hasContraband || Boolean(vehMism);
+          return `
+            <div id="vehicle-search-report" style="background:${isAlert ? "#2B1416" : "#14261B"};border:1.5px solid ${isAlert ? "#E57373" : "#66BB6A"};border-radius:6px;padding:7px 9px;display:flex;flex-direction:column;gap:4px;">
+              <div style="font-size:11px;font-weight:800;color:${isAlert ? "#FFCDD2" : "#C8E6C9"};line-height:1.3;">
+                🐕 ${tr(t.vehicleSearchResult, state.lang)}
+              </div>
+              ${vehMism ? `<div style="font-size:10.5px;font-weight:700;color:#FFE082;">📌 ${tr(vehMism.hint, state.lang)}</div>` : ""}
+            </div>
+          `;
+        })() : ""}
 
         <section class="desk-area">
           ${(() => {
@@ -6384,16 +6396,16 @@
             <button type="button" id="btn-doc-seal" class="seal-stamp ${doc.sealDisc && state.spottedCodes.includes(doc.sealDisc.code) ? "forged-spotted" : ""} ${state.uvActive && doc.sealDisc ? "forged-uv" : ""}">
               ✪ ${tr(doc.sealText, state.lang)}
             </button>
-            ${spottedObjs.length > 0 ? `
-              <div style="padding:6px;border-radius:6px;background:${needsArrest ? "#BBDEFB" : "#FFE0B2"};color:${needsArrest ? "#1565C0" : "#E65100"};font-size:11px;font-weight:800;">
-                📌 ${tr(spottedObjs[0].hint, state.lang)}
-              </div>
-            ` : ""}
-            ${state.vehicleInspected ? `
-              <div style="padding:7px;border-radius:6px;background:${t.hasContraband ? "#FFCDD2" : "#C8E6C9"};color:#1B1916;font-size:11px;font-weight:700;">
-                🐕 ${tr(t.vehicleSearchResult, state.lang)}
-              </div>
-            ` : ""}
+            ${(() => {
+              const docSpotted = spottedObjs.filter(v => v.code !== "CONTRABAND_CARGO" && (doc.type === "VEHICLE_CUSTOMS" || v.code !== "VEHICLE_MISMATCH"));
+              if (docSpotted.length === 0) return "";
+              const docNeedsArrest = docSpotted.some(v => v.requiresDetention);
+              return `
+                <div style="padding:6px;border-radius:6px;background:${docNeedsArrest ? "#BBDEFB" : "#FFE0B2"};color:${docNeedsArrest ? "#1565C0" : "#E65100"};font-size:11px;font-weight:800;">
+                  📌 ${tr(docSpotted[0].hint, state.lang)}
+                </div>
+              `;
+            })()}
           </div>
             `;
           })()}
@@ -6594,6 +6606,7 @@
             if (t.violations.some(v => v.code === "VEHICLE_MISMATCH") && !state.spottedCodes.includes("VEHICLE_MISMATCH")) {
               state.spottedCodes.push("VEHICLE_MISMATCH");
             }
+            pushShiftLog(t.hasContraband ? "#EF5350" : "#81C784", L(`🐕 Огляд авто: ${t.vehicleSearchResult.uk}`, `🐕 Vehicle search: ${t.vehicleSearchResult.en}`));
           } else if (state.dogTargetZone) {
             state.zoneCheckMsg = L("Пусто! Тут лише особисті речі — перевір інший відсік.", "Empty! Only personal items — check another compartment.");
           } else if (state.checkedZones.length >= 3) {
@@ -6603,6 +6616,7 @@
             if (t.violations.some(v => v.code === "VEHICLE_MISMATCH") && !state.spottedCodes.includes("VEHICLE_MISMATCH")) {
               state.spottedCodes.push("VEHICLE_MISMATCH");
             }
+            pushShiftLog("#81C784", L(`🐕 Огляд авто: ${t.vehicleSearchResult.uk}`, `🐕 Vehicle search: ${t.vehicleSearchResult.en}`));
           } else {
             state.zoneCheckMsg = L("Пусто! Схованки тут немає — можеш перевірити інший відсік або завершити.", "Empty here! Check another compartment or finish search.");
           }
@@ -6620,6 +6634,7 @@
           if (t.violations.some(v => v.code === "VEHICLE_MISMATCH") && !state.spottedCodes.includes("VEHICLE_MISMATCH")) {
             state.spottedCodes.push("VEHICLE_MISMATCH");
           }
+          pushShiftLog("#81C784", L(`🐕 Огляд авто завершено: ${t.vehicleSearchResult.uk}`, `🐕 Vehicle search finished: ${t.vehicleSearchResult.en}`));
           render();
         });
       }
