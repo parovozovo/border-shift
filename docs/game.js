@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v7.1";
+  const BUILD_VERSION = "v7.2";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -3194,6 +3194,106 @@
         L("«Оце тема після вітру на трасі! Тримай 50 🪙 на заправку термоса!»", "'Just what I needed after the highway wind! Catch 50 🪙!'"),
         L("«Спасибі за гарячу каву, друже! Бережи себе на посту!»", "'Thanks for the hot coffee, friend! Stay safe on duty!'")
       ]
+    },
+    CLERGY_ARTIST: {
+      shapes: ["SEDAN", "MINIBUS", "RETRO"],
+      cargos: [
+        L("Скрипка, контрабас та сценічні костюми", "Violin, double bass & stage outfits"),
+        L("Колекція вінілових платівок, ноти та плед", "Vinyl records, sheet music & blanket"),
+        L("Церковні книги, свічки та гуманітарні пакунки", "Prayer books, candles & aid parcels")
+      ],
+      greetings: [
+        L("«Мир вам, інспекторе! Їдемо з %CITY% на благодійний концерт, ось запрошення!»", "'Peace to you! Heading from %CITY% to a charity concert, here is our invite!'"),
+        L("«Доброго дня! Супроводжую духовну місію з м. %CITY%, усі папери в порядку.»", "'Good day! Accompanying a chaplaincy mission from %CITY%, all papers ready.'"),
+        L("«Вітаю! Везу інструменти на фестиваль до Поландії — гляньте документи, будь ласка.»", "'Greetings! Taking instruments to a festival in Polandia — please check.'")
+      ],
+      interrogations: [
+        L("«Усе чесно й прозоро, маємо офіційний лист від філармонії м. %CITY%!»", "'All honest and transparent, official letter from %CITY% philharmonic!'"),
+        L("«Перевіряйте скільки потрібно, мистецтво не боїться світла!»", "'Check all you want, art fears no light!'")
+      ],
+      intimidates: [
+        L("«Спокійніше, пане інспекторе, в багажнику ж крихка скрипка!»", "'Easy there, inspector, there is a fragile violin in the trunk!'"),
+        L("«Бог свідок — у мене кожен документ справжній!»", "'Heaven as my witness — every paper is real!'")
+      ],
+      coffees: [
+        L("«Дякую за тепло душевне й каву! Візьміть 50 🪙 на потреби поста!»", "'Thank you for the warmth and coffee! Take 50 🪙!'"),
+        L("«Благословенної вам зміни, інспекторе!»", "'Have a blessed shift, inspector!'")
+      ]
+    },
+    MEDIC_RESCUER: {
+      shapes: ["MINIBUS", "SUV", "SEDAN"],
+      cargos: [
+        L("Медичні шини, турнікети, дефібрилятор та аптечки", "Medical splints, tourniquets & AED"),
+        L("Ліки, інсулін у термоконтейнері та халати", "Medicine, insulin cooler & scrubs"),
+        L("Ноші складні, перев'язувальний матеріал та вода", "Folding stretchers & bandages")
+      ],
+      greetings: [
+        L("«Доброго дня! Їду на медичний симпозіум з м. %CITY%, документи чисті.»", "'Good day! Heading to a medical symposium from %CITY%, docs clean.'"),
+        L("«Вітаю, колего! Везу партію аптечок для реабілітаційного центру, ось папери.»", "'Hello! Delivering medkits for a rehab center, here are my papers.'"),
+        L("«Салют! Повертаюся з навчання з тактичної медицини додому в %CITY%.»", "'Salute! Returning from tactical medicine training home to %CITY%.'")
+      ],
+      interrogations: [
+        L("«У нас у клініці в %CITY% облік суворий — кожна печатка звірена!»", "'Strict accounting at our %CITY% clinic — every stamp verified!'"),
+        L("«Готовий хоч зараз відкрити все, там тільки медицина!»", "'Ready to open everything right now, only medical gear!'")
+      ],
+      intimidates: [
+        L("«Ей, не стукайте так — у салоні термобокс із вакцинами!»", "'Hey, easy — there's a vaccine cooler inside!'"),
+        L("«Спокійно, тиск і так високий, дивіться папери!»", "'Calm down, my blood pressure is high enough, check the papers!'")
+      ],
+      coffees: [
+        L("«Після нічного чергування кава — це порятунок! Тримай 50 🪙!»", "'After night shift, coffee is a lifesaver! Catch 50 🪙!'"),
+        L("«Дякую за каву й бережіть здоров'я на посту!»", "'Thanks for the coffee and stay healthy!'")
+      ]
+    },
+    BLOGGER_INFLUENCER: {
+      shapes: ["SPORT", "E_SCOOTER", "SEDAN"],
+      cargos: [
+        L("Кільцева лампа, екшн-камера, петлички та ноутбук", "Ring light, action cam, mics & laptop"),
+        L("Коробка мерчу, штатив та 3 павербанки", "Merch box, tripod & 3 powerbanks"),
+        L("Дитячий дрон-іграшка, окуляри та селфі-палка", "Toy drone, sunglasses & selfie stick")
+      ],
+      greetings: [
+        L("«Всім хай! Ой, інспекторе, я з %CITY% на колабу їду — зараз все покажу!»", "'Hey everyone! Heading from %CITY% for a collab — showing all docs!'"),
+        L("«Привітик! Знімаю влог про подорож без фільтрів, ось паспорт, лайк за сервіс!»", "'Hi! Filming a travel vlog, here is my passport, thumbs up!'"),
+        L("«Салют! Спізнююсь на стрім у Варшавку, гляньте швиденько документи!»", "'Salute! Late for a stream in Varshavka, quick check please!'")
+      ],
+      interrogations: [
+        L("«Усе легально, бро, я ж не хочу хейту в коментарях — дивіться!»", "'All legal bro, don't want hate in comments — look!'"),
+        L("«Там усе по поличках, навіть підписники перевіряли!»", "'Everything is organized, even my followers checked!'")
+      ],
+      intimidates: [
+        L("«Оу, оце контент! Але по склу не стукай, камера на панелі!»", "'Whoa, what content! Don't bang the glass, dashcam is rolling!'"),
+        L("«Ей, без агресії, ми ж у прямому ефірі... жартую, не знімаю!»", "'Hey, no aggression, we are live... kidding, not recording!'")
+      ],
+      coffees: [
+        L("«Топчик! Кава 10 з 10! Лови 50 🪙 донату!»", "'Top tier! Coffee 10/10! Catch a 50 🪙 donation!'"),
+        L("«Дякую за каву, найкращий КПП у регіоні!»", "'Thanks for the coffee, best checkpoint in the region!'")
+      ]
+    },
+    FARMER_AGRO: {
+      shapes: ["PICKUP", "TRUCK", "RETRO", "BICYCLE"],
+      cargos: [
+        L("Мішки насіння соняшнику, добрива та запчастини до сівалки", "Sunflower seed bags, fertilizer & seeder parts"),
+        L("Мед у бідонах, яблука та саджанці груші", "Honey cans, apples & pear saplings"),
+        L("Плуг-окучник, домкрат і робочі чоботи", "Plow parts, jack & work boots")
+      ],
+      greetings: [
+        L("«Здоров, козаче! Їду з господарства під %CITY% за запчастинами до трактора.»", "'Hey Cossack! Heading from my farm near %CITY% for tractor parts.'"),
+        L("«Добрий день! Посівна на носі, везу зразки зерна на виставку — ось документи!»", "'Good day! Planting season soon, taking grain samples to an expo!'"),
+        L("«Слава праці! Повертаюся з поля додому в %CITY%, усе по паперах чисто.»", "'Greetings! Heading home to %CITY% from the fields, papers clean.'")
+      ],
+      interrogations: [
+        L("«У нас на землі все чесно — що заробив, те й везу, дивись документи!»", "'Everything is honest on the farm — check my papers!'"),
+        L("«Довідку в %CITY% ще минулого тижня виписали, усе сходиться!»", "'Permit issued in %CITY% last week, all matches!'")
+      ],
+      intimidates: [
+        L("«Не грюкай, синку, в кузові розсада — поб'єш горщики!»", "'Don't bang, son, seedlings in the bed — you'll break the pots!'"),
+        L("«Та куди мені ховатися, руки в мозолях, усе по закону!»", "'Nothing to hide, honest farmer here!'")
+      ],
+      coffees: [
+        L("«Оце по-нашому! Дякую за каву, ось 50 🪙 до зарплати!»", "'That's our way! Thanks for coffee, take 50 🪙!'"),
+        L("«Дай Боже врожаю і тобі спокійної зміни!»", "'Good harvest and a calm shift to you!'")
+      ]
     }
   };
 
@@ -3243,6 +3343,22 @@
       p.glasses = Math.random() < 0.65 ? 2 : 0; // dark aviators
       if (gender === "M") p.facialHair = pick([3, 5, 6]);
       if (Math.random() < 0.3) p.scarOrDetail = 1;
+    } else if (archKey === "CLERGY_ARTIST") {
+      p.outfitStyle = pick([1, 2, 4]);
+      p.headwear = Math.random() < 0.45 ? 5 : 0;
+      if (gender === "M") p.facialHair = pick([0, 3, 6]);
+    } else if (archKey === "MEDIC_RESCUER") {
+      p.outfitStyle = 1;
+      p.headwear = 0;
+      p.glasses = Math.random() < 0.45 ? 1 : 0;
+    } else if (archKey === "BLOGGER_INFLUENCER") {
+      p.outfitStyle = 0;
+      p.headwear = Math.random() < 0.4 ? 1 : 0;
+      p.glasses = Math.random() < 0.55 ? pick([2, 3, 4]) : 0;
+    } else if (archKey === "FARMER_AGRO") {
+      p.outfitStyle = pick([3, 4]);
+      p.headwear = Math.random() < 0.65 ? pick([1, 3]) : 0;
+      if (gender === "M") p.facialHair = pick([2, 4, 5]);
     }
     return p;
   }
@@ -3251,8 +3367,8 @@
     const city = pick(CITIES);
 
     if (Math.random() < 0.60) {
-      // Honest traveler matched to one of 6 rich archetypes!
-      const archKeys = ["PENSIONER", "GLAM_LADY", "MAJOR_VIP", "WORKER_DRIVER", "IT_VOLUNTEER", "BIKER_TRAVELER"];
+      // Honest traveler matched to one of 10 rich archetypes!
+      const archKeys = ["PENSIONER", "GLAM_LADY", "MAJOR_VIP", "WORKER_DRIVER", "IT_VOLUNTEER", "BIKER_TRAVELER", "CLERGY_ARTIST", "MEDIC_RESCUER", "BLOGGER_INFLUENCER", "FARMER_AGRO"];
       const archKey = pick(archKeys);
       const arch = TRAVELER_ARCHETYPES[archKey];
       let gender = "M";
@@ -3263,9 +3379,12 @@
       } else if (archKey === "PENSIONER") {
         gender = Math.random() < 0.5 ? "F" : "M";
         age = randInt(61, 76);
-      } else if (archKey === "IT_VOLUNTEER") {
-        gender = Math.random() < 0.4 ? "F" : "M";
-        age = randInt(22, 38);
+      } else if (archKey === "IT_VOLUNTEER" || archKey === "BLOGGER_INFLUENCER") {
+        gender = Math.random() < 0.45 ? "F" : "M";
+        age = randInt(20, 36);
+      } else if (archKey === "MEDIC_RESCUER" || archKey === "CLERGY_ARTIST") {
+        gender = Math.random() < 0.45 ? "F" : "M";
+        age = randInt(26, 54);
       } else if (archKey === "MAJOR_VIP") {
         gender = Math.random() < 0.2 ? "F" : "M";
         age = randInt(27, 49);
@@ -3273,8 +3392,8 @@
         gender = Math.random() < 0.2 ? "F" : "M";
         age = randInt(24, 46);
       } else {
-        gender = Math.random() < 0.12 ? "F" : "M";
-        age = randInt(28, 55);
+        gender = Math.random() < 0.14 ? "F" : "M";
+        age = randInt(28, 56);
       }
 
       const dir = Math.random() < 0.65 ? "EXIT" : "ENTRY";
@@ -3435,10 +3554,12 @@
     }
 
     if (scheme === 1) {
-      // Fake issuer seal
+      // Fake issuer seal (diverse archetypes so it's never obvious!)
+      const s1Arch = pick(["MAJOR_VIP", "WORKER_DRIVER", "IT_VOLUNTEER", "BLOGGER_INFLUENCER", "FARMER_AGRO"]);
       const fullName = randomFullName("M");
       const age = randInt(24, 48);
-      const portrait = Object.assign(randomPortrait("M"), { scarOrDetail: 2, expression: 2 });
+      const portrait = Object.assign(buildArchetypePortrait(s1Arch, "M"), { scarOrDetail: 2, expression: 2 });
+      const s1Tr = pickTransportForShapes(TRAVELER_ARCHETYPES[s1Arch].shapes, city.code, false);
       const fakes = [
         { diag: L("Гострий карієс переднього зуба", "Acute toothache"), clinic: L("Стоматологія «Веселий Зуб»", "Dental 'Happy Tooth'") },
         { diag: L("Психосоматична алергія на зелену фарбу", "Green pigment allergy"), clinic: L("Студія краси «Нігтики Левгорода»", "Beauty Salon") },
@@ -3453,7 +3574,7 @@
       const fc = pick(fakes);
       const offerBribe1 = Math.random() < 0.5;
       return buildTravelerFromParts({
-        fullName, age, gender: "M", portrait, transport: trMeta,
+        fullName, age, gender: "M", portrait, transport: s1Tr,
         passportFields: [
           { label: L("ПІБ", "Full Name"), value: fullName, disc: null },
           { label: L("Вік / Стать", "Age / Sex"), value: L(`${age} р. • ЧОЛ`, `${age} y/o • M`), disc: null },
@@ -3488,11 +3609,13 @@
     }
 
     if (scheme === 2) {
-      // Visual PHOTO_MISMATCH (no text spoiler — click mini passport photo or face row!)
-      const gender = Math.random() < 0.5 ? "F" : "M";
+      // Visual PHOTO_MISMATCH (diverse archetypes!)
+      const s2Arch = pick(["GLAM_LADY", "WORKER_DRIVER", "BLOGGER_INFLUENCER", "PENSIONER", "CLERGY_ARTIST"]);
+      const gender = s2Arch === "GLAM_LADY" ? "F" : (Math.random() < 0.5 ? "F" : "M");
       const fullName = randomFullName(gender);
-      const age = randInt(25, 50);
-      const realPortrait = randomPortrait(gender);
+      const age = s2Arch === "PENSIONER" ? randInt(61, 74) : randInt(25, 50);
+      const realPortrait = buildArchetypePortrait(s2Arch, gender);
+      const s2Tr = pickTransportForShapes(TRAVELER_ARCHETYPES[s2Arch].shapes, city.code, false);
       const oppositeGender = gender === "F" ? "M" : "F";
       const fakePhoto = randomPortrait(oppositeGender);
       fakePhoto.hairColor = (realPortrait.hairColor + 2) % 5;
@@ -3502,7 +3625,7 @@
         fullName, age, gender,
         portrait: realPortrait,
         passportPortrait: fakePhoto,
-        transport: trMeta,
+        transport: s2Tr,
         passportFields: [
           { label: L("ПІБ (звірте фото!)", "Full Name (verify photo)"), value: fullName, disc: DISCREPANCY.PHOTO_MISMATCH },
           { label: L("Вік / Стать", "Age / Sex"), value: L(`${age} р. • ${gender === "M" ? "ЧОЛ" : "ЖІН"}`, `${age} y/o • ${gender}`), disc: null },
@@ -3526,13 +3649,15 @@
 
     if (scheme === 3) {
       // NAME_MISMATCH across Passport vs Exemption / Customs
+      const s3Arch = pick(["WORKER_DRIVER", "MAJOR_VIP", "FARMER_AGRO", "IT_VOLUNTEER", "MEDIC_RESCUER"]);
       const fullName = randomFullName("M");
       const otherName = randomFullName("M");
       const age = randInt(26, 48);
-      const portrait = randomPortrait("M");
+      const portrait = buildArchetypePortrait(s3Arch, "M");
+      const s3Tr = pickTransportForShapes(TRAVELER_ARCHETYPES[s3Arch].shapes, city.code, false);
       const offerBribe3 = Math.random() < 0.4;
       return buildTravelerFromParts({
-        fullName, age, gender: "M", portrait, transport: trMeta,
+        fullName, age, gender: "M", portrait, transport: s3Tr,
         passportFields: [
           { label: L("ПІБ", "Full Name"), value: fullName, disc: null },
           { label: L("Вік / Стать", "Age / Sex"), value: L(`${age} р. • ЧОЛ`, `${age} y/o • M`), disc: null },
@@ -3614,13 +3739,14 @@
     }
 
     if (scheme === 5 && daySpec.requireVehicleDecl) {
-      // CONTRABAND_CARGO hidden behind plausible declaration (vans/trucks/pickups/SUVs!)
+      // CONTRABAND_CARGO hidden behind plausible declaration (diverse archetypes: driver, farmer, VIP, artist!)
+      const s5Arch = pick(["WORKER_DRIVER", "FARMER_AGRO", "MAJOR_VIP", "CLERGY_ARTIST"]);
       const fullName = randomFullName("M");
-      const age = randInt(28, 53);
-      const portrait = buildArchetypePortrait("WORKER_DRIVER", "M");
+      const age = randInt(28, 54);
+      const portrait = buildArchetypePortrait(s5Arch, "M");
       const cCase = pick(CONTRABAND_COVERS);
-      const smugglerCars = TRANSPORT_CATALOG.filter(m => m.isCar && ["MINIBUS", "TRUCK", "PICKUP", "SUV"].includes(m.shape));
-      const carOnlyMeta = makeTransportMeta(pick(smugglerCars.length ? smugglerCars : TRANSPORT_CATALOG.filter(m => m.isCar)), null, generatePlate(city.code, true));
+      const s5Pool = TRANSPORT_CATALOG.filter(m => m.isCar && TRAVELER_ARCHETYPES[s5Arch].shapes.includes(m.shape));
+      const carOnlyMeta = makeTransportMeta(pick(s5Pool.length ? s5Pool : TRANSPORT_CATALOG.filter(m => m.isCar)), null, generatePlate(city.code, true));
       const smugglerGreets = [
         L(`«Салют, шефе! Звичайні речі з м. ${city.uk}, усе по декларації!»`, `'Hello boss! Ordinary cargo from ${city.en}, all declared!'`),
         L(`«Добрий вечір, командире! Везем запчастини та речі в Поландію, поспішаємо на паром!»`, `'Good evening! Hauling spare parts & luggage, rushing for the ferry!'`),
@@ -4025,7 +4151,13 @@
     ctx.fillStyle = "#111C24";
     ctx.fill();
 
-    // 2. Smooth Layered Mountain Horizon
+    // 2. Smooth Layered Mountain Horizon + Watchtower Searchlight & Clouds
+    ctx.fillStyle = "rgba(255, 255, 255, 0.06)";
+    for (let ci = 0; ci < 3; ci++) {
+      const clx = ((tSec * (6 + ci * 2) + ci * 140) % (w + 90)) - 45;
+      ctx.beginPath(); ctx.ellipse(clx, 26 + ci * 14, 34, 8, 0, 0, Math.PI * 2); ctx.fill();
+    }
+
     ctx.fillStyle = "#1A2925";
     ctx.beginPath();
     ctx.moveTo(0, h * 0.64);
@@ -4033,6 +4165,22 @@
     ctx.quadraticCurveTo(w * 0.56, h * 0.34, w * 0.78, h * 0.54);
     ctx.quadraticCurveTo(w * 0.90, h * 0.44, w, h * 0.58);
     ctx.lineTo(w, h * 0.64);
+    ctx.closePath();
+    ctx.fill();
+
+    // Watchtower + rotating searchlight beam
+    ctx.fillStyle = "#0E1714";
+    ctx.fillRect(w * 0.44, h * 0.25, 6, h * 0.34);
+    ctx.fillRect(w * 0.41, h * 0.21, 13, 10);
+    const sweepX = Math.sin(tSec * 1.1) * 70;
+    const beamGrad = ctx.createLinearGradient(w * 0.44, h * 0.26, w * 0.28 + sweepX, h * 0.72);
+    beamGrad.addColorStop(0, "rgba(255, 245, 157, 0.22)");
+    beamGrad.addColorStop(1, "rgba(255, 245, 157, 0)");
+    ctx.fillStyle = beamGrad;
+    ctx.beginPath();
+    ctx.moveTo(w * 0.44, h * 0.26);
+    ctx.lineTo(w * 0.16 + sweepX, h * 0.72);
+    ctx.lineTo(w * 0.40 + sweepX, h * 0.72);
     ctx.closePath();
     ctx.fill();
 
@@ -4063,12 +4211,13 @@
     ctx.fillRect(w * 0.68, h * 0.34, w * 0.27, h * 0.36);
     ctx.fillStyle = "#141B18";
     ctx.fillRect(w * 0.64, h * 0.28, w * 0.34, 11);
-    // Warm lit booth window + inspector silhouette
+    // Warm lit booth window + animated inspector silhouette
+    const inspBob = Math.sin(tSec * 2.2) * 1.2;
     ctx.fillStyle = "#E0B145";
     ctx.fillRect(w * 0.73, h * 0.42, 54, 28);
     ctx.fillStyle = "#2A2018";
-    ctx.beginPath(); ctx.arc(w * 0.79, h * 0.55, 6.5, 0, Math.PI * 2); ctx.fill();
-    ctx.fillRect(w * 0.768, h * 0.61, 16, 9);
+    ctx.beginPath(); ctx.arc(w * 0.79, h * 0.55 + inspBob, 6.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillRect(w * 0.768, h * 0.61 + inspBob * 0.5, 16, 9);
 
     // Checkpoint flag stripe (Blue / Yellow)
     ctx.fillStyle = "#1565C0";
@@ -4076,8 +4225,14 @@
     ctx.fillStyle = "#FBC02D";
     ctx.fillRect(w * 0.66, h * 0.34 + 12, 4, 12);
 
-    // 5. Lead SUV at the Gate + Warm Headlight Cone
-    const carX = w * 0.25, carY = h * 0.60;
+    // 5. Lead SUV at the Gate + Engine Vibration + Exhaust + Warm Headlight Cone
+    const engineVib = Math.sin(tSec * 20) * 0.5;
+    const carX = w * 0.25, carY = h * 0.60 + engineVib;
+    for (let ep = 0; ep < 3; ep++) {
+      const age = (tSec * 1.2 + ep * 0.33) % 1;
+      ctx.fillStyle = `rgba(200, 215, 220, ${(1 - age) * 0.28})`;
+      ctx.beginPath(); ctx.arc(carX - 4 - age * 20, carY + 26 - age * 14, 2.5 + age * 4.5, 0, Math.PI * 2); ctx.fill();
+    }
     const headGrad = ctx.createLinearGradient(carX + 94, carY + 22, carX + 185, carY + 28);
     headGrad.addColorStop(0, "rgba(255, 240, 150, 0.34)");
     headGrad.addColorStop(1, "rgba(255, 240, 150, 0)");
@@ -4121,6 +4276,14 @@
     for (let s = 0; s < 6; s++) {
       ctx.fillStyle = s % 2 === 0 ? "#C62828" : "#ECEFF1";
       ctx.fillRect(barPostX + 10 + s * 14, barY, 14, 5.5);
+    }
+
+    // Drifting night snow / dust particles
+    ctx.fillStyle = "rgba(220, 238, 250, 0.36)";
+    for (let sn = 0; sn < 18; sn++) {
+      const sx = (sn * 29 + tSec * 18) % w;
+      const sy = (sn * 19 + tSec * 28) % h;
+      ctx.fillRect(sx, sy, 1.8, 1.8);
     }
   }
 
@@ -5703,6 +5866,7 @@
     const excessiveDetain = isDetain && !t.shouldBeApproved && !canDetain;
 
     let ruleCorrect = false;
+    let usdBonus = 0;
     if (decisionType === "APPROVE") ruleCorrect = t.shouldBeApproved;
     else if (decisionType === "DENY") ruleCorrect = !t.shouldBeApproved && !t.isWantedTarget;
     else if (decisionType === "DETAIN") ruleCorrect = (!t.shouldBeApproved || criminalBribeOffer) && canDetain;
@@ -5737,7 +5901,7 @@
         const badges = loadAgencyBadges();
         const undercoverBounty = state.isUndercoverSbkAgent ? 1200 : 0;
         const isHighValueSpyOrVip = t.isWantedTarget || t.storyTag === "FSM_SPY" || t.storyTag === "SABOTEUR" || t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE";
-        // Bounties grow with career progress: day 1 = 60%, day 9+ = 160% of base (spies pay ~11-18k 🪙 at full ramp)
+        // Bounties grow with career progress: day 1 = 60%, day 9+ = 160% of base (spies pay ~11-18k 🪙 + USD agency bonus!)
         const bountyDay = state.daySpec ? state.daySpec.dayNumber : 1;
         const bountyRamp = Math.min(1.6, 0.6 + 0.12 * (bountyDay - 1));
         const baseDetainBounty = Math.round((isHighValueSpyOrVip
@@ -5745,6 +5909,10 @@
           : (700 + Math.floor(Math.random() * 701))) * bountyRamp);
         const badgeBonus = (badges.includes("SBK_SHIELD") ? 600 : 0) + (badges.includes("VSP_GUARD") && (t.storyTag === "DUAL_CITIZEN" || t.storyTag === "VIP_DIVERSE") ? 800 : 0);
         detainBonus = baseDetainBounty + undercoverBounty + badgeBonus + (state.sandboxMod ? state.sandboxMod.detainExtra : 0);
+        if (isHighValueSpyOrVip) {
+          usdBonus = Math.round((250 + Math.floor(Math.random() * 301)) * bountyRamp) + (state.isUndercoverSbkAgent ? 150 : 0);
+          state.usd += usdBonus;
+        }
         state.sbkRep = Math.min(100, state.sbkRep + (isHighValueSpyOrVip ? 14 : 4));
         state.totalCareerDetained += 1;
         if (state.totalCareerDetained >= 3) unlockAgencyBadge("SBK_SHIELD");
@@ -5824,6 +5992,8 @@
 
     if (t.storyTag === "INTEL_ALLY" && isApprove) {
       detainBonus += 200;
+      usdBonus += 180;
+      state.usd += 180;
       state.sbkRep = Math.min(100, state.sbkRep + 15);
       unlockAgencyBadge("GUR_FALCON");
     }
@@ -5874,7 +6044,9 @@
       moneyDelta: netMoney
     };
     if (!state.shiftLogs) state.shiftLogs = [];
-    const logSign = netMoney > 0 ? `+${netMoney} 🪙` : (netMoney < 0 ? `${netMoney} 🪙` : "");
+    const uahPart = netMoney > 0 ? `+${netMoney} 🪙` : (netMoney < 0 ? `${netMoney} 🪙` : "");
+    const usdPart = usdBonus > 0 ? `+${usdBonus} 💵` : "";
+    const logSign = [uahPart, usdPart].filter(Boolean).join(" ");
     state.shiftLogs.unshift({
       color: state.lastFeedback.ok ? "#81C784" : "#FF8A80",
       text: L(
@@ -6132,10 +6304,66 @@
     document.getElementById("encounter-dialog-title").textContent = tr(enc.title, state.lang);
     document.getElementById("encounter-dialog-desc").textContent = tr(enc.desc, state.lang);
     const c = document.getElementById("encounter-canvas");
+    if (window._encounterAnimRaf) {
+      cancelAnimationFrame(window._encounterAnimRaf);
+      window._encounterAnimRaf = null;
+    }
     if (c) {
       const ctx = c.getContext("2d");
-      ctx.clearRect(0, 0, c.width, c.height);
-      drawPortrait(ctx, enc.portrait, c.width * 0.5, c.height * 0.98, 0.58);
+      const encId = (enc.id || "").toLowerCase();
+      const isAgency = encId.includes("sbk") || encId.includes("radar") || encId.includes("wanted") || encId.includes("gur");
+      const isNightCrime = encId.includes("tolik") || encId.includes("bribe") || encId.includes("mafia") || encId.includes("nabk");
+      const drawEncFrame = (tSec) => {
+        const w = c.width, h = c.height;
+        ctx.clearRect(0, 0, w, h);
+        const bg = ctx.createLinearGradient(0, 0, 0, h);
+        if (isAgency) {
+          bg.addColorStop(0, "#0A192F");
+          bg.addColorStop(1, "#162C46");
+        } else if (isNightCrime) {
+          bg.addColorStop(0, "#1C1427");
+          bg.addColorStop(1, "#2C1B1E");
+        } else {
+          bg.addColorStop(0, "#242A24");
+          bg.addColorStop(1, "#3A3124");
+        }
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, w, h);
+
+        if (isAgency) {
+          // Animated radar/police sweep glow
+          const pulse = 0.25 + 0.2 * Math.sin(tSec * 4.5);
+          ctx.fillStyle = `rgba(41, 121, 255, ${pulse.toFixed(2)})`;
+          ctx.beginPath(); ctx.arc(w * 0.16, h * 0.22, 22, 0, Math.PI * 2); ctx.fill();
+          ctx.strokeStyle = "rgba(100, 181, 246, 0.35)";
+          ctx.lineWidth = 1.2;
+          ctx.beginPath(); ctx.arc(w * 0.84, h * 0.26, 12 + (tSec * 12) % 16, 0, Math.PI * 2); ctx.stroke();
+        } else if (isNightCrime) {
+          const glow = 0.18 + 0.12 * Math.sin(tSec * 3.2);
+          ctx.fillStyle = `rgba(224, 177, 69, ${glow.toFixed(2)})`;
+          ctx.beginPath(); ctx.arc(w * 0.2, h * 0.78, 28, 0, Math.PI * 2); ctx.fill();
+        } else {
+          ctx.fillStyle = "rgba(255, 224, 130, 0.15)";
+          ctx.beginPath(); ctx.arc(w * 0.5, h * 0.32, 36 + Math.sin(tSec * 2) * 3, 0, Math.PI * 2); ctx.fill();
+        }
+        drawPortrait(ctx, enc.portrait, w * 0.5, h * 0.98, 0.58, { isLive: true, timeSec: tSec });
+      };
+      let lastEncDraw = 0;
+      const tickEnc = (nowTs) => {
+        if (!dlg.open) {
+          window._encounterAnimRaf = null;
+          return;
+        }
+        if (!lastEncDraw || nowTs - lastEncDraw >= 36) {
+          lastEncDraw = nowTs;
+          drawEncFrame((nowTs || Date.now()) * 0.001);
+        }
+        window._encounterAnimRaf = requestAnimationFrame(tickEnc);
+      };
+      drawEncFrame(Date.now() * 0.001);
+      if (typeof requestAnimationFrame === "function") {
+        window._encounterAnimRaf = requestAnimationFrame(tickEnc);
+      }
     }
     const optsWrap = document.getElementById("encounter-options");
     optsWrap.innerHTML = "";
@@ -6189,9 +6417,9 @@
       options: [
         {
           id: "accept_sbk_agent",
-          label: L("🕵️ Стати негласним агентом СБК «Кордон-7»! (+2 500 🪙 підйомних)", "🕵️ Become Undercover Agent 'Border-7'! (+2,500 🪙 bonus)"),
+          label: L("🕵️ Стати негласним агентом СБК «Кордон-7»! (+2 500 🪙 +350 💵)", "🕵️ Become Undercover Agent 'Border-7'! (+2,500 🪙 +350 💵)"),
           outcome: L("Ти підписав таємну угоду! Тепер ти негласний агент СБК «Кордон-7» (ціль: 4 агенти)!", "You signed the covert agreement! Hunt 4 enemy operatives!"),
-          moneyDelta: 2500, timeDelta: 15, riskDelta: -15, sbkDelta: 20, tolikDelta: 0, palychDelta: 0, moraleDelta: 10,
+          moneyDelta: 2500, usdDelta: 350, timeDelta: 15, riskDelta: -15, sbkDelta: 20, tolikDelta: 0, palychDelta: 0, moraleDelta: 10,
           onSelect: () => { state.isUndercoverSbkAgent = true; unlockDiscovery("SERV_SBK_AGENT"); }
         },
         {
@@ -6217,15 +6445,15 @@
       options: [
         {
           id: "stay_undercover_colonel",
-          label: L("🕵️ Залишитися Таємним Полковником і ПРОДОВЖУВАТИ ГРУ! (+6 500 🪙, ставка 1 800 🪙)", "🕵️ Stay as Covert Colonel & KEEP PLAYING! (+6,500 🪙, 1,800 🪙 salary)"),
+          label: L("🕵️ Залишитися Таємним Полковником і ПРОДОВЖУВАТИ ГРУ! (+6 500 🪙 +1 500 💵)", "🕵️ Stay as Covert Colonel & KEEP PLAYING! (+6,500 🪙 +1,500 💵)"),
           outcome: L("Ти сховав погони полковника в сейф і залишився негласним господарем кордону!", "You locked the Colonel's epaulets in the safe and stayed as covert master of the border!"),
-          moneyDelta: 6500, timeDelta: 30, riskDelta: -40, sbkDelta: 30, tolikDelta: 0, palychDelta: 0, moraleDelta: 25
+          moneyDelta: 6500, usdDelta: 1500, timeDelta: 30, riskDelta: -40, sbkDelta: 30, tolikDelta: 0, palychDelta: 0, moraleDelta: 25
         },
         {
           id: "retire_to_sbk_hq",
-          label: L("🏛️ Очолити Центральний Штаб у Кийграді (Завершити службу — Персональне Досьє)", "🏛️ Lead Central HQ in Kyihrad (Finish Game — Epilogue Dossier)"),
+          label: L("🏛️ Очолити Центральний Штаб у Кийграді (+1 500 💵 премії — Досьє)", "🏛️ Lead Central HQ in Kyihrad (+1,500 💵 — Epilogue Dossier)"),
           outcome: L("Ти передаєш ключі від будки й від'їжджаєш до столиці!", "You depart for Kyihrad!"),
-          moneyDelta: 6500, timeDelta: 0, riskDelta: 0, sbkDelta: 30, tolikDelta: 0, palychDelta: 0, moraleDelta: 20,
+          moneyDelta: 6500, usdDelta: 1500, timeDelta: 0, riskDelta: 0, sbkDelta: 30, tolikDelta: 0, palychDelta: 0, moraleDelta: 20,
           onSelect: () => { triggerEnding("SBK_SHADOW_COLONEL"); return true; }
         }
       ]
