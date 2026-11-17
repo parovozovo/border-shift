@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v5.4";
+  const BUILD_VERSION = "v5.5";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -3301,6 +3301,27 @@
       const portrait = randomPortrait("M");
       const cCase = pick(CONTRABAND_COVERS);
       const carOnlyMeta = makeTransportMeta(pick(TRANSPORT_CATALOG.filter(m => m.isCar)), null, generatePlate(city.code, true));
+      const smugglerGreets = [
+        L(`«Салют, шефе! Звичайні речі з м. ${city.uk}, усе по декларації!»`, `'Hello boss! Ordinary cargo from ${city.en}, all declared!'`),
+        L(`«Добрий вечір, командире! Везем запчастини та речі в Поландію, поспішаємо на паром!»`, `'Good evening! Hauling spare parts & luggage, rushing for the ferry!'`),
+        L(`«Вітаю, інспекторе! Перевіряйте папери — я вже третю годину в черзі стою!»`, `'Hi inspector! Check the papers, been waiting in line for three hours!'`),
+        L(`«Здоровенькі були! З м. ${city.uk} на ярмарок везу товар, усе чисто і по чеках!»`, `'Greetings! Taking market goods from ${city.en}, all receipts clean!'`),
+        L(`«Та там нічого цікавого — коробки, ганчір'я, особисті речі. Пропускайте!»`, `'Nothing interesting back there — just boxes and rags. Wave me through!'`),
+        L(`«Спокійної зміни, пане офіцере! Усе заповнено як треба, без затримок!»`, `'Quiet shift, officer! Everything is filled out properly!'`)
+      ];
+      const smugglerInterrogations = [
+        L("«Навіщо пса кликати, він мені сумки подряпає! Домовимось по-тихому!»", "'No need for the sniffer dog, it scratches my bags! Let's settle quietly!'"),
+        L("«Слухай, у мене під обшивкою делікатний товар... може не будемо будити Бавовну?»", "'Listen, fragile cargo inside... let's not wake the sniffer dog, okay?'"),
+        L("«Та які перевірки вночі? Давай я краще віддячу за швидке оформлення!»", "'Why inspect at night? Let me thank you for fast clearance instead!'"),
+        L("«Тихіше, інспекторе... там у багажнику дещо не для протоколу. Поговоримо по-діловому?»", "'Quiet, inspector... something off-record in the trunk. Talk business?'"),
+        L("«Ех, бачу ти окатий... скільки коштує закрити очі на один багажник?»", "'Ah, sharp eyes... what does it cost to skip the trunk check?'")
+      ];
+      const smugglerIntimidates = [
+        L("«*Здригнувся, коли пес підійшов* Заберіть «Бавовну» від багажника!»", "'*Flinches as dog nears* Keep Bavovna away from the trunk!'"),
+        L("«*Нервово стискає кермо* Не треба лізти в обшивку, я скаргу на гарячу лінію напишу!»", "'*Grips wheel nervously* Don't touch the lining, I will complain!'"),
+        L("«*Пітніє* Там усе заварено з заводу, немає чого туди світити!»", "'*Sweating* It is factory-welded, nothing to see there!'"),
+        L("«*Озирається на пса* У мене алергія на собак, відведіть його!»", "'*Glances at dog* I am allergic to dogs, take it away!'")
+      ];
       return buildTravelerFromParts({
         fullName, age, gender: "M", portrait, transport: carOnlyMeta,
         passportFields: [
@@ -3322,9 +3343,9 @@
         includeDecl: true,
         declaredCargo: cCase.decl,
         vehicleSearchResult: cCase.found,
-        greeting: L(`«Салют, шефе! Звичайні речі з м. ${city.uk}, усе по декларації!»`, `'Hello boss! Ordinary cargo from ${city.en}, all declared!'`),
-        interrogationReply: L("«Навіщо пса кликати, він мені сумки подряпає! Лови 600 🪙!»", "'No need for the sniffer dog, it scratches my bags! Catch 600 🪙!'"),
-        intimidateReply: L("«*Здригнувся, коли пес підійшов* Заберіть «Бавовну» від багажника!»", "'*Flinches as dog nears* Keep Bavovna away from the trunk!'"),
+        greeting: pick(smugglerGreets),
+        interrogationReply: pick(smugglerInterrogations),
+        intimidateReply: pick(smugglerIntimidates),
         coffeeReply: L("«Дякую... а собака вашу каву любить? Може, заберете її в будку?»", "'Thanks... keep your dog inside with the coffee, okay?'"),
         arrestFull: L("Контрабандиста взято на гарячому за допомогою пса «Бавовни»!", "Smuggler busted red-handed by sniffer dog Bavovna!"),
         arrestToned: L("Вилучено контрабандний вантаж.", "Contraband cargo seized."),
@@ -4802,14 +4823,14 @@
       mod = built.mod;
       baseDay = built.daySpec;
     }
-    const baseSec = (sandbox ? 300 : 270) + (mod.shiftSecDelta || 0) + meta.shiftTimeBonus;
+    const baseSec = (sandbox ? 215 : 195) + (mod.shiftSecDelta || 0) + meta.shiftTimeBonus;
     state = Object.assign(state, {
       phase: "MORNING_BRIEFING",
       isSandbox: sandbox,
       dayIndex: 0,
       daySpec: baseDay,
       sandboxMod: mod,
-      queue: generateDailyQueue(baseDay, sandbox ? 12 : 9),
+      queue: generateDailyQueue(baseDay, sandbox ? 14 : 12),
       travelerIdx: 0,
       selectedDocIdx: 0,
       shiftSec: Math.max(150, baseSec),
@@ -4867,7 +4888,7 @@
 
   function beginShift() {
     const meta = getMetaPerkFlags();
-    const baseSec = state.isSandbox ? 300 : 270;
+    const baseSec = state.isSandbox ? 215 : 195;
     const modDelta = state.sandboxMod ? (state.sandboxMod.shiftSecDelta || 0) : 0;
     const bonusSec = (state.ownedAssets.includes("espresso_machine") ? 35 : 0) + (state.ownedAssets.includes("porsche_911") ? 35 : 0) + (state.ownedAssets.includes("lanos_sport") ? 20 : 0) + (state.ownedAssets.includes("steppe_ebike") ? 18 : 0) + (state.ownedAssets.includes("monako_hypercar") ? 40 : 0) + (state.ownedAssets.includes("addon_nitro_spoiler") ? 20 : 0) + (state.ownedAssets.includes("addon_migalka") ? 15 : 0) + meta.shiftTimeBonus + modDelta;
     state.phase = "BOOTH_SHIFT";
@@ -4893,6 +4914,8 @@
 
   function prepareCurrentTraveler() {
     state.selectedDocIdx = 0;
+    state.uvActive = false;
+    state.docFolded = false;
     state.vehicleInspected = false;
     state.trunkPanelOpen = false;
     state.checkedZones = [];
@@ -5028,16 +5051,37 @@
       }
       state.shiftCorrect += 1;
     } else {
-      fineDelta = excessiveDetain ? 40 : (state.shiftMistakes === 0 ? 50 : 150);
-      if (state.shiftMistakes === 0 && rank.freeFirstMistake) {
-        fineDelta = 0;
-      } else if (state.shiftMistakes === 0 && meta.halfFirstFine) {
-        fineDelta = Math.round(fineDelta * 0.5);
-      }
-      state.palychRep = Math.max(0, state.palychRep - 4);
-      if ((t.isWantedTarget || t.storyTag === "FSM_SPY" || t.storyTag === "SABOTEUR" || t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE") && isApprove) {
+      const isHighRiskTarget = t.isWantedTarget || t.storyTag === "FSM_SPY" || t.storyTag === "SABOTEUR" || t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE";
+      if (isDetain && t.shouldBeApproved) {
+        fineDelta = 1200;
+        state.sbkRep = Math.max(0, state.sbkRep - 12);
+        state.palychRep = Math.max(0, state.palychRep - 10);
+      } else if (isApprove && !t.shouldBeApproved && isHighRiskTarget) {
+        fineDelta = 3500;
         state.sbkRep = Math.max(0, state.sbkRep - 28);
-        state.nabkRisk = Math.min(100, state.nabkRisk + 18);
+        state.nabkRisk = Math.min(100, state.nabkRisk + 20);
+        state.palychRep = Math.max(0, state.palychRep - 12);
+      } else if (isApprove && !t.shouldBeApproved) {
+        fineDelta = 1500;
+        state.sbkRep = Math.max(0, state.sbkRep - 10);
+        state.nabkRisk = Math.min(100, state.nabkRisk + 12);
+        state.palychRep = Math.max(0, state.palychRep - 8);
+      } else {
+        fineDelta = excessiveDetain ? 500 : 600;
+        if (state.shiftMistakes === 0 && rank.freeFirstMistake) {
+          fineDelta = 0;
+        } else if (state.shiftMistakes === 0 && meta.halfFirstFine) {
+          fineDelta = Math.round(fineDelta * 0.5);
+        }
+        state.palychRep = Math.max(0, state.palychRep - 6);
+      }
+      if (t.storyTag === "NABK_STING" && state.bribeAccepted && isApprove) {
+        fineDelta += 2000;
+        state.sbkRep = Math.max(0, state.sbkRep - 15);
+        if (!state.isUndercoverSbkAgent) {
+          state.reprimands = (state.reprimands || 0) + 1;
+          state.underSurveillance = true;
+        }
       }
       state.shiftMistakes += 1;
     }
@@ -5212,7 +5256,7 @@
       state.daySpec = ACT_ONE_DAYS[nextIdx];
     }
 
-    state.queue = generateDailyQueue(state.daySpec, state.isSandbox ? 12 : 9);
+    state.queue = generateDailyQueue(state.daySpec, state.isSandbox ? 14 : 12);
     state.shiftProcessed = 0;
     state.shiftCorrect = 0;
     state.shiftMistakes = 0;
@@ -6082,7 +6126,7 @@
               <button type="button" id="btn-take-bribe" style="background:${t.bribeOffer.isFriendlyGift ? "#1B5E20" : "#6D4C41"};color:#E0B145;padding:5px 8px;font-size:11px;width:100%;margin-top:4px;">
                 ${t.bribeOffer.isFriendlyGift ? tr(L(`🤝 ВЗЯТИ ПІДГОН НА КАВУ (+${bribeInfo.display})`, `🤝 ACCEPT GIFT (+${bribeInfo.display})`), state.lang) : tr(L(`✉️ ВЗЯТИ КОНВЕРТ (+${bribeInfo.display})`, `✉️ TAKE ENVELOPE (+${bribeInfo.display})`), state.lang)}
               </button>
-              ${!t.bribeOffer.isFriendlyGift ? `<div style="font-size:10px;color:#FFAB91;margin-top:2px;">⚖️ ${tr(L("Пропозиція хабаря — кримінал (можна 🚨 Затримати)", "Offering a bribe is a crime (can 🚨 Detain)"), state.lang)}</div>` : ""}
+              ${!t.bribeOffer.isFriendlyGift ? `<div style="font-size:10px;color:${state.nabkRisk >= 65 || state.underSurveillance ? "#FF5252" : "#FFAB91"};margin-top:2px;">${state.nabkRisk >= 65 || state.underSurveillance ? tr(L(`⚠️ НАБК ${state.nabkRisk}% — дуже небезпечно брати! Краще 🚨 Затримати`, `⚠️ NABK ${state.nabkRisk}% — risky! Better 🚨 Detain`), state.lang) : tr(L("⚖️ Пропозиція хабаря — кримінал (можна 🚨 Затримати)", "Offering a bribe is a crime (can 🚨 Detain)"), state.lang)}</div>` : ""}
             ` : (state.bribeAccepted ? `<div style="color:#81C784;font-size:11px;font-weight:700;margin-top:4px;">${tr(L("✔ У кишені (тисни ✔ ПРОПУСТИТИ)", "✔ Pocketed (press ✔ APPROVE)"), state.lang)}</div>` : "")}
           </div>
         </section>
@@ -6123,7 +6167,48 @@
 
         <section class="desk-area">
           <div class="doc-tabs" id="doc-tabs-bar"></div>
-          <div class="doc-paper ${state.uvActive ? "uv-mode" : ""}">
+          ${(() => {
+            const titleStr = (doc.title && doc.title.uk ? doc.title.uk : "").toUpperCase();
+            let docTheme = "doc-theme-cert";
+            let headerBanner = "";
+            if (doc.type === "PASSPORT") {
+              if (titleStr.includes("ПОЛАНД") || titleStr.includes("ФРАНЦ")) {
+                docTheme = "doc-theme-foreign-burgundy";
+                headerBanner = tr(L("📕 ІНОЗЕМНИЙ ПАСПОРТ • ЄВРО-ЗРАЗОК", "📕 FOREIGN PASSPORT • EURO SERIES"), state.lang);
+              } else if (titleStr.includes("БРИТАН") || titleStr.includes("КАРПАТ")) {
+                docTheme = "doc-theme-foreign-green";
+                headerBanner = tr(L("📗 ІНОЗЕМНИЙ ПАСПОРТ • ЗАКОРДОННИЙ", "📗 FOREIGN PASSPORT • OVERSEAS"), state.lang);
+              } else if (titleStr.includes("ГЕРМАН")) {
+                docTheme = "doc-theme-foreign-slate";
+                headerBanner = tr(L("📓 ІНОЗЕМНИЙ ПАСПОРТ • ШТОС-СЕРІЯ", "📓 FOREIGN PASSPORT • SHTOS SERIES"), state.lang);
+              } else {
+                docTheme = "doc-theme-kraina";
+                headerBanner = tr(L("🛡️ KRAINA • НАЦІОНАЛЬНИЙ ПАСПОРТ", "🛡️ KRAINA • NATIONAL PASSPORT"), state.lang);
+              }
+            } else if (doc.type === "MILITARY_ID") {
+              docTheme = "doc-theme-oblik";
+              headerBanner = tr(L("📱 ДЕРЖАВНИЙ РЕЄСТР «ОБЛІК+»", "📱 DIGITAL REGISTRY 'OBLIK+'"), state.lang);
+            } else if (doc.type === "VEHICLE_CUSTOMS") {
+              docTheme = "doc-theme-customs";
+              headerBanner = tr(L("🚘 МИТНА ДЕКЛАРАЦІЯ ТА ТЕХПАСПОРТ", "🚘 CUSTOMS & VEHICLE REGISTRATION"), state.lang);
+            } else {
+              headerBanner = tr(L("📄 ОФІЦІЙНИЙ БЛАНК ДПСК", "📄 OFFICIAL BORDER FORM"), state.lang);
+            }
+            if (state.docFolded) {
+              return `
+                <div class="doc-paper ${docTheme}" style="justify-content:center;align-items:center;text-align:center;min-height:130px;cursor:pointer;" id="btn-unfold-doc">
+                  <div style="font-size:12px;font-weight:900;letter-spacing:0.6px;opacity:0.85;">${headerBanner}</div>
+                  <div style="font-size:15px;font-weight:800;margin:4px 0;">${tr(doc.title, state.lang)}</div>
+                  <button type="button" class="btn-mustard" style="padding:5px 12px;font-size:11px;">🔓 ${tr(L("Розгорнути документ", "Open Document"), state.lang)}</button>
+                </div>
+              `;
+            }
+            return `
+          <div class="doc-paper ${docTheme} ${state.uvActive ? "uv-mode" : ""}">
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:9.5px;font-weight:900;letter-spacing:0.5px;opacity:0.78;border-bottom:1px dashed rgba(0,0,0,0.18);padding-bottom:3px;">
+              <span>${headerBanner}</span>
+              <button type="button" id="btn-fold-doc" style="background:transparent;color:inherit;padding:0 4px;font-size:10px;opacity:0.75;">📂 ${tr(L("Скласти", "Fold"), state.lang)}</button>
+            </div>
             <div class="row-between">
               <div>
                 <div style="font-weight:800;font-size:14px;">${tr(doc.title, state.lang)}</div>
@@ -6188,6 +6273,8 @@
               </div>
             ` : ""}
           </div>
+            `;
+          })()}
           ${state.scanActive ? `
             <div class="scanner-box">
               <div style="display:flex;justify-content:space-between;font-size:11px;color:#E0B145;font-weight:800;">
@@ -6265,20 +6352,34 @@
       t.documents.forEach((dItem, idx) => {
         const b = document.createElement("button");
         b.type = "button";
-        b.className = "doc-tab" + (idx === state.selectedDocIdx ? " active" : "");
-        const labelMap = {
-          PASSPORT: L("🛂 Паспорт", "🛂 Passport"),
-          EXEMPTION_CERT: L("📄 Довідка", "📄 Permit"),
-          MILITARY_ID: L("📱 Облік+", "📱 Oblik+"),
-          VEHICLE_CUSTOMS: L("🚘 Техпаспорт", "🚘 Transport")
-        };
-        b.textContent = tr(labelMap[dItem.type] || dItem.title, state.lang);
-        b.addEventListener("click", () => { audio.playTap(); state.selectedDocIdx = idx; render(); });
+        const tTitle = (dItem.title && dItem.title.uk ? dItem.title.uk : "").toUpperCase();
+        let tabTheme = "";
+        let labelText = dItem.title;
+        if (dItem.type === "PASSPORT") {
+          if (tTitle.includes("ПОЛАНД") || tTitle.includes("ФРАНЦ")) { tabTheme = "tab-foreign-burgundy"; labelText = L("📕 Паспорт (ЄС)", "📕 Passport"); }
+          else if (tTitle.includes("БРИТАН") || tTitle.includes("КАРПАТ")) { tabTheme = "tab-foreign-green"; labelText = L("📗 Паспорт (Закорд.)", "📗 Passport"); }
+          else if (tTitle.includes("ГЕРМАН")) { tabTheme = "tab-foreign-slate"; labelText = L("📓 Паспорт (Штос)", "📓 Passport"); }
+          else { tabTheme = "tab-kraina"; labelText = L("🛡️ Паспорт KRAINA", "🛡️ KRAINA ID"); }
+        } else if (dItem.type === "MILITARY_ID") {
+          tabTheme = "tab-oblik"; labelText = L("📱 Облік+", "📱 Oblik+");
+        } else if (dItem.type === "VEHICLE_CUSTOMS") {
+          tabTheme = "tab-customs"; labelText = L("🚘 Техпаспорт", "🚘 Transport");
+        } else {
+          labelText = L("📄 Довідка", "📄 Permit");
+        }
+        b.className = "doc-tab " + tabTheme + (idx === state.selectedDocIdx ? " active" : "");
+        b.textContent = tr(labelText, state.lang);
+        b.addEventListener("click", () => { audio.playTap(); state.selectedDocIdx = idx; state.docFolded = false; render(); });
         tabsBar.appendChild(b);
       });
 
+      const foldBtn = document.getElementById("btn-fold-doc");
+      if (foldBtn) foldBtn.addEventListener("click", () => { audio.playTap(); state.docFolded = true; render(); });
+      const unfoldBtn = document.getElementById("btn-unfold-doc");
+      if (unfoldBtn) unfoldBtn.addEventListener("click", () => { audio.playTap(); state.docFolded = false; render(); });
+
       const fieldsList = document.getElementById("doc-fields-list");
-      doc.fields.forEach(f => {
+      if (fieldsList) doc.fields.forEach(f => {
         const isSpotted = f.disc && state.spottedCodes.includes(f.disc.code);
         const rowBtn = document.createElement("button");
         rowBtn.type = "button";
@@ -6298,7 +6399,8 @@
         fieldsList.appendChild(rowBtn);
       });
 
-      document.getElementById("btn-doc-seal").addEventListener("click", () => {
+      const sealBtn = document.getElementById("btn-doc-seal");
+      if (sealBtn) sealBtn.addEventListener("click", () => {
         audio.playTap();
         if (doc.sealDisc && !state.spottedCodes.includes(doc.sealDisc.code)) {
           state.spottedCodes.push(doc.sealDisc.code);
