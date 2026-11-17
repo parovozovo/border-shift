@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v7.0";
+  const BUILD_VERSION = "v7.1";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -3028,33 +3028,285 @@
     { decl: L("Коробки з телевізійними антенами", "TV antenna boxes"), found: L("ПЕС «БАВОВНА» РОЗДЕР КАРТОН: 5 нелегальних терміналів супутникового зв'язку на продаж!", "DOG SEARCH: 5 undeclared satellite terminals for resale!"), bribeAmount: 1900, currency: "USD" }
   ];
 
+  // ★ RICH TRAVELER ARCHETYPES (Appearance + Matched Transport + Persona Dialogues!) ★
+  const TRAVELER_ARCHETYPES = {
+    PENSIONER: {
+      shapes: ["RETRO", "BICYCLE", "BUS", "ON_FOOT", "SEDAN"],
+      cargos: [
+        L("Домашні закрутки, мед у банках та теплі шкарпетки", "Homemade jars, honey & wool socks"),
+        L("Мішок картоплі, часник та бабусине сало", "Sack of potatoes, garlic & homemade salo"),
+        L("Ліки від тиску, термос із ромашкою та плед", "Blood pressure meds, chamomile tea & blanket"),
+        L("Саджанці яблунь, лопати та старі фотоальбоми", "Apple saplings, shovels & old photo albums")
+      ],
+      greetings: [
+        L("«Доброго здоров'я, синку! Їду з м. %CITY% до онуків, усе по-старому й по закону!»", "'Good health, son! Heading from %CITY% to my grandkids, all legal!'"),
+        L("«Ой, зачекайте, зараз окуляри знайду... Ось паспорт із %CITY%, гляньте, будь ласка!»", "'Wait, let me find my glasses... Here is my passport from %CITY%!'"),
+        L("«Їду на базар у Варшавку — там сир, мед і консервація, усе своє, домашнє!»", "'Going to Varshavka market with homemade cheese, honey & pickles!'"),
+        L("«Здоров, прикордоннику! Дід уже 40 років за кермом своєї ластівки, жодного штрафу!»", "'Hello officer! 40 years behind the wheel of this beauty, zero tickets!'"),
+        L("«Слава Богу, черга рухається! Їду з м. %CITY% до сестри на ювілей.»", "'Thank goodness the line moves! Heading from %CITY% to my sister's birthday.'")
+      ],
+      interrogations: [
+        L("«Та перевіряйте хоч лупою, синку, в нашому ЦНАПі в %CITY% усе чітко штампують!»", "'Check with a magnifying glass if you want, everything is official!'"),
+        L("«Ой, та я ще вчора ввечері всі папери в папку склав, усе там зійшлося!»", "'I packed all papers neatly last night, everything matches!'")
+      ],
+      intimidates: [
+        L("«Ох ти ж батюшки, чого так гримати на стару людину?! Тиск же підскочить!»", "'Oh goodness, why bang on the glass at an elder?! My blood pressure!'"),
+        L("«Не кричи, синку, я погано чую, але документи в мене чистіші за сльозу!»", "'Don't shout son, I'm hard of hearing, but my papers are spotless!'")
+      ],
+      coffees: [
+        L("«Дай Боже здоров'я за гарячу каву! Візьми 50 🪙 онукам на цукерки... тобто тобі на каву!»", "'God bless you for the hot coffee! Take 50 🪙 for yourself!'"),
+        L("«Спасибі, добрий чоловіче! Пахне як вдома в %CITY%. Легкої тобі зміни!»", "'Thank you kindly! Smells like home. Have an easy shift!'")
+      ]
+    },
+    GLAM_LADY: {
+      shapes: ["SPORT", "SUV", "E_SCOOTER", "SEDAN"],
+      cargos: [
+        L("Валіза парфумів, 4 капелюшки, фен та сукні", "Perfume case, 4 hats, hairdryer & dresses"),
+        L("Переноска з рудим котом, корм та ветпаспорт", "Cat carrier with orange cat, food & vet passport"),
+        L("Весільна сукня та триповерховий торт", "Wedding dress & 3-tier cake"),
+        L("Кільцева лампа, косметичка та 2 пари туфель", "Ring light, makeup bag & 2 pairs of heels")
+      ],
+      greetings: [
+        L("«Привітик, інспекторе! Спізнююсь на літак із Варшавки, подивіться папери швиденько!»", "'Hi inspector! Late for my flight in Varshavka, please check fast!'"),
+        L("«Добрий день! Їду з м. %CITY% на б'юті-форум, усе в повному порядку, дивіться!»", "'Good day! Heading from %CITY% to a beauty expo, all clean!'"),
+        L("«Ой, а ви такий серйозний! Ось мій паспорт, там навіть фото вдале, правда?»", "'Oh, you look so serious! Here is my passport — cute photo, right?'"),
+        L("«Вітаю! Везу свого котика до грумера за кордон, ветпаспорт і документи на місці!»", "'Hello! Taking my kitty to a groomer abroad, all docs ready!'"),
+        L("«Повертаюся з шопінгу додому в %CITY%, везу подарунки подругам!»", "'Returning from shopping to %CITY% with gifts for friends!'")
+      ],
+      interrogations: [
+        L("«Та все там ідеально, я перед виїздом у салоні й паспорт оновила, і манікюр зробила!»", "'Everything is flawless, I checked my passport right before my manicure!'"),
+        L("«Можете перевіряти хоч тричі, у мене кожна буквочка за законом!»", "'Check three times if you like, every letter is legal!'")
+      ],
+      intimidates: [
+        L("«Ей! Обережніше зі склом, це ж тонування преміум-класу!»", "'Hey! Careful with the glass, that's premium tint!'"),
+        L("«Фу, навіщо так кричати? Я ж не злочинниця якась, дивіться нормально!»", "'Ugh, why yell like that? I'm not a criminal!'")
+      ],
+      coffees: [
+        L("«О, латешка! Ви прямо джентльмен! Ловіть 50 🪙 на сиропчик!»", "'Ooh, coffee! What a gentleman! Catch 50 🪙 for syrup!'"),
+        L("«Мерсі за каву! Якби всі на КПП були такі милі!»", "'Merci for the coffee! Wish everyone at the border was this sweet!'")
+      ]
+    },
+    MAJOR_VIP: {
+      shapes: ["G_WAGON", "SPORT", "SUV", "ARMORED"],
+      cargos: [
+        L("Шкіряний кейс із контрактами, ноутбук та гольф-ключки", "Leather briefcase, laptop & golf clubs"),
+        L("Елітний костюм-трійка та коробка сигар", "Tailored 3-piece suit & cigar box"),
+        L("Охоронний кейс із документами інвестфонду", "Locked investment fund briefcase"),
+        L("Карбоновий шосейник та брендова сумка", "Carbon road bike & designer duffle")
+      ],
+      greetings: [
+        L("«Швидше оформлюй, командире, у мене через годину переговори в Поландії!»", "'Process it fast, commander, I have negotiations in Polandia in an hour!'"),
+        L("«Здоров! Офіційне бронювання, їду з %CITY% по держконтракту — не затримуй кортеж.»", "'Hey! Official critical exemption from %CITY%, don't hold up the ride.'"),
+        L("«Добрий день. Усе оформлено через юристів, комар носа не підточить.»", "'Good day. Everything cleared by my lawyers, spotless.'"),
+        L("«Я тут рідко в черзі стою, але правила є правила — тримай документи.»", "'Rarely wait in lines, but rules are rules — here are the papers.'")
+      ],
+      interrogations: [
+        L("«У мене найкращі адвокати в %CITY%, там жодної коми зайвої немає!»", "'I have the best lawyers in %CITY%, not a single typo in there!'"),
+        L("«Перевіряй скільки влізе, час — гроші, а в мене все чисто.»", "'Check all you want, time is money, and I'm clean.'")
+      ],
+      intimidates: [
+        L("«Ти по капоту не стукай, ця тачка коштує як твій КПП за рік!»", "'Don't bang on my hood, this car costs more than your post!'"),
+        L("«Спокійніше, інспекторе, не псуй нерви ні собі, ні мені.»", "'Easy there, inspector, save your nerves.'")
+      ],
+      coffees: [
+        L("«О, еспресо не завадить! Тримай 50 🪙, повага за сервіс.»", "'Espresso hits the spot! Take 50 🪙, respect for the service.'"),
+        L("«Дякую за каву, норм сервіс на кордоні!»", "'Thanks for the coffee, solid border service!'")
+      ]
+    },
+    WORKER_DRIVER: {
+      shapes: ["MINIBUS", "TRUCK", "PICKUP", "SEDAN"],
+      cargos: [
+        L("Запчастини до трактора, ключі, домкрат та каністра", "Tractor spare parts, wrenches & jack"),
+        L("Генератор 3 кВт, подовжувачі та будматеріали", "3kW generator, cables & building supplies"),
+        L("Медичні шини, турнікети та гуманітарні коробки", "Medical splints, tourniquets & aid boxes"),
+        L("Пластикові ящики порожні на закупку товару", "Empty crates for cargo pickup")
+      ],
+      greetings: [
+        L("«Здоров, братан! Третю добу за баранкою з %CITY%, усе по накладній чітко!»", "'Hey bro! Third day behind the wheel from %CITY%, manifest is clean!'"),
+        L("«Доброго вечора! Везу волонтерський генератор і будінструмент, ось папери.»", "'Evening! Hauling a volunteer generator and tools, here are the papers.'"),
+        L("«Бажаю здоров'я! Їду порожняком за запчастинами у Варшавку, усе легально.»", "'Greetings! Driving empty to Varshavka for spare parts, all legal.'"),
+        L("«Салют, командире! Робочий рейс з %CITY%, нехай зміна летить швидко!»", "'Salute, boss! Work run from %CITY%, hope your shift flies by!'"),
+        L("«Ось дозвіл на міжнародні перевезення і техпаспорт — усе звіряв на базі!»", "'Here is my carrier permit and registration — checked at the depot!'")
+      ],
+      interrogations: [
+        L("«Та кажу тобі, сам у диспетчера двічі перевіряв, печатка мокра й свіжа!»", "'Telling you, checked twice with dispatch, stamp is fresh!'"),
+        L("«Крути хоч до ранку, братан, у мене все біле-прозоре!»", "'Inspect till morning bro, I'm 100% legit!'")
+      ],
+      intimidates: [
+        L("«Тихіше по дверях, вона ще в кредиті! Усе ж нормально по доках!»", "'Easy on the door, still paying off the loan! Papers are fine!'"),
+        L("«Ну чого галасувати, ми ж люди робочі, усе по закону везу!»", "'Why shout, we're working folks, hauling everything legally!'")
+      ],
+      coffees: [
+        L("«Оце по-братськи! Зігрів душу! На 50 🪙 на нормальний бутерброд!»", "'That's brotherly! Warmed my soul! Take 50 🪙 for a sandwich!'"),
+        L("«Дякую за каву, командире! Ні цвяха ні жезла тобі на зміні!»", "'Thanks for the coffee, boss! Smooth shift to you!'")
+      ]
+    },
+    IT_VOLUNTEER: {
+      shapes: ["E_SCOOTER", "BICYCLE", "SEDAN", "MINIBUS", "MOTORCYCLE"],
+      cargos: [
+        L("Ігровий ноутбук, 2 павербанки та термінал зв'язку", "Gaming laptop, 2 powerbanks & sat-terminal"),
+        L("Коробки з українськими книжками та павербанками", "Boxes of books & powerbanks"),
+        L("Фотоштативи, рюкзак та дрон-іграшка для гуртка", "Tripods, backpack & school toy drone"),
+        L("Волонтерські аптечки, грілки та спальники", "Volunteer medkits, hand-warmers & sleeping bags")
+      ],
+      greetings: [
+        L("«Привіт! Їду з м. %CITY% на техконференцію — документи й QR в «Облік+» свіжі!»", "'Hi! Heading from %CITY% to a tech conf — docs and QR updated!'"),
+        L("«Добрий день! Везу павербанки та аптечки з %CITY%, ось усі накладні.»", "'Good day! Bringing powerbanks and medkits from %CITY%, all invoices ready.'"),
+        L("«Вітаю! Зараз такий час, що простіше самокатом/велом без черги — тримайте паспорт!»", "'Hello! Faster on two wheels than waiting in line — here is my ID!'"),
+        L("«Добрий день, інспекторе! Перевірте, будь ласка, документи, усе в реєстрі синхронізовано.»", "'Good day inspector! Everything is synced in the registry.'")
+      ],
+      interrogations: [
+        L("«У мене навіть цифрова копія в телефоні є, усе сходиться до цифри!»", "'Got a digital backup too, every digit matches!'"),
+        L("«Можемо звірити по базі — там 100% валідний запис!»", "'Check the database — 100% valid record!'")
+      ],
+      intimidates: [
+        L("«Оу, навіщо така агресія? Я просто волонтер/айтішник, усе ж легально!»", "'Whoa, why the aggression? Everything is legal!'"),
+        L("«Спокійно, я не тікаю, просто покажіть, що вам звірити!»", "'Relax, I'm not running, just tell me what to show!'")
+      ],
+      coffees: [
+        L("«О, фільтр-кава на кордоні — це топ! Задоначу 50 🪙 у банку вашого поста!»", "'Filter coffee at the border is top tier! Catch 50 🪙 for the post!'"),
+        L("«Дякую за каву, дуже вчасно! Гарної зміни!»", "'Thanks for the coffee, right on time! Good shift!'")
+      ]
+    },
+    BIKER_TRAVELER: {
+      shapes: ["MOTORCYCLE", "PICKUP", "SUV", "BICYCLE"],
+      cargos: [
+        L("Рибальські вудки, намет, каремат та термос", "Fishing rods, tent, sleeping pad & thermos"),
+        L("Лижне спорядження, термобілизна та окуляри", "Ski gear, thermal wear & goggles"),
+        L("Колекція вінілу, гітара та кофр із інструментом", "Vinyl records, guitar & tool roll"),
+        L("Спортивний рюкзак, спальник та ліхтарик", "Sport backpack, sleeping bag & flashlight")
+      ],
+      greetings: [
+        L("«Салют, друже! Дорога кличе, їду з %CITY% у гори — папери в рюкзаку сухі й чисті!»", "'Salute friend! Road calls, riding from %CITY% to the mountains — papers clean!'"),
+        L("«Вітаю на посту! Вибрався на риболовлю до Карпатії, ось паспорт і техпаспорт.»", "'Greetings! Heading fishing toward Karpatia, here are my docs.'"),
+        L("«Здоров! Вітер у лице, але документи тримаю в порядку — гляньте!»", "'Hey! Wind in my face, but my paperwork is tight — take a look!'"),
+        L("«Добрий вечір! Їду в тур Європою на своєму залізному коні, усе офіційно!»", "'Evening! Touring Europe on my iron horse, all official!'")
+      ],
+      interrogations: [
+        L("«На трасі без паперів далеко не заїдеш, тож у мене все залізним порядком!»", "'Can't ride far without clean papers, so mine are rock solid!'"),
+        L("«Дивись скільки треба, друже, мені приховувати нічого!»", "'Take your time buddy, nothing to hide!'")
+      ],
+      intimidates: [
+        L("«Ей, по баку не бий! Ми на трасі поважаємо один одного!»", "'Hey, don't bang on the tank! Respect the ride!'"),
+        L("«Крутий характер, інспекторе, але папери в мене справжні!»", "'Tough attitude, inspector, but my papers are real!'")
+      ],
+      coffees: [
+        L("«Оце тема після вітру на трасі! Тримай 50 🪙 на заправку термоса!»", "'Just what I needed after the highway wind! Catch 50 🪙!'"),
+        L("«Спасибі за гарячу каву, друже! Бережи себе на посту!»", "'Thanks for the hot coffee, friend! Stay safe on duty!'")
+      ]
+    }
+  };
+
+  function pickTransportForShapes(shapes, cityCode, twoWheelerBias) {
+    let pool = TRANSPORT_CATALOG.filter(m => shapes.includes(m.shape));
+    if (twoWheelerBias && Math.random() < 0.45) {
+      const tw = TRANSPORT_CATALOG.filter(m => m.shape === "BICYCLE" || m.shape === "E_SCOOTER" || m.shape === "ON_FOOT" || m.shape === "MOTORCYCLE");
+      if (tw.length > 0) pool = tw;
+    }
+    if (pool.length === 0) pool = TRANSPORT_CATALOG;
+    const spec = pick(pool);
+    return makeTransportMeta(spec, null, generatePlate(cityCode, spec.isCar));
+  }
+
+  function buildArchetypePortrait(archKey, gender) {
+    const p = randomPortrait(gender);
+    if (archKey === "PENSIONER") {
+      p.hairColor = pick([2, 5]); // silver/grey
+      p.outfitStyle = pick([1, 3, 4]);
+      if (gender === "M") {
+        p.facialHair = pick([2, 3, 4, 5]);
+        p.headwear = Math.random() < 0.55 ? 3 : 0; // knit beanie
+      } else {
+        p.headwear = Math.random() < 0.65 ? 2 : 0; // floral headscarf
+      }
+      if (Math.random() < 0.55) p.glasses = pick([1, 3]);
+    } else if (archKey === "GLAM_LADY") {
+      p.headwear = Math.random() < 0.25 ? 5 : 0;
+      p.lipColor = randInt(0, 3);
+      p.earrings = randInt(1, 3);
+      if (Math.random() < 0.4) p.glasses = pick([2, 4]);
+    } else if (archKey === "MAJOR_VIP") {
+      p.outfitStyle = 2; // suit & tie
+      p.headwear = 0;
+      p.glasses = Math.random() < 0.6 ? pick([2, 4]) : 0;
+      if (Math.random() < 0.55) p.scarOrDetail = 3; // gold chain
+    } else if (archKey === "WORKER_DRIVER") {
+      p.outfitStyle = pick([0, 1, 3]);
+      p.headwear = Math.random() < 0.55 ? pick([1, 3]) : 0;
+      if (gender === "M") p.facialHair = pick([1, 2, 4, 6]);
+    } else if (archKey === "IT_VOLUNTEER") {
+      p.outfitStyle = pick([0, 4]);
+      p.glasses = Math.random() < 0.5 ? pick([1, 3]) : 0;
+      p.headwear = Math.random() < 0.25 ? 1 : 0;
+    } else if (archKey === "BIKER_TRAVELER") {
+      p.outfitStyle = 5; // jacket
+      p.glasses = Math.random() < 0.65 ? 2 : 0; // dark aviators
+      if (gender === "M") p.facialHair = pick([3, 5, 6]);
+      if (Math.random() < 0.3) p.scarOrDetail = 1;
+    }
+    return p;
+  }
+
   function createProceduralTraveler(daySpec) {
     const city = pick(CITIES);
-    let trChoice = null;
-    if (daySpec && daySpec.twoWheelerBias && Math.random() < 0.55) {
-      const twoWheelers = TRANSPORT_CATALOG.filter(t => t.shape === "BIKE" || t.shape === "SCOOTER" || t.shape === "FOOT");
-      if (twoWheelers.length > 0) trChoice = pick(twoWheelers);
-    }
-    const trMeta = makeTransportMeta(trChoice, null, generatePlate(city.code, true));
 
     if (Math.random() < 0.60) {
-      // Honest traveler (high variety of genders, ages, bikes/scooters/on-foot/cars & cities!)
-      const gender = Math.random() < 0.56 ? "F" : "M";
-      const age = (gender === "M" && Math.random() < 0.45) ? randInt(61, 75) : randInt(20, 56);
+      // Honest traveler matched to one of 6 rich archetypes!
+      const archKeys = ["PENSIONER", "GLAM_LADY", "MAJOR_VIP", "WORKER_DRIVER", "IT_VOLUNTEER", "BIKER_TRAVELER"];
+      const archKey = pick(archKeys);
+      const arch = TRAVELER_ARCHETYPES[archKey];
+      let gender = "M";
+      let age = randInt(24, 52);
+      if (archKey === "GLAM_LADY") {
+        gender = "F";
+        age = randInt(21, 38);
+      } else if (archKey === "PENSIONER") {
+        gender = Math.random() < 0.5 ? "F" : "M";
+        age = randInt(61, 76);
+      } else if (archKey === "IT_VOLUNTEER") {
+        gender = Math.random() < 0.4 ? "F" : "M";
+        age = randInt(22, 38);
+      } else if (archKey === "MAJOR_VIP") {
+        gender = Math.random() < 0.2 ? "F" : "M";
+        age = randInt(27, 49);
+      } else if (archKey === "BIKER_TRAVELER") {
+        gender = Math.random() < 0.2 ? "F" : "M";
+        age = randInt(24, 46);
+      } else {
+        gender = Math.random() < 0.12 ? "F" : "M";
+        age = randInt(28, 55);
+      }
+
       const dir = Math.random() < 0.65 ? "EXIT" : "ENTRY";
       const fullName = randomFullName(gender);
-      const portrait = randomPortrait(gender);
-      const cargo = pick(HONEST_CARGOS);
-      const rawGreet = gender === "F" ? pick(HONEST_GREETINGS_F) : pick(HONEST_GREETINGS_M);
-      const greeting = L(rawGreet.uk.replace("%CITY%", city.uk), rawGreet.en.replace("%CITY%", city.en));
+      const portrait = buildArchetypePortrait(archKey, gender);
+      const trMeta = pickTransportForShapes(arch.shapes, city.code, daySpec && daySpec.twoWheelerBias);
+      const cargo = pick(arch.cargos);
+      const rawGreet = pick(arch.greetings);
+      const greeting = L(rawGreet.uk.replace(/%CITY%/g, city.uk), rawGreet.en.replace(/%CITY%/g, city.en));
+      const rawInterr = pick(arch.interrogations);
+      const interrogationReply = L(rawInterr.uk.replace(/%CITY%/g, city.uk), rawInterr.en.replace(/%CITY%/g, city.en));
+      const intimidateReply = pick(arch.intimidates);
+      const rawCoffee = pick(arch.coffees);
+      const coffeeReply = L(rawCoffee.uk.replace(/%CITY%/g, city.uk), rawCoffee.en.replace(/%CITY%/g, city.en));
 
       const extraDocs = [];
       if (dir === "EXIT" && gender === "M" && age >= 18 && age <= 60) {
-        const reasons = [
-          L("Багатодітний батько (3 дітей до 18 років)", "Father of 3 minor children"),
-          L("Офіційне бронювання енергокомпанії «Кийград-Світло»", "Kyihrad Power Grid Critical Exemption"),
-          L("Супровід особи з інвалідністю І групи", "Accompanying 1st-degree disabled relative")
-        ];
+        const reasons = archKey === "MAJOR_VIP"
+          ? [
+              L("Офіційне відрядження стратегічного інвестфонду", "Strategic Investment Mission Permit"),
+              L("Бронювання керівного складу «Укр-Енерго-Люкс»", "Critical Executive Exemption")
+            ]
+          : (archKey === "WORKER_DRIVER"
+            ? [
+                L("Ліцензований водій міжнародних вантажів «Шлях»", "Licensed International Carrier Driver"),
+                L("Бронювання критичної інфраструктури (енергетика)", "Critical Infrastructure Driver Exemption")
+              ]
+            : [
+                L("Багатодітний батько (3 дітей до 18 років)", "Father of 3 minor children"),
+                L("Офіційне бронювання енергокомпанії «Кийград-Світло»", "Kyihrad Power Grid Critical Exemption"),
+                L("Супровід особи з інвалідністю І групи", "Accompanying 1st-degree disabled relative")
+              ]);
         extraDocs.push({
           type: "EXEMPTION_CERT",
           title: L("ДОВІДКА ПРО ВІДСТРОЧКУ", "EXEMPTION CERTIFICATE"),
@@ -3101,17 +3353,18 @@
         includeDecl: daySpec.requireVehicleDecl,
         declaredCargo: cargo,
         greeting,
-        interrogationReply: L("«Перевіряйте хоч двічі, усі печатки з мого міста справжні!»", "'Check twice if you wish, everything is genuine!'"),
-        intimidateReply: L("«Ой... ну навіщо так гримати? Всі папери ж в порядку!»", "'Whoa... why bang on the window? All papers are clean!'"),
-        coffeeReply: giveTip
-          ? L("«О, золота ви людина! На вулиці дубак. Тримайте 50 🪙 на поповнення термоса!»", "'Thank you kindly! It's freezing out there — take 50 🪙 for the thermos!'")
-          : L("«Дякую щиро за теплу каву, легкої зміни вам!»", "'Thank you for the warm coffee, have a smooth shift!'"),
+        interrogationReply,
+        intimidateReply,
+        coffeeReply,
         coffeeTip: giveTip ? 50 : 0,
         arrestFull: L("Ти заарештував абсолютно чесного мандрівника!", "Guards awkwardly detain an innocent traveler!"),
         arrestToned: L("Мандрівника помилково затримано.", "Innocent traveler detained."),
         shouldBeApproved: true
       });
     }
+
+    // Fallback transport for violator schemes (refined per scheme below!)
+    const trMeta = pickTransportForShapes(["SEDAN", "MINIBUS", "SUV", "RETRO", "PICKUP"], city.code, daySpec && daySpec.twoWheelerBias);
 
     // Procedural Violator (7 distinct schemes — zero text spoilers!)
     const maxScheme = daySpec.requireOblikQr ? 6 : (daySpec.requireVehicleDecl ? 5 : 3);
@@ -3129,11 +3382,9 @@
       const gender = isGirl ? "F" : "M";
       const fullName = randomFullName(gender);
       const age = isOldMan ? randInt(62, 76) : randInt(22, 48);
-      const portrait = randomPortrait(gender);
-      if (isOldMan) {
-        portrait.hairColor = 4; // grey/white hair
-        portrait.facialHair = pick([1, 2, 4]);
-      }
+      const scheme0Arch = isGirl ? "GLAM_LADY" : (isOldMan ? "PENSIONER" : "WORKER_DRIVER");
+      const portrait = buildArchetypePortrait(scheme0Arch, gender);
+      const scheme0Tr = pickTransportForShapes(TRAVELER_ARCHETYPES[scheme0Arch].shapes, city.code, daySpec && daySpec.twoWheelerBias);
       const isExpired = isGirl || isOldMan || Math.random() < 0.55;
       const disc = isExpired ? DISCREPANCY.EXPIRED_DATE : DISCREPANCY.AGE_RESTRICTION_NO_PERMIT;
       const expYear = pick(["2019", "2020", "2021"]);
@@ -3147,7 +3398,7 @@
         ? (smallBribeObj.currency === "USD" ? `${smallBribeObj.amount} 💵` : `${smallBribeObj.amount} 🪙`)
         : "";
       return buildTravelerFromParts({
-        fullName, age, gender, direction: "EXIT", portrait, transport: trMeta,
+        fullName, age, gender, direction: "EXIT", portrait, transport: scheme0Tr,
         passportSub: L(`Серія ${city.code}-${randInt(100000, 999999)} • м. ${city.uk}`, `No. ${city.code}-${randInt(100000, 999999)}`),
         passportFields: [
           { label: L("ПІБ", "Full Name"), value: fullName, disc: null },
@@ -3363,12 +3614,13 @@
     }
 
     if (scheme === 5 && daySpec.requireVehicleDecl) {
-      // CONTRABAND_CARGO hidden behind plausible declaration (only in cars/vans, never e-scooters!)
+      // CONTRABAND_CARGO hidden behind plausible declaration (vans/trucks/pickups/SUVs!)
       const fullName = randomFullName("M");
       const age = randInt(28, 53);
-      const portrait = randomPortrait("M");
+      const portrait = buildArchetypePortrait("WORKER_DRIVER", "M");
       const cCase = pick(CONTRABAND_COVERS);
-      const carOnlyMeta = makeTransportMeta(pick(TRANSPORT_CATALOG.filter(m => m.isCar)), null, generatePlate(city.code, true));
+      const smugglerCars = TRANSPORT_CATALOG.filter(m => m.isCar && ["MINIBUS", "TRUCK", "PICKUP", "SUV"].includes(m.shape));
+      const carOnlyMeta = makeTransportMeta(pick(smugglerCars.length ? smugglerCars : TRANSPORT_CATALOG.filter(m => m.isCar)), null, generatePlate(city.code, true));
       const smugglerGreets = [
         L(`«Салют, шефе! Звичайні речі з м. ${city.uk}, усе по декларації!»`, `'Hello boss! Ordinary cargo from ${city.en}, all declared!'`),
         L(`«Добрий вечір, командире! Везем запчастини та речі в Поландію, поспішаємо на паром!»`, `'Good evening! Hauling spare parts & luggage, rushing for the ferry!'`),
@@ -5341,6 +5593,12 @@
     prepareCurrentTraveler();
     saveStateToStorage();
     render();
+  }
+
+  function pushShiftLog(color, text) {
+    if (!state.shiftLogs) state.shiftLogs = [];
+    state.shiftLogs.unshift({ color, text });
+    if (state.shiftLogs.length > 25) state.shiftLogs.length = 25;
   }
 
   function prepareCurrentTraveler() {
