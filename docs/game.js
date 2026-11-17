@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v6.2";
+  const BUILD_VERSION = "v6.3";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -6930,8 +6930,11 @@
           listEl.appendChild(toastDiv);
         }
 
+        const shiftBribeUsd = Math.round((state.shiftBribesTotal || 0) / USD_UAH_RATE);
+        const wealthFactor = Math.round(Math.min(4500, shiftBribeUsd * 0.14 + state.usd * 0.06));
+
         if ((state.reprimands > 0 || state.underSurveillance || state.nabkRisk >= 25) && !state.purchasedExpensesToday.includes("krysha_bribe")) {
-          const baseKUsd = Math.max(55, Math.round((2200 + state.nabkRisk * 75 + (state.reprimands || 0) * 1500) / USD_UAH_RATE));
+          const baseKUsd = Math.max(450, Math.round(450 + state.nabkRisk * 12 + (state.reprimands || 0) * 350 + wealthFactor * 0.75));
           const kCostUsd = state.isUndercoverSbkAgent ? Math.round(baseKUsd * 0.65) : baseKUsd;
           const canK = state.usd >= kCostUsd;
           const kCard = document.createElement("div");
@@ -6975,7 +6978,7 @@
             id: "bribe_sbk",
             icon: "🕵️",
             title: L("Підкупити куратора СБК (+24 СБК, -10% НАБК)", "Bribe SBK Handler (+24 SBK, -10% NABK)"),
-            cost: state.sbkRep < 35 ? 600 : 320,
+            cost: (state.sbkRep < 35 ? 1250 : 650) + Math.round(wealthFactor * 0.9),
             chance: state.sbkRep < 35 ? 0.45 : (state.sbkRep < 60 ? 0.72 : 0.90),
             onSuccess: () => { state.sbkRep = Math.min(100, state.sbkRep + 24); state.nabkRisk = Math.max(0, state.nabkRisk - 10); },
             onFail: () => { state.sbkRep = Math.max(0, state.sbkRep - 10); state.nabkRisk = Math.min(100, state.nabkRisk + 12); }
@@ -6984,7 +6987,7 @@
             id: "bribe_palych",
             icon: "🧢",
             title: L("Підкупити Пал Палича (+22 Палич, -1 догана)", "Bribe Pal Palych (+22 Palych, -1 reprimand)"),
-            cost: (state.reprimands || 0) >= 2 ? 320 : 160,
+            cost: ((state.reprimands || 0) >= 2 ? 750 : 400) + Math.round(wealthFactor * 0.6),
             chance: (state.palychRep < 30 || (state.reprimands || 0) >= 2) ? 0.55 : 0.88,
             onSuccess: () => { state.palychRep = Math.min(100, state.palychRep + 22); state.reprimands = Math.max(0, (state.reprimands || 0) - 1); },
             onFail: () => { state.palychRep = Math.max(0, state.palychRep - 8); }
@@ -6993,7 +6996,7 @@
             id: "bribe_tolik",
             icon: "🚐",
             title: L("Задобрити Толіка (+25 Толік — ближче до втечі)", "Grease Tolik (+25 Tolik rep)"),
-            cost: state.tolikRep < 30 ? 400 : 220,
+            cost: (state.tolikRep < 30 ? 850 : 450) + Math.round(wealthFactor * 0.65),
             chance: state.tolikRep < 30 ? 0.50 : 0.88,
             onSuccess: () => { state.tolikRep = Math.min(100, state.tolikRep + 25); },
             onFail: () => { state.tolikRep = Math.max(0, state.tolikRep - 8); }
@@ -7002,7 +7005,7 @@
             id: "bribe_nabk",
             icon: "⚖️",
             title: L("Підмазати ревізора НАБК (-25% НАБК, зняти нагляд)", "Bribe NABK Auditor (-25% NABK, clear watch)"),
-            cost: state.nabkRisk >= 65 ? 850 : 450,
+            cost: (state.nabkRisk >= 65 ? 1800 : 950) + Math.round(wealthFactor * 1.25),
             chance: state.nabkRisk >= 70 ? 0.45 : (state.underSurveillance ? 0.60 : 0.80),
             onSuccess: () => { state.nabkRisk = Math.max(0, state.nabkRisk - 25); state.underSurveillance = false; },
             onFail: () => { state.nabkRisk = Math.min(100, state.nabkRisk + 15); }
