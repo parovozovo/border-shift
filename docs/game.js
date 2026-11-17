@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v6.0";
+  const BUILD_VERSION = "v6.1";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -2590,12 +2590,12 @@
         { label: L("Відстрочка 18–60", "Exit Permit"), value: L("Без підстави", "Not provided"), disc: DISCREPANCY.AGE_RESTRICTION_NO_PERMIT }
       ],
       includeDecl: true,
-      declaredCargo: L("Шкіряний портфель, диктофон", "Leather briefcase"),
+      declaredCargo: L("Шкіряний портфель, папки з договорами", "Leather briefcase, contract folders"),
       vehicleSearchResult: L("В бардачку лежать пусті протоколи вилучення готівки з шапкою НАБК!", "Glovebox holds blank NABK cash-seizure protocols!"),
-      greeting: L("«Добрий день... Слухайте, довідку забув дома, а на зустріч у Варшавку запізнююся. Може, ось 500 🪙 — ніхто ж не бачить?..» *поправляє ґудзик піджака*", "'Hello... Forgot my permit at home. Here is 500 🪙 — nobody is watching, right?..' *adjusts lapel button*"),
-      interrogationReply: L("«Та які камери, інспекторе?! Я звичайний менеджер, візьміть купюри в руки — швидше ж!»", "'What cameras?! Just touch the cash bills and stamp me!'"),
-      intimidateReply: L("«*Різко блідне й прикриває рукою ґудзик на грудях* Е-е... не маєте права чіпати!»", "'*Goes pale and covers chest button* H-hey, hands off!'"),
-      coffeeReply: L("«Дякую... тільки, будь ласка, не бризніть на лацкан піджака, там... чутлива електроніка!»", "'Thanks... please don't spill on my lapel, sensitive... fabric!'"),
+      greeting: L("«Добрий день... Слухайте, довідку забув дома, а на ділову зустріч запізнююся. Може, порішаємо за 400 💵 — швидко й без черги?»", "'Hello... Forgot my permit at home and late for a meeting. Can we settle for 400 💵 quickly?'"),
+      interrogationReply: L("«Та які питання, інспекторе?! Я звичайний менеджер, беріть конверт — мені реально горить!»", "'What questions?! I am a regular manager, just take the envelope — I am in a rush!'"),
+      intimidateReply: L("«*Спокійно поправляє краватку* Е-е... давайте без різких рухів, не затримуйте бізнес!»", "'*Adjusts tie calmly* H-hey, no sudden moves, don't hold up business!'"),
+      coffeeReply: L("«Дякую за каву... то як щодо зеленого штампа?»", "'Thanks for the coffee... so how about a green stamp?'"),
       arrestFull: L("Ти затримав його, хоча він іще не вчинив злочину в межах документів — достатньо ✖ ВІДМОВИТИ!", "Should just press DENY without touching his marked bills!"),
       arrestToned: L("Агента не вдалося зловити на злочині — треба було ✖ ВІДМОВИТИ.", "Should press DENY cleanly."),
       bribeOffer: { amount: 400, currency: "USD", instantOffer: true, isStingTrap: true, syndicateFavor: false },
@@ -4956,6 +4956,7 @@
     state.sirenTriggerSec = state.shiftHasSiren ? (110 + Math.floor(Math.random() * 105)) : -1;
     state.sirenPauseSec = 18 + Math.floor(Math.random() * 15);
     state.encounterTriggered = false;
+    state.gotReprimandToday = false;
     state.radioDispatch = null;
     state.barrierState = "CLOSED";
     state.lastFeedback = null;
@@ -5081,12 +5082,30 @@
     else if (decisionType === "DENY") ruleCorrect = !t.shouldBeApproved && !t.isWantedTarget;
     else if (decisionType === "DETAIN") ruleCorrect = (!t.shouldBeApproved || criminalBribeOffer) && canDetain;
 
-    const coveredByBribe = state.bribeAccepted && isApprove && !t.isWantedTarget;
+    const bribedPass = state.bribeAccepted && isApprove;
+    const isStingOrRaid = bribedPass && (t.storyTag === "NABK_STING" || (state.nabkRisk >= 75 && Math.random() < 0.35));
     const rank = getRank();
     const meta = getMetaPerkFlags();
 
     let salaryDelta = 0, fineDelta = 0, detainBonus = 0;
-    if (ruleCorrect || coveredByBribe) {
+    if (bribedPass) {
+      // Bribe pass: no official salary, no cash fine! Only sanctions (reprimand) if caught in a sting/raid!
+      if (isStingOrRaid) {
+        state.nabkRisk = Math.min(100, state.nabkRisk + 22);
+        state.sbkRep = Math.max(0, state.sbkRep - 15);
+        state.underSurveillance = true;
+        if (!state.isUndercoverSbkAgent) {
+          state.reprimands = (state.reprimands || 0) + 1;
+          state.gotReprimandToday = true;
+        }
+      } else {
+        if (t.isWantedTarget || t.storyTag === "FSM_SPY" || t.storyTag === "SABOTEUR" || t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE" || t.storyTag === "VIP_DIVERSE") {
+          state.sbkRep = Math.max(0, state.sbkRep - 26);
+          state.nabkRisk = Math.min(100, state.nabkRisk + 14);
+        }
+        state.shiftCorrect += 1;
+      }
+    } else if (ruleCorrect) {
       const salMult = (state.sandboxMod && state.sandboxMod.salaryMult ? state.sandboxMod.salaryMult : 1.0) * meta.salaryBonusMult;
       salaryDelta = Math.round(rank.salary * salMult);
       if (isDetain && canDetain) {
@@ -5115,10 +5134,6 @@
           state.nabkRisk = Math.max(0, state.nabkRisk - 8);
         }
       }
-      if (coveredByBribe && (t.storyTag === "FSM_SPY" || t.storyTag === "SABOTEUR" || t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE" || t.storyTag === "VIP_DIVERSE")) {
-        state.sbkRep = Math.max(0, state.sbkRep - 26);
-        state.nabkRisk = Math.min(100, state.nabkRisk + 14);
-      }
       state.shiftCorrect += 1;
     } else {
       const isHighRiskTarget = t.isWantedTarget || t.storyTag === "FSM_SPY" || t.storyTag === "SABOTEUR" || t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE";
@@ -5145,17 +5160,17 @@
         }
         state.palychRep = Math.max(0, state.palychRep - 6);
       }
-      if (t.storyTag === "NABK_STING" && state.bribeAccepted && isApprove) {
-        fineDelta += 2000;
-        state.sbkRep = Math.max(0, state.sbkRep - 15);
-        if (!state.isUndercoverSbkAgent) {
-          state.reprimands = (state.reprimands || 0) + 1;
-          state.underSurveillance = true;
-        }
-      }
       if (state.ownedAssets.includes("tactical_vest")) fineDelta = Math.round(fineDelta * 0.75);
       else if (state.ownedAssets.includes("uv_spotlight")) fineDelta = Math.round(fineDelta * 0.90);
       state.shiftMistakes += 1;
+    }
+
+    // Add time per processed traveler so dynamic shifts reward pace!
+    state.shiftSec = Math.min(320, state.shiftSec + ((ruleCorrect || (bribedPass && !isStingOrRaid)) ? 8 : 4));
+
+    if (state.reprimands >= 3) {
+      triggerEnding("FIRED_LOSER");
+      return;
     }
 
     // Track all 12 Shytomyr Legends persistently + per run!
@@ -5218,17 +5233,19 @@
     state.barrierState = isApprove ? "OPEN_APPROVED" : (isDetain ? "SBK_ARREST_FLASH" : "CLOSED");
     state.lastFeedbackAt = Date.now();
     state.lastFeedback = {
-      ok: ruleCorrect || coveredByBribe,
+      ok: ruleCorrect || (bribedPass && !isStingOrRaid),
       title: shytomyrBonusToast
         ? L("🧦 БРАТЕРСТВО М. ШИТОМИР!", "🧦 ORDER OF SHYTOMYR!")
-        : (coveredByBribe
-          ? L("ЗАКРИТО ОЧІ (ЗА ХАБАР)", "LOOKED THE OTHER WAY (BRIBED)")
-          : (bribeDetainMsg
-            ? L("СПРОБУ ХАБАРЯ ЗАТРИМАНО! (+ПРЕМІЯ СБК)", "BRIBE ATTEMPT DETAINED! (+SBK BONUS)")
-            : (ruleCorrect && isDetain ? L("КРИМІНАЛ ЗАТРИМАНО! (+ПРЕМІЯ СБК)", "CRIMINAL DETAINED! (+SBK BONUS)") : (ruleCorrect ? L("РІШЕННЯ ПРАВИЛЬНЕ", "CORRECT DECISION") : (excessiveDetain ? L("ПЕРЕВИЩЕННЯ! Треба ✖ ВІДМОВИТИ", "EXCESSIVE FORCE! Should ✖ DENY") : L("ПОМИЛКА ПРОТОКОЛУ! ШТРАФ", "PROTOCOL VIOLATION! FINE")))))),
-      detail: shytomyrBonusToast || bribeDetainMsg || (isDetain
+        : (isStingOrRaid
+          ? L("🚨 СПАЛИЛИ НА ХАБАРІ! (+1 ДОГАНА)", "🚨 BUSTED ON BRIBE! (+1 REPRIMAND)")
+          : (bribedPass
+            ? L("ЗАКРИТО ОЧІ (ЗА ХАБАР)", "LOOKED THE OTHER WAY (BRIBED)")
+            : (bribeDetainMsg
+              ? L("СПРОБУ ХАБАРЯ ЗАТРИМАНО! (+ПРЕМІЯ СБК)", "BRIBE ATTEMPT DETAINED! (+SBK BONUS)")
+              : (ruleCorrect && isDetain ? L("КРИМІНАЛ ЗАТРИМАНО! (+ПРЕМІЯ СБК)", "CRIMINAL DETAINED! (+SBK BONUS)") : (ruleCorrect ? L("РІШЕННЯ ПРАВИЛЬНЕ", "CORRECT DECISION") : (excessiveDetain ? L("ПЕРЕВИЩЕННЯ! Треба ✖ ВІДМОВИТИ", "EXCESSIVE FORCE! Should ✖ DENY") : L("ПОМИЛКА ПРОТОКОЛУ! ШТРАФ", "PROTOCOL VIOLATION! FINE"))))))),
+      detail: shytomyrBonusToast || (isStingOrRaid ? L("Ти впіймався на підставі! За 3 догани звільнять (зникає через день).", "Caught in a sting! 3 reprimands = fired (decays next clean day).") : null) || bribeDetainMsg || (isDetain
         ? (state.contentMode === "FULL_18_PLUS" ? t.arrestFull : t.arrestToned)
-        : (ruleCorrect ? L("Оформлено за директивою ДПСК.", "Processed per SBGS directive.") : (t.violations[0] ? t.violations[0].title : L("Безпідставна відмова", "Wrongful denial")))),
+        : (bribedPass ? L("Без штрафу, але ризик НАБК зріс.", "No fine, but NABK risk increased.") : (ruleCorrect ? L("Оформлено за директивою ДПСК.", "Processed per SBGS directive.") : (t.violations[0] ? t.violations[0].title : L("Безпідставна відмова", "Wrongful denial"))))),
       moneyDelta: netMoney
     };
 
@@ -5314,6 +5331,10 @@
 
     state.dayIndex = nextIdx;
     state.eveningToast = null;
+    if ((state.reprimands || 0) > 0 && !state.gotReprimandToday) {
+      state.reprimands = Math.max(0, state.reprimands - 1);
+    }
+    state.gotReprimandToday = false;
     state.money += getPassiveRent();
     state.usd += getPassiveUsd();
     const prevRank = getRank();
@@ -6749,6 +6770,7 @@
           state.nabkRisk = Math.min(100, state.nabkRisk + 12);
           if (!state.isUndercoverSbkAgent || state.nabkRisk >= 60) {
             state.reprimands = (state.reprimands || 0) + 1;
+            state.gotReprimandToday = true;
             state.underSurveillance = true;
             if (state.reprimands >= 3) {
               triggerEnding("FIRED_LOSER");
