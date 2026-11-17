@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v7.2";
+  const BUILD_VERSION = "v7.3";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -1863,29 +1863,89 @@
 
     startMusicLoop() {
       if (this.musicInterval) return;
-      const chords = [
-        [146.83, 220.00, 261.63, 329.63],
-        [116.54, 174.61, 220.00, 293.66],
-        [98.00,  146.83, 174.61, 261.63],
-        [110.00, 164.81, 196.00, 277.18]
-      ];
+      const themes = {
+        // Original checkpoint booth progression (kept as loved!)
+        BOOTH: [
+          [146.83, 220.00, 261.63, 329.63],
+          [116.54, 174.61, 220.00, 293.66],
+          [98.00,  146.83, 174.61, 261.63],
+          [110.00, 164.81, 196.00, 277.18]
+        ],
+        // Atmospheric night border main menu theme (Cm -> Ab -> Eb -> G)
+        MENU: [
+          [130.81, 196.00, 233.08, 311.13],
+          [103.83, 155.56, 207.65, 261.63],
+          [155.56, 233.08, 293.66, 392.00],
+          [98.00,  146.83, 196.00, 246.94]
+        ],
+        // Warm, cozy late-night home / evening theme (Am -> F -> C -> E7)
+        EVENING: [
+          [110.00, 164.81, 220.00, 261.63],
+          [87.31,  174.61, 220.00, 261.63],
+          [130.81, 196.00, 261.63, 329.63],
+          [82.41,  164.81, 207.65, 293.66]
+        ],
+        // Cinematic epilogue / ending theme (Em -> C -> G -> D)
+        ENDING: [
+          [164.81, 246.94, 293.66, 392.00],
+          [130.81, 196.00, 246.94, 329.63],
+          [196.00, 293.66, 369.99, 440.00],
+          [146.83, 220.00, 293.66, 369.99]
+        ]
+      };
 
       const playPadSlice = () => {
         try {
           if (!this.musicEnabled || !this.ctx || this.ctx.state !== "running" || document.hidden) return;
-          const chord = chords[this.chordStep % chords.length];
-          this.chordStep = (this.chordStep + 1) % chords.length;
+          const m = this.mood || "MENU";
+          const isTense = m === "TENSE";
+          const isBooth = m === "BOOTH_NORMAL";
+          const isMenu = m === "MENU";
+          const isEvening = m === "EVENING";
+          const isEnding = m === "ENDING";
 
-          const isTense = this.mood === "TENSE";
-          const isBooth = this.mood === "BOOTH_NORMAL";
-          const cutoff = isTense ? 520 : (isBooth ? 420 : 340);
+          const bank = isMenu ? themes.MENU : (isEvening ? themes.EVENING : (isEnding ? themes.ENDING : themes.BOOTH));
+          const chord = bank[this.chordStep % bank.length];
+          this.chordStep = (this.chordStep + 1) % bank.length;
+
+          const cutoff = isTense ? 520 : (isBooth ? 420 : (isEnding ? 560 : (isEvening ? 460 : 340)));
 
           chord.forEach((freq, idx) => {
-            const voiceGain = idx === 0 ? 0.022 : 0.011;
-            this.playWarmNote(freq, 3.5, 1.3, cutoff, voiceGain, idx === 0 ? "sine" : "triangle");
+            const voiceGain = idx === 0 ? (isEvening ? 0.018 : 0.022) : 0.011;
+            this.playWarmNote(freq, 3.5, 1.2, cutoff, voiceGain, idx === 0 ? "sine" : "triangle");
           });
 
-          if (isBooth || isTense) {
+          if (isMenu) {
+            // Subtle night watchtower arpeggio notes
+            const n1 = chord[2] * 2;
+            const n2 = chord[3] * 2;
+            setTimeout(() => {
+              if (!this.musicEnabled || document.hidden || this.mood !== "MENU") return;
+              this.playWarmNote(n1, 1.3, 0.05, 500, 0.012, "sine");
+            }, 900);
+            setTimeout(() => {
+              if (!this.musicEnabled || document.hidden || this.mood !== "MENU") return;
+              this.playWarmNote(n2, 1.6, 0.05, 520, 0.011, "sine");
+            }, 1900);
+          } else if (isEvening) {
+            // Warm home electric-piano style gentle chimes
+            const notes = [chord[1] * 2, chord[2] * 2, chord[3] * 2];
+            notes.forEach((nf, ni) => {
+              setTimeout(() => {
+                if (!this.musicEnabled || document.hidden || this.mood !== "EVENING") return;
+                this.playWarmNote(nf, 1.5, 0.03, 720, 0.012, "triangle");
+              }, 700 + ni * 850);
+            });
+          } else if (isEnding) {
+            // Cinematic epilogue 3-note motif
+            const motif = [chord[3], chord[2] * 2, chord[3] * 2];
+            motif.forEach((ef, ei) => {
+              setTimeout(() => {
+                if (!this.musicEnabled || document.hidden || this.mood !== "ENDING") return;
+                this.playWarmNote(ef, 2.1, 0.06, 820, 0.015, "sine");
+              }, 500 + ei * 950);
+            });
+          } else if (isBooth || isTense) {
             const melodyFreq = chord[(this.chordStep + 1) % chord.length] * 2;
             setTimeout(() => {
               if (!this.musicEnabled || document.hidden) return;
@@ -5823,7 +5883,13 @@
 
   function updateMood() {
     const t = state.queue[state.travelerIdx];
-    if (state.sirenActive || (state.phase === "BOOTH_SHIFT" && (state.shiftSec <= 45 || state.nabkRisk >= 65 || (t && t.isWantedTarget)))) {
+    if (state.phase === "MAIN_MENU" || state.phase === "ARCHIVE") {
+      audio.mood = "MENU";
+    } else if (state.phase === "HOME_EVENING" || state.phase === "SHIFT_SUMMARY") {
+      audio.mood = "EVENING";
+    } else if (state.phase === "ENDING") {
+      audio.mood = "ENDING";
+    } else if (state.sirenActive || (state.phase === "BOOTH_SHIFT" && (state.shiftSec <= 45 || state.nabkRisk >= 65 || (t && t.isWantedTarget)))) {
       audio.mood = "TENSE";
     } else if (state.phase === "BOOTH_SHIFT") {
       audio.mood = "BOOTH_NORMAL";
