@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v5.6";
+  const BUILD_VERSION = "v5.7";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -5014,6 +5014,17 @@
       finishShift();
       return;
     }
+    const nowMs = Date.now();
+    if (state.lastFeedback && state.lastFeedbackAt && nowMs - state.lastFeedbackAt >= 5000) {
+      state.lastFeedback = null;
+      const el = document.getElementById("float-feedback-toast");
+      if (el) el.remove();
+    }
+    if (state.radioDispatch && state.radioDispatchAt && nowMs - state.radioDispatchAt >= 5000) {
+      state.radioDispatch = null;
+      const el = document.getElementById("float-radio-toast");
+      if (el) el.remove();
+    }
     updateMood();
     const timerEl = document.getElementById("hud-timer");
     if (timerEl) {
@@ -5205,6 +5216,7 @@
       : null;
 
     state.barrierState = isApprove ? "OPEN_APPROVED" : (isDetain ? "SBK_ARREST_FLASH" : "CLOSED");
+    state.lastFeedbackAt = Date.now();
     state.lastFeedback = {
       ok: ruleCorrect || coveredByBribe,
       title: shytomyrBonusToast
@@ -5247,6 +5259,7 @@
     if (state.travelerIdx === 2 && !state.radioDispatch) {
       const upcoming = state.queue.slice(state.travelerIdx).find(u => u && (u.isWantedTarget || u.storyTag === "FSM_SPY" || u.storyTag === "DUAL_CITIZEN" || u.storyTag === "VIP_DIVERSE"));
       if (upcoming) {
+        state.radioDispatchAt = Date.now();
         state.radioDispatch = L(
           `📞 РАЦІЯ СБК: «Увага! На під'їзді ${upcoming.vehicleDesc.uk} — терміново перевірте документи та багажник!»`,
           `📞 SBK RADIO: 'Alert! ${upcoming.vehicleDesc.en} approaching — inspect papers & trunk carefully!'`
@@ -6137,7 +6150,23 @@
         activeSpeech = { uk: syncText(activeSpeech.uk), en: syncText(activeSpeech.en) };
       }
 
+      const nowAlert = Date.now();
+      const showFeedback = Boolean(state.lastFeedback && (!state.lastFeedbackAt || nowAlert - state.lastFeedbackAt < 5000));
+      const showRadio = Boolean(state.radioDispatch && (!state.radioDispatchAt || nowAlert - state.radioDispatchAt < 5000));
+
       root.innerHTML = `
+        ${(showFeedback || droneWarning || showRadio) ? `
+          <div class="floating-alerts" id="floating-alerts-layer">
+            ${showFeedback ? `
+              <div id="float-feedback-toast" class="toast-banner" style="background:${state.lastFeedback.ok ? "#1B5E20" : "#7F0000"};border:1px solid rgba(255,255,255,0.22);">
+                <span><strong>${tr(state.lastFeedback.title, state.lang)}:</strong> ${tr(state.lastFeedback.detail, state.lang)}</span>
+                <strong style="color:#E0B145;white-space:nowrap;">${state.lastFeedback.moneyDelta >= 0 ? "+" + state.lastFeedback.moneyDelta : state.lastFeedback.moneyDelta} 🪙</strong>
+              </div>
+            ` : ""}
+            ${droneWarning ? `<div class="radar-alert" style="border:1px solid #FF5252;">${tr(L("⚠️ РАДАР ППО: У небі «мопед» на підльоті! Готуйтесь до сирени!", "⚠️ RADAR ALERT: Drone spotted in sky! Siren imminent!"), state.lang)}</div>` : ""}
+            ${showRadio ? `<div id="float-radio-toast" style="background:#1565C0;color:#FFF;padding:6px 9px;border-radius:6px;font-size:11px;font-weight:700;border:1px solid #90CAF9;">${tr(state.radioDispatch, state.lang)}</div>` : ""}
+          </div>
+        ` : ""}
         <header class="top-bar">
           <div class="row-between">
             <span id="hud-timer" style="color:${state.shiftSec < 40 ? "#FF8A80" : "#E0B145"};font-weight:700;font-size:12.5px;">${tr(L("День", "Day"), state.lang)} ${state.daySpec.dayNumber} • ⏱ ${state.shiftSec}s</span>
@@ -6158,15 +6187,6 @@
           </div>
         </header>
 
-        ${state.lastFeedback ? `
-          <div class="toast-banner" style="background:${state.lastFeedback.ok ? "#1B5E20" : "#7F0000"};">
-            <span><strong>${tr(state.lastFeedback.title, state.lang)}:</strong> ${tr(state.lastFeedback.detail, state.lang)}</span>
-            <strong style="color:#E0B145;white-space:nowrap;">${state.lastFeedback.moneyDelta >= 0 ? "+" + state.lastFeedback.moneyDelta : state.lastFeedback.moneyDelta} 🪙</strong>
-          </div>
-        ` : ""}
-
-        ${droneWarning ? `<div class="radar-alert">${tr(L("⚠️ РАДАР ППО: У небі «мопед» на підльоті! Готуйтесь до сирени!", "⚠️ RADAR ALERT: Drone spotted in sky! Siren imminent!"), state.lang)}</div>` : ""}
-        ${state.radioDispatch ? `<div style="background:#1565C0;color:#FFF;padding:5px 8px;border-radius:6px;font-size:11px;font-weight:700;border:1px solid #90CAF9;">${tr(state.radioDispatch, state.lang)}</div>` : ""}
         ${tabletBadge}
 
         <section class="booth-row">
@@ -6258,10 +6278,28 @@
             }
             if (state.docFolded) {
               return `
-                <div class="doc-paper ${docTheme}" style="justify-content:center;align-items:center;text-align:center;min-height:130px;cursor:pointer;" id="btn-unfold-doc">
-                  <div style="font-size:12px;font-weight:900;letter-spacing:0.6px;opacity:0.85;">${headerBanner}</div>
-                  <div style="font-size:15px;font-weight:800;margin:4px 0;">${tr(doc.title, state.lang)}</div>
-                  <button type="button" class="btn-mustard" style="padding:5px 12px;font-size:11px;">🔓 ${tr(L("Розгорнути документ", "Open Document"), state.lang)}</button>
+                <div class="desk-table-surface" id="desk-table-grid">
+                  ${t.documents.map((dItem, dIdx) => {
+                    const dtTitle = (dItem.title && dItem.title.uk ? dItem.title.uk : "").toUpperCase();
+                    let bg = "#FAF6EC", fg = "#1F1D1A", bdr = "#8D6E63", tag = tr(L("📄 ДОКУМЕНТ", "📄 DOCUMENT"), state.lang);
+                    if (dItem.type === "PASSPORT") {
+                      if (dtTitle.includes("ПОЛАНД") || dtTitle.includes("ФРАНЦ")) { bg = "#5D1A2B"; fg = "#FDE8E8"; bdr = "#E57373"; tag = "📕 PASSPORT"; }
+                      else if (dtTitle.includes("БРИТАН") || dtTitle.includes("КАРПАТ")) { bg = "#1B4332"; fg = "#D8F3DC"; bdr = "#81C784"; tag = "📗 PASSPORT"; }
+                      else if (dtTitle.includes("ГЕРМАН")) { bg = "#2B2D42"; fg = "#EDF2F4"; bdr = "#90A4AE"; tag = "📓 PASSPORT"; }
+                      else { bg = "#102A43"; fg = "#FFE082"; bdr = "#E0B145"; tag = "🛡️ KRAINA"; }
+                    } else if (dItem.type === "MILITARY_ID") {
+                      bg = "#1B3B2B"; fg = "#A5D6A7"; bdr = "#66BB6A"; tag = "📱 ОБЛІК+";
+                    } else if (dItem.type === "VEHICLE_CUSTOMS") {
+                      bg = "#FFF3CD"; fg = "#3E2723"; bdr = "#B7811E"; tag = "🚘 ДЕКЛАРАЦІЯ";
+                    }
+                    return `
+                      <button type="button" class="desk-doc-item" data-doc-idx="${dIdx}" style="background:${bg};color:${fg};border:1.5px solid ${bdr};">
+                        <span style="font-size:10px;font-weight:900;opacity:0.85;">${tag}</span>
+                        <span style="font-size:12px;font-weight:800;line-height:1.2;">${tr(dItem.title, state.lang)}</span>
+                        <span style="font-size:10px;opacity:0.75;">${tr(L("Натисни, щоб відкрити →", "Click to open →"), state.lang)}</span>
+                      </button>
+                    `;
+                  }).join("")}
                 </div>
               `;
             }
@@ -6437,8 +6475,18 @@
 
       const foldBtn = document.getElementById("btn-fold-doc");
       if (foldBtn) foldBtn.addEventListener("click", () => { audio.playTap(); state.docFolded = true; render(); });
-      const unfoldBtn = document.getElementById("btn-unfold-doc");
-      if (unfoldBtn) unfoldBtn.addEventListener("click", () => { audio.playTap(); state.docFolded = false; render(); });
+      document.querySelectorAll(".desk-doc-item").forEach(itemBtn => {
+        itemBtn.addEventListener("click", () => {
+          audio.playTap();
+          state.selectedDocIdx = Number(itemBtn.getAttribute("data-doc-idx")) || 0;
+          state.docFolded = false;
+          render();
+        });
+      });
+      const floatFb = document.getElementById("float-feedback-toast");
+      if (floatFb) floatFb.addEventListener("click", () => { state.lastFeedback = null; floatFb.remove(); });
+      const floatRad = document.getElementById("float-radio-toast");
+      if (floatRad) floatRad.addEventListener("click", () => { state.radioDispatch = null; floatRad.remove(); });
 
       const fieldsList = document.getElementById("doc-fields-list");
       if (fieldsList) doc.fields.forEach(f => {
