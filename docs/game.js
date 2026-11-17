@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v6.5";
+  const BUILD_VERSION = "v6.6";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -3117,14 +3117,31 @@
     }
 
     if (scheme === 0) {
-      // Formal violation: Expired date (no "ПРОСТРОЧЕНИЙ" text!) OR Male 18-60 without permit
-      const gender = Math.random() < 0.4 ? "F" : "M";
+      // Formal violation (requiresDetention: false — DENY or small bribe!):
+      // Girl / Elderly man with expired doc, OR Male 18-60 with expired doc / no permit
+      const rollType = Math.random();
+      const isGirl = rollType < 0.35;
+      const isOldMan = !isGirl && rollType < 0.65;
+      const gender = isGirl ? "F" : "M";
       const fullName = randomFullName(gender);
-      const age = randInt(23, 49);
+      const age = isOldMan ? randInt(62, 76) : randInt(22, 48);
       const portrait = randomPortrait(gender);
-      const isExpired = gender === "F" || Math.random() < 0.5;
+      if (isOldMan) {
+        portrait.hairColor = 4; // grey/white hair
+        portrait.facialHair = pick([1, 2, 4]);
+      }
+      const isExpired = isGirl || isOldMan || Math.random() < 0.55;
       const disc = isExpired ? DISCREPANCY.EXPIRED_DATE : DISCREPANCY.AGE_RESTRICTION_NO_PERMIT;
       const expYear = pick(["2019", "2020", "2021"]);
+      const offersSmallBribe = Math.random() < 0.55;
+      const smallBribeObj = offersSmallBribe
+        ? (Math.random() < 0.5
+          ? { amount: randInt(6, 11) * 10, currency: "USD", requiresDiscovery: true, nabkRiskJump: 6, isStingTrap: false, syndicateFavor: false }
+          : { amount: randInt(26, 44) * 10, currency: "UAH", requiresDiscovery: true, nabkRiskJump: 5, isStingTrap: false, syndicateFavor: false })
+        : null;
+      const bribeDisplayStr = smallBribeObj
+        ? (smallBribeObj.currency === "USD" ? `${smallBribeObj.amount} 💵` : `${smallBribeObj.amount} 🪙`)
+        : "";
       return buildTravelerFromParts({
         fullName, age, gender, direction: "EXIT", portrait, transport: trMeta,
         passportSub: L(`Серія ${city.code}-${randInt(100000, 999999)} • м. ${city.uk}`, `No. ${city.code}-${randInt(100000, 999999)}`),
@@ -3137,16 +3154,26 @@
             : { label: L("Відстрочка 18–60", "Exit Permit"), value: L("Без оформленої підстави", "None submitted"), disc }
         ],
         includeDecl: daySpec.requireVehicleDecl,
-        declaredCargo: L("Валізи, плед", "Suitcases"),
-        greeting: isExpired
-          ? L(`«Ой, добрий день! Так поспішали з м. ${city.uk} на рейс до Варшавки!»`, `'Hello! Rushing from ${city.en} for Varshavka!'`)
-          : L("«Добрий день! Їду на тиждень, думав, по біометричному без довідки пускають!»", "'Good day! Thought biometric passport was enough without a permit!'"),
-        interrogationReply: L("«Будь ласка, пане інспекторе! По-доброму прошу — квитки згоряють, пропустіть по-людськи!»", "'Please, Inspector! Asking kindly — our tickets expire, let us through!'"),
-        intimidateReply: L("«*Нервово ковтає* Та я ж тільки формальність проґавив, не кличте СБК!»", "'*Gulps* It's just a paperwork slip, don't call SBK!'"),
+        declaredCargo: isOldMan ? L("Домашня консервація, плед", "Homemade jars, blanket") : L("Валізи, одяг", "Suitcases, clothes"),
+        greeting: isGirl
+          ? L(`«Привіт! Ой, так спізнилась на автобус у Варшавку з м. ${city.uk}... гляньте швиденько!»`, `'Hi! Running late for my bus from ${city.en}... quick check please!'`)
+          : (isOldMan
+            ? L(`«Доброго здоров'я, синку! Дід їде до онуків з м. ${city.uk}, усе по-старому!»`, `'Good health, son! Grandpa heading to visit grandkids from ${city.en}!'`)
+            : (isExpired
+              ? L(`«Ой, добрий день! Так поспішали з м. ${city.uk} на рейс до Варшавки!»`, `'Hello! Rushing from ${city.en} for Varshavka!'`)
+              : L("«Добрий день! Їду на тиждень, думав, по біометричному без довідки пускають!»", "'Good day! Thought biometric passport was enough without a permit!'"))),
+        interrogationReply: offersSmallBribe
+          ? (isGirl
+            ? L(`«Ой, серйозно прострочений?! Ну не розвертайте мене! Ось ${bribeDisplayStr} на каву з круасаном — не помічайте дату!»`, `'Seriously expired?! Don't turn me back! Here is ${bribeDisplayStr} for coffee — ignore the date!'`)
+            : (isOldMan
+              ? L(`«От халепа, старий забув оновити! Візьми, синку, ${bribeDisplayStr} на бензин і пропусти діда!»`, `'Darn, forgot to renew! Take ${bribeDisplayStr} for gas and let grandpa pass!'`)
+              : L(`«Та йой, дрібна формальність! Тримай ${bribeDisplayStr} зверху — не псуй людям поїздку!»`, `'Just a small slip! Take ${bribeDisplayStr} — don't ruin the trip!'`)))
+          : L("«Будь ласка, пане інспекторе! По-доброму прошу — квитки згоряють, пропустіть по-людськи!»", "'Please, Inspector! Asking kindly — our tickets expire, let us through!'"),
+        intimidateReply: L("«*Нервово ковтає* Та це ж дрібна формальність у паперах, не кличте СБК!»", "'*Gulps* It's just a paperwork slip, don't call SBK!'"),
         coffeeReply: L("«Дякую за каву... будь ласка, увійдіть у становище!»", "'Thanks for the coffee... please understand my situation!'"),
         arrestFull: L("Ти викликав спецназ за формальну помилку — достатньо було натиснути ✖ ВІДМОВИТИ!", "Overkill! A simple DENY stamp was required."),
         arrestToned: L("Перевищення сили — треба було ✖ ВІДМОВИТИ.", "Should have pressed DENY."),
-        bribeOffer: null,
+        bribeOffer: smallBribeObj,
         shouldBeApproved: false,
         violations: [disc]
       });
@@ -4983,8 +5010,8 @@
     state.coffeeTipGiven = false;
     state.justShook = false;
     state.spottedCodes = [];
-    state.scanActive = false;
-    state.scanFailedMsg = false;
+    state.inspectMode = false;
+    state.justUnfoldedDoc = false;
     const t = state.queue[state.travelerIdx];
     const zones = ["TRUNK", "SPARE", "GLOVE"];
     state.dogTargetZone = (t && (t.hasContraband || t.storyTag === "DUAL_CITIZEN")) ? pick(zones) : null;
@@ -6224,7 +6251,7 @@
                   ${t.direction === "ENTRY" ? tr(L("🟢 В'ЇЗД", "🟢 ENTRY"), state.lang) : tr(L("🔴 ВИЇЗД", "🔴 EXIT"), state.lang)}
                 </span>
               </div>
-              <div style="color:#B0BEC5;font-size:11px;margin-bottom:4px;">🚘 ${tr(t.vehicleDesc, state.lang)}</div>
+              <button type="button" id="booth-vehicle-info" class="booth-vehicle-tag" title="${tr(L("Натисни, щоб звірити авто", "Click to verify vehicle"), state.lang)}">🚘 ${tr(t.vehicleDesc, state.lang)}</button>
               <p style="font-size:11.5px;line-height:1.35;">${tr(activeSpeech, state.lang)}</p>
             </div>
             ${bribeVisible ? `
@@ -6282,7 +6309,7 @@
           `;
         })() : ""}
 
-        <section class="desk-area">
+        <section class="desk-area ${state.inspectMode ? "inspect-mode" : ""}">
           ${(() => {
             const titleStr = (doc.title && doc.title.uk ? doc.title.uk : "").toUpperCase();
             let docTheme = "doc-theme-cert";
@@ -6337,8 +6364,10 @@
                 </div>
               `;
             }
+            const unfoldCls = state.justUnfoldedDoc ? "doc-unfold" : "";
+            state.justUnfoldedDoc = false;
             return `
-          <div class="doc-paper ${docTheme} ${state.uvActive ? "uv-mode" : ""}">
+          <div class="doc-paper ${unfoldCls} ${docTheme} ${state.uvActive ? "uv-mode" : ""}">
             <div style="display:flex;justify-content:space-between;align-items:center;font-size:9.5px;font-weight:900;letter-spacing:0.5px;opacity:0.78;border-bottom:1px dashed rgba(0,0,0,0.18);padding-bottom:3px;">
               <span>${headerBanner}</span>
               <button type="button" id="btn-fold-doc" style="background:transparent;color:inherit;padding:0 4px;font-size:10px;opacity:0.75;">📂 ${tr(L("Скласти", "Fold"), state.lang)}</button>
@@ -6409,21 +6438,11 @@
           </div>
             `;
           })()}
-          ${state.scanActive ? `
-            <div class="scanner-box">
-              <div style="display:flex;justify-content:space-between;font-size:11px;color:#E0B145;font-weight:800;">
-                <span>📡 ${tr(L("СКАНЕР РЕЄСТРУ: Влучи в зелену зону!", "REGISTRY SCANNER: Hit the green zone!"), state.lang)}</span>
-                ${state.scanFailedMsg ? `<span style="color:#FF5252;">${tr(L("Збій (-4s)!", "Miss (-4s)!"), state.lang)}</span>` : ""}
-              </div>
-              <div class="scanner-track">
-                <div class="scanner-zone"></div>
-                <div class="scanner-cursor"></div>
-              </div>
-              <button type="button" id="btn-scanner-hit" class="btn-mustard" style="padding:7px;font-size:12px;">🎯 ${tr(L("ЗЛОВИТИ СИГНАЛ", "LOCK SIGNAL"), state.lang)}</button>
-            </div>
-          ` : ""}
+          <div id="inspect-hint-bar" class="inspect-hint-bar" style="display:${state.inspectMode ? "flex" : "none"};">
+            <span id="inspect-hint-text">🎯 ${tr(L("Тисни на помилку: дату, ПІБ, фото, печатку або опис/вигляд авто!", "Click the issue: date, name, photo, seal, or vehicle!"), state.lang)}</span>
+          </div>
           <div class="row-between">
-            <button type="button" id="btn-interrogate" class="btn-outline" style="flex:1;background:#3E2723;">${tr(L("🔍 Вказати на помилку / Допитати", "🔍 Point Out Issue / Question"), state.lang)}</button>
+            <button type="button" id="btn-interrogate" class="btn-outline" style="flex:1;background:${state.inspectMode ? "#5D1A1A" : "#3E2723"};border-color:${state.inspectMode ? "#FF5252" : "#4E5B53"};">${state.inspectMode ? tr(L("🎯 Скасувати вказування", "🎯 Cancel Pointing"), state.lang) : tr(L("🔍 Вказати на помилку", "🔍 Point Out Issue"), state.lang)}</button>
           </div>
         </section>
 
@@ -6458,6 +6477,37 @@
         drawPortrait(mctx, t.passportPortrait, miniC.width * 0.5, miniC.height * 0.98, 0.44);
       }
 
+      const deskSection = root.querySelector ? root.querySelector(".desk-area") : null;
+      const boothWrapEl = document.getElementById("booth-wrap");
+      const inspectHintBar = document.getElementById("inspect-hint-bar");
+      const inspectHintText = document.getElementById("inspect-hint-text");
+      const interrogateBtn = document.getElementById("btn-interrogate");
+
+      function syncInspectUi() {
+        if (deskSection) deskSection.classList.toggle("inspect-mode", !!state.inspectMode);
+        if (boothWrapEl && boothWrapEl.parentElement) boothWrapEl.parentElement.classList.toggle("inspect-mode", !!state.inspectMode);
+        if (inspectHintBar) inspectHintBar.style.display = state.inspectMode ? "flex" : "none";
+        if (interrogateBtn) {
+          interrogateBtn.style.background = state.inspectMode ? "#5D1A1A" : "#3E2723";
+          interrogateBtn.style.borderColor = state.inspectMode ? "#FF5252" : "#4E5B53";
+          interrogateBtn.textContent = state.inspectMode
+            ? tr(L("🎯 Скасувати вказування", "🎯 Cancel Pointing"), state.lang)
+            : tr(L("🔍 Вказати на помилку", "🔍 Point Out Issue"), state.lang);
+        }
+      }
+
+      function reportCleanCheck(cleanMsg) {
+        if (!state.inspectMode) return;
+        audio.playDeny();
+        state.shiftSec = Math.max(5, state.shiftSec - 2);
+        const timerEl = document.getElementById("hud-timer");
+        if (timerEl) {
+          timerEl.textContent = `${tr(L("День", "Day"), state.lang)} ${state.daySpec.dayNumber} • ⏱ ${state.shiftSec}s`;
+          timerEl.style.color = state.shiftSec < 40 ? "#FF8A80" : "#E0B145";
+        }
+        if (inspectHintText) inspectHintText.textContent = `${tr(cleanMsg, state.lang)} (-2s)`;
+      }
+
       const photoBtn = document.getElementById("btn-passport-photo");
       if (photoBtn) {
         photoBtn.addEventListener("click", () => {
@@ -6465,12 +6515,15 @@
           if (t.violations.some(v => v.code === "PHOTO_MISMATCH") && !state.spottedCodes.includes("PHOTO_MISMATCH")) {
             state.spottedCodes.push("PHOTO_MISMATCH");
             state.interrogated = true;
+            state.inspectMode = false;
             render();
+          } else {
+            reportCleanCheck(L("❌ Фото в паспорті відповідає обличчю!", "❌ Passport photo matches!"));
           }
         });
       }
 
-      document.getElementById("booth-wrap").addEventListener("click", () => {
+      function handleVehicleOrFaceCheck() {
         audio.playTap();
         let foundVisual = false;
         t.violations.forEach(v => {
@@ -6479,8 +6532,18 @@
             foundVisual = true;
           }
         });
-        if (foundVisual) render();
-      });
+        if (foundVisual) {
+          state.interrogated = true;
+          state.inspectMode = false;
+          render();
+        } else {
+          reportCleanCheck(L("❌ Авто та обличчя відповідають документам!", "❌ Vehicle and face match!"));
+        }
+      }
+
+      boothWrapEl.addEventListener("click", handleVehicleOrFaceCheck);
+      const vehInfoBtn = document.getElementById("booth-vehicle-info");
+      if (vehInfoBtn) vehInfoBtn.addEventListener("click", handleVehicleOrFaceCheck);
 
       const foldBtn = document.getElementById("btn-fold-doc");
       if (foldBtn) foldBtn.addEventListener("click", () => { audio.playTap(); state.docFolded = true; render(); });
@@ -6489,6 +6552,7 @@
           audio.playTap();
           state.selectedDocIdx = Number(itemBtn.getAttribute("data-doc-idx")) || 0;
           state.docFolded = false;
+          state.justUnfoldedDoc = true;
           render();
         });
       });
@@ -6523,7 +6587,10 @@
           if (f.disc && !state.spottedCodes.includes(f.disc.code)) {
             state.spottedCodes.push(f.disc.code);
             state.interrogated = true;
+            state.inspectMode = false;
             render();
+          } else {
+            reportCleanCheck(L("❌ У цьому полі все чисто!", "❌ This field is clean!"));
           }
         });
         fieldsList.appendChild(rowBtn);
@@ -6535,7 +6602,10 @@
         if (doc.sealDisc && !state.spottedCodes.includes(doc.sealDisc.code)) {
           state.spottedCodes.push(doc.sealDisc.code);
           state.interrogated = true;
+          state.inspectMode = false;
           render();
+        } else {
+          reportCleanCheck(L("❌ Печатка справжня!", "❌ Seal is genuine!"));
         }
       });
 
@@ -6642,53 +6712,14 @@
       document.getElementById("hud-music").addEventListener("click", () => { audio.ensureCtx(); audio.musicEnabled = !audio.musicEnabled; render(); });
       document.getElementById("hud-wanted").addEventListener("click", () => { audio.playTap(); openWantedDossierModal(); });
       document.getElementById("hud-rules").addEventListener("click", () => { audio.playTap(); openRulesModal(); });
-      document.getElementById("btn-interrogate").addEventListener("click", () => {
+      interrogateBtn.addEventListener("click", () => {
         audio.playTap();
-        state.interrogated = true;
-        state.reactionState = "NONE";
-        const paperDisc = t.violations.find(v =>
-          v.code !== "CONTRABAND_CARGO" &&
-          v.code !== "VEHICLE_MISMATCH" &&
-          v.code !== "PHOTO_MISMATCH" &&
-          !state.spottedCodes.includes(v.code)
-        );
-        if (paperDisc) {
-          if (hasSbkTablet) {
-            state.spottedCodes.push(paperDisc.code);
-            state.scanActive = false;
-          } else {
-            state.scanActive = true;
-            state.scanFailedMsg = false;
-          }
+        state.inspectMode = !state.inspectMode;
+        if (inspectHintText) {
+          inspectHintText.textContent = `🎯 ${tr(L("Тисни на помилку: дату, ПІБ, фото, печатку або опис/вигляд авто!", "Click the issue: date, name, photo, seal, or vehicle!"), state.lang)}`;
         }
-        render();
+        syncInspectUi();
       });
-
-      const scanHitBtn = document.getElementById("btn-scanner-hit");
-      if (scanHitBtn) {
-        scanHitBtn.addEventListener("click", () => {
-          // 1.4s triangle wave: 0..0.7s goes 2% -> 94%, 0.7..1.4s goes 94% -> 2%
-          const phase = (Date.now() % 1400) / 1400;
-          const posPct = phase <= 0.5 ? (2 + (phase * 2) * 92) : (94 - ((phase - 0.5) * 2) * 92);
-          if (posPct >= 30 && posPct <= 70) {
-            audio.playApprove();
-            state.scanActive = false;
-            state.scanFailedMsg = false;
-            const paperDisc = t.violations.find(v =>
-              v.code !== "CONTRABAND_CARGO" &&
-              v.code !== "VEHICLE_MISMATCH" &&
-              v.code !== "PHOTO_MISMATCH" &&
-              !state.spottedCodes.includes(v.code)
-            );
-            if (paperDisc) state.spottedCodes.push(paperDisc.code);
-          } else {
-            audio.playDeny();
-            state.scanFailedMsg = true;
-            state.shiftSec = Math.max(5, state.shiftSec - 4);
-          }
-          render();
-        });
-      }
 
       const bribeBtn = document.getElementById("btn-take-bribe");
       if (bribeBtn && bribeInfo) {

@@ -477,6 +477,9 @@ button:disabled {
   gap: 5px;
   box-shadow: inset 0 0 10px rgba(90, 65, 40, 0.12);
   transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.doc-paper.doc-unfold {
   animation: docUnfold 0.18s ease-out;
 }
 
@@ -945,49 +948,48 @@ dialog::backdrop {
   overscroll-behavior: contain;
 }
 
-/* === REGISTRY TIMING SCANNER MINI-GAME === */
-@keyframes scannerSweep {
-  0% { left: 2%; }
-  50% { left: 94%; }
-  100% { left: 2%; }
-}
-
-.scanner-box {
-  background-color: #161C19;
-  border: 1.5px solid #E0B145;
+/* === POINT-OUT INSPECTION MODE === */
+.inspect-hint-bar {
+  background-color: #2B1A17;
+  border: 1px solid #FF7043;
   border-radius: 6px;
-  padding: 8px;
+  padding: 5px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #FFE0B2;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   gap: 6px;
 }
 
-.scanner-track {
-  position: relative;
-  height: 16px;
-  background-color: #263238;
+.booth-vehicle-tag {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid transparent;
   border-radius: 4px;
-  overflow: hidden;
-  border: 1px solid #455A64;
+  padding: 2px 5px;
+  color: #B0BEC5;
+  font-size: 11px;
+  text-align: left;
+  width: 100%;
+  margin-bottom: 4px;
 }
 
-.scanner-zone {
-  position: absolute;
-  left: 32%;
-  width: 36%;
-  top: 0;
-  bottom: 0;
-  background-color: rgba(46, 125, 50, 0.72);
-  border-left: 2px solid #81C784;
-  border-right: 2px solid #81C784;
+.inspect-mode .doc-field-row,
+.inspect-mode .seal-stamp,
+.inspect-mode #btn-passport-photo,
+.inspect-mode .booth-vehicle-tag,
+.inspect-mode #booth-wrap {
+  cursor: crosshair;
+  outline: 1.5px dashed rgba(255, 112, 67, 0.55);
+  outline-offset: 1px;
 }
 
-.scanner-cursor {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 4%;
-  background-color: #FFD54F;
-  box-shadow: 0 0 6px #FFD54F;
-  animation: scannerSweep 1.4s linear infinite;
+.inspect-mode .doc-field-row:hover,
+.inspect-mode .seal-stamp:hover,
+.inspect-mode #btn-passport-photo:hover,
+.inspect-mode .booth-vehicle-tag:hover,
+.inspect-mode #booth-wrap:hover {
+  outline: 2px solid #FF5252;
+  background-color: rgba(255, 82, 82, 0.12);
 }
