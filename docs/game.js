@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v6.6";
+  const BUILD_VERSION = "v6.7";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -6508,15 +6508,25 @@
         if (inspectHintText) inspectHintText.textContent = `${tr(cleanMsg, state.lang)} (-2s)`;
       }
 
+      function reportAlreadySpotted() {
+        if (!state.inspectMode) return;
+        audio.playApprove();
+        if (inspectHintText) inspectHintText.textContent = tr(L("✅ Цю помилку вже зафіксовано! Приймай рішення (✖ ВІДМОВИТИ або 🚨 СБК).", "✅ Issue already spotted! Make your decision (✖ DENY or 🚨 DETAIN)."), state.lang);
+      }
+
       const photoBtn = document.getElementById("btn-passport-photo");
       if (photoBtn) {
         photoBtn.addEventListener("click", () => {
           audio.playTap();
-          if (t.violations.some(v => v.code === "PHOTO_MISMATCH") && !state.spottedCodes.includes("PHOTO_MISMATCH")) {
-            state.spottedCodes.push("PHOTO_MISMATCH");
-            state.interrogated = true;
-            state.inspectMode = false;
-            render();
+          if (t.violations.some(v => v.code === "PHOTO_MISMATCH")) {
+            if (!state.spottedCodes.includes("PHOTO_MISMATCH")) {
+              state.spottedCodes.push("PHOTO_MISMATCH");
+              state.interrogated = true;
+              state.inspectMode = false;
+              render();
+            } else {
+              reportAlreadySpotted();
+            }
           } else {
             reportCleanCheck(L("❌ Фото в паспорті відповідає обличчю!", "❌ Passport photo matches!"));
           }
@@ -6526,16 +6536,23 @@
       function handleVehicleOrFaceCheck() {
         audio.playTap();
         let foundVisual = false;
+        let alreadyHadVisual = false;
         t.violations.forEach(v => {
-          if ((v.code === "VEHICLE_MISMATCH" || v.code === "PHOTO_MISMATCH") && !state.spottedCodes.includes(v.code)) {
-            state.spottedCodes.push(v.code);
-            foundVisual = true;
+          if (v.code === "VEHICLE_MISMATCH" || v.code === "PHOTO_MISMATCH") {
+            if (!state.spottedCodes.includes(v.code)) {
+              state.spottedCodes.push(v.code);
+              foundVisual = true;
+            } else {
+              alreadyHadVisual = true;
+            }
           }
         });
         if (foundVisual) {
           state.interrogated = true;
           state.inspectMode = false;
           render();
+        } else if (alreadyHadVisual) {
+          reportAlreadySpotted();
         } else {
           reportCleanCheck(L("❌ Авто та обличчя відповідають документам!", "❌ Vehicle and face match!"));
         }
@@ -6584,11 +6601,15 @@
         `;
         rowBtn.addEventListener("click", () => {
           audio.playTap();
-          if (f.disc && !state.spottedCodes.includes(f.disc.code)) {
-            state.spottedCodes.push(f.disc.code);
-            state.interrogated = true;
-            state.inspectMode = false;
-            render();
+          if (f.disc) {
+            if (!state.spottedCodes.includes(f.disc.code)) {
+              state.spottedCodes.push(f.disc.code);
+              state.interrogated = true;
+              state.inspectMode = false;
+              render();
+            } else {
+              reportAlreadySpotted();
+            }
           } else {
             reportCleanCheck(L("❌ У цьому полі все чисто!", "❌ This field is clean!"));
           }
@@ -6599,11 +6620,15 @@
       const sealBtn = document.getElementById("btn-doc-seal");
       if (sealBtn) sealBtn.addEventListener("click", () => {
         audio.playTap();
-        if (doc.sealDisc && !state.spottedCodes.includes(doc.sealDisc.code)) {
-          state.spottedCodes.push(doc.sealDisc.code);
-          state.interrogated = true;
-          state.inspectMode = false;
-          render();
+        if (doc.sealDisc) {
+          if (!state.spottedCodes.includes(doc.sealDisc.code)) {
+            state.spottedCodes.push(doc.sealDisc.code);
+            state.interrogated = true;
+            state.inspectMode = false;
+            render();
+          } else {
+            reportAlreadySpotted();
+          }
         } else {
           reportCleanCheck(L("❌ Печатка справжня!", "❌ Seal is genuine!"));
         }
@@ -6653,7 +6678,20 @@
 
       document.getElementById("react-dog").addEventListener("click", () => {
         audio.playDogSniff();
-        state.trunkPanelOpen = true;
+        if (state.ownedAssets.includes("uv_endoscope")) {
+          state.shiftSec = Math.max(5, state.shiftSec - dogSecCost);
+          state.trunkPanelOpen = false;
+          state.vehicleInspected = true;
+          state.zoneCheckMsg = null;
+          if (t.hasContraband && !state.spottedCodes.includes("CONTRABAND_CARGO")) state.spottedCodes.push("CONTRABAND_CARGO");
+          if (t.storyTag === "DUAL_CITIZEN" && !state.spottedCodes.includes("DUAL_CITIZENSHIP")) state.spottedCodes.push("DUAL_CITIZENSHIP");
+          if (t.violations.some(v => v.code === "VEHICLE_MISMATCH") && !state.spottedCodes.includes("VEHICLE_MISMATCH")) {
+            state.spottedCodes.push("VEHICLE_MISMATCH");
+          }
+          pushShiftLog(t.hasContraband ? "#EF5350" : "#81C784", L(`🩻🐕 Рентген + Пес: ${t.vehicleSearchResult.uk}`, `🩻🐕 X-Ray + Dog: ${t.vehicleSearchResult.en}`));
+        } else {
+          state.trunkPanelOpen = true;
+        }
         render();
       });
 
