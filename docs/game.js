@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v5.5";
+  const BUILD_VERSION = "v5.6";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -748,8 +748,26 @@
       currency: "UAH",
       icon: "🐕",
       title: L("Мобільний рентген-сканер + вітаміни для пса «Бавовни»", "Mobile X-Ray Scanner + Dog Treats for 'Bavovna'"),
-      subtitle: L("Огляд транспорту миттєвий (0с замість -8с) + авто-підсвітка лівих печаток", "Instant transport search (0s vs -8s) + auto-spots fake seals"),
-      cost: 7500, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 0, moraleBoost: 0
+      subtitle: L("Огляд транспорту швидший (-3с, мін. 2с; 1с/відсік) + авто-підсвітка лівих печаток", "Faster transport search (-3s, min 2s; 1s/zone) + auto-spots fake seals"),
+      cost: 14000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 0, moraleBoost: 0
+    },
+    {
+      id: "uv_spotlight",
+      category: "TECH",
+      currency: "UAH",
+      icon: "🔦",
+      title: L("Потужний стаціонарний УФ-прожектор «Сова-М»", "Heavy UV Spotlight 'Sova-M'"),
+      subtitle: L("Автоматично виявляє фальшиві QR-коди «Облік+» та дає -10% до штрафів", "Auto-spots fake 'Oblik+' QR codes & reduces protocol fines by 10%"),
+      cost: 11000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 0, moraleBoost: 0
+    },
+    {
+      id: "tactical_vest",
+      category: "TECH",
+      currency: "UAH",
+      icon: "🦺",
+      title: L("Тактичний жилет ДПСК «Кордон-Про»", "Tactical Vest 'Border-Pro'"),
+      subtitle: L("Солідний вигляд: -25% штрафів за помилки (не стакається з прожектором) + 10 СБК", "Authority look: -25% protocol fines (best-only) & +10 SBK rep"),
+      cost: 18500, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 5
     },
     {
       id: "sbk_database_tablet",
@@ -771,13 +789,23 @@
     },
     {
       id: "lanos_sport",
-      category: "TECH",
+      category: "AUTO",
       currency: "UAH",
       onlyUah: true,
       icon: "🚗",
       title: L("«Ланос-Спорт 1.6» (Чесна робоча конячка)", "'Lanos-Sport 1.6' Workhorse"),
-      subtitle: L("+20с до зміни (швидкий доїзд) +10 сім'ї та Паличу, 0% НАБК!", "+20s shift time, +10 family & Palych, 0% NABK!"),
+      subtitle: L("+20с до зміни (діє найкраще авто в гаражі) +10 сім'ї та Паличу, 0% НАБК!", "+20s shift time (best car only), +10 family & Palych, 0% NABK!"),
       cost: 28000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 10, moraleBoost: 10
+    },
+    {
+      id: "border_hotel",
+      category: "REALTY",
+      currency: "UAH",
+      onlyUah: true,
+      icon: "🏨",
+      title: L("Мотель «Нічний Шлагбаум» біля траси", "'Night Barrier' Highway Motel"),
+      subtitle: L("Білий бізнес! +1 800 🪙 щоранку і +15% щастя сім'ї (0% НАБК)", "Clean business! +1,800 🪙 every morning & +15% family morale (0% NABK)"),
+      cost: 48000, passiveIncome: 1800, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 15
     },
     {
       id: "suburban_brick_house",
@@ -800,12 +828,21 @@
     },
     {
       id: "euro_bmw",
-      category: "LUXURY",
+      category: "AUTO",
       currency: "USD",
       icon: "🚙",
       title: L("Чорна «Беха Х5» (Повний фарш)", "Black 'Beha X5' Executive"),
-      subtitle: L("Повага Толіка (+20) і Палича (+15), щастя сім'ї (+15), +5% уваги НАБК/день", "Tolik (+20) & Palych (+15) respect, family (+15), +5% daily NABK risk"),
+      subtitle: L("+25с до зміни (найкраще авто), повага Толіка (+20) і Палича (+15), +5% НАБК/день", "+25s shift (best car), Tolik (+20) & Palych (+15), +5% daily NABK risk"),
       cost: 28000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 5, tolikBoost: 20, palychBoost: 15, moraleBoost: 15
+    },
+    {
+      id: "fake_diplomat_id",
+      category: "LUXURY",
+      currency: "USD",
+      icon: "🛂",
+      title: L("Дипломатичний паспорт «Офшорія-VIP»", "Diplomatic Passport 'Ofshoria-VIP'"),
+      subtitle: L("Прикриття статусом: пасивно -6% ризику НАБК щоранку та +15 Паличу", "Immunity cover: passively -6% NABK risk every morning & +15 Palych"),
+      cost: 16000, passiveIncome: 0, passiveUsd: 0, dailyRisk: -6, tolikBoost: 5, palychBoost: 15, moraleBoost: 10
     },
     {
       id: "kyivhrad_flat",
@@ -2250,7 +2287,7 @@
     const docs = [
       {
         type: "PASSPORT",
-        title: L("ПАСПОРТ KRAINA", "KRAINA PASSPORT"),
+        title: cfg.passportTitle || L("ПАСПОРТ KRAINA", "KRAINA PASSPORT"),
         subtitle: cfg.passportSub || L(`Серія KR-${randInt(100000, 999999)} • м. ${pick(CITIES).uk}`, `No. KR-${randInt(100000, 999999)} • ${pick(CITIES).en}`),
         fields: cfg.passportFields,
         sealText: cfg.passportSeal || L("ДМС KRAINA • ДІЙСНИЙ", "SMS KRAINA • VALID"),
@@ -2499,12 +2536,12 @@
       includeDecl: true,
       declaredCargo: L("Валізи Louis Vuitton, золотий ланцюг", "Designer suitcases"),
       greeting: L("«Чуєш, ти знаєш, хто мій батя?! Я лечу на бізнес-конференцію в Монаківку! Які довідки?! Став штамп бігом!»", "'Do you know who my dad is?! Heading to Monakivka! What permit?! Stamp it NOW!'"),
-      interrogationReply: L("«Ой не напрягай. Ось 1 000 🪙 прямо на торпеді — або ж просто нажми ✖ ВІДМОВИТИ і втрачай шанс!»", "'Stop stressing me. Take 1,000 🪙 cash — or turn me down and stay broke!'"),
+      interrogationReply: L("«Ой не напрягай. Ось 3 500 💵 прямо на торпеді — або ж просто нажми ✖ ВІДМОВИТИ і втрачай шанс!»", "'Stop stressing me. Take 3,500 💵 cash — or turn me down and stay broke!'"),
       intimidateReply: L("«ТИ НА КОГО ГАВКАЄШ?! Та мій батя цей шлагбаум завтра знесе! *руки тремтять на кермі*»", "'WHO DO YOU THINK YOU ARE YELLING AT?! My dad will demolish this booth!'"),
       coffeeReply: L("«Фу, та це ж розчинна з термоса? Ну... хоч гаряча, спасибі.»", "'Ugh, thermos coffee? Well... at least it is hot.'"),
       arrestFull: L("Мажор кричить у телефон «Батя, мене пакують за відмову виїзду!», але ти перестарався — достатньо було відмови!", "You detained a VIP over a missing permit when a simple DENY sufficed!"),
       arrestToned: L("Перевищення сили — достатньо було натиснути ✖ ВІДМОВИТИ.", "Excessive force — should have pressed DENY."),
-      bribeOffer: { amount: 600, currency: "USD", instantOffer: true, isStingTrap: false, syndicateFavor: false },
+      bribeOffer: { amount: 3500, currency: "USD", instantOffer: true, isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.AGE_RESTRICTION_NO_PERMIT],
       storyTag: "DEPUTY_SON"
@@ -4886,11 +4923,26 @@
     render();
   }
 
+  function getShiftBonusSec() {
+    const has = id => state.ownedAssets.includes(id);
+    const bestCarSec = Math.max(
+      0,
+      has("monako_hypercar") ? 40 : 0,
+      has("porsche_911") ? 30 : 0,
+      has("euro_bmw") ? 25 : 0,
+      has("lanos_sport") ? 20 : 0,
+      has("steppe_ebike") ? 15 : 0
+    );
+    const coffeeSec = has("espresso_machine") ? 25 : 0;
+    const bestAddonSec = Math.max(0, has("addon_nitro_spoiler") ? 15 : 0, has("addon_migalka") ? 12 : 0);
+    return bestCarSec + coffeeSec + bestAddonSec;
+  }
+
   function beginShift() {
     const meta = getMetaPerkFlags();
     const baseSec = state.isSandbox ? 215 : 195;
     const modDelta = state.sandboxMod ? (state.sandboxMod.shiftSecDelta || 0) : 0;
-    const bonusSec = (state.ownedAssets.includes("espresso_machine") ? 35 : 0) + (state.ownedAssets.includes("porsche_911") ? 35 : 0) + (state.ownedAssets.includes("lanos_sport") ? 20 : 0) + (state.ownedAssets.includes("steppe_ebike") ? 18 : 0) + (state.ownedAssets.includes("monako_hypercar") ? 40 : 0) + (state.ownedAssets.includes("addon_nitro_spoiler") ? 20 : 0) + (state.ownedAssets.includes("addon_migalka") ? 15 : 0) + meta.shiftTimeBonus + modDelta;
+    const bonusSec = getShiftBonusSec() + meta.shiftTimeBonus + modDelta;
     state.phase = "BOOTH_SHIFT";
     state.shiftSec = Math.max(150, baseSec + bonusSec);
     state.travelerIdx = 0;
@@ -4933,7 +4985,14 @@
     state.dogTargetZone = (t && (t.hasContraband || t.storyTag === "DUAL_CITIZEN")) ? pick(zones) : null;
     if (t && state.ownedAssets.includes("uv_endoscope")) {
       for (const v of t.violations) {
-        if (v.code === "FAKE_ISSUER_SEAL" || v.code === "INVALID_QR_CODE") {
+        if (v.code === "FAKE_ISSUER_SEAL") {
+          state.spottedCodes.push(v.code);
+        }
+      }
+    }
+    if (t && state.ownedAssets.includes("uv_spotlight")) {
+      for (const v of t.violations) {
+        if (v.code === "INVALID_QR_CODE" && !state.spottedCodes.includes(v.code)) {
           state.spottedCodes.push(v.code);
         }
       }
@@ -5083,6 +5142,8 @@
           state.underSurveillance = true;
         }
       }
+      if (state.ownedAssets.includes("tactical_vest")) fineDelta = Math.round(fineDelta * 0.75);
+      else if (state.ownedAssets.includes("uv_spotlight")) fineDelta = Math.round(fineDelta * 0.90);
       state.shiftMistakes += 1;
     }
 
@@ -6036,8 +6097,9 @@
       const photoSpotted = state.spottedCodes.includes("PHOTO_MISMATCH");
       const rk = getRank();
       const gurFast = loadAgencyBadges().includes("GUR_FALCON") ? 2 : 0;
-      const dogSecCost = state.ownedAssets.includes("uv_endoscope") ? 0 : Math.max(0, rk.dogCost - gurFast);
-      const searchCost = dogSecCost === 0 ? "0s" : `-${dogSecCost}s`;
+      const hasEndoscope = state.ownedAssets.includes("uv_endoscope");
+      const dogSecCost = Math.max(2, rk.dogCost - gurFast - (hasEndoscope ? 3 : 0));
+      const searchCost = `-${dogSecCost}s`;
       const bribeInfo = getComputedBribe(t.bribeOffer);
       const bribeVisible = Boolean(
         bribeInfo &&
@@ -6145,7 +6207,7 @@
             { id: "SPARE", icon: "🛞", name: L("Запаска", "Spare") },
             { id: "GLOVE", icon: "🧤", name: L("Салон", "Cabin") }
           ];
-          const stepCostText = hasEndoscope ? "0s" : "-2s";
+          const stepCostText = hasEndoscope ? "-1s" : "-2s";
           return `
           <div id="trunk-search-panel" style="background:#1B221E;border:1.5px solid #E0B145;border-radius:6px;padding:7px;display:flex;flex-direction:column;gap:5px;">
             <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#E0B145;font-weight:800;">
@@ -6464,7 +6526,7 @@
           audio.playDogSniff();
           if (!state.checkedZones) state.checkedZones = [];
           if (!state.checkedZones.includes(zone)) state.checkedZones.push(zone);
-          const stepSec = hasEndoscope ? 0 : 2;
+          const stepSec = hasEndoscope ? 1 : 2;
           if (stepSec > 0) state.shiftSec = Math.max(5, state.shiftSec - stepSec);
 
           if (state.dogTargetZone && state.dogTargetZone === zone) {
@@ -6918,7 +6980,7 @@
         }
         if (state.escapeFund < getEscapeTarget()) {
           const escStep = 1000;
-          const canEsc = (state.usd >= escStep) || ((state.money + state.usd * USD_UAH_RATE) >= escStep * USD_UAH_RATE);
+          const canEsc = state.usd >= escStep;
           const eCard = document.createElement("div");
           eCard.className = "card-slate row-between";
           eCard.innerHTML = `
@@ -6986,7 +7048,28 @@
           listEl.appendChild(card);
         });
       } else {
-        ASSET_UPGRADES.forEach(asset => {
+        const curCat = state.shopCat || "ALL";
+        const cats = [
+          { id: "ALL", label: L("Усі", "All") },
+          { id: "TECH", label: L("🔦 Техніка", "🔦 Gear") },
+          { id: "AUTO", label: L("🚗 Авто", "🚗 Auto") },
+          { id: "REALTY", label: L("🏠 Дім/Бізнес", "🏠 Realty") },
+          { id: "LUXURY", label: L("🕶️ Тінь", "🕶️ Shadow") }
+        ];
+        const catBar = document.createElement("div");
+        catBar.style.cssText = "display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px;";
+        cats.forEach(c => {
+          const cb = document.createElement("button");
+          cb.type = "button";
+          cb.className = curCat === c.id ? "btn-mustard" : "btn-secondary";
+          cb.style.cssText = "padding:4px 8px;font-size:10.5px;";
+          cb.textContent = tr(c.label, state.lang);
+          cb.addEventListener("click", () => { audio.playTap(); state.shopCat = c.id; render(); });
+          catBar.appendChild(cb);
+        });
+        listEl.appendChild(catBar);
+
+        ASSET_UPGRADES.filter(a => curCat === "ALL" || a.category === curCat || (curCat === "AUTO" && (a.id === "porsche_911" || a.id === "steppe_ebike" || a.id === "monako_hypercar"))).forEach(asset => {
           const owned = state.ownedAssets.includes(asset.id);
           const isUsd = asset.currency === "USD";
           const canBuy = !owned && canAffordAsset(asset);
