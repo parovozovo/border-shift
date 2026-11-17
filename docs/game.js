@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v6.3";
+  const BUILD_VERSION = "v6.4";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -4972,7 +4972,7 @@
   function prepareCurrentTraveler() {
     state.selectedDocIdx = 0;
     state.uvActive = false;
-    state.docFolded = false;
+    state.docFolded = true;
     state.vehicleInspected = false;
     state.trunkPanelOpen = false;
     state.checkedZones = [];
@@ -6182,15 +6182,13 @@
             <div class="shift-log-line" style="color:${line2 ? line2.color : "#546E7A"};opacity:0.82;">${line2 ? tr(line2.text, state.lang) : ""}</div>
           </div>
           <button type="button" id="btn-toggle-logs" class="btn-outline" style="padding:3px 7px;font-size:10.5px;flex-shrink:0;">${state.logsExpanded ? "▴" : "▾"} ${topLogs.length}</button>
-          ${state.logsExpanded ? `
-            <div class="shift-log-drawer">
-              <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #354039;padding-bottom:4px;font-size:11px;font-weight:800;color:#E0B145;">
-                <span>📻 ${tr(L("ЖУРНАЛ ПОВІДОМЛЕНЬ ЗМІНИ", "SHIFT MESSAGE LOG"), state.lang)}</span>
-                <button type="button" id="btn-close-logs" class="btn-outline" style="padding:1px 6px;font-size:10px;">✕</button>
-              </div>
-              ${topLogs.map(lg => `<div style="font-size:11px;line-height:1.3;color:${lg.color};border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:3px;">${tr(lg.text, state.lang)}</div>`).join("")}
+          <div class="shift-log-drawer" id="shift-log-drawer" style="display:${state.logsExpanded ? "flex" : "none"};">
+            <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #354039;padding-bottom:4px;font-size:11px;font-weight:800;color:#E0B145;">
+              <span>📻 ${tr(L("ЖУРНАЛ ПОВІДОМЛЕНЬ ЗМІНИ", "SHIFT MESSAGE LOG"), state.lang)}</span>
+              <button type="button" id="btn-close-logs" class="btn-outline" style="padding:1px 6px;font-size:10px;">✕</button>
             </div>
-          ` : ""}
+            ${topLogs.map(lg => `<div style="font-size:11px;line-height:1.3;color:${lg.color};border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:3px;">${tr(lg.text, state.lang)}</div>`).join("")}
+          </div>
         </div>
         <header class="top-bar">
           <div class="row-between">
@@ -6273,7 +6271,6 @@
         })() : ""}
 
         <section class="desk-area">
-          <div class="doc-tabs" id="doc-tabs-bar"></div>
           ${(() => {
             const titleStr = (doc.title && doc.title.uk ? doc.title.uk : "").toUpperCase();
             let docTheme = "doc-theme-cert";
@@ -6318,7 +6315,7 @@
                       bg = "#FFF3CD"; fg = "#3E2723"; bdr = "#B7811E"; tag = "🚘 ДЕКЛАРАЦІЯ";
                     }
                     return `
-                      <button type="button" class="desk-doc-item" data-doc-idx="${dIdx}" style="background:${bg};color:${fg};border:1.5px solid ${bdr};">
+                      <button type="button" id="desk-doc-${dIdx}" class="desk-doc-item" data-doc-idx="${dIdx}" style="background:${bg};color:${fg};border:1.5px solid ${bdr};">
                         <span style="font-size:10px;font-weight:900;opacity:0.85;">${tag}</span>
                         <span style="font-size:12px;font-weight:800;line-height:1.2;">${tr(dItem.title, state.lang)}</span>
                         <span style="font-size:10px;opacity:0.75;">${tr(L("Натисни, щоб відкрити →", "Click to open →"), state.lang)}</span>
@@ -6473,31 +6470,6 @@
         if (foundVisual) render();
       });
 
-      const tabsBar = document.getElementById("doc-tabs-bar");
-      t.documents.forEach((dItem, idx) => {
-        const b = document.createElement("button");
-        b.type = "button";
-        const tTitle = (dItem.title && dItem.title.uk ? dItem.title.uk : "").toUpperCase();
-        let tabTheme = "";
-        let labelText = dItem.title;
-        if (dItem.type === "PASSPORT") {
-          if (tTitle.includes("ПОЛАНД") || tTitle.includes("ФРАНЦ")) { tabTheme = "tab-foreign-burgundy"; labelText = L("📕 Паспорт (ЄС)", "📕 Passport"); }
-          else if (tTitle.includes("БРИТАН") || tTitle.includes("КАРПАТ")) { tabTheme = "tab-foreign-green"; labelText = L("📗 Паспорт (Закорд.)", "📗 Passport"); }
-          else if (tTitle.includes("ГЕРМАН")) { tabTheme = "tab-foreign-slate"; labelText = L("📓 Паспорт (Штос)", "📓 Passport"); }
-          else { tabTheme = "tab-kraina"; labelText = L("🛡️ Паспорт KRAINA", "🛡️ KRAINA ID"); }
-        } else if (dItem.type === "MILITARY_ID") {
-          tabTheme = "tab-oblik"; labelText = L("📱 Облік+", "📱 Oblik+");
-        } else if (dItem.type === "VEHICLE_CUSTOMS") {
-          tabTheme = "tab-customs"; labelText = L("🚘 Техпаспорт", "🚘 Transport");
-        } else {
-          labelText = L("📄 Довідка", "📄 Permit");
-        }
-        b.className = "doc-tab " + tabTheme + (idx === state.selectedDocIdx ? " active" : "");
-        b.textContent = tr(labelText, state.lang);
-        b.addEventListener("click", () => { audio.playTap(); state.selectedDocIdx = idx; state.docFolded = false; render(); });
-        tabsBar.appendChild(b);
-      });
-
       const foldBtn = document.getElementById("btn-fold-doc");
       if (foldBtn) foldBtn.addEventListener("click", () => { audio.playTap(); state.docFolded = true; render(); });
       document.querySelectorAll(".desk-doc-item").forEach(itemBtn => {
@@ -6509,9 +6481,20 @@
         });
       });
       const toggleLogsBtn = document.getElementById("btn-toggle-logs");
-      if (toggleLogsBtn) toggleLogsBtn.addEventListener("click", () => { audio.playTap(); state.logsExpanded = !state.logsExpanded; render(); });
+      const logsDrawer = document.getElementById("shift-log-drawer");
+      if (toggleLogsBtn) toggleLogsBtn.addEventListener("click", () => {
+        audio.playTap();
+        state.logsExpanded = !state.logsExpanded;
+        if (logsDrawer) logsDrawer.style.display = state.logsExpanded ? "flex" : "none";
+        toggleLogsBtn.textContent = `${state.logsExpanded ? "▴" : "▾"} ${topLogs.length}`;
+      });
       const closeLogsBtn = document.getElementById("btn-close-logs");
-      if (closeLogsBtn) closeLogsBtn.addEventListener("click", () => { audio.playTap(); state.logsExpanded = false; render(); });
+      if (closeLogsBtn) closeLogsBtn.addEventListener("click", () => {
+        audio.playTap();
+        state.logsExpanded = false;
+        if (logsDrawer) logsDrawer.style.display = "none";
+        if (toggleLogsBtn) toggleLogsBtn.textContent = `▾ ${topLogs.length}`;
+      });
 
       const fieldsList = document.getElementById("doc-fields-list");
       if (fieldsList) doc.fields.forEach(f => {
