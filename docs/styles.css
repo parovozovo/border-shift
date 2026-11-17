@@ -622,25 +622,54 @@ button:disabled {
 .desk-doc-item:nth-child(even) { transform: rotate(1.1deg); }
 .desk-doc-item:hover:nth-child(odd), .desk-doc-item:hover:nth-child(even) { transform: translateY(-2px) rotate(0deg); }
 
-.floating-alerts {
-  position: fixed;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 20px);
-  max-width: 438px;
+.shift-log-box {
+  position: relative;
+  height: 44px;
+  min-height: 44px;
+  background: #131915;
+  border: 1px solid #2E3B33;
+  border-radius: 6px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.shift-log-lines {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+
+.shift-log-line {
+  font-size: 11px;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+}
+
+.shift-log-drawer {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 210px;
+  overflow-y: auto;
   z-index: 65;
+  background: #151C17;
+  border: 1.5px solid #E0B145;
+  border-radius: 6px;
+  padding: 7px 9px;
   display: flex;
   flex-direction: column;
   gap: 5px;
-  pointer-events: none;
-}
-
-.floating-alerts > * {
-  pointer-events: auto;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.68);
-  animation: docUnfold 0.18s ease-out;
-  cursor: pointer;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.85);
 }
 
 .game-menu-wrap {

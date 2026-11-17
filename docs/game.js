@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v6.1";
+  const BUILD_VERSION = "v6.2";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -4958,6 +4958,10 @@
     state.encounterTriggered = false;
     state.gotReprimandToday = false;
     state.radioDispatch = null;
+    state.shiftLogs = [
+      { color: "#B0BEC5", text: L(`Зміна Дня ${state.daySpec.dayNumber} почалася. Перевіряйте документи й багажник.`, `Day ${state.daySpec.dayNumber} shift started. Inspect docs & trunks.`) }
+    ];
+    state.logsExpanded = false;
     state.barrierState = "CLOSED";
     state.lastFeedback = null;
     prepareCurrentTraveler();
@@ -5014,17 +5018,6 @@
     if (state.shiftSec === 0) {
       finishShift();
       return;
-    }
-    const nowMs = Date.now();
-    if (state.lastFeedback && state.lastFeedbackAt && nowMs - state.lastFeedbackAt >= 5000) {
-      state.lastFeedback = null;
-      const el = document.getElementById("float-feedback-toast");
-      if (el) el.remove();
-    }
-    if (state.radioDispatch && state.radioDispatchAt && nowMs - state.radioDispatchAt >= 5000) {
-      state.radioDispatch = null;
-      const el = document.getElementById("float-radio-toast");
-      if (el) el.remove();
     }
     updateMood();
     const timerEl = document.getElementById("hud-timer");
@@ -5248,6 +5241,16 @@
         : (bribedPass ? L("Без штрафу, але ризик НАБК зріс.", "No fine, but NABK risk increased.") : (ruleCorrect ? L("Оформлено за директивою ДПСК.", "Processed per SBGS directive.") : (t.violations[0] ? t.violations[0].title : L("Безпідставна відмова", "Wrongful denial"))))),
       moneyDelta: netMoney
     };
+    if (!state.shiftLogs) state.shiftLogs = [];
+    const logSign = netMoney > 0 ? `+${netMoney} 🪙` : (netMoney < 0 ? `${netMoney} 🪙` : "");
+    state.shiftLogs.unshift({
+      color: state.lastFeedback.ok ? "#81C784" : "#FF8A80",
+      text: L(
+        `${state.lastFeedback.title.uk}${logSign ? " (" + logSign + ")" : ""} — ${state.lastFeedback.detail.uk}`,
+        `${state.lastFeedback.title.en}${logSign ? " (" + logSign + ")" : ""} — ${state.lastFeedback.detail.en}`
+      )
+    });
+    if (state.shiftLogs.length > 25) state.shiftLogs.length = 25;
 
     state.travelerIdx += 1;
     if (state.travelerIdx >= state.queue.length) {
@@ -5281,6 +5284,8 @@
           `📞 РАЦІЯ СБК: «Увага! На під'їзді ${upcoming.vehicleDesc.uk} — терміново перевірте документи та багажник!»`,
           `📞 SBK RADIO: 'Alert! ${upcoming.vehicleDesc.en} approaching — inspect papers & trunk carefully!'`
         );
+        if (!state.shiftLogs) state.shiftLogs = [];
+        state.shiftLogs.unshift({ color: "#64B5F6", text: state.radioDispatch });
         render();
       }
     }
@@ -6163,23 +6168,30 @@
         activeSpeech = { uk: syncText(activeSpeech.uk), en: syncText(activeSpeech.en) };
       }
 
-      const nowAlert = Date.now();
-      const showFeedback = Boolean(state.lastFeedback && (!state.lastFeedbackAt || nowAlert - state.lastFeedbackAt < 5000));
-      const showRadio = Boolean(state.radioDispatch && (!state.radioDispatchAt || nowAlert - state.radioDispatchAt < 5000));
+      const topLogs = (state.shiftLogs || []).slice();
+      if (droneWarning) {
+        topLogs.unshift({ color: "#FF5252", text: L("⚠️ РАДАР ППО: У небі «мопед» на підльоті! Готуйтесь до сирени!", "⚠️ RADAR ALERT: Drone spotted in sky! Siren imminent!") });
+      }
+      const line1 = topLogs[0];
+      const line2 = topLogs[1];
 
       root.innerHTML = `
-        ${(showFeedback || droneWarning || showRadio) ? `
-          <div class="floating-alerts" id="floating-alerts-layer">
-            ${showFeedback ? `
-              <div id="float-feedback-toast" class="toast-banner" style="background:${state.lastFeedback.ok ? "#1B5E20" : "#7F0000"};border:1px solid rgba(255,255,255,0.22);">
-                <span><strong>${tr(state.lastFeedback.title, state.lang)}:</strong> ${tr(state.lastFeedback.detail, state.lang)}</span>
-                <strong style="color:#E0B145;white-space:nowrap;">${state.lastFeedback.moneyDelta >= 0 ? "+" + state.lastFeedback.moneyDelta : state.lastFeedback.moneyDelta} 🪙</strong>
-              </div>
-            ` : ""}
-            ${droneWarning ? `<div class="radar-alert" style="border:1px solid #FF5252;">${tr(L("⚠️ РАДАР ППО: У небі «мопед» на підльоті! Готуйтесь до сирени!", "⚠️ RADAR ALERT: Drone spotted in sky! Siren imminent!"), state.lang)}</div>` : ""}
-            ${showRadio ? `<div id="float-radio-toast" style="background:#1565C0;color:#FFF;padding:6px 9px;border-radius:6px;font-size:11px;font-weight:700;border:1px solid #90CAF9;">${tr(state.radioDispatch, state.lang)}</div>` : ""}
+        <div class="shift-log-box" id="shift-log-bar">
+          <div class="shift-log-lines">
+            <div class="shift-log-line" style="color:${line1 ? line1.color : "#78909C"};">${line1 ? tr(line1.text, state.lang) : "—"}</div>
+            <div class="shift-log-line" style="color:${line2 ? line2.color : "#546E7A"};opacity:0.82;">${line2 ? tr(line2.text, state.lang) : ""}</div>
           </div>
-        ` : ""}
+          <button type="button" id="btn-toggle-logs" class="btn-outline" style="padding:3px 7px;font-size:10.5px;flex-shrink:0;">${state.logsExpanded ? "▴" : "▾"} ${topLogs.length}</button>
+          ${state.logsExpanded ? `
+            <div class="shift-log-drawer">
+              <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #354039;padding-bottom:4px;font-size:11px;font-weight:800;color:#E0B145;">
+                <span>📻 ${tr(L("ЖУРНАЛ ПОВІДОМЛЕНЬ ЗМІНИ", "SHIFT MESSAGE LOG"), state.lang)}</span>
+                <button type="button" id="btn-close-logs" class="btn-outline" style="padding:1px 6px;font-size:10px;">✕</button>
+              </div>
+              ${topLogs.map(lg => `<div style="font-size:11px;line-height:1.3;color:${lg.color};border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:3px;">${tr(lg.text, state.lang)}</div>`).join("")}
+            </div>
+          ` : ""}
+        </div>
         <header class="top-bar">
           <div class="row-between">
             <span id="hud-timer" style="color:${state.shiftSec < 40 ? "#FF8A80" : "#E0B145"};font-weight:700;font-size:12.5px;">${tr(L("День", "Day"), state.lang)} ${state.daySpec.dayNumber} • ⏱ ${state.shiftSec}s</span>
@@ -6496,10 +6508,10 @@
           render();
         });
       });
-      const floatFb = document.getElementById("float-feedback-toast");
-      if (floatFb) floatFb.addEventListener("click", () => { state.lastFeedback = null; floatFb.remove(); });
-      const floatRad = document.getElementById("float-radio-toast");
-      if (floatRad) floatRad.addEventListener("click", () => { state.radioDispatch = null; floatRad.remove(); });
+      const toggleLogsBtn = document.getElementById("btn-toggle-logs");
+      if (toggleLogsBtn) toggleLogsBtn.addEventListener("click", () => { audio.playTap(); state.logsExpanded = !state.logsExpanded; render(); });
+      const closeLogsBtn = document.getElementById("btn-close-logs");
+      if (closeLogsBtn) closeLogsBtn.addEventListener("click", () => { audio.playTap(); state.logsExpanded = false; render(); });
 
       const fieldsList = document.getElementById("doc-fields-list");
       if (fieldsList) doc.fields.forEach(f => {
