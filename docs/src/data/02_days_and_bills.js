@@ -127,167 +127,167 @@
       minDay: 1, chance: 1.0, currency: "UAH",
       title: L("🛒 Закупити харчі, павербанки та бензин у генератор (+15% сім'я)", "🛒 Buy groceries, powerbanks & generator fuel (+15% family)"),
       subtitle: L("Дім у теплі й зі світлом — можна пропустити 1–2 вечори", "Keep home warm and lit — optional if savings are tight"),
-      cost: 3800, morale: 15, escape: 0, riskDelta: 0, sbkDelta: 0
+      cost: 1800, morale: 15, escape: 0, riskDelta: 0, sbkDelta: 0
     },
     {
       id: "reb_donation",
       minDay: 1, chance: 1.0, currency: "UAH",
       title: L("📡 Скинутися куму з ЗСК на купольний РЕБ проти «мопедів» (+15 СБК, +12% сім'я)", "📡 Chip in for an anti-drone EW jammer (+15 SBK, +12% family)"),
       subtitle: L("Військові дякують, а майор СБК «Тихий» ставить плюсик у досьє", "Troops thank you and SBK Major Quiet logs your support"),
-      cost: 5500, morale: 12, escape: 0, riskDelta: -8, sbkDelta: 15
+      cost: 2500, morale: 12, escape: 0, riskDelta: -8, sbkDelta: 15
     },
     {
       id: "mother_truskavets",
       minDay: 1, chance: 0.85, currency: "UAH",
       title: L("⛲ Путівка для мами й тещі у Трускавецьк на мінеральні води (+25% сім'я)", "⛲ Send mom & mother-in-law to Truskavetsk mineral spa (+25% family)"),
       subtitle: L("Удома панує благословенна тиша на тиждень вперед!", "Blessed peace and quiet at home all week!"),
-      cost: 7200, morale: 25, escape: 0, riskDelta: 0, sbkDelta: 0
+      cost: 3200, morale: 25, escape: 0, riskDelta: 0, sbkDelta: 0
     },
     {
       id: "dog_vet_spa",
       minDay: 1, chance: 0.9, currency: "UAH",
       title: L("🐕 СПА та вітаміни для пса «Бавовни» (+10 СБК, +10% сім'я)", "🐕 Vet Spa & Vitamins for Sniffer Dog 'Bavovna' (+10 SBK, +10% family)"),
       subtitle: L("Пес радісно махає хвостом і краще чує контрабанду", "Happy sniffer dog stays sharp at the gate"),
-      cost: 4200, morale: 10, escape: 0, riskDelta: 0, sbkDelta: 10
+      cost: 1500, morale: 10, escape: 0, riskDelta: 0, sbkDelta: 10
     },
     {
       id: "shred_evidence",
       minDay: 2, chance: 0.75, currency: "USD",
       title: L("🕵️‍♂️ Адвокат-«рішала» з Кийграда: зачистити хвости в НАБК (-25% ризику НАБК)", "🕵️‍♂️ Kyihrad fixer lawyer: scrub NABK investigation tails (-25% NABK risk)"),
       subtitle: L("Порятунок, якщо брав товсті конверти або прикупив майно", "Lifesaver if you took fat envelopes or bought luxury assets"),
-      cost: 2800, morale: 0, escape: 0, riskDelta: -25, sbkDelta: 0
+      cost: 950, morale: 0, escape: 0, riskDelta: -25, sbkDelta: 0
     },
     {
       id: "smuggler_poker",
       minDay: 2, chance: 0.55, currency: "USD",
       title: L("🃏 Закритий покер із перевізниками Толіка (+18 Толік, +12% сім'я)", "🃏 Backroom Poker with Tolik's Crew (+18 Tolik, +12% family)"),
       subtitle: L("Живі зв'язки з синдикатом та шанс зірвати банк (+6% НАБК)", "Build syndicate trust (+6% NABK risk)"),
-      cost: 1800, morale: 12, escape: 0, riskDelta: 6, sbkDelta: 0, tolikDelta: 18
+      cost: 550, morale: 12, escape: 0, riskDelta: 6, sbkDelta: 0, tolikDelta: 18
     },
     {
       id: "crypto_signal_vip",
       minDay: 3, chance: 0.45, currency: "USD",
-      title: L("📈 Вкластися в закритий крипто-інсайд «Шитомир-Коїн» (+7 500 💵!)", "📈 Join 'Shytomyr-Coin' Crypto Insider Pool (+7,500 💵!)"),
-      subtitle: L("Поступово відкривається з Дня 3+ — множить вкладені 3 000 💵 у 2.5 рази!", "Unlocks Day 3+ — turns 3,000 💵 into 7,500 💵!"),
-      cost: 3000, morale: 8, escape: 0, riskDelta: 4, sbkDelta: 0, usdReward: 7500
+      title: L("📈 Вкластися в закритий крипто-інсайд «Шитомир-Коїн» (+2 100 💵!)", "📈 Join 'Shytomyr-Coin' Crypto Insider Pool (+2,100 💵!)"),
+      subtitle: L("Поступово відкривається з Дня 3+ — множить вкладені 850 💵 у ~2.5 рази!", "Unlocks Day 3+ — turns 850 💵 into 2,100 💵!"),
+      cost: 850, morale: 8, escape: 0, riskDelta: 4, sbkDelta: 0, usdReward: 2100
     },
     {
       id: "secret_shytomyr_party",
       minDay: 2, chance: 0.22, isRare: true, currency: "USD",
       title: L("🧦 Таємна вечірка «Підземний Шитомир» (+35% сім'я, -10% НАБК)", "🧦 Secret 'Underground Shytomyr' Party (+35% family, -10% NABK)"),
       subtitle: L("✨ Рідкісна нічна подія (22% шанс): земляки накривають стіл!", "✨ Rare night event (22% chance): Shytomyr legends host a feast!"),
-      cost: 1600, morale: 35, escape: 0, riskDelta: -10, sbkDelta: 0, tolikDelta: 15
+      cost: 500, morale: 35, escape: 0, riskDelta: -10, sbkDelta: 0, tolikDelta: 15
     },
     {
       id: "witch_fortune",
       minDay: 3, chance: 0.18, isRare: true, currency: "UAH",
       title: L("🔮 Карпатська мольфарка: зняти «порчу НАБК» (-20% НАБК, +18% сім'я)", "🔮 Carpathian Mystic: Cleanse 'NABK Hex' (-20% NABK, +18% family)"),
       subtitle: L("✨ Рідкісна подія (18% шанс): димить травами прямо над декларацією!", "✨ Rare event (18% chance): herbal smoke clears your audit karma!"),
-      cost: 8500, morale: 18, escape: 0, riskDelta: -20, sbkDelta: 5
+      cost: 4200, morale: 18, escape: 0, riskDelta: -20, sbkDelta: 5
     },
     {
       id: "shady_kazino_night",
       minDay: 2, chance: 0.24, isRare: true, currency: "USD",
-      title: L("🎰 Підпільне «Казино КПП-777» (Виграй +6 000 💵!)", "🎰 Underground 'Gate-777 Casino' (Win +6,000 💵!)"),
-      subtitle: L("✨ Рідкісна подія (24% шанс): крутиш рулетку за 1 500 💵!", "✨ Rare event (24% chance): spin the midnight wheel for 1,500 💵!"),
-      cost: 1500, morale: 15, escape: 0, riskDelta: 5, sbkDelta: 0, usdReward: 6000
+      title: L("🎰 Підпільне «Казино КПП-777» (Виграй +1 800 💵!)", "🎰 Underground 'Gate-777 Casino' (Win +1,800 💵!)"),
+      subtitle: L("✨ Рідкісна подія (24% шанс): крутиш рулетку за 450 💵!", "✨ Rare event (24% chance): spin the midnight wheel for 450 💵!"),
+      cost: 450, morale: 15, escape: 0, riskDelta: 5, sbkDelta: 0, usdReward: 1800
     },
     {
       id: "black_market_drone_lens",
       minDay: 3, chance: 0.20, isRare: true, currency: "USD",
       title: L("🛸 Нічний аукціон трофейної оптики для ГУР-М (+30 СБК, -12% НАБК)", "🛸 Midnight Trophy Optics Auction for GUR-M (+30 SBK, -12% NABK)"),
       subtitle: L("✨ Рідкісна подія (20% шанс): розвідка цінує такий підгін!", "✨ Rare event (20% chance): GUR-M remembers top-grade optics!"),
-      cost: 4200, morale: 0, escape: 0, riskDelta: -12, sbkDelta: 30
+      cost: 1300, morale: 0, escape: 0, riskDelta: -12, sbkDelta: 30
     },
     {
       id: "diplomat_banquet",
       minDay: 4, chance: 0.16, isRare: true, currency: "USD",
       title: L("🥂 Закритий банкет консулів Франції-Люкс (+25 Палич, +25 СБК, -15% НАБК)", "🥂 Francia-Lux Consuls Banquet (+25 Palych, +25 SBK, -15% NABK)"),
       subtitle: L("✨ Елітна подія Дня 4+ (16% шанс): найвищі зв'язки на кордоні!", "✨ Rare Day 4+ event (16% chance): elite diplomatic connections!"),
-      cost: 4500, morale: 20, escape: 0, riskDelta: -15, sbkDelta: 25, palychDelta: 25
+      cost: 1500, morale: 20, escape: 0, riskDelta: -15, sbkDelta: 25, palychDelta: 25
     },
     {
       id: "bukovel_weekend",
       minDay: 1, chance: 0.9, currency: "UAH",
       title: L("🎿 Сімейні вихідні в аквапарку Буковельська (+22% сім'я, -5% стресу НАБК)", "🎿 Family weekend at Bukovelsk spa resort (+22% family)"),
       subtitle: L("Справжнє перезавантаження між важкими змінами", "Real reset between intense shifts"),
-      cost: 6500, morale: 22, escape: 0, riskDelta: -5, sbkDelta: 5
+      cost: 2800, morale: 22, escape: 0, riskDelta: -5, sbkDelta: 5
     },
     {
       id: "midnight_shawarma_crawl",
       minDay: 1, chance: 0.85, currency: "UAH",
       title: L("🥙 Нічний рейд по шаурмі з псом «Бавовною» (+12% сім'я, +5 СБК)", "🥙 Midnight Shawarma Run with Bavovna (+12% family, +5 SBK)"),
       subtitle: L("Смачно, ситно й пес у захваті!", "Tasty, filling, and Bavovna approves!"),
-      cost: 3500, morale: 12, escape: 0, riskDelta: 0, sbkDelta: 5
+      cost: 1500, morale: 12, escape: 0, riskDelta: 0, sbkDelta: 5
     },
     {
       id: "midnight_fishing",
       minDay: 2, chance: 0.65, currency: "UAH",
       title: L("🎣 Нічна рибалка на Тетереві з Пал Паличем (+20 Палич, -8% НАБК)", "🎣 Night Fishing with Pal Palych (+20 Palych, -8% NABK)"),
       subtitle: L("Спільна юшка на березі зближує краще за будь-який звіт", "Riverbank fish soup beats any paperwork"),
-      cost: 5200, morale: 8, escape: 0, riskDelta: -8, sbkDelta: 0, palychDelta: 20
+      cost: 2200, morale: 8, escape: 0, riskDelta: -8, sbkDelta: 0, palychDelta: 20
     },
     {
       id: "donate_drones_crew",
       minDay: 2, chance: 0.6, currency: "UAH",
       title: L("🚁 Нічний збір на FPV-рій для розвідки ГУР-М (+28 СБК, -10% НАБК)", "🚁 Fund FPV Drone Swarm for GUR-M (+28 SBK, -10% NABK)"),
       subtitle: L("Хлопці на передку передають подяку й прикривають твій тил", "Frontline scouts appreciate the gear"),
-      cost: 9500, morale: 15, escape: 0, riskDelta: -10, sbkDelta: 28
+      cost: 4500, morale: 15, escape: 0, riskDelta: -10, sbkDelta: 28
     },
     {
       id: "underground_mma",
       minDay: 2, chance: 0.5, currency: "USD",
       title: L("🥊 Підпільні бої «Митниця vs Контрабас» (+22 Толік, +12% сім'я)", "🥊 Underground Fight Night: Customs vs Smugglers (+22 Tolik)"),
       subtitle: L("Ставиш на Толікового бійця — повага в синдикаті зростає (+5% НАБК)", "Syndicate street cred rises (+5% NABK)"),
-      cost: 1200, morale: 12, escape: 0, riskDelta: 5, sbkDelta: 0, tolikDelta: 22
+      cost: 400, morale: 12, escape: 0, riskDelta: 5, sbkDelta: 0, tolikDelta: 22
     },
     {
       id: "fake_auction_painting",
       minDay: 3, chance: 0.45, currency: "USD",
       title: L("🖼️ Купити картину «Козак Мамай на крипто-полотні» (+30% сім'я)", "🖼️ Buy 'Kozak Mamai on Crypto-Canvas' (+30% family)"),
       subtitle: L("Дружина в захваті, а критики кажуть, що це чистий авангард", "Wife loves it, critics call it pure avant-garde"),
-      cost: 3200, morale: 30, escape: 0, riskDelta: -6, sbkDelta: 0
+      cost: 1000, morale: 30, escape: 0, riskDelta: -6, sbkDelta: 0
     },
     {
       id: "vip_sauna_delegates",
       minDay: 3, chance: 0.22, isRare: true, currency: "USD",
       title: L("🧖 VIP-сауна з делегатами Карпатії (+25 Палич, +15 Толік, +15% сім'я)", "🧖 VIP Sauna with Karpatia Delegates (+25 Palych, +15 Tolik)"),
       subtitle: L("✨ Рідкісна нічна подія (22% шанс): усі важливі питання вирішуються в парі!", "✨ Rare event (22% chance): deals sealed in steam!"),
-      cost: 2800, morale: 15, escape: 0, riskDelta: 4, sbkDelta: 0, palychDelta: 25, tolikDelta: 15
+      cost: 900, morale: 15, escape: 0, riskDelta: 4, sbkDelta: 0, palychDelta: 25, tolikDelta: 15
     },
     {
       id: "hack_registry_night",
       minDay: 4, chance: 0.19, isRare: true, currency: "USD",
       title: L("💻 Замовити «Сірого Хакера» почистити логи КПП (-35% НАБК, -1 Догана!)", "💻 Hire 'Gray Hacker' to wipe checkpoint logs (-35% NABK, -1 Reprimand!)"),
       subtitle: L("✨ Рідкісна подія Дня 4+ (19% шанс): зникають навіть старі догани!", "✨ Rare Day 4+ event (19% chance): even reprimands vanish!"),
-      cost: 4000, morale: 0, escape: 0, riskDelta: -35, sbkDelta: 0, reprimandHeal: 1
+      cost: 1200, morale: 0, escape: 0, riskDelta: -35, sbkDelta: 0, reprimandHeal: 1
     },
     {
       id: "smuggler_treasure_map",
       minDay: 4, chance: 0.17, isRare: true, currency: "USD",
-      title: L("🗺️ Купити в Толіка «карту забутого складу» (+9 500 💵 заначки!)", "🗺️ Buy 'Forgotten Stash Map' from Tolik (+9,500 💵 haul!)"),
-      subtitle: L("✨ Рідкісна подія Дня 4+ (17% шанс): за 2 500 💵 відкопуєш старий сейф!", "✨ Rare Day 4+ event (17% chance): dig up an old stash!"),
-      cost: 2500, morale: 10, escape: 0, riskDelta: 8, sbkDelta: 0, usdReward: 9500
+      title: L("🗺️ Купити в Толіка «карту забутого складу» (+3 200 💵 заначки!)", "🗺️ Buy 'Forgotten Stash Map' from Tolik (+3,200 💵 haul!)"),
+      subtitle: L("✨ Рідкісна подія Дня 4+ (17% шанс): за 900 💵 відкопуєш старий сейф!", "✨ Rare Day 4+ event (17% chance): dig up an old stash!"),
+      cost: 900, morale: 10, escape: 0, riskDelta: 8, sbkDelta: 0, usdReward: 3200
     },
     {
       id: "extra_k9_handler",
       minDay: 1, chance: 0.85, currency: "UAH",
       title: L("🐕 Додатковий інструктор для «Бавовни» (+20с часу на наступну зміну)", "🐕 Extra K9 Trainer for 'Bavovna' (+20s next shift)"),
       subtitle: L("Тактична підготовка пса до завтрашньої черги", "Prep your sniffer dog for tomorrow's rush"),
-      cost: 6000, morale: 5, escape: 0, riskDelta: 0, sbkDelta: 5, nextTimeBoost: 20
+      cost: 2400, morale: 5, escape: 0, riskDelta: 0, sbkDelta: 5, nextTimeBoost: 20
     },
     {
       id: "customs_broker_tip",
       minDay: 2, chance: 0.65, currency: "USD",
       title: L("💼 Інсайд митного брокера на завтра (+25% до конвертів наступної зміни)", "💼 Customs Broker Insider (+25% bribe offers next shift)"),
       subtitle: L("Попередить жирних клієнтів про твою зміну (+4% НАБК)", "Steers richer VIPs to your booth (+4% NABK)"),
-      cost: 2200, morale: 5, escape: 0, riskDelta: 4, sbkDelta: 0, nextBribeBoost: 0.25
+      cost: 700, morale: 5, escape: 0, riskDelta: 4, sbkDelta: 0, nextBribeBoost: 0.25
     },
     {
       id: "frontier_charity_cup",
       minDay: 2, chance: 0.70, currency: "UAH",
       title: L("🏆 Спонсорувати кубок прикордонників (+18 Палич, +15 СБК, -10% НАБК)", "🏆 Sponsor Border Guard Cup (+18 Palych, +15 SBK, -10% NABK)"),
       subtitle: L("Зміцнює авторитет серед керівництва та контррозвідки", "Builds goodwill with both Palych and SBK"),
-      cost: 8000, morale: 10, escape: 0, riskDelta: -10, sbkDelta: 15, palychDelta: 18
+      cost: 3500, morale: 10, escape: 0, riskDelta: -10, sbkDelta: 15, palychDelta: 18
     }
   ];

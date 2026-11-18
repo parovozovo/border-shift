@@ -111,7 +111,7 @@
                   </div>
                   <div>
                     <div style="font-size:13.5px;font-weight:900;">${tr(L("ВІЛЬНА ГРА", "ENDLESS SANDBOX"), state.lang)}</div>
-                    <div style="font-size:10.5px;opacity:0.84;margin-top:2px;">${tr(L("Випадкові укази, ранги, 100 000 💵 втеча", "Random decrees, ranks & escape"), state.lang)}</div>
+                    <div style="font-size:10.5px;opacity:0.84;margin-top:2px;">${tr(L("Випадкові укази, ранги, 25 000 💵 втеча", "Random decrees, ranks & escape"), state.lang)}</div>
                   </div>
                 </button>
               </div>
@@ -215,13 +215,13 @@
             "#E0B145", "🛂",
             L("Передісторія: КПП «Захід-04»", "Backstory: Checkpoint 'Zakhid-04'"),
             L("Країна Kraina • Воєнний стан • Твоя перша зміна", "State of Kraina • Martial Law • Your First Shift"),
-            L("Попереднього інспектора забрали вночі оперативники НАБК після скандалу з фальшивими довідками. На ранок тебе терміново перевели на віддалений карпатський пункт «Захід-04».\n\nВдома чекає сім'я з купою рахунків, на КПП тиснуть контрабандисти й мажори, а на старті маєш лише 15 000 🪙.", "The previous inspector was arrested overnight by NABK over fake exit permits. You've been reassigned to remote mountain gate 'Zakhid-04'.\n\nAt home your family waits with rising bills; at the gate smugglers & VIPs push through — and you start with just 15,000 🪙.")
+            L("Попереднього інспектора забрали вночі оперативники НАБК після скандалу з фальшивими довідками. На ранок тебе терміново перевели на віддалений карпатський пункт «Захід-04».\n\nВдома чекає сім'я з купою рахунків, на КПП тиснуть контрабандисти й мажори, а на старті маєш лише 6 000 🪙.", "The previous inspector was arrested overnight by NABK over fake exit permits. You've been reassigned to remote mountain gate 'Zakhid-04'.\n\nAt home your family waits with rising bills; at the gate smugglers & VIPs push through — and you start with just 6,000 🪙.")
           ),
           renderOnboardCard(
             "#4CAF50", "🛤️",
             L("Три шляхи інспектора", "Three Inspector Paths"),
             L("Обирай свій стиль служби на кожному кроці", "Shape your career with every stamp"),
-            L("1️⃣ Чесна служба: тримай устав ДПСК, допомагай розвідці ГУР/СБК та отримай офіційну подяку.\n2️⃣ Подвійний агент «Кордон-7»: завоюй довіру контррозвідки й піднімись до полковника під прикриттям.\n3️⃣ Великий куш та втеча: збирай баксіки 💵, відмивай гримники 🪙 та виїжджай за кордон через Толіка (60 000 💵 у Кампанії / 100 000 💵 у Вільній грі).", "1️⃣ Honest Service: follow SBGS directives, aid GUR/SBK, earn Kyiv commendations.\n2️⃣ Covert Agent 'Border-7': earn SBK trust and rise to undercover Colonel.\n3️⃣ Big Score & Escape: collect baksiky 💵 bribes, launder cash 🪙 and flee abroad via Tolik (60,000 💵 Story / 100,000 💵 Freeplay).")
+            L("1️⃣ Чесна служба: тримай устав ДПСК, допомагай розвідці ГУР/СБК та отримай офіційну подяку.\n2️⃣ Подвійний агент «Кордон-7»: завоюй довіру контррозвідки й піднімись до полковника під прикриттям.\n3️⃣ Великий куш та втеча: збирай баксіки 💵, відмивай гримники 🪙 та виїжджай за кордон через Толіка (15 000 💵 у Кампанії / 25 000 💵 у Вільній грі).", "1️⃣ Honest Service: follow SBGS directives, aid GUR/SBK, earn Kyiv commendations.\n2️⃣ Covert Agent 'Border-7': earn SBK trust and rise to undercover Colonel.\n3️⃣ Big Score & Escape: collect baksiky 💵 bribes, launder cash 🪙 and flee abroad via Tolik (15,000 💵 Story / 25,000 💵 Freeplay).")
           )
         ].join("");
       } else if (tab === 1) {
@@ -1317,7 +1317,7 @@
               shookBribe = true;
             } else if (!t.bribeOffer && !state.bribeAccepted && t.storyTag !== "FSM_SPY" && t.storyTag !== "NABK_STING") {
               t.bribeOffer = {
-                amount: 220,
+                amount: 1150,
                 currency: "UAH",
                 reason: L("За мовчання (вибито тиском)", "Hush money (shaken down)"),
                 instantOffer: true
@@ -1383,8 +1383,8 @@
           const meta = getMetaPerkFlags();
           const has = id => state.ownedAssets.includes(id);
           const cMult = (state.sandboxMod ? (state.sandboxMod.coffeeMult || 1) : 1) * (has("balenci_jacket") ? 1.35 : 1);
-          const sockTip = (state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_KEVLAR_SOCKS")) ? 300 : 0;
-          const tip = Math.round(t.coffeeTip * 5 * cMult) + (has("thermos_tray") ? 250 : 0) + (has("espresso_machine") ? 450 : 0) + (has("parrot_kesha") ? 500 : 0) + (has("addon_syrup_bar") ? 350 : 0) + (has("addon_gold_cage") ? 300 : 0) + sockTip + (meta.coffeeTipBonus * 5);
+          const sockTip = (state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_KEVLAR_SOCKS")) ? 100 : 0;
+          const tip = Math.round(t.coffeeTip * 2 * cMult) + (has("thermos_tray") ? 80 : 0) + (has("espresso_machine") ? 150 : 0) + (has("parrot_kesha") ? 150 : 0) + (has("addon_syrup_bar") ? 120 : 0) + (has("addon_gold_cage") ? 100 : 0) + sockTip + (meta.coffeeTipBonus * 2);
           state.money += tip;
           state.lastFeedback = {
             ok: true,
@@ -1614,10 +1614,10 @@
               const dir = state.exchDir || "USD_TO_UAH";
               const hasBiz = state.ownedAssets.includes("shawarma_kiosk") || state.ownedAssets.includes("cyprus_offshore");
               const capToday = DAILY_OBNAL_LIMIT_USD
-                + (state.ownedAssets.includes("shawarma_kiosk") ? 12000 : 0)
-                + (state.ownedAssets.includes("cyprus_offshore") ? 15000 : 0)
-                + (state.ownedAssets.includes("addon_osint_app") ? 10000 : 0)
-                + ((state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_404_FLOPPY")) ? 4000 : 0);
+                + (state.ownedAssets.includes("shawarma_kiosk") ? 4000 : 0)
+                + (state.ownedAssets.includes("cyprus_offshore") ? 5000 : 0)
+                + (state.ownedAssets.includes("addon_osint_app") ? 3000 : 0)
+                + ((state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_404_FLOPPY")) ? 300 : 0);
               const launderFee = Math.max(0.05, (hasBiz ? 0.10 : 0.18) - (state.ownedAssets.includes("iphon_17_pro") ? 0.03 : 0));
               const feePct = Math.round(launderFee * 100);
               const remObnal = Math.max(0, capToday - (state.obnalUsedToday || 0));
@@ -1683,10 +1683,10 @@
       if (sliderEl && previewEl && doExchBtn) {
         const hasBiz = state.ownedAssets.includes("shawarma_kiosk") || state.ownedAssets.includes("cyprus_offshore");
         const capToday = DAILY_OBNAL_LIMIT_USD
-          + (state.ownedAssets.includes("shawarma_kiosk") ? 12000 : 0)
-          + (state.ownedAssets.includes("cyprus_offshore") ? 15000 : 0)
-          + (state.ownedAssets.includes("addon_osint_app") ? 10000 : 0)
-          + ((state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_404_FLOPPY")) ? 4000 : 0);
+          + (state.ownedAssets.includes("shawarma_kiosk") ? 4000 : 0)
+          + (state.ownedAssets.includes("cyprus_offshore") ? 5000 : 0)
+          + (state.ownedAssets.includes("addon_osint_app") ? 3000 : 0)
+          + ((state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_404_FLOPPY")) ? 300 : 0);
         const launderFee = Math.max(0.05, (hasBiz ? 0.10 : 0.18) - (state.ownedAssets.includes("iphon_17_pro") ? 0.03 : 0));
         const feePct = Math.round(launderFee * 100);
         sliderEl.addEventListener("input", () => {
@@ -1738,11 +1738,11 @@
         }
 
         const shiftBribeUsd = Math.round((state.shiftBribesTotal || 0) / USD_UAH_RATE);
-        const wealthFactor = Math.round(Math.min(12000, shiftBribeUsd * 0.14 + state.usd * 0.05));
+        const wealthFactor = Math.round(Math.min(1800, shiftBribeUsd * 0.12 + state.usd * 0.03));
         const gelikMult = state.ownedAssets.includes("gelik_v8") ? 0.85 : 1.0;
 
         if ((state.reprimands > 0 || state.underSurveillance || state.nabkRisk >= 25) && !state.purchasedExpensesToday.includes("krysha_bribe")) {
-          const baseKUsd = Math.max(1500, Math.round((1500 + state.nabkRisk * 40 + (state.reprimands || 0) * 1200 + wealthFactor * 0.75) * gelikMult));
+          const baseKUsd = Math.max(350, Math.round((350 + state.nabkRisk * 8 + (state.reprimands || 0) * 250 + wealthFactor * 0.5) * gelikMult));
           const kCostUsd = state.isUndercoverSbkAgent ? Math.round(baseKUsd * 0.65) : baseKUsd;
           const canK = state.usd >= kCostUsd;
           const kCard = document.createElement("div");
@@ -1786,7 +1786,7 @@
             id: "bribe_sbk",
             icon: "🕵️",
             title: L("Підкупити куратора СБК (+24 СБК, -10% НАБК)", "Bribe SBK Handler (+24 SBK, -10% NABK)"),
-            cost: Math.round(((state.sbkRep < 35 ? 3800 : 2000) + Math.round(wealthFactor * 0.65)) * gelikMult),
+            cost: Math.round(((state.sbkRep < 35 ? 800 : 450) + Math.round(wealthFactor * 0.45)) * gelikMult),
             chance: state.sbkRep < 35 ? 0.45 : (state.sbkRep < 60 ? 0.72 : 0.90),
             onSuccess: () => { state.sbkRep = Math.min(100, state.sbkRep + 24); state.nabkRisk = Math.max(0, state.nabkRisk - 10); },
             onFail: () => { state.sbkRep = Math.max(0, state.sbkRep - 10); state.nabkRisk = Math.min(100, state.nabkRisk + 12); }
@@ -1795,7 +1795,7 @@
             id: "bribe_palych",
             icon: "🧢",
             title: L("Підкупити Пал Палича (+22 Палич, -1 догана)", "Bribe Pal Palych (+22 Palych, -1 reprimand)"),
-            cost: Math.round((((state.reprimands || 0) >= 2 ? 2500 : 1400) + Math.round(wealthFactor * 0.45)) * gelikMult),
+            cost: Math.round((((state.reprimands || 0) >= 2 ? 550 : 300) + Math.round(wealthFactor * 0.35)) * gelikMult),
             chance: (state.palychRep < 30 || (state.reprimands || 0) >= 2) ? 0.55 : 0.88,
             onSuccess: () => { state.palychRep = Math.min(100, state.palychRep + 22); state.reprimands = Math.max(0, (state.reprimands || 0) - 1); },
             onFail: () => { state.palychRep = Math.max(0, state.palychRep - 8); }
@@ -1804,7 +1804,7 @@
             id: "bribe_tolik",
             icon: "🚐",
             title: L("Задобрити Толіка (+25 Толік — ближче до втечі)", "Grease Tolik (+25 Tolik rep)"),
-            cost: Math.round(((state.tolikRep < 30 ? 2800 : 1500) + Math.round(wealthFactor * 0.5)) * gelikMult),
+            cost: Math.round(((state.tolikRep < 30 ? 600 : 350) + Math.round(wealthFactor * 0.35)) * gelikMult),
             chance: state.tolikRep < 30 ? 0.50 : 0.88,
             onSuccess: () => { state.tolikRep = Math.min(100, state.tolikRep + 25); },
             onFail: () => { state.tolikRep = Math.max(0, state.tolikRep - 8); }
@@ -1813,7 +1813,7 @@
             id: "bribe_nabk",
             icon: "⚖️",
             title: L("Підмазати ревізора НАБК (-25% НАБК, зняти нагляд)", "Bribe NABK Auditor (-25% NABK, clear watch)"),
-            cost: Math.round(((state.nabkRisk >= 65 ? 5500 : 3000) + Math.round(wealthFactor * 0.85)) * gelikMult),
+            cost: Math.round(((state.nabkRisk >= 65 ? 1100 : 650) + Math.round(wealthFactor * 0.6)) * gelikMult),
             chance: state.nabkRisk >= 70 ? 0.45 : (state.underSurveillance ? 0.60 : 0.80),
             onSuccess: () => { state.nabkRisk = Math.max(0, state.nabkRisk - 25); state.underSurveillance = false; },
             onFail: () => { state.nabkRisk = Math.min(100, state.nabkRisk + 15); }
@@ -1859,15 +1859,15 @@
         });
       } else if (state.eveningTab === 0) {
         if (state.escapeFund < getEscapeTarget()) {
-          const escStep = 5000;
+          const escStep = 1500;
           const canEsc = state.usd >= escStep;
           const eCard = document.createElement("div");
           eCard.className = "card-slate row-between";
           eCard.innerHTML = `
             <div style="flex:1;">
-              <div style="font-size:13px;font-weight:800;color:#81C784;">🚐 ${tr(L("Фонд утечі через Толіка (+5 000 💵, +10 Толік)", "Tolik Escape Fund (+5,000 💵, +10 Tolik)"), state.lang)}</div>
+              <div style="font-size:13px;font-weight:800;color:#81C784;">🚐 ${tr(L("Фонд утечі через Толіка (+1 500 💵, +10 Толік)", "Tolik Escape Fund (+1,500 💵, +10 Tolik)"), state.lang)}</div>
               <div style="color:#CFD8DC;font-size:11px;">${tr(L(`Зібрано: ${state.escapeFund.toLocaleString("en-US")} / ${getEscapeTarget().toLocaleString("en-US")} 💵`, `Saved: ${state.escapeFund.toLocaleString("en-US")} / ${getEscapeTarget().toLocaleString("en-US")} 💵`), state.lang)}</div>
-              <div style="color:#E0B145;font-size:12px;font-weight:800;">5 000 💵 (≈ ${(5000 * USD_UAH_RATE).toLocaleString("en-US")} 🪙)</div>
+              <div style="color:#E0B145;font-size:12px;font-weight:800;">1 500 💵 (≈ ${(1500 * USD_UAH_RATE).toLocaleString("en-US")} 🪙)</div>
             </div>
           `;
           const eb = document.createElement("button");

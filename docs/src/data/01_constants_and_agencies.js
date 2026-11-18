@@ -1,6 +1,6 @@
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v8.6";
-  const DAILY_OBNAL_LIMIT_USD = 15000;
+  const BUILD_VERSION = "v8.7";
+  const DAILY_OBNAL_LIMIT_USD = 5000;
   let confirmResetArmed = false;
 
   // Fallback for older Safari lacking CanvasRenderingContext2D.roundRect
@@ -236,14 +236,14 @@
     {
       id: "OLIGARCH_EXODUS",
       title: L("💰 Указ Віче: «Ніч олігархів та мажорів»", "💰 Daily Decree: 'Night of Oligarchs'"),
-      desc: L("Багатії рвуться у напрямку Монаківки та Варшавки — усі конверти сьогодні ПОДВІЙНІ (x2)!", "VIPs are rushing toward Monakivka and Varshavka — all bribe offers today are DOUBLED (x2)!"),
-      bribeMult: 2.0, detainExtra: 0, salaryMult: 1.0, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
+      desc: L("Багатії рвуться у напрямку Монаківки та Варшавки — усі конверти сьогодні +35%!", "VIPs are rushing toward Monakivka and Varshavka — all bribe offers today are +35%!"),
+      bribeMult: 1.35, detainExtra: 0, salaryMult: 1.0, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
     },
     {
       id: "MARTIAL_AUDIT",
       title: L("🚨 Указ Штабу: «Спецоперація Контррозвідки»", "🚨 Daily Decree: 'Counter-Intel Sweep'"),
-      desc: L("Група СБК чергує на КПП! За кожен обґрунтований АРЕШТ сьогодні платять +1 100 🪙 премії!", "SBK team on site! Every valid DETENTION today pays an extra +1 100 🪙 bonus!"),
-      bribeMult: 1.0, detainExtra: 1100, salaryMult: 1.0, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: true, twoWheelerBias: false, extraShytomyr: false, extraWar: true
+      desc: L("Група СБК чергує на КПП! За кожен обґрунтований АРЕШТ сьогодні платять +900 🪙 премії!", "SBK team on site! Every valid DETENTION today pays an extra +900 🪙 bonus!"),
+      bribeMult: 1.0, detainExtra: 900, salaryMult: 1.0, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: true, twoWheelerBias: false, extraShytomyr: false, extraWar: true
     },
     {
       id: "TOTAL_DIGITAL_OBLIK",
@@ -254,8 +254,8 @@
     {
       id: "CONTRABAND_BOOM",
       title: L("📦 Указ Митниці: «Полювання на двійників та тайники»", "📦 Daily Decree: 'Clone & Stash Hunt'"),
-      desc: L("Звіряйте колір транспорту перед шлагбаумом із декларацією! Премія за АРЕШТ +900 🪙!", "Compare the parked vehicle color against papers! Detention bonus +900 🪙!"),
-      bribeMult: 1.0, detainExtra: 900, salaryMult: 1.0, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
+      desc: L("Звіряйте колір транспорту перед шлагбаумом із декларацією! Премія за АРЕШТ +700 🪙!", "Compare the parked vehicle color against papers! Detention bonus +700 🪙!"),
+      bribeMult: 1.0, detainExtra: 700, salaryMult: 1.0, coffeeMult: 1, shiftSecDelta: 0, forceOblik: false, forceSiren: false, twoWheelerBias: false, extraShytomyr: false, extraWar: false
     },
     {
       id: "NIGHT_CONVOY_SURGE",

@@ -24,7 +24,7 @@
       coffeeReply: L("«*Дмухає на каву, перука з'їжджає набік* Ой, гаряченька!»", "'*Blows on coffee, wig shifts slightly* Oh, nice and hot!'"),
       arrestFull: L("Коли хустку й біляву перуку зняли, з'ясувалося що «Тітка Галя» — це Петро Пасічник із Левгорода!", "Once the wig came off, 'Aunt Halya' turned out to be Petro from Levhorod!"),
       arrestToned: L("Порушника з чужим паспортом затримано.", "Impersonator detained."),
-      bribeOffer: { amount: 120, currency: "USD", isStingTrap: false, syndicateFavor: false },
+      bribeOffer: { amount: 80, currency: "USD", isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.PHOTO_MISMATCH],
       storyTag: "AUNT_HALYA"
@@ -57,13 +57,13 @@
       declaredCargo: L("Пуста дубова труна (без вкладення), 2 вінки", "Empty oak casket, 2 wreaths"),
       vehicleSearchResult: L("ПЕС «БАВОВНА» РОЗКРИВ ТРУНУ: Усередині сидить живий кум у ластах із телефоном і банкою консервів!", "DOG SEARCH: Inside the coffin sits a live cousin in swim fins eating canned food!"),
       greeting: L("«Скорботний рейс, командире... Везу пусту антикварну труну... *ІЗ КУЗОВА ЛУНАЄ ГУЧНЕ: АПЧХИ!*»", "'Solemn run, officer... Just hauling an empty casket... *LOUD SNEEZE FROM THE BACK!*"),
-      interrogationReply: L("«То... протяги в катафалку скриплять! Не кличте собаку, ось 2 500 💵 за живого пасажира!»", "'Just... creaky hinges! Don't bring the dog, take 2,500 💵 for the stowaway!'"),
+      interrogationReply: L("«То... протяги в катафалку скриплять! Не кличте собаку, ось 750 💵 за живого пасажира!»", "'Just... creaky hinges! Don't bring the dog, take 750 💵 for the stowaway!'"),
       intimidateReply: L("«*Стук по склу — із труни панічно кричать: БУДЬ ЛАСКА, НЕ ВІДКРИВАЙТЕ, В МЕНЕ КЛАУСТРОФОБІЯ!*»", "'*From the coffin: PLEASE DON'T OPEN, I'M CLAUSTROPHOBIC!*"),
       coffeeReply: L("«О, дайте два стаканчики... другий для... е-е... охолодження радіатора!»", "'Give me two cups... second one is for the radiator!'"),
       arrestFull: L("Група СБК витягає із труни «небіжчика в ластах» та затримує водія катафалка!", "SBK pulls the 'deceased in swim fins' out of the coffin and cuffs the driver!"),
       arrestToned: L("Спроба незаконного переправлення особи у тайнику викрита.", "Stowaway smuggling attempt prevented."),
       hasContraband: true,
-      bribeOffer: { amount: 2500, currency: "USD", isStingTrap: false, syndicateFavor: false },
+      bribeOffer: { amount: 750, currency: "USD", isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.CONTRABAND_CARGO],
       storyTag: "COFFIN"
@@ -96,13 +96,13 @@
       declaredCargo: L("Коробки з теплими шкарпетками та крупою (120 кг)", "Boxes of warm socks & buckwheat (120 kg)"),
       vehicleSearchResult: L("ПЕС «БАВОВНА» ЗНАЙШОВ СХОВАНКУ: За фальшивою стінкою буса — 40 блоків контрабандних цигарок і 2 пасажири без квитків!", "DOG SEARCH: False bulkhead hides 40 cigarette cartons and 2 unticketed stowaways!"),
       greeting: L("«Здорово, командире! Свій рейс! Толік везе «гуманітарку» до Варшавки. Можемо по-діловому порішати — і будемо друзями на майбутнє!»", "'Hey boss! Tolik running a friendly load to Varshavka. Let's make a business deal for future favors!'"),
-      interrogationReply: L("«Слухай, у мене за спиною двоє хлопців до Варшавки їдуть... Бери 3 200 💵 у кишеню — і колись сам вивеземо вночі, як припече!»", "'Listen, carrying 2 guys in back... Take 3,200 💵 and earn syndicate favors if you ever need a night exit!'"),
+      interrogationReply: L("«Слухай, у мене за спиною двоє хлопців до Варшавки їдуть... Бери 850 💵 у кишеню — і колись сам вивеземо вночі, як припече!»", "'Listen, carrying 2 guys in back... Take 850 💵 and earn syndicate favors if you ever need a night exit!'"),
       intimidateReply: L("«Ой, не гарячкуй! Твої колеги на сусідній зміні спокійніше з Толіком працюють!»", "'Whoa easy there! Other shifts work smoothly with Tolik!'"),
       coffeeReply: L("«Дякую за каву, брате! Як буде треба тихо виїхати в Поландію — ти знаєш, де шукати Толіка!»", "'Thanks for the coffee brother! Whenever you need a quiet ride out, ask for Tolik!'"),
       arrestFull: L("Толіка «Бусика» беруть на гарячому — контрабандна мережа зазнала важких втрат!", "Tolik 'Busyk' is busted red-handed — smuggling syndicate takes a heavy hit!"),
       arrestToned: L("Перевізника з незадекларованим вантажем затримано.", "Carrier with undeclared contraband detained."),
       hasContraband: true,
-      bribeOffer: { amount: 3200, currency: "USD", isStingTrap: false, syndicateFavor: true },
+      bribeOffer: { amount: 850, currency: "USD", isStingTrap: false, syndicateFavor: true },
       shouldBeApproved: false,
       violations: [DISCREPANCY.CONTRABAND_CARGO],
       storyTag: "TOLIK_RUN"
@@ -124,12 +124,12 @@
       includeDecl: true,
       declaredCargo: L("Валізи Louis Vuitton, золотий ланцюг", "Designer suitcases"),
       greeting: L("«Чуєш, ти знаєш, хто мій батя?! Я лечу на бізнес-конференцію в Монаківку! Які довідки?! Став штамп бігом!»", "'Do you know who my dad is?! Heading to Monakivka! What permit?! Stamp it NOW!'"),
-      interrogationReply: L("«Ой не напрягай. Ось 3 500 💵 прямо на торпеді — або ж просто нажми ✖ ВІДМОВИТИ і втрачай шанс!»", "'Stop stressing me. Take 3,500 💵 cash — or turn me down and stay broke!'"),
+      interrogationReply: L("«Ой не напрягай. Ось 1 100 💵 прямо на торпеді — або ж просто нажми ✖ ВІДМОВИТИ і втрачай шанс!»", "'Stop stressing me. Take 1,100 💵 cash — or turn me down and stay broke!'"),
       intimidateReply: L("«ТИ НА КОГО ГАВКАЄШ?! Та мій батя цей шлагбаум завтра знесе! *руки тремтять на кермі*»", "'WHO DO YOU THINK YOU ARE YELLING AT?! My dad will demolish this booth!'"),
       coffeeReply: L("«Фу, та це ж розчинна з термоса? Ну... хоч гаряча, спасибі.»", "'Ugh, thermos coffee? Well... at least it is hot.'"),
       arrestFull: L("Мажор кричить у телефон «Батя, мене пакують за відмову виїзду!», але ти перестарався — достатньо було відмови!", "You detained a VIP over a missing permit when a simple DENY sufficed!"),
       arrestToned: L("Перевищення сили — достатньо було натиснути ✖ ВІДМОВИТИ.", "Excessive force — should have pressed DENY."),
-      bribeOffer: { amount: 3500, currency: "USD", instantOffer: true, isStingTrap: false, syndicateFavor: false },
+      bribeOffer: { amount: 1100, currency: "USD", instantOffer: true, isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.AGE_RESTRICTION_NO_PERMIT],
       storyTag: "DEPUTY_SON"
@@ -180,13 +180,13 @@
       includeDecl: true,
       declaredCargo: L("Шкіряний портфель, папки з договорами", "Leather briefcase, contract folders"),
       vehicleSearchResult: L("В бардачку лежать пусті протоколи вилучення готівки з шапкою НАБК!", "Glovebox holds blank NABK cash-seizure protocols!"),
-      greeting: L("«Добрий день... Слухайте, довідку забув дома, а на ділову зустріч запізнююся. Може, порішаємо за 400 💵 — швидко й без черги?»", "'Hello... Forgot my permit at home and late for a meeting. Can we settle for 400 💵 quickly?'"),
+      greeting: L("«Добрий день... Слухайте, довідку забув дома, а на ділову зустріч запізнююся. Може, порішаємо за 300 💵 — швидко й без черги?»", "'Hello... Forgot my permit at home and late for a meeting. Can we settle for 300 💵 quickly?'"),
       interrogationReply: L("«Та які питання, інспекторе?! Я звичайний менеджер, беріть конверт — мені реально горить!»", "'What questions?! I am a regular manager, just take the envelope — I am in a rush!'"),
       intimidateReply: L("«*Спокійно поправляє краватку* Е-е... давайте без різких рухів, не затримуйте бізнес!»", "'*Adjusts tie calmly* H-hey, no sudden moves, don't hold up business!'"),
       coffeeReply: L("«Дякую за каву... то як щодо зеленого штампа?»", "'Thanks for the coffee... so how about a green stamp?'"),
       arrestFull: L("Ти затримав його, хоча він іще не вчинив злочину в межах документів — достатньо ✖ ВІДМОВИТИ!", "Should just press DENY without touching his marked bills!"),
       arrestToned: L("Агента не вдалося зловити на злочині — треба було ✖ ВІДМОВИТИ.", "Should press DENY cleanly."),
-      bribeOffer: { amount: 400, currency: "USD", instantOffer: true, isStingTrap: true, syndicateFavor: false },
+      bribeOffer: { amount: 300, currency: "USD", instantOffer: true, isStingTrap: true, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.AGE_RESTRICTION_NO_PERMIT],
       storyTag: "NABK_STING"
@@ -224,7 +224,7 @@
       coffeeReply: L("«Хм, а непогана кава. У Монаківці така по 20 євро.»", "'Decent espresso. Costs 20 euros in Monakivka.'"),
       arrestFull: L("Контррозвідка СБК затримує псевдо-дипломата з липовим мандатом на «Геліку»!", "SBK arrests the fake diplomat with a bogus Duchy seal!"),
       arrestToned: L("Затримано особу з підробленим дипломатичним документом.", "Detained for forged diplomatic papers."),
-      bribeOffer: { amount: 1200, currency: "USD", instantOffer: true, isStingTrap: false, syndicateFavor: false },
+      bribeOffer: { amount: 450, currency: "USD", instantOffer: true, isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.FAKE_ISSUER_SEAL],
       isWantedTarget: true,
@@ -265,7 +265,7 @@
       arrestFull: L("Псевдоволонтера пакують у бус СБК під його ж власний стрім!", "The fake charity influencer gets cuffed on his own livestream!"),
       arrestToned: L("Затримано за комерційну контрабанду під виглядом гуманітарки.", "Detained for commercial smuggling under false charity guise."),
       hasContraband: true,
-      bribeOffer: { amount: 1650, currency: "USD", requiresDiscovery: true, isStingTrap: false, syndicateFavor: false },
+      bribeOffer: { amount: 500, currency: "USD", requiresDiscovery: true, isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.CONTRABAND_CARGO],
       storyTag: "FAKE_BLOGGER"
@@ -306,7 +306,7 @@
       coffeeTip: isLegit ? 60 : 0,
       arrestFull: L(isLegit ? "Ти затримав справжнього кіберінженера!" : "Шахрая з вигаданою крипто-печаткою затримано!", isLegit ? "You detained a real cyber engineer!" : "Detained for bogus crypto seal!"),
       arrestToned: L("Мандрівника на самокаті затримано.", "Scooter rider detained."),
-      bribeOffer: isLegit ? null : { amount: 140, currency: "USD", isStingTrap: false, syndicateFavor: false },
+      bribeOffer: isLegit ? null : { amount: 120, currency: "USD", isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: isLegit,
       violations: isLegit ? [] : [DISCREPANCY.FAKE_ISSUER_SEAL],
       storyTag: `CRYPTO_${dayNum}`
@@ -392,7 +392,7 @@
       arrestFull: L("Група СБК вилітає з будки й пакує коригувальника! Майор «Тихий» виписує тобі премію!", "SBK tackles the spotter and awards you a combat bonus!"),
       arrestToned: L("Підозрюваного у диверсійній діяльності затримано.", "Suspected saboteur detained."),
       hasContraband: true,
-      bribeOffer: { amount: 1500, currency: "USD", requiresDiscovery: true, isStingTrap: false, syndicateFavor: false },
+      bribeOffer: { amount: 600, currency: "USD", requiresDiscovery: true, isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.WANTED_CRIMINAL_OR_SPY, DISCREPANCY.CONTRABAND_CARGO],
       isWantedTarget: true,
@@ -423,7 +423,7 @@
       arrestFull: L("Контррозвідка СБК арештовує контрабандиста військової електроніки разом із фургоном!", "SBK arrests the military chip smuggler and impounds the van!"),
       arrestToned: L("Контрабандну партію мікроелектроніки затримано.", "Smuggled military electronics seized."),
       hasContraband: true,
-      bribeOffer: { amount: 3500, currency: "USD", requiresDiscovery: true, isStingTrap: false, syndicateFavor: false },
+      bribeOffer: { amount: 950, currency: "USD", requiresDiscovery: true, isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.CONTRABAND_CARGO, DISCREPANCY.FAKE_ISSUER_SEAL],
       isWantedTarget: true,
@@ -446,12 +446,12 @@
       includeDecl: true,
       declaredCargo: L("Макбук Про, крипто-флешка Ledger, валіза", "MacBook Pro, Ledger wallet, suitcase"),
       greeting: L("«Бро, я сеньйор-архітектор! На 3 дні на мітап у Варшавку — маю віддалений реліз. Не затримуй!»", "'Bro, I'm a Senior Architect! Off to a 3-day meetup in Varshavka, let's keep it smooth!'"),
-      interrogationReply: L("«Слухай, у мене контракт горить. Закину 4 500 💵 чистими прямо зараз — забудь про довідку!»", "'Look, my contract is burning. Here's 4,500 💵 cash right now — forget the permit!'"),
+      interrogationReply: L("«Слухай, у мене контракт горить. Закину 1 200 💵 чистими прямо зараз — забудь про довідку!»", "'Look, my contract is burning. Here's 1,200 💵 cash right now — forget the permit!'"),
       intimidateReply: L("«*Знімає брендові окуляри* Та я податки плачу, нащо так кричати?!»", "'*Takes off shades* Hey I pay taxes, no need to yell!'"),
-      coffeeReply: L("«О, фільтр-кава є? Можу накинути 500 💵 на каву, якщо піднімеш шлагбаум!»", "'Nice filter coffee! Raise the barrier and I'll tip big!'"),
+      coffeeReply: L("«О, фільтр-кава є? Можу накинути на каву, якщо піднімеш шлагбаум!»", "'Nice filter coffee! Raise the barrier and I'll tip big!'"),
       arrestFull: L("За відсутність відстрочки достатньо було натиснути ✖ ВІДМОВИТИ — а не пакувати айтішника!", "Should have pressed ✖ DENY instead of full detention!"),
       arrestToned: L("Перевищення сили — треба було ✖ ВІДМОВИТИ.", "Should have pressed DENY."),
-      bribeOffer: { amount: 4500, currency: "USD", instantOffer: true, nabkRiskJump: 14, isStingTrap: false, syndicateFavor: false },
+      bribeOffer: { amount: 1200, currency: "USD", instantOffer: true, nabkRiskJump: 10, isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.AGE_RESTRICTION_NO_PERMIT],
       storyTag: "IT_VIP"
@@ -484,13 +484,13 @@
       declaredCargo: L("Сейфові кейси з «документами комітету»", "Armored briefcases with 'committee docs'"),
       vehicleSearchResult: L("ПЕС «БАВОВНА» І СКАНЕР: У кейсах 400 000 💵 готівкою в банківських стрічках і 3 закордонні паспорти!", "DOG & X-RAY: Briefcases stuffed with 400,000 💵 cash and 3 foreign passports!"),
       greeting: L("«Ти знаєш, з ким розмовляєш? Народний обранець їде на саміт у Монаківку! Шлагбаум вгору!»", "'Do you know who I am?! MP heading to Monakivka summit! Barrier UP!'"),
-      interrogationReply: L("«Не псуй собі кар'єру, синку. Ось тобі 8 000 💵 у пакеті — мовчи й натискай зелений!»", "'Don't ruin your career, son. Here's 8,000 💵 in a bag — press green!'"),
+      interrogationReply: L("«Не псуй собі кар'єру, синку. Ось тобі 1 800 💵 у пакеті — мовчи й натискай зелений!»", "'Don't ruin your career, son. Here's 1,800 💵 in a bag — press green!'"),
       intimidateReply: L("«*Червоніє від люті* Завтра твій начальник у мене на килимі стоятиме!»", "'*Turns red with rage* Your boss will answer to me tomorrow!'"),
       coffeeReply: L("«Коньяк до кави є? Хоча гаразд, штампуй вже.»", "'Got cognac for the coffee? Whatever, stamp it.'"),
       arrestFull: L("Контррозвідка СБК та НАБК блокують Майбах депутата-втікача! Тобі виписують премію СБК!", "SBK & NABK block the fleeing MP's Maybach! Massive bounty awarded!"),
       arrestToned: L("Затримано посадовця з підробленим відрядженням.", "Official detained with forged travel order."),
       hasContraband: true,
-      bribeOffer: { amount: 8000, currency: "USD", instantOffer: true, nabkRiskJump: 22, isStingTrap: false, syndicateFavor: false },
+      bribeOffer: { amount: 1800, currency: "USD", instantOffer: true, nabkRiskJump: 12, isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.FAKE_ISSUER_SEAL, DISCREPANCY.CONTRABAND_CARGO],
       isWantedTarget: true,
@@ -516,13 +516,13 @@
       declaredCargo: L("Спортивні сумки з тенісними ракетками", "Sports bags with tennis rackets"),
       vehicleSearchResult: L("ПЕС «БАВОВНА» ЗІРВАВ ДНО БАГАЖНИКА: Дві спортивні сумки набиті пачками 100 💵 купюр і золотими злитками!", "DOG SEARCH: False trunk floor packed with 100 💵 bill bricks & gold bars!"),
       greeting: L("«Тихо, командире... Обшуки в Києві почалися годину тому. Мені треба зникнути до світанку.»", "'Quiet, commander... Raids started in Kyiv an hour ago. I must vanish before dawn.'"),
-      interrogationReply: L("«Слухай уважно: 10 000 💵 тобі на руки просто зараз! Тільки пропусти!»", "'Listen closely: 10,000 💵 cash in your hand right now! Just let me pass!'"),
+      interrogationReply: L("«Слухай уважно: 2 500 💵 тобі на руки просто зараз! Тільки пропусти!»", "'Listen closely: 2,500 💵 cash in your hand right now! Just let me pass!'"),
       intimidateReply: L("«*Холодно дивиться* Гроші або куля в спину від моїх людей — обирай мудро.»", "'*Cold stare* Take the cash or face my people — choose wisely.'"),
       coffeeReply: L("«В останній раз таку каву пив на заправці під Києвом...»", "'Last time I had coffee like this was outside Kyiv...'"),
       arrestFull: L("СПЕЦОПЕРАЦІЯ РОКУ! Ти затримав топ-корупціонера з мільйонами в багажнику! СБК в захваті!", "ARREST OF THE YEAR! You caught the top corrupt official fleeing with millions!"),
       arrestToned: L("Топ-фігуранта кримінального розшуку затримано на кордоні.", "High-profile wanted official detained at border."),
       hasContraband: true,
-      bribeOffer: { amount: 10000, currency: "USD", requiresDiscovery: true, nabkRiskJump: 28, isStingTrap: false, syndicateFavor: false },
+      bribeOffer: { amount: 2500, currency: "USD", requiresDiscovery: true, nabkRiskJump: 15, isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.WANTED_CRIMINAL_OR_SPY, DISCREPANCY.CONTRABAND_CARGO],
       isWantedTarget: true,
@@ -584,32 +584,32 @@
     L("Фотоштативи, дрон DJI-Іграшка (дитячий) та рюкзак", "Tripods, toy drone & backpack")
   ];
   const CONTRABAND_COVERS = [
-    { decl: L("Старі дерев'яні меблі та килими", "Antique wooden furniture & rugs"), found: L("ПЕС «БАВОВНА» РОЗГРИЗ ОБШИВКУ: У ніжках столу сховано 50 блоків контрабандних сигарет!", "DOG SEARCH: Table legs packed with 50 smuggled cigarette cartons!"), bribeAmount: 850, currency: "USD" },
-    { decl: L("Мішки з будівельним гіпсом та шпаклівкою", "Sacks of construction plaster"), found: L("ПЕС «БАВОВНА» РОЗКОПАВ ГІПС: Усередині мішків — каміння нелегального бурштину з Бурштинівки!", "DOG SEARCH: Sacks hide raw Burshtynivka amber!"), bribeAmount: 1400, currency: "USD" },
-    { decl: L("Запасні автомобільні шини (4 шт.)", "Spare car tires (4 pcs)"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА ЗАПАСКУ: Всередині покришок заховані пачки нелегальної валюти та чужі паспорти!", "DOG SEARCH: Tires stuffed with undeclared cash and forged passports!"), bribeAmount: 2400, currency: "USD" },
-    { decl: L("Паливні баки та запчастини до фур", "Fuel cans & truck spare parts"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ ТАЙНИК: Під сидінням 400 л краденого дизелю та паливні талони!", "DOG SEARCH: Stolen diesel & black-market fuel coupons under the seat!"), bribeAmount: 900, currency: "USD" },
-    { decl: L("Коробки з «гуманітарним одягом»", "Boxes of 'humanitarian clothes'"), found: L("ПЕС «БАВОВНА» ПОРВАВ СКОТЧ: У коробках сховані підсанкційні мікрочіпи й комплектуючі до дронів!", "DOG SEARCH: Boxes hide sanctioned microchips & drone parts!"), bribeAmount: 2800, currency: "USD" },
-    { decl: L("Рулони килимів від бабусі", "Rolled vintage carpets"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ СХОВАНКУ: Усередині рулонів — старовинні ікони та срібні монети на вивіз!", "DOG SEARCH: Rolled carpets conceal antique icons & silver coins!"), bribeAmount: 2000, currency: "USD" },
-    { decl: L("Металобрухт на переробку", "Scrap metal for recycling"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА БАГАЖНИК: Під лахміттям вирізані автокаталізатори та бухти мідного кабелю!", "DOG SEARCH: Stolen catalytic converters & copper cables under rags!"), bribeAmount: 950, currency: "USD" },
-    { decl: L("Подарункові кошики з шоколадом", "Gift baskets with chocolate"), found: L("ПЕС «БАВОВНА» ЗІРВАВ ФАЛЬШ-ДНО: Під цукерками — ящики безакцизного алкоголю та вейпів!", "DOG SEARCH: False bottom packed with untaxed liquor & vapes!"), bribeAmount: 1050, currency: "USD" },
-    { decl: L("Тубуси з «дитячими малюнками»", "Tubes with 'kids drawings'"), found: L("ПЕС «БАВОВНА» ПОРВАВ ТУБУСИ: Викрадені музейні полотна XIX століття без декларації!", "DOG SEARCH: Stolen 19th-century museum paintings!"), bribeAmount: 3500, currency: "USD" },
-    { decl: L("Холодильник для риби та льоду", "Cooler for fish & ice"), found: L("ПЕС «БАВОВНА» ВІДКРИВ ХОЛОДИЛЬНИК: 18 кг нелегальної чорної ікри та раритетних молюсків!", "DOG SEARCH: 18kg of smuggled black caviar!"), bribeAmount: 1800, currency: "USD" },
-    { decl: L("Туристичні намети й каремати", "Camping tents & mats"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ У НАМЕТАХ: 6 тепловізорів подвійного призначення без документів!", "DOG SEARCH: 6 undeclared thermal optics inside tent rolls!"), bribeAmount: 3200, currency: "USD" },
-    { decl: L("Книжки з кулінарії та журнали", "Cookbooks & magazines"), found: L("ПЕС «БАВОВНА» ВИРВАВ ОБКЛАДИНКУ: Порожнисті томи набиті контрабандними золотими ланцюжками!", "DOG SEARCH: Hollowed books stuffed with gold chains!"), bribeAmount: 2200, currency: "USD" },
-    { decl: L("Пластикові каністри з водою", "Plastic water jerrycans"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА КАНИСТРИ: Замість води — 60 літрів підпільного спирту!", "DOG SEARCH: 60 liters of bootleg spirit inside water cans!"), bribeAmount: 800, currency: "USD" },
-    { decl: L("Акваріумні фільтри та трубки", "Aquarium filters & tubes"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ ТЕРАРІУМ: Контрабанда екзотичних хамелеонів та рідкісних папуг!", "DOG SEARCH: Smuggled exotic chameleons & rare parrots!"), bribeAmount: 1100, currency: "USD" },
-    { decl: L("Мікрохвильовки на ремонт (4 шт.)", "Broken microwaves for repair"), found: L("ПЕС «БАВОВНА» РОЗКРИВ КОРПУСИ: Усередині мікрохвильовок сховані 10 ігрових відеокарт RTX!", "DOG SEARCH: Microwave shells hide 10 high-end RTX GPUs!"), bribeAmount: 2600, currency: "USD" },
-    { decl: L("Спальні мішки та туристичні каремати", "Sleeping bags & camp mats"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА СПАЛЬНИКИ: Під купою речей ховаються двоє нелегалів без документів!", "DOG SEARCH: 2 undocumented stowaways hiding under sleeping bags!"), bribeAmount: 3400, currency: "USD" },
-    { decl: L("Консервована тушонка домашня (3 ящики)", "Homemade canned stew (3 crates)"), found: L("ПЕС «БАВОВНА» ПОЧУВ ПОРОХ: У банках під жиром — набої та мисливські гільзи!", "DOG SEARCH: Stew cans conceal undeclared ammo!"), bribeAmount: 1200, currency: "USD" },
-    { decl: L("Футляри для спортивного взуття", "Sneaker boxes"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ ПІДРОБКИ: 80 пар палених кросівок без акцизу та мита!", "DOG SEARCH: 80 pairs of counterfeit designer sneakers!"), bribeAmount: 900, currency: "USD" },
-    { decl: L("Скринька з «дідівськими нагородами»", "Box of 'grandpa trinkets'"), found: L("ПЕС «БАВОВНА» РОЗКУСИВ КЕЙС: Викрадене скіфське золото та античні амфори!", "DOG SEARCH: Looted Scythian gold & ancient amphoras!"), bribeAmount: 3800, currency: "USD" },
-    { decl: L("Упаковки прального порошку (12 пачок)", "Laundry detergent packs (12 pcs)"), found: L("ПЕС «БАВОВНА» ЗАЧХАВ: У пачках порошку — підпільні стимулятори та заборонені пігулки!", "DOG SEARCH: Detergent bags hide illicit narcotics!"), bribeAmount: 2900, currency: "USD" },
-    { decl: L("Коробки з сувенірними годинниками", "Souvenir watch boxes"), found: L("ПЕС «БАВОВНА» ПІДНЯВ ОБШИВКУ: 15 оригінальних швейцарських хронометрів на 100к+!", "DOG SEARCH: 15 luxury Swiss watches hidden in lining!"), bribeAmount: 3100, currency: "USD" },
-    { decl: L("Баки з-під тосолу та антифризу", "Antifreeze canisters"), found: L("ПЕС «БАВОВНА» ВИЯВИВ ДВОСТІННІ БАКИ: Контрабандне срібло в гранулах (12 кг)!", "DOG SEARCH: Double-walled cans packed with 12kg silver pellets!"), bribeAmount: 2100, currency: "USD" },
-    { decl: L("Клітки для перевезення голубів", "Pigeon transport cages"), found: L("ПЕС «БАВОВНА» ПІДНЯВ БРЕЗЕНТ: 4 рідкісні соколи-балобани для арабських шейхів!", "DOG SEARCH: 4 smuggled rare falcons for collectors!"), bribeAmount: 3300, currency: "USD" },
-    { decl: L("Старий розібраний мопед на запчастини", "Disassembled old moped parts"), found: L("ПЕС «БАВОВНА» ПОГРИЗ РАМУ: У бензобаку сховані 15 блоків електронних цигарок!", "DOG SEARCH: Fuel tank stuffed with 15 cartons of illicit vapes!"), bribeAmount: 190, currency: "USD" },
-    { decl: L("Музичні колонки концертної сцени", "Concert stage speakers"), found: L("ПЕС «БАВОВНА» ЗІРВАВ СІТКУ КОЛОНКИ: Усередині сабвуфера сидить ухилянт із рюкзаком!", "DOG SEARCH: Hollowed subwoofer hides an evader with a backpack!"), bribeAmount: 2800, currency: "USD" },
-    { decl: L("Коробки з телевізійними антенами", "TV antenna boxes"), found: L("ПЕС «БАВОВНА» РОЗДЕР КАРТОН: 5 нелегальних терміналів супутникового зв'язку на продаж!", "DOG SEARCH: 5 undeclared satellite terminals for resale!"), bribeAmount: 1900, currency: "USD" }
+    { decl: L("Старі дерев'яні меблі та килими", "Antique wooden furniture & rugs"), found: L("ПЕС «БАВОВНА» РОЗГРИЗ ОБШИВКУ: У ніжках столу сховано 50 блоків контрабандних сигарет!", "DOG SEARCH: Table legs packed with 50 smuggled cigarette cartons!"), bribeAmount: 320, currency: "USD" },
+    { decl: L("Мішки з будівельним гіпсом та шпаклівкою", "Sacks of construction plaster"), found: L("ПЕС «БАВОВНА» РОЗКОПАВ ГІПС: Усередині мішків — каміння нелегального бурштину з Бурштинівки!", "DOG SEARCH: Sacks hide raw Burshtynivka amber!"), bribeAmount: 480, currency: "USD" },
+    { decl: L("Запасні автомобільні шини (4 шт.)", "Spare car tires (4 pcs)"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА ЗАПАСКУ: Всередині покришок заховані пачки нелегальної валюти та чужі паспорти!", "DOG SEARCH: Tires stuffed with undeclared cash and forged passports!"), bribeAmount: 850, currency: "USD" },
+    { decl: L("Паливні баки та запчастини до фур", "Fuel cans & truck spare parts"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ ТАЙНИК: Під сидінням 400 л краденого дизелю та паливні талони!", "DOG SEARCH: Stolen diesel & black-market fuel coupons under the seat!"), bribeAmount: 280, currency: "USD" },
+    { decl: L("Коробки з «гуманітарним одягом»", "Boxes of 'humanitarian clothes'"), found: L("ПЕС «БАВОВНА» ПОРВАВ СКОТЧ: У коробках сховані підсанкційні мікрочіпи й комплектуючі до дронів!", "DOG SEARCH: Boxes hide sanctioned microchips & drone parts!"), bribeAmount: 1000, currency: "USD" },
+    { decl: L("Рулони килимів від бабусі", "Rolled vintage carpets"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ СХОВАНКУ: Усередині рулонів — старовинні ікони та срібні монети на вивіз!", "DOG SEARCH: Rolled carpets conceal antique icons & silver coins!"), bribeAmount: 720, currency: "USD" },
+    { decl: L("Металобрухт на переробку", "Scrap metal for recycling"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА БАГАЖНИК: Під лахміттям вирізані автокаталізатори та бухти мідного кабелю!", "DOG SEARCH: Stolen catalytic converters & copper cables under rags!"), bribeAmount: 300, currency: "USD" },
+    { decl: L("Подарункові кошики з шоколадом", "Gift baskets with chocolate"), found: L("ПЕС «БАВОВНА» ЗІРВАВ ФАЛЬШ-ДНО: Під цукерками — ящики безакцизного алкоголю та вейпів!", "DOG SEARCH: False bottom packed with untaxed liquor & vapes!"), bribeAmount: 360, currency: "USD" },
+    { decl: L("Тубуси з «дитячими малюнками»", "Tubes with 'kids drawings'"), found: L("ПЕС «БАВОВНА» ПОРВАВ ТУБУСИ: Викрадені музейні полотна XIX століття без декларації!", "DOG SEARCH: Stolen 19th-century museum paintings!"), bribeAmount: 1200, currency: "USD" },
+    { decl: L("Холодильник для риби та льоду", "Cooler for fish & ice"), found: L("ПЕС «БАВОВНА» ВІДКРИВ ХОЛОДИЛЬНИК: 18 кг нелегальної чорної ікри та раритетних молюсків!", "DOG SEARCH: 18kg of smuggled black caviar!"), bribeAmount: 640, currency: "USD" },
+    { decl: L("Туристичні намети й каремати", "Camping tents & mats"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ У НАМЕТАХ: 6 тепловізорів подвійного призначення без документів!", "DOG SEARCH: 6 undeclared thermal optics inside tent rolls!"), bribeAmount: 1100, currency: "USD" },
+    { decl: L("Книжки з кулінарії та журнали", "Cookbooks & magazines"), found: L("ПЕС «БАВОВНА» ВИРВАВ ОБКЛАДИНКУ: Порожнисті томи набиті контрабандними золотими ланцюжками!", "DOG SEARCH: Hollowed books stuffed with gold chains!"), bribeAmount: 800, currency: "USD" },
+    { decl: L("Пластикові каністри з водою", "Plastic water jerrycans"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА КАНИСТРИ: Замість води — 60 літрів підпільного спирту!", "DOG SEARCH: 60 liters of bootleg spirit inside water cans!"), bribeAmount: 260, currency: "USD" },
+    { decl: L("Акваріумні фільтри та трубки", "Aquarium filters & tubes"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ ТЕРАРІУМ: Контрабанда екзотичних хамелеонів та рідкісних папуг!", "DOG SEARCH: Smuggled exotic chameleons & rare parrots!"), bribeAmount: 420, currency: "USD" },
+    { decl: L("Мікрохвильовки на ремонт (4 шт.)", "Broken microwaves for repair"), found: L("ПЕС «БАВОВНА» РОЗКРИВ КОРПУСИ: Усередині мікрохвильовок сховані 10 ігрових відеокарт RTX!", "DOG SEARCH: Microwave shells hide 10 high-end RTX GPUs!"), bribeAmount: 950, currency: "USD" },
+    { decl: L("Спальні мішки та туристичні каремати", "Sleeping bags & camp mats"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА СПАЛЬНИКИ: Під купою речей ховаються двоє нелегалів без документів!", "DOG SEARCH: 2 undocumented stowaways hiding under sleeping bags!"), bribeAmount: 1150, currency: "USD" },
+    { decl: L("Консервована тушонка домашня (3 ящики)", "Homemade canned stew (3 crates)"), found: L("ПЕС «БАВОВНА» ПОЧУВ ПОРОХ: У банках під жиром — набої та мисливські гільзи!", "DOG SEARCH: Stew cans conceal undeclared ammo!"), bribeAmount: 450, currency: "USD" },
+    { decl: L("Футляри для спортивного взуття", "Sneaker boxes"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ ПІДРОБКИ: 80 пар палених кросівок без акцизу та мита!", "DOG SEARCH: 80 pairs of counterfeit designer sneakers!"), bribeAmount: 300, currency: "USD" },
+    { decl: L("Скринька з «дідівськими нагородами»", "Box of 'grandpa trinkets'"), found: L("ПЕС «БАВОВНА» РОЗКУСИВ КЕЙС: Викрадене скіфське золото та античні амфори!", "DOG SEARCH: Looted Scythian gold & ancient amphoras!"), bribeAmount: 1200, currency: "USD" },
+    { decl: L("Упаковки прального порошку (12 пачок)", "Laundry detergent packs (12 pcs)"), found: L("ПЕС «БАВОВНА» ЗАЧХАВ: У пачках порошку — підпільні стимулятори та заборонені пігулки!", "DOG SEARCH: Detergent bags hide illicit narcotics!"), bribeAmount: 1050, currency: "USD" },
+    { decl: L("Коробки з сувенірними годинниками", "Souvenir watch boxes"), found: L("ПЕС «БАВОВНА» ПІДНЯВ ОБШИВКУ: 15 оригінальних швейцарських хронометрів на 100к+!", "DOG SEARCH: 15 luxury Swiss watches hidden in lining!"), bribeAmount: 1100, currency: "USD" },
+    { decl: L("Баки з-під тосолу та антифризу", "Antifreeze canisters"), found: L("ПЕС «БАВОВНА» ВИЯВИВ ДВОСТІННІ БАКИ: Контрабандне срібло в гранулах (12 кг)!", "DOG SEARCH: Double-walled cans packed with 12kg silver pellets!"), bribeAmount: 750, currency: "USD" },
+    { decl: L("Клітки для перевезення голубів", "Pigeon transport cages"), found: L("ПЕС «БАВОВНА» ПІДНЯВ БРЕЗЕНТ: 4 рідкісні соколи-балобани для арабських шейхів!", "DOG SEARCH: 4 smuggled rare falcons for collectors!"), bribeAmount: 1150, currency: "USD" },
+    { decl: L("Старий розібраний мопед на запчастини", "Disassembled old moped parts"), found: L("ПЕС «БАВОВНА» ПОГРИЗ РАМУ: У бензобаку сховані 15 блоків електронних цигарок!", "DOG SEARCH: Fuel tank stuffed with 15 cartons of illicit vapes!"), bribeAmount: 180, currency: "USD" },
+    { decl: L("Музичні колонки концертної сцени", "Concert stage speakers"), found: L("ПЕС «БАВОВНА» ЗІРВАВ СІТКУ КОЛОНКИ: Усередині сабвуфера сидить ухилянт із рюкзаком!", "DOG SEARCH: Hollowed subwoofer hides an evader with a backpack!"), bribeAmount: 900, currency: "USD" },
+    { decl: L("Коробки з телевізійними антенами", "TV antenna boxes"), found: L("ПЕС «БАВОВНА» РОЗДЕР КАРТОН: 5 нелегальних терміналів супутникового зв'язку на продаж!", "DOG SEARCH: 5 undeclared satellite terminals for resale!"), bribeAmount: 680, currency: "USD" }
   ];
 
   // ★ RICH TRAVELER ARCHETYPES (Appearance + Matched Transport + Persona Dialogues!) ★
@@ -1251,13 +1251,13 @@
         declaredCargo: L("Спортивна сумка, одяг", "Gym bag, clothes"),
         greeting: L("«Вітаю! Ось свіженька довідка з круглою мокрою печаткою!»", "'Hello! Fresh exemption certificate with a wet round seal!'"),
         interrogationReply: offerBribe1
-          ? L("«Ну... в Телеграмі порадили! Візьми 800 💵 у конверті — печатку ж ніхто не роздивиться!»", "'Bought it online! Take 800 💵 — nobody inspects the seal!'")
+          ? L("«Ну... в Телеграмі порадили! Візьми 250 💵 у конверті — печатку ж ніхто не роздивиться!»", "'Bought it online! Take 250 💵 — nobody inspects the seal!'")
           : L("«Клянусь, мені цю довідку юрист пообіцяв як офіційну! Пропустіть по-доброму, я сам став жертвою!»", "'I swear a lawyer told me this was valid! Please let me pass, I was scammed!'"),
         intimidateReply: L("«*Виступає піт* Та директор клініки клявся, що довідка справжня!»", "'*Sweats* The clinic swore it was real!'"),
         coffeeReply: L("«Дякую за каву... тільки під УФ-лампу цю довідку не суньте, вона... екологічна!»", "'Thanks for coffee... please keep it out of UV light!'"),
         arrestFull: L("Власника липової довідки затримано за використання підробленої печатки!", "Forged seal user arrested!"),
         arrestToned: L("Порушника з фіктивною печаткою затримано.", "Forged seal traveler detained."),
-        bribeOffer: offerBribe1 ? { amount: 800, currency: "USD", requiresDiscovery: true, nabkRiskJump: 12, isStingTrap: false, syndicateFavor: false } : null,
+        bribeOffer: offerBribe1 ? { amount: 250, currency: "USD", requiresDiscovery: true, nabkRiskJump: 8, isStingTrap: false, syndicateFavor: false } : null,
         shouldBeApproved: false,
         violations: [DISCREPANCY.FAKE_ISSUER_SEAL]
       });
@@ -1290,13 +1290,13 @@
         declaredCargo: L("Особисті речі", "Personal effects"),
         greeting: L("«Добрий день! Ось мій паспорт... я трохи змінився за останній рік після відпустки.»", "'Hello! Here is my passport... I look a bit different since last summer.'"),
         interrogationReply: offerBribe2
-          ? L("«Ну взяв паспорт родича, бо свій загубив! Візьми 1 200 💵 і закрий очі!»", "'Borrowed a relative's passport! Take 1,200 💵!'")
+          ? L("«Ну взяв паспорт родича, бо свій загубив! Візьми 400 💵 і закрий очі!»", "'Borrowed a relative's passport! Take 400 💵!'")
           : L("«Будь ласка, свій паспорт згорів у пожежі, узяв документ брата/сестри! Зрозумійте по-людськи!»", "'Please, my own passport burned, I took my sibling's! Have mercy!'"),
         intimidateReply: L("«*Очі бігають* Та пластична операція! Хто тепер у фото дивиться?!»", "'*Eyes dart* Had a makeover! Who even checks photos?!'"),
         coffeeReply: L("«Дякую за каву... перегорніть сторінку швидше!»", "'Thanks... please flip the passport page!'"),
         arrestFull: L("Підміна особи викрита — чужий паспорт вилучено, а водія затримано!", "Passport impersonation busted!"),
         arrestToned: L("Використано чужий документ — затримано.", "Stolen ID detained."),
-        bribeOffer: offerBribe2 ? { amount: 1200, currency: "USD", requiresDiscovery: true, nabkRiskJump: 14, isStingTrap: false, syndicateFavor: false } : null,
+        bribeOffer: offerBribe2 ? { amount: 400, currency: "USD", requiresDiscovery: true, nabkRiskJump: 10, isStingTrap: false, syndicateFavor: false } : null,
         shouldBeApproved: false,
         violations: [DISCREPANCY.PHOTO_MISMATCH]
       });
@@ -1333,13 +1333,13 @@
         declaredCargo: L("Ліки, валіза", "Medicine, suitcase"),
         greeting: L("«Добрий день! Довідку зробили прямо перед виїздом — усе легально!»", "'Hello! Permit issued right before departure — all legal!'"),
         interrogationReply: offerBribe3
-          ? L("«Тьфу, в друкарні прізвище переплутали! Бери 900 💵, не присікуйся!»", "'Damn, typo in the name! Take 900 💵 and let me roll!'")
+          ? L("«Тьфу, в друкарні прізвище переплутали! Бери 300 💵, не присікуйся!»", "'Damn, typo in the name! Take 300 💵 and let me roll!'")
           : L("«Вибачте, у ЦНАП помилково вписали інше прізвище! Пропустіть по-доброму, я звичайний водій!»", "'Sorry, clerk made a typo in my surname! Please let me pass, just a regular driver!'"),
         intimidateReply: L("«*Тремтить* Це... це подвійне прізвище! Чи кума...»", "'*Stammers* It's my... second surname!'"),
         coffeeReply: L("«Спасибі за каву... і прізвище не звіряйте сильно, гаразд?»", "'Thanks... no need to compare surnames closely!'"),
         arrestFull: L("Чужа куплена довідка викрита — афериста пакує контррозвідка!", "Mismatched documents seized!"),
         arrestToned: L("Виявлено розбіжність ПІБ у документах.", "Name mismatch detained."),
-        bribeOffer: offerBribe3 ? { amount: 900, currency: "USD", requiresDiscovery: true, nabkRiskJump: 12, isStingTrap: false, syndicateFavor: false } : null,
+        bribeOffer: offerBribe3 ? { amount: 300, currency: "USD", requiresDiscovery: true, nabkRiskJump: 8, isStingTrap: false, syndicateFavor: false } : null,
         shouldBeApproved: false,
         violations: [DISCREPANCY.NAME_MISMATCH]
       });
@@ -1384,7 +1384,7 @@
       }
 
       const offersSeriousBribe4 = Math.random() < 0.45;
-      const bribe4Amt = randInt(14, 22) * 100;
+      const bribe4Amt = randInt(5, 8) * 100;
       if (offersSeriousBribe4) {
         interrMsg = L(`«Тихіше, інспекторе... тачка «гаряча», візьми ${bribe4Amt.toLocaleString("en-US")} 💵 і забудь про техпаспорт!»`, `'Easy, inspector... car is hot, take ${bribe4Amt.toLocaleString("en-US")} 💵 and forget the title!'`);
       }
@@ -1420,7 +1420,7 @@
         coffeeReply: L("«Дякую! Гаряча кава краще за будь-яке СТО!»", "'Thanks! Better than any mechanic!'"),
         arrestFull: L("Авто-двійника з перебитими номерами конфісковано, водія затримано!", "Cloned vehicle confiscated and driver arrested!"),
         arrestToned: L("Виявлено невідповідність транспорту техпаспорту.", "Vehicle mismatch detained."),
-        bribeOffer: offersSeriousBribe4 ? { amount: bribe4Amt, currency: "USD", requiresDiscovery: true, nabkRiskJump: 14, isStingTrap: false, syndicateFavor: false } : null,
+        bribeOffer: offersSeriousBribe4 ? { amount: bribe4Amt, currency: "USD", requiresDiscovery: true, nabkRiskJump: 10, isStingTrap: false, syndicateFavor: false } : null,
         shouldBeApproved: false,
         violations: [DISCREPANCY.VEHICLE_MISMATCH]
       });
@@ -1531,13 +1531,13 @@
           declaredCargo: L("Рюкзак, документи", "Backpack"),
           greeting: L("«Добрий день! З телефоном щось глючить — але ось паперова довідка, чесно!»", "'Hello! Phone app is glitching — but here is my paper permit!'"),
           interrogationReply: offerBribe6
-            ? L("«Та то база Облік+ зависла! Ось 1 100 💵 — не натискай 🚨 АРЕШТ!»", "'The Oblik+ server must be down! Take 1,100 💵 — don't press 🚨 DETAIN!'")
+            ? L("«Та то база Облік+ зависла! Ось 350 💵 — не натискай 🚨 АРЕШТ!»", "'The Oblik+ server must be down! Take 350 💵 — don't press 🚨 DETAIN!'")
             : L("«Це помилка сервера Облік+, клянусь! У мене ж паперова довідка на руках — пропустіть по-доброму!»", "'It's an Oblik+ server glitch, I swear! Look at my paper permit — please!'"),
           intimidateReply: L("«*Різко ховає телефон у кишеню* Батарея сіла, нічого сканувати!»", "'*Hides phone* Battery died, can't scan!'"),
           coffeeReply: L("«О, дякую... ви тільки інтернет на планшеті вимкніть!»", "'Thanks... maybe turn off tablet Wi-Fi!'"),
           arrestFull: L("Реєстр «Облік+» підтвердив статус у розшуку — порушника передано групі реагування!", "Oblik+ confirmed wanted status — detained!"),
           arrestToned: L("Затримано за недійсним кодом у реєстрі «Облік+».", "Detained for wanted Oblik+ code."),
-          bribeOffer: offerBribe6 ? { amount: 1100, currency: "USD", requiresDiscovery: true, nabkRiskJump: 14, isStingTrap: false, syndicateFavor: false } : null,
+          bribeOffer: offerBribe6 ? { amount: 350, currency: "USD", requiresDiscovery: true, nabkRiskJump: 9, isStingTrap: false, syndicateFavor: false } : null,
         shouldBeApproved: false,
         violations: [DISCREPANCY.INVALID_QR_CODE]
       });
@@ -1610,13 +1610,13 @@
       declaredCargo: L("Особисті речі, другий гаманець", "Personal bags"),
       vehicleSearchResult: L("ПЕС «БАВОВНА» І СКАНЕР: Під килимком водія сховано синій закордонний паспорт громадянина KRAINA!", "DOG SEARCH: Hidden KRAINA passport found under floor mat!"),
       greeting: L(`«Пардон, я іноземець з ${fc.name.uk}! Які обмеження?! Пропускайте мерщій!»`, `'Pardon, I am from ${fc.name.en}! Let me exit right now!'`),
-      interrogationReply: L("«Тихіше! Ну так, у мене є ще паспорт Kraina... Візьми 3 000 💵 і не викликай Військову Поліцію!»", "'Quiet! Okay I also hold a Kraina passport... Take 3,000 💵 and don't call Military Police!'"),
+      interrogationReply: L("«Тихіше! Ну так, у мене є ще паспорт Kraina... Візьми 900 💵 і не викликай Військову Поліцію!»", "'Quiet! Okay I also hold a Kraina passport... Take 900 💵 and don't call Military Police!'"),
       intimidateReply: L("«*Ховає другий паспорт у кишеню* Я громадянин іншої держави, не чіпайте мене!»", "'*Hides second passport* I am a foreign national!'"),
       coffeeReply: L("«Дякую... а Військова Поліція сьогодні на зміні?..»", "'Thanks... is Military Police on duty tonight?..'"),
       arrestFull: L("Викликано Військову Поліцію (ВСП)! Ухилянта з подвійним громадянством затримано!", "Military Police (VSP) arrived and detained the dual-citizen evader!"),
       arrestToned: L("Порушника з подвійним громадянством передано Військовій Поліції.", "Dual-citizen violator handed over to Military Police."),
       hasContraband: true,
-      bribeOffer: { amount: 3000, currency: "USD", requiresDiscovery: true, nabkRiskJump: 15, isStingTrap: false, syndicateFavor: false },
+      bribeOffer: { amount: 900, currency: "USD", requiresDiscovery: true, nabkRiskJump: 10, isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.DUAL_CITIZENSHIP],
       isWantedTarget: true,
@@ -1643,13 +1643,13 @@
       declaredCargo: L("Туристичний намет, павербанки", "Camping tent, powerbanks"),
       vehicleSearchResult: L("ПЕС «БАВОВНА» ЗНАЙШОВ СХОВАНКУ: Супутниковий маячок «ФСМ», шифроблокнот і карта ТЕЦ!", "DOG SEARCH: Enemy FSM satellite beacon, cipher pad & power-grid map!"),
       greeting: L(`«Вітаю! Я незалежний журналіст з ${fc.name.uk}, їду знімати ваші пейзажі та підстанції!»`, `'Hello! Independent journalist from ${fc.name.en}, filming landscapes!'`),
-      interrogationReply: L("«Не треба кликати ГУР-М чи СБК! Ось 6 500 💵 — забудь про багажник!»", "'Don't call GUR-M or SBK! Take 6,500 💵 and forget the trunk!'"),
+      interrogationReply: L("«Не треба кликати ГУР-М чи СБК! Ось 1 600 💵 — забудь про багажник!»", "'Don't call GUR-M or SBK! Take 1,600 💵 and forget the trunk!'"),
       intimidateReply: L("«*Холодно посміхається* Ви ще пошкодуєте про такий тон...»", "'*Cold smile* You'll regret that tone...'"),
       coffeeReply: L("«Дякую. У нас у відомстві кава гірша.»", "'Thanks. Our agency serves worse coffee.'"),
       arrestFull: L("СПЕЦОПЕРАЦІЯ ГУР-М І СБК! Ти взяв кадрового шпигуна ворожої «ФСМ»!", "GUR-M & SBK joint sting! Enemy FSM sleeper agent captured!"),
       arrestToned: L("Агента ворожої розвідки «ФСМ» затримано.", "Enemy FSM intelligence operative detained."),
       hasContraband: true,
-      bribeOffer: { amount: 6500, currency: "USD", requiresDiscovery: true, nabkRiskJump: 28, isStingTrap: false, syndicateFavor: false },
+      bribeOffer: { amount: 1600, currency: "USD", requiresDiscovery: true, nabkRiskJump: 15, isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.WANTED_CRIMINAL_OR_SPY, DISCREPANCY.CONTRABAND_CARGO],
       isWantedTarget: true,
@@ -1658,17 +1658,17 @@
   }
 
   const VIP_CATEGORY_PRESETS = [
-    { cat: "Будівництво", shape: "SUV", car: L("«Крузак-Піраміда 300»", "'Kruzak-Pyramid 300'"), cargo: L("Макети елітних ЖК, папки з дозвіллям", "Luxury condo blueprints"), usd: 4200, risk: 18, greet: L("«Шефе, я забудовник! У мене 400 обманутих вкладників під мерією, треба терміново на відпочинок!»", "'Boss, I'm a developer! Need urgent rest abroad!'") },
-    { cat: "Освіта", shape: "SEDAN", car: L("«Мерс-Аспірант Е350»", "'Mers-Aspirant E350'"), cargo: L("300 дипломів магістрів та печатка", "300 blank master diplomas"), usd: 2500, risk: 14, greet: L("«Вітаю, колего! Ректор Академії Таро та Крипти їде на симпозіум до Франції-Люкс!»", "'Greetings! Rector of Tarot Academy heading to a symposium!'") },
-    { cat: "Митниця", shape: "SUV", car: L("«Беха Х7 Конфіскат»", "'Beha X7 Confiscate'"), cargo: L("Коробки з конфіскованими гаджетами", "Seized gadget crates"), usd: 6000, risk: 22, greet: L("«Свій до свого! Я зі складу митниці, їду в Монаківку інвентаризувати фури!»", "'One of yours! Customs warehouse chief off to Monakivka!'") },
-    { cat: "Фінанси", shape: "SPORT", car: L("«Стріла-Купе GT»", "'Strila-Coupe GT'"), cargo: L("Апаратні крипто-гаманці та сервери", "Hardware crypto wallets"), usd: 8500, risk: 25, greet: L("«Слухай, у мого банку завтра забирають ліцензію — мені кров з носу треба за кордон!»", "'Listen, my bank loses its license tomorrow — I gotta cross tonight!'") },
-    { cat: "Феміда", shape: "SUV", car: L("«Лексус-Крейсер LX»", "'Leksus-Cruiser LX'"), cargo: L("Мантія та кейс з «вироками»", "Judge robe & briefcase"), usd: 7000, risk: 24, greet: L("«Я недоторканний суддя у відставці! Куди ти дивишся? Шлагбаум вгору!»", "'Retired high judge! Raise the barrier at once!'") },
-    { cat: "Силовики", shape: "G_WAGON", car: L("«Гелік-Прокурор 500»", "'Gelik-Prosecutor 500'"), cargo: L("Справи на олігархів (усе «закрито»)", "Closed oligarch case files"), usd: 8500, risk: 26, greet: L("«Екс-прокурор району на зв'язку! Краще не перевіряй мій техпаспорт — домовимось!»", "'Ex-district prosecutor here! Better not inspect too closely!'") },
-    { cat: "Шоу-біз", shape: "SPORT", car: L("«Електро-Комета Стрім»", "'Electro-Comet Stream'"), cargo: L("Кільцева лампа і гайд «Як стати мільйонером»", "Ring light & course guides"), usd: 2800, risk: 12, greet: L("«Йоу! Я топ-коуч успішного успіху! Лечу знімати рілси в Поландію!»", "'Yo! Top success coach flying to shoot reels!'") },
-    { cat: "МСЕК-Еліт", shape: "SUV", car: L("«Порш Кабан S»", "'Porsh Kaban S'"), cargo: L("Пачки чистих бланків довідок та печатки", "Blank disability forms & seals"), usd: 7800, risk: 25, greet: L("«Тихо, колего! Я голова комісії МСЕК — їду в Алікантово на реабілітацію!»", "'Quiet! Head of medical board heading to Alikantovo for rehab!'") },
-    { cat: "Енергетика", shape: "G_WAGON", car: L("«Гелік-Кубик V8»", "'Gelik-Kubik V8'"), cargo: L("Кейс із тендерними контрактами", "Rigged grid tender files"), usd: 9200, risk: 26, greet: L("«У мене завтра аудит НАБК по трансформаторах — не тримай на шлагбаумі!»", "'NABK audit on transformers tomorrow — open the gate!'") },
-    { cat: "Агро-Барон", shape: "PICKUP", car: L("«Рам-Трактор 1500»", "'Ram-Tractor 1500'"), cargo: L("Зернові накладні й мішки готівки", "Grain invoices & cash bags"), usd: 5400, risk: 20, greet: L("«Я половину області засіяв! Їду в Поландію купувати комбайн!»", "'I planted half the region! Heading to Polandia for a harvester!'") },
-    { cat: "Політтехнолог", shape: "SEDAN", car: L("«Ауді А8 Броня»", "'Audi A8 Armor'"), cargo: L("Ботоферма в багажнику, 50 смартфонів", "Bot-farm in trunk, 50 phones"), usd: 6200, risk: 22, greet: L("«Без зайвого шуму — вибори скоро, лечу до шефа на стратегічну нараду!»", "'Keep it quiet — flying to the boss for campaign strategy!'") }
+    { cat: "Будівництво", shape: "SUV", car: L("«Крузак-Піраміда 300»", "'Kruzak-Pyramid 300'"), cargo: L("Макети елітних ЖК, папки з дозвіллям", "Luxury condo blueprints"), usd: 1400, risk: 11, greet: L("«Шефе, я забудовник! У мене 400 обманутих вкладників під мерією, треба терміново на відпочинок!»", "'Boss, I'm a developer! Need urgent rest abroad!'") },
+    { cat: "Освіта", shape: "SEDAN", car: L("«Мерс-Аспірант Е350»", "'Mers-Aspirant E350'"), cargo: L("300 дипломів магістрів та печатка", "300 blank master diplomas"), usd: 1000, risk: 9, greet: L("«Вітаю, колего! Ректор Академії Таро та Крипти їде на симпозіум до Франції-Люкс!»", "'Greetings! Rector of Tarot Academy heading to a symposium!'") },
+    { cat: "Митниця", shape: "SUV", car: L("«Беха Х7 Конфіскат»", "'Beha X7 Confiscate'"), cargo: L("Коробки з конфіскованими гаджетами", "Seized gadget crates"), usd: 1800, risk: 12, greet: L("«Свій до свого! Я зі складу митниці, їду в Монаківку інвентаризувати фури!»", "'One of yours! Customs warehouse chief off to Monakivka!'") },
+    { cat: "Фінанси", shape: "SPORT", car: L("«Стріла-Купе GT»", "'Strila-Coupe GT'"), cargo: L("Апаратні крипто-гаманці та сервери", "Hardware crypto wallets"), usd: 2300, risk: 14, greet: L("«Слухай, у мого банку завтра забирають ліцензію — мені кров з носу треба за кордон!»", "'Listen, my bank loses its license tomorrow — I gotta cross tonight!'") },
+    { cat: "Феміда", shape: "SUV", car: L("«Лексус-Крейсер LX»", "'Leksus-Cruiser LX'"), cargo: L("Мантія та кейс з «вироками»", "Judge robe & briefcase"), usd: 2000, risk: 13, greet: L("«Я недоторканний суддя у відставці! Куди ти дивишся? Шлагбаум вгору!»", "'Retired high judge! Raise the barrier at once!'") },
+    { cat: "Силовики", shape: "G_WAGON", car: L("«Гелік-Прокурор 500»", "'Gelik-Prosecutor 500'"), cargo: L("Справи на олігархів (усе «закрито»)", "Closed oligarch case files"), usd: 2400, risk: 15, greet: L("«Екс-прокурор району на зв'язку! Краще не перевіряй мій техпаспорт — домовимось!»", "'Ex-district prosecutor here! Better not inspect too closely!'") },
+    { cat: "Шоу-біз", shape: "SPORT", car: L("«Електро-Комета Стрім»", "'Electro-Comet Stream'"), cargo: L("Кільцева лампа і гайд «Як стати мільйонером»", "Ring light & course guides"), usd: 1100, risk: 9, greet: L("«Йоу! Я топ-коуч успішного успіху! Лечу знімати рілси в Поландію!»", "'Yo! Top success coach flying to shoot reels!'") },
+    { cat: "МСЕК-Еліт", shape: "SUV", car: L("«Порш Кабан S»", "'Porsh Kaban S'"), cargo: L("Пачки чистих бланків довідок та печатки", "Blank disability forms & seals"), usd: 2100, risk: 14, greet: L("«Тихо, колего! Я голова комісії МСЕК — їду в Алікантово на реабілітацію!»", "'Quiet! Head of medical board heading to Alikantovo for rehab!'") },
+    { cat: "Енергетика", shape: "G_WAGON", car: L("«Гелік-Кубик V8»", "'Gelik-Kubik V8'"), cargo: L("Кейс із тендерними контрактами", "Rigged grid tender files"), usd: 2500, risk: 15, greet: L("«У мене завтра аудит НАБК по трансформаторах — не тримай на шлагбаумі!»", "'NABK audit on transformers tomorrow — open the gate!'") },
+    { cat: "Агро-Барон", shape: "PICKUP", car: L("«Рам-Трактор 1500»", "'Ram-Tractor 1500'"), cargo: L("Зернові накладні й мішки готівки", "Grain invoices & cash bags"), usd: 1600, risk: 12, greet: L("«Я половину області засіяв! Їду в Поландію купувати комбайн!»", "'I planted half the region! Heading to Polandia for a harvester!'") },
+    { cat: "Політтехнолог", shape: "SEDAN", car: L("«Ауді А8 Броня»", "'Audi A8 Armor'"), cargo: L("Ботоферма в багажнику, 50 смартфонів", "Bot-farm in trunk, 50 phones"), usd: 1750, risk: 13, greet: L("«Без зайвого шуму — вибори скоро, лечу до шефа на стратегічну нараду!»", "'Keep it quiet — flying to the boss for campaign strategy!'") }
   ];
 
   function createDiverseVipEscapee() {

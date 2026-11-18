@@ -98,49 +98,49 @@
       id: "CODE_GUR_NIGHT",
       title: L("🦉 Шифр ГУР «Нічний Сокіл»", "🦉 GUR Cipher 'Night Falcon'"),
       logText: L("🦉 UV-знахідка: розшифровано мітку ГУР «Нічний Сокіл»!", "🦉 UV find: decoded GUR 'Night Falcon' mark!"),
-      uah: 1400, usd: 0, sbkDelta: 6, riskDelta: 0, palychDelta: 0, tolikDelta: 0, timeDelta: 0
+      uah: 500, usd: 0, sbkDelta: 6, riskDelta: 0, palychDelta: 0, tolikDelta: 0, timeDelta: 0
     },
     {
       id: "NABK_MARKER",
       title: L("🎙️ Потайний штамп аудитора НАБК", "🎙️ Hidden NABK Auditor Stamp"),
       logText: L("🎙️ UV-знахідка: виявлено й знешкоджено мітку аудиту НАБК!", "🎙️ UV find: detected & neutralized hidden NABK audit stamp!"),
-      uah: 1200, usd: 0, sbkDelta: 0, riskDelta: -6, palychDelta: 0, tolikDelta: 0, timeDelta: 0
+      uah: 400, usd: 0, sbkDelta: 0, riskDelta: -6, palychDelta: 0, tolikDelta: 0, timeDelta: 0
     },
     {
       id: "SYNDICATE_MARK",
       title: L("🕶️ Символ «Караван Варшавки»", "🕶️ 'Varshavka Caravan' Mark"),
       logText: L("🕶️ UV-знахідка: підтверджено таємний знак синдикату Толіка!", "🕶️ UV find: confirmed Tolik syndicate UV mark!"),
-      uah: 1100, usd: 0, sbkDelta: 0, riskDelta: 0, palychDelta: 0, tolikDelta: 6, timeDelta: 0
+      uah: 400, usd: 0, sbkDelta: 0, riskDelta: 0, palychDelta: 0, tolikDelta: 6, timeDelta: 0
     },
     {
       id: "PALYCH_SEAL",
       title: L("🥃 Архівна мітка «Палич-Фонд 1998»", "🥃 Archive Stamp 'Palych-Fund 1998'"),
       logText: L("🥃 UV-знахідка: знайдено архівну печатку Палича!", "🥃 UV find: logged Palych archival UV stamp!"),
-      uah: 1000, usd: 0, sbkDelta: 0, riskDelta: 0, palychDelta: 6, tolikDelta: 0, timeDelta: 0
+      uah: 350, usd: 0, sbkDelta: 0, riskDelta: 0, palychDelta: 6, tolikDelta: 0, timeDelta: 0
     },
     {
       id: "CYBER_CIPHER",
       title: L("🔐 Мікро-QR кібердепартаменту", "🔐 Cyber Dept Micro-QR"),
       logText: L("🔐 UV-знахідка: перехоплено прихований мікро-QR!", "🔐 UV find: intercepted hidden cyber micro-QR!"),
-      uah: 1600, usd: 0, sbkDelta: 5, riskDelta: 0, palychDelta: 0, tolikDelta: 0, timeDelta: 0
+      uah: 600, usd: 0, sbkDelta: 5, riskDelta: 0, palychDelta: 0, tolikDelta: 0, timeDelta: 0
     },
     {
       id: "SHYTOMYR_RUNE",
       title: L("🛸 Люмінесцентний «Дерун-Енерджі»", "🛸 Glowing 'Derun-Energy' Stamp"),
       logText: L("🛸 UV-знахідка: магічний штамп шитомирських майстрів (+час і премія)!", "🛸 UV find: Shytomyr craftsman UV stamp (+time & bonus)!"),
-      uah: 1350, usd: 0, sbkDelta: 0, riskDelta: 0, palychDelta: 0, tolikDelta: 0, timeDelta: 2
+      uah: 450, usd: 0, sbkDelta: 0, riskDelta: 0, palychDelta: 0, tolikDelta: 0, timeDelta: 2
     },
     {
       id: "OFFSHORE_WATERMARK",
       title: L("🌴 Невидима віза «Офшор-Монаківка»", "🌴 Invisible 'Monakivka Offshore' Visa"),
       logText: L("🌴 UV-знахідка: зафіксовано елітну офшорну водяну мітку!", "🌴 UV find: logged VIP offshore watermark!"),
-      uah: 0, usd: 130, sbkDelta: 0, riskDelta: 0, palychDelta: 0, tolikDelta: 4, timeDelta: 0
+      uah: 0, usd: 35, sbkDelta: 0, riskDelta: 0, palychDelta: 0, tolikDelta: 4, timeDelta: 0
     },
     {
       id: "VIP_CHANCELLERY",
       title: L("📜 Закрита резолюція «Без черги»", "📜 Secret Resolution 'VIP Lane'"),
       logText: L("📜 UV-знахідка: знайдено закриту візу канцелярії!", "📜 UV find: spotted VIP chancellery UV seal!"),
-      uah: 0, usd: 120, sbkDelta: 0, riskDelta: 0, palychDelta: 4, tolikDelta: 0, timeDelta: 0
+      uah: 0, usd: 25, sbkDelta: 0, riskDelta: 0, palychDelta: 4, tolikDelta: 0, timeDelta: 0
     }
   ];
 
@@ -153,21 +153,21 @@
         id: "STORY_NABK_WIRE",
         title: L("🎙️ Мікрокамера НАБК та мічені купюри", "🎙️ NABK Micro-Cam & Marked Bills"),
         logText: L("🎙️ UV-викриття: зафіксовано мічені купюри й жучок НАБК!", "🎙️ UV catch: logged NABK wiretap & marked bills!"),
-        uah: 1800, usd: 0, sbkDelta: 8, riskDelta: -10, palychDelta: 0, tolikDelta: 0, timeDelta: 0
+        uah: 700, usd: 0, sbkDelta: 8, riskDelta: -10, palychDelta: 0, tolikDelta: 0, timeDelta: 0
       };
     } else if (traveler.storyTag === "FSM_SPY") {
       base = {
         id: "STORY_FSM_INK",
         title: L("🕵️ Флуоресцентна фарба типографії ФСМ", "🕵️ Fluorescent FSM Print Ink"),
         logText: L("🕵️ UV-експертиза: знято пробу секретної фарби ФСМ!", "🕵️ UV forensic: sampled fluorescent FSM ink!"),
-        uah: 2000, usd: 0, sbkDelta: 10, riskDelta: 0, palychDelta: 0, tolikDelta: 0, timeDelta: 0
+        uah: 900, usd: 0, sbkDelta: 10, riskDelta: 0, palychDelta: 0, tolikDelta: 0, timeDelta: 0
       };
     } else if (traveler.storyTag === "INTEL_ALLY") {
       base = {
         id: "STORY_GUR_TRIDENT",
         title: L("🦅 Невидимий тризуб-голограма ГУР-М", "🦅 Invisible GUR-M Trident Hologram"),
         logText: L("🦅 UV-підтвердження: активовано спецголограму ГУР-М!", "🦅 UV verify: activated covert GUR-M hologram!"),
-        uah: 0, usd: 150, sbkDelta: 10, riskDelta: 0, palychDelta: 0, tolikDelta: 0, timeDelta: 0
+        uah: 0, usd: 50, sbkDelta: 10, riskDelta: 0, palychDelta: 0, tolikDelta: 0, timeDelta: 0
       };
     } else if (state.currentUvEasterEgg) {
       base = state.currentUvEasterEgg;
@@ -193,12 +193,11 @@
     let rankScale = 1;
     if (currency === "USD" && !offer.isStingTrap) {
       const d = state.daySpec ? state.daySpec.dayNumber : 1;
-      if (state.sbkColonelPromoted || d >= 8) rankScale = 1.5;
-      else if (d >= 5) rankScale = 1.25;
-      else if (d >= 3) rankScale = 1.1;
+      if (state.sbkColonelPromoted || d >= 7) rankScale = 1.25;
+      else if (d >= 4) rankScale = 1.10;
       else rankScale = 1.0;
     }
-    const baseAmt = currency === "USD" ? (Math.max(450, offer.amount) * 3.2) : (offer.amount * 8);
+    const baseAmt = currency === "USD" ? offer.amount : (offer.amount < 500 ? offer.amount * 5 : offer.amount);
     const amt = Math.round(baseAmt * rankScale * modMult * jacketMult * ringMult * audiMult * prepMult * intimidateMult);
     return {
       amount: amt,
@@ -358,14 +357,14 @@
     };
   }
 
-  function getEscapeTarget() { return state.isSandbox ? 100000 : 60000; }
+  function getEscapeTarget() { return state.isSandbox ? 25000 : 15000; }
   function getEscapeTolikRep() { return state.isSandbox ? 65 : 55; }
   function getRank() {
     if (state.sbkColonelPromoted) {
       return {
         id: "SBK_COLONEL",
         title: L("🕵️ Таємний Полковник СБК («Кордон-7»)", "🕵️ Covert SBK Colonel ('Border-7')"),
-        salary: 11000,
+        salary: 1800,
         perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 🪙 • -8% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 🪙 • -8% NABK/day"),
         dogCost: 0,
         freeFirstMistake: true,
@@ -376,8 +375,8 @@
       return {
         id: "SBK_AGENT",
         title: L("🕵️ Негласний агент СБК («Кордон-7»)", "🕵️ Undercover SBK Agent ('Border-7')"),
-        salary: 6500,
-        perkLabel: L("🔓 Перк: +12 000 🪙/арешт • Пес -4с", "🔓 Perk: +12,000 🪙/arrest • Dog -4s"),
+        salary: 900,
+        perkLabel: L("🔓 Перк: +1 500 🪙/арешт • Пес -4с", "🔓 Perk: +1,500 🪙/arrest • Dog -4s"),
         dogCost: 4,
         freeFirstMistake: false,
         dailyRiskHeal: 4
@@ -387,7 +386,7 @@
       return {
         id: "CAMPAIGN_INSPECTOR",
         title: L("Інспектор ДПСК", "SBGS Inspector"),
-        salary: 3500,
+        salary: 480,
         perkLabel: L("Сюжетний режим (перки Архіву активні)", "Story mode (Archive perks active)"),
         dogCost: 8,
         freeFirstMistake: false,
@@ -399,7 +398,7 @@
       return {
         id: "REGIONAL_CURATOR",
         title: L("Регіональний куратор ДПСК", "Regional SBGS Curator"),
-        salary: 14000,
+        salary: 1800,
         perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 🪙 • -8% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 🪙 • -8% NABK/day"),
         dogCost: 0,
         freeFirstMistake: true,
@@ -410,7 +409,7 @@
       return {
         id: "CHECKPOINT_CHIEF",
         title: L("Начальник КПП", "Checkpoint Chief"),
-        salary: 10000,
+        salary: 1400,
         perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 🪙 • -6% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 🪙 • -6% NABK/day"),
         dogCost: 0,
         freeFirstMistake: true,
@@ -421,7 +420,7 @@
       return {
         id: "CHIEF_CUSTOMS",
         title: L("Старший офіцер митниці", "Chief Customs Officer"),
-        salary: 8000,
+        salary: 1100,
         perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 🪙 • -5% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 🪙 • -5% NABK/day"),
         dogCost: 0,
         freeFirstMistake: true,
@@ -432,7 +431,7 @@
       return {
         id: "DEPUTY_PALYCH",
         title: L("Заступник Пал Палича", "Palych's Deputy"),
-        salary: 6000,
+        salary: 800,
         perkLabel: L("🔓 Перки: 1-ша помилка 0 🪙 • Пес -4с", "🔓 Perks: 1st Mistake 0 🪙 • Dog -4s"),
         dogCost: 4,
         freeFirstMistake: true,
@@ -443,7 +442,7 @@
       return {
         id: "SENIOR_SHIFT",
         title: L("Старший зміни", "Senior Shift Inspector"),
-        salary: 4500,
+        salary: 600,
         perkLabel: L("🔓 Перк: Пес «Бавовна» витрачає 4с замість 8с", "🔓 Perk: Sniffer dog costs 4s instead of 8s"),
         dogCost: 4,
         freeFirstMistake: false,
@@ -453,7 +452,7 @@
     return {
       id: "JUNIOR",
       title: L("Молодший інспектор", "Junior Inspector"),
-      salary: 3200,
+      salary: 450,
       perkLabel: L("Підніміться до Дня 3 для 1-го рангового перку!", "Reach Day 3 to unlock your first Rank Perk!"),
       dogCost: 8,
       freeFirstMistake: false,
@@ -462,15 +461,15 @@
   }
 
   function getEffectiveBossCut() {
-    const bribeUsd = state.shiftBribesTotal > 0 ? Math.round((state.shiftBribesTotal * 0.22) / USD_UAH_RATE) : 0;
-    const baseUsd = Math.min(12000, Math.max(300, 150 + bribeUsd));
-    return state.ownedAssets.includes("rolex_watch") ? Math.max(100, Math.round(baseUsd * 0.5)) : baseUsd;
+    const bribeUsd = state.shiftBribesTotal > 0 ? Math.round((state.shiftBribesTotal * 0.18) / USD_UAH_RATE) : 0;
+    const baseUsd = Math.min(900, Math.max(80, 50 + bribeUsd));
+    return state.ownedAssets.includes("rolex_watch") ? Math.max(40, Math.round(baseUsd * 0.5)) : baseUsd;
   }
 
   function getPassiveRent() {
     const assetRent = ASSET_UPGRADES.filter(a => state.ownedAssets.includes(a.id)).reduce((s, a) => s + a.passiveIncome, 0);
     const addonRent = ASSET_ADDONS.filter(a => state.ownedAssets.includes(a.id)).reduce((s, a) => s + a.passiveIncome, 0);
-    const sbkCovertPay = state.isUndercoverSbkAgent ? (state.sbkColonelPromoted ? 35000 : 16000) : 0;
+    const sbkCovertPay = state.isUndercoverSbkAgent ? (state.sbkColonelPromoted ? 12000 : 5500) : 0;
     return assetRent + addonRent + sbkCovertPay;
   }
   function getPassiveUsd() {
@@ -538,7 +537,7 @@
       spottedCodes: [],
       lastFeedback: null,
       barrierState: "CLOSED",
-      money: 15000 + meta.startCashBonus * 10,
+      money: 6000 + meta.startCashBonus * 4,
       escapeFund: 0,
       familyMorale: 80,
       nabkRisk: Math.max(0, 10 - meta.startNabkHeal),
@@ -568,7 +567,7 @@
       eveningTab: 0,
       encounterTriggered: false,
       activeEndingId: null,
-      usd: 500,
+      usd: 150,
       campaignFlags: {},
       factionFinaleDone: false,
       reprimands: 0,
@@ -775,35 +774,33 @@
       } else {
         if (t.isWantedTarget || t.storyTag === "FSM_SPY" || t.storyTag === "SABOTEUR" || t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE" || t.storyTag === "VIP_DIVERSE") {
           state.sbkRep = Math.max(0, state.sbkRep - 26);
-          state.nabkRisk = Math.min(100, state.nabkRisk + 14);
         }
         if (state.ownedAssets.includes("laser_plate_reader")) {
-        state.shiftSec += 3;
-      }
-      state.shiftCorrect += 1;
+          state.shiftSec += 3;
+        }
+        state.shiftCorrect += 1;
       }
     } else if (ruleCorrect) {
       const salMult = (state.sandboxMod && state.sandboxMod.salaryMult ? state.sandboxMod.salaryMult : 1.0) * meta.salaryBonusMult;
-      const detectorBonus = state.ownedAssets.includes("money_detector") ? 250 : 0;
+      const detectorBonus = state.ownedAssets.includes("money_detector") ? 120 : 0;
       salaryDelta = Math.round(rank.salary * salMult) + detectorBonus;
       if (isDetain && canDetain) {
         const badges = loadAgencyBadges();
-        const undercoverBounty = state.isUndercoverSbkAgent ? 12000 : 0;
+        const undercoverBounty = state.isUndercoverSbkAgent ? 1500 : 0;
         const isHighValueSpyOrVip = t.isWantedTarget || t.storyTag === "FSM_SPY" || t.storyTag === "SABOTEUR" || t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE";
-        // Bounties grow with career progress: day 1 = 60%, day 9+ = 160% of base (high-stakes bounties!)
         const bountyDay = state.daySpec ? state.daySpec.dayNumber : 1;
-        const bountyRamp = Math.min(1.6, 0.6 + 0.12 * (bountyDay - 1));
+        const bountyRamp = Math.min(1.4, 0.8 + 0.08 * (bountyDay - 1));
         const baseDetainBounty = Math.round((isHighValueSpyOrVip
-          ? (38000 + Math.floor(Math.random() * 25001))
-          : (12000 + Math.floor(Math.random() * 8001))) * bountyRamp);
-        const badgeBonus = (badges.includes("SBK_SHIELD") ? 8000 : 0) + (badges.includes("VSP_GUARD") && (t.storyTag === "DUAL_CITIZEN" || t.storyTag === "VIP_DIVERSE") ? 10000 : 0);
+          ? (4500 + Math.floor(Math.random() * 2501))
+          : (1800 + Math.floor(Math.random() * 1201))) * bountyRamp);
+        const badgeBonus = (badges.includes("SBK_SHIELD") ? 800 : 0) + (badges.includes("VSP_GUARD") && (t.storyTag === "DUAL_CITIZEN" || t.storyTag === "VIP_DIVERSE") ? 1200 : 0);
         const tabletBonus = state.ownedAssets.includes("sbk_database_tablet") ? Math.round(baseDetainBounty * 0.2) : 0;
         const amberBonus = (state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_AMBER_BEETLE")) ? Math.round(baseDetainBounty * 0.15) : 0;
-        detainBonus = baseDetainBounty + undercoverBounty + badgeBonus + tabletBonus + amberBonus + (state.sandboxMod ? state.sandboxMod.detainExtra * 4 : 0);
+        detainBonus = baseDetainBounty + undercoverBounty + badgeBonus + tabletBonus + amberBonus + (state.sandboxMod ? (state.sandboxMod.detainExtra || 0) : 0);
         if (isHighValueSpyOrVip) {
-          usdBonus = Math.round((1800 + Math.floor(Math.random() * 1801)) * bountyRamp) + (state.isUndercoverSbkAgent ? 900 : 0);
+          usdBonus = Math.round((120 + Math.floor(Math.random() * 131)) * bountyRamp) + (state.isUndercoverSbkAgent ? 100 : 0);
         } else {
-          usdBonus = Math.round((400 + Math.floor(Math.random() * 401)) * bountyRamp);
+          usdBonus = 0;
         }
         state.usd += usdBonus;
         state.sbkRep = Math.min(100, state.sbkRep + (isHighValueSpyOrVip ? 14 : 4));
@@ -827,21 +824,21 @@
     } else {
       const isHighRiskTarget = t.isWantedTarget || t.storyTag === "FSM_SPY" || t.storyTag === "SABOTEUR" || t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE";
       if (isDetain && t.shouldBeApproved) {
-        fineDelta = 4500;
+        fineDelta = 1500;
         state.sbkRep = Math.max(0, state.sbkRep - 12);
         state.palychRep = Math.max(0, state.palychRep - 10);
       } else if (isApprove && !t.shouldBeApproved && isHighRiskTarget) {
-        fineDelta = 12000;
+        fineDelta = 3500;
         state.sbkRep = Math.max(0, state.sbkRep - 28);
-        state.nabkRisk = Math.min(100, state.nabkRisk + 20);
+        state.nabkRisk = Math.min(100, state.nabkRisk + 18);
         state.palychRep = Math.max(0, state.palychRep - 12);
       } else if (isApprove && !t.shouldBeApproved) {
-        fineDelta = 5500;
+        fineDelta = 1800;
         state.sbkRep = Math.max(0, state.sbkRep - 10);
-        state.nabkRisk = Math.min(100, state.nabkRisk + 12);
+        state.nabkRisk = Math.min(100, state.nabkRisk + 10);
         state.palychRep = Math.max(0, state.palychRep - 8);
       } else {
-        fineDelta = excessiveDetain ? 2000 : 2400;
+        fineDelta = excessiveDetain ? 650 : 800;
         if (state.shiftMistakes === 0 && rank.freeFirstMistake) {
           fineDelta = 0;
         } else if (state.shiftMistakes === 0 && meta.halfFirstFine) {
@@ -1044,7 +1041,10 @@
 
   function advanceToNextDay(forceContinueFromCampaign) {
     const hasOffshoreShield = state.ownedAssets.includes("cyprus_offshore") || state.sbkColonelPromoted;
-    const bustedByCounterIntel = state.nabkRisk >= 90 || (!hasOffshoreShield && state.nabkRisk >= 70 && state.shiftBribesTotal > 0 && Math.random() < 0.42);
+    if (!hasOffshoreShield && state.nabkRisk >= 75) {
+      state.underSurveillance = true;
+    }
+    const bustedByCounterIntel = state.nabkRisk >= 100 || (!hasOffshoreShield && state.nabkRisk >= 95 && state.underSurveillance && state.shiftBribesTotal > 0);
     if (bustedByCounterIntel) {
       triggerEnding("NABK_PRISONER");
       return;
@@ -1371,8 +1371,8 @@
       id: "sbk_undercover_recruitment",
       title: L("🕵️ ВЕРБУВАННЯ СБК: ПОЗИВНИЙ «КОРДОН-7»", "🕵️ SBK RECRUITMENT: CALLSIGN 'BORDER-7'"),
       desc: L(
-        "Майор СБК «Тихий» заходить у будку через службовий вхід і кладе на стіл чорне посвідчення:\n«Інспекторе, ти взяв уже двох серйозних порушників. Нам потрібна своя негласна людина прямо в будці, під носом у Пал Палича та контрабандистів.\n\nПідписуй згоду як Негласний оперативник «Кордон-7»: отримуєш +1 200 🪙 окладу щоранку, +1 200 🪙 премії за кожного шпигуна, імунітет від доган Палича та -35% ціни на «Кришу»! Для легенди можеш брати конверти, але не доводь НАБК до обшуків!»",
-        "SBK Major 'Quiet' enters the booth and places a black folder on your desk:\n'Inspector, you have sharp eyes. Sign on as Undercover Agent Border-7: earn +1,200 🪙 covert pay every morning, +1,200 🪙 extra bounty per spy, protection from Palych's reprimands & -35% Krysha cost!'"
+        "Майор СБК «Тихий» заходить у будку через службовий вхід і кладе на стіл чорне посвідчення:\n«Інспекторе, ти взяв уже двох серйозних порушників. Нам потрібна своя негласна людина прямо в будці, під носом у Пал Палича та контрабандистів.\n\nПідписуй згоду як Негласний оперативник «Кордон-7»: отримуєш +5 500 🪙 окладу щоранку, +1 500 🪙 премії за кожного шпигуна, імунітет від доган Палича та -35% ціни на «Кришу»! Для легенди можеш брати конверти, але не доводь НАБК до обшуків!»",
+        "SBK Major 'Quiet' enters the booth and places a black folder on your desk:\n'Inspector, you have sharp eyes. Sign on as Undercover Agent Border-7: earn +5,500 🪙 covert pay every morning, +1,500 🪙 extra bounty per spy, protection from Palych's reprimands & -35% Krysha cost!'"
       ),
       portrait: { gender: "M", skinTone: 0, faceShape: 2, hairStyle: 4, hairColor: 0, facialHair: 0, glasses: 2, headwear: 4, scarOrDetail: 0, expression: 0, specialId: "NONE" },
       options: [
@@ -1399,8 +1399,8 @@
       id: "sbk_colonel_climax",
       title: L("🎖️ СПЕЦОПЕРАЦІЯ УСПІШНА: ПОГОНИ ПОЛКОВНИКА СБК!", "🎖️ OPERATION COMPLETE: SBK COLONEL PROMOTION!"),
       desc: L(
-        "Ти ліквідував цілу мережу шпигунів та контрабандистів, працюючи під прикриттям! Майор «Тихий» особисто вручає тобі коробку з погонами Полковника СБК та премію 6 500 🪙:\n\n«Агенте «Кордон-7», штаб у захваті! Ти можеш залишитися на пункті Таємним Куратором кордону (ставка 1 800 🪙/людину + 2 500 🪙 щоранку), або переїхати в Центральний Штаб у Кийграді!»",
-        "You dismantled the spy ring while undercover! Major 'Quiet' hands you Colonel's epaulets and a 6,500 🪙 reward:\n\n'Stay at the checkpoint as Secret Sector Commander (1,800 🪙/traveler + 2,500 🪙/day) or transfer to Central HQ!'"
+        "Ти ліквідував цілу мережу шпигунів та контрабандистів, працюючи під прикриттям! Майор «Тихий» особисто вручає тобі коробку з погонами Полковника СБК та премію 6 500 🪙:\n\n«Агенте «Кордон-7», штаб у захваті! Ти можеш залишитися на пункті Таємним Куратором кордону (ставка 1 800 🪙/людину + 12 000 🪙 щоранку), або переїхати в Центральний Штаб у Кийграді!»",
+        "You dismantled the spy ring while undercover! Major 'Quiet' hands you Colonel's epaulets and a 6,500 🪙 reward:\n\n'Stay at the checkpoint as Secret Sector Commander (1,800 🪙/traveler + 12,000 🪙/day) or transfer to Central HQ!'"
       ),
       portrait: { gender: "M", skinTone: 0, faceShape: 2, hairStyle: 4, hairColor: 0, facialHair: 0, glasses: 2, headwear: 4, scarOrDetail: 0, expression: 1, specialId: "NONE" },
       options: [
@@ -1454,17 +1454,17 @@
         id: "faction_finale_tolik",
         title: L("🚐 ФІНАЛЬНА МІСІЯ СИНДИКАТУ ТОЛІКА: «ЗАХІД-ЕКСПРЕС»", "🚐 TOLIK SYNDICATE FINALE: 'WEST-EXPRESS'"),
         desc: L(
-          "Толік довіряє тобі на всі 100%! Опівночі він жене 3 фури з контрабандою й просить підняти шлагбаум востаннє за частку в 18 000 💵.",
-          "Tolik trusts you 100%! At midnight he's rolling 3 smuggling trucks through and offers an 18,000 💵 cut."
+          "Толік довіряє тобі на всі 100%! Опівночі він жене 3 фури з контрабандою й просить підняти шлагбаум востаннє за частку в 5 000 💵.",
+          "Tolik trusts you 100%! At midnight he's rolling 3 smuggling trucks through and offers a 5,000 💵 cut."
         ),
         portrait: { gender: "M", skinTone: 1, faceShape: 2, hairStyle: 1, hairColor: 1, facialHair: 2, glasses: 1, headwear: 3, scarOrDetail: 0, expression: 1, specialId: "TOLIK_COURIER" },
         options: [
           {
             id: "finale_tolik_pass",
-            label: L("💵 Пропустити конвой Толіка (+18 000 💵, +22% НАБК)", "💵 Wave Tolik's convoy (+18,000 💵, +22% NABK)"),
+            label: L("💵 Пропустити конвой Толіка (+5 000 💵, +22% НАБК)", "💵 Wave Tolik's convoy (+5,000 💵, +22% NABK)"),
             outcome: L("Фури пролетіли за хвилину, а в кишені хрустять пачки баксіків!", "Trucks cleared in a minute, pockets heavy with cash!"),
             moneyDelta: 0, timeDelta: 0, riskDelta: 22, sbkDelta: -15, tolikDelta: 30, palychDelta: 0, moraleDelta: 10,
-            onSelect: () => { state.usd += 18000; unlockDiscovery("SERV_TOLIK_FINALE"); openCampaignMilestoneModal(); return true; }
+            onSelect: () => { state.usd += 5000; unlockDiscovery("SERV_TOLIK_FINALE"); openCampaignMilestoneModal(); return true; }
           },
           {
             id: "finale_tolik_bust",
@@ -1480,17 +1480,17 @@
         id: "faction_finale_palych",
         title: L("🧢 ФІНАЛЬНА МІСІЯ ПАЛ ПАЛИЧА: «ВЕЛИКИЙ КОШТОРИС»", "🧢 PALYCH FINALE: 'THE GRAND BUDGET'"),
         desc: L(
-          "Пал Палич задоволений твоєю вірністю! Перед ревізією з Києва він пропонує тихо списати «генераторний бюджет» навпіл (+8 000 💵).",
-          "Palych appreciates your loyalty! Before the Kyiv audit, he offers to split a 'generator fund' (+8,000 💵)."
+          "Пал Палич задоволений твоєю вірністю! Перед ревізією з Києва він пропонує тихо списати «генераторний бюджет» навпіл (+2 500 💵).",
+          "Palych appreciates your loyalty! Before the Kyiv audit, he offers to split a 'generator fund' (+2,500 💵)."
         ),
         portrait: { gender: "M", skinTone: 1, faceShape: 3, hairStyle: 0, hairColor: 0, facialHair: 0, glasses: 0, headwear: 4, scarOrDetail: 0, expression: 1, specialId: "PALYCH_BOSS" },
         options: [
           {
             id: "finale_palych_split",
-            label: L("🤝 Розпилити бюджет із Паличем (+8 000 💵, +15% НАБК)", "🤝 Split budget with Palych (+8,000 💵, +15% NABK)"),
+            label: L("🤝 Розпилити бюджет із Паличем (+2 500 💵, +15% НАБК)", "🤝 Split budget with Palych (+2,500 💵, +15% NABK)"),
             outcome: L("Частка на руках, Палич тисне руку!", "Share pocketed, Palych salutes you!"),
             moneyDelta: 0, timeDelta: 0, riskDelta: 15, sbkDelta: 0, tolikDelta: 0, palychDelta: 25, moraleDelta: 15,
-            onSelect: () => { state.usd += 8000; unlockDiscovery("SERV_PALYCH_FINALE"); openCampaignMilestoneModal(); return true; }
+            onSelect: () => { state.usd += 2500; unlockDiscovery("SERV_PALYCH_FINALE"); openCampaignMilestoneModal(); return true; }
           },
           {
             id: "finale_palych_clean",
