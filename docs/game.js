@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v7.8";
+  const BUILD_VERSION = "v8.0";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -212,6 +212,18 @@
       requiresDetention: true,
       title: L("Подвійне громадянство (прихований паспорт Kraina)", "Dual Citizenship (Hidden Kraina ID)"),
       hint: L("Виявлено: приховане громадянство Kraina у чоловіка 18–60.", "Finding: hidden Kraina citizenship on male 18–60.")
+    },
+    CHILDREN_AGE_FRAUD: {
+      code: "CHILDREN_AGE_FRAUD",
+      requiresDetention: false,
+      title: L("Дитина в посвідченні вже повнолітня (18+)", "Child on permit is already 18+ adult"),
+      hint: L("Виявлено: одна з трьох дітей вже повнолітня (18+) — відстрочка недійсна.", "Finding: one of the 3 children is 18+ — permit invalid.")
+    },
+    GUARDIAN_NO_PASSENGER: {
+      code: "GUARDIAN_NO_PASSENGER",
+      requiresDetention: false,
+      title: L("Супровід без присутності підопічного в авто", "Guardian exiting without disabled relative present"),
+      hint: L("Виявлено: у салоні авто відсутня особа, яку супроводжують!", "Finding: accompanied relative is missing from the vehicle!")
     }
   };
 
@@ -728,6 +740,27 @@
       title: L("🗺️ Купити в Толіка «карту забутого складу» (+2 400 💵 заначки!)", "🗺️ Buy 'Forgotten Stash Map' from Tolik (+2,400 💵 haul!)"),
       subtitle: L("✨ Рідкісна подія Дня 4+ (17% шанс): за 700 💵 відкопуєш старий сейф!", "✨ Rare Day 4+ event (17% chance): dig up an old stash!"),
       cost: 700, morale: 10, escape: 0, riskDelta: 8, sbkDelta: 0, usdReward: 2400
+    },
+    {
+      id: "extra_k9_handler",
+      minDay: 1, chance: 0.85, currency: "UAH",
+      title: L("🐕 Додатковий інструктор для «Бавовни» (+20с часу на наступну зміну)", "🐕 Extra K9 Trainer for 'Bavovna' (+20s next shift)"),
+      subtitle: L("Тактична підготовка пса до завтрашньої черги", "Prep your sniffer dog for tomorrow's rush"),
+      cost: 1500, morale: 5, escape: 0, riskDelta: 0, sbkDelta: 5, nextTimeBoost: 20
+    },
+    {
+      id: "customs_broker_tip",
+      minDay: 2, chance: 0.65, currency: "USD",
+      title: L("💼 Інсайд митного брокера на завтра (+25% до конвертів наступної зміни)", "💼 Customs Broker Insider (+25% bribe offers next shift)"),
+      subtitle: L("Попередить жирних клієнтів про твою зміну (+4% НАБК)", "Steers richer VIPs to your booth (+4% NABK)"),
+      cost: 650, morale: 5, escape: 0, riskDelta: 4, sbkDelta: 0, nextBribeBoost: 0.25
+    },
+    {
+      id: "frontier_charity_cup",
+      minDay: 2, chance: 0.70, currency: "UAH",
+      title: L("🏆 Спонсорувати кубок прикордонників (+18 Палич, +15 СБК, -10% НАБК)", "🏆 Sponsor Border Guard Cup (+18 Palych, +15 SBK, -10% NABK)"),
+      subtitle: L("Зміцнює авторитет серед керівництва та контррозвідки", "Builds goodwill with both Palych and SBK"),
+      cost: 2200, morale: 10, escape: 0, riskDelta: -10, sbkDelta: 15, palychDelta: 18
     }
   ];
 
@@ -1229,6 +1262,121 @@
           label: L("💰 Тихо відкрити кейс (Ризик! +900 💵 або -20с і +15% НАБК)", "💰 Peek inside quietly (+900 💵 or -20s & +15% NABK)"),
           outcome: L("У кейсі лежало 900 💵 готівкою — ти встиг забрати до приїзду охорони!", "900 💵 cash inside — pocketed before security returned!"),
           moneyDelta: 0, usdDelta: 900, timeDelta: -10, riskDelta: 15, sbkDelta: -5, tolikDelta: 0, palychDelta: 0, moraleDelta: 0
+        }
+      ]
+    },
+    {
+      id: "wounded_evac_ambulance",
+      title: L("🚑 ТЕРМІНОВИЙ МЕДЕВАК ІЗ ПОРАНЕННИМИ", "🚑 URGENT MEDEVAC AMBULANCE"),
+      desc: L(
+        "Сирени швидкої розрізають тишу перед КПП. Фельдшер просить миттєво відкрити зелений коридор до клініки в Поландії — папери заповнені лише частково через обстріл.",
+        "An ambulance with flashing lights races to the barrier. The medic begs for an immediate green corridor to Polandia — paperwork is half-done due to shelling."
+      ),
+      portrait: { gender: "F", skinTone: 1, faceShape: 0, hairStyle: 1, hairColor: 1, facialHair: 0, glasses: 0, headwear: 0, scarOrDetail: 0, expression: 2, outfitStyle: 1, specialId: "NONE" },
+      options: [
+        {
+          id: "evac_green",
+          label: L("🟢 Відкрити зелений коридор негайно (+1 500 🪙 +200 💵 премії, +20 СБК, +10с)", "🟢 Open green corridor immediately (+1,500 🪙 +200 💵 bonus, +20 SBK, +10s)"),
+          outcome: L("Волонтерський штаб та ГУР-М дякують за врятовані хвилини!", "HQ and medics thank you for saving crucial minutes!"),
+          moneyDelta: 1500, usdDelta: 200, timeDelta: 10, riskDelta: -5, sbkDelta: 20, tolikDelta: 0, palychDelta: 0, moraleDelta: 15
+        },
+        {
+          id: "evac_paperwork",
+          label: L("📋 Вимагати повного оформлення кожної печатки (-10с, +10 Палич)", "📋 Demand full stamp protocol (-10s, +10 Palych)"),
+          outcome: L("Бюрократія перемогла: втрачено дорогоцінний час, зате Палич задоволений звітом.", "Bureaucracy wins: precious time lost, though Palych likes the paperwork."),
+          moneyDelta: 0, timeDelta: -10, riskDelta: 0, sbkDelta: -8, tolikDelta: 0, palychDelta: 10, moraleDelta: -5
+        }
+      ]
+    },
+    {
+      id: "interpol_red_notice",
+      title: L("🇪🇺 ТЕРМІНОВИЙ ЗАПИТ ІНТЕРПОЛУ", "🇪🇺 URGENT INTERPOL LIAISON ALERT"),
+      desc: L(
+        "Офіцер зв'язку з Варшавки передає по закритій лінії: до твого шлагбаума наближається викрадений кортеж із банківською готівкою. СБК просить перехоплення, а Толік шепоче в рацію про «відкат».",
+        "Varshavka liaison warns on the encrypted line: a stolen VIP cash van is approaching your post. SBK asks for an intercept while Tolik whispers about a cut."
+      ),
+      portrait: { gender: "M", skinTone: 0, faceShape: 2, hairStyle: 0, hairColor: 2, facialHair: 2, glasses: 1, headwear: 4, scarOrDetail: 0, expression: 0, specialId: "NONE" },
+      options: [
+        {
+          id: "interpol_help",
+          label: L("🚨 Спільне перехоплення з СБК та поляками (+1 800 🪙 +300 💵, +20 СБК, -10% НАБК)", "🚨 Joint intercept with SBK & Polish border patrol (+1,800 🪙 +300 💵, +20 SBK)"),
+          outcome: L("Ідеальна координація! Міжнародна премія вже в кишені!", "Flawless coordination! International bounty awarded!"),
+          moneyDelta: 1800, usdDelta: 300, timeDelta: 5, riskDelta: -10, sbkDelta: 20, tolikDelta: -8, palychDelta: 5, moraleDelta: 10
+        },
+        {
+          id: "interpol_leak",
+          label: L("🚐 Попередити Толіка, щоб кортеж звернув у ліс (+1 100 💵, +18 Толік, +14% НАБК)", "🚐 Tip off Tolik's crew to detour (+1,100 💵, +18 Tolik, +14% NABK)"),
+          outcome: L("Кортеж зник у лісосмузі, а на сидінні з'явився грубий конверт.", "The convoy vanished onto dirt roads, leaving a thick envelope."),
+          moneyDelta: 0, usdDelta: 1100, timeDelta: 0, riskDelta: 14, sbkDelta: -12, tolikDelta: 18, palychDelta: 0, moraleDelta: 0
+        }
+      ]
+    },
+    {
+      id: "journalist_livestream",
+      title: L("📸 РЕЙД ЖУРНАЛІСТІВ-РОЗСЛІДУВАЧІВ", "📸 INVESTIGATIVE PRESS AT THE GATE"),
+      desc: L(
+        "Знімальна група під'їжджає до віконця з камерами: «Знімаємо репортаж про чесність на кордоні Kraina! Покажете, як працює ваша будка?»",
+        "A film crew approaches with cameras: 'Shooting a report on border integrity in Kraina! Care to show how your booth operates?'"
+      ),
+      portrait: { gender: "F", skinTone: 3, faceShape: 0, hairStyle: 2, hairColor: 3, facialHair: 0, glasses: 3, headwear: 0, scarOrDetail: 0, expression: 1, outfitStyle: 2, specialId: "NONE" },
+      options: [
+        {
+          id: "press_open",
+          label: L("🎥 Відкрито показати зразкову роботу (-15% НАБК, +1 200 🪙, +12 СБК)", "🎥 Showcase clean inspection (-15% NABK, +1,200 🪙, +12 SBK)"),
+          outcome: L("Сюжет виходить у вечірніх новинах — НАБК знімає частину підозр!", "Prime-time report boosts your spotless reputation and eases NABK heat!"),
+          moneyDelta: 1200, timeDelta: 0, riskDelta: -15, sbkDelta: 12, tolikDelta: 0, palychDelta: 5, moraleDelta: 12
+        },
+        {
+          id: "press_palych",
+          label: L("🧢 Викликати Палича «забороненою зоною» та вирізати кадри (+500 💵, +15 Палич)", "🧢 Have Palych block filming as 'restricted zone' (+500 💵, +15 Palych)"),
+          outcome: L("Палич затулив об'єктив і сунув подяку за тишу: «Менше камер — спокійніша каса!»", "Palych blocked the lens and slipped you hush cash."),
+          moneyDelta: 0, usdDelta: 500, timeDelta: 0, riskDelta: 10, sbkDelta: -5, tolikDelta: 5, palychDelta: 15, moraleDelta: 0
+        }
+      ]
+    },
+    {
+      id: "blackout_generator_surge",
+      title: L("⚡ АВАРІЙНИЙ БЛЕКАУТ НА МАГІСТРАЛІ", "⚡ HIGHWAY CHECKPOINT BLACKOUT"),
+      desc: L(
+        "Трансформатор біля КПП іскрить і гасне! Термінал «Облік+» завис, а на під'їзді стоїть фура Толіка з потужним дизель-генератором на причепі.",
+        "The checkpoint transformer sparks out! Terminals flicker while Tolik's truck idles nearby with a heavy diesel generator."
+      ),
+      portrait: { gender: "M", skinTone: 2, faceShape: 1, hairStyle: 1, hairColor: 1, facialHair: 4, glasses: 0, headwear: 1, scarOrDetail: 0, expression: 2, outfitStyle: 3, specialId: "NONE" },
+      options: [
+        {
+          id: "power_battery",
+          label: L("🔋 Перейти на резервний інвертор ДПСК (+1 000 🪙 премії, +15с, +10 СБК)", "🔋 Switch to SBGS backup inverter (+1,000 🪙 bonus, +15s, +10 SBK)"),
+          outcome: L("Усі системи знову онлайн! Командування відзначає автономність поста.", "Systems back online! HQ commends your post readiness."),
+          moneyDelta: 1000, timeDelta: 15, riskDelta: -4, sbkDelta: 10, tolikDelta: 0, palychDelta: 5, moraleDelta: 5
+        },
+        {
+          id: "power_tolik",
+          label: L("🔌 Кинути кабель від фури Толіка в обмін на швидкий проїзд (+750 💵, +15 Толік)", "🔌 Hook up Tolik's generator for a quick wave-through (+750 💵, +15 Tolik)"),
+          outcome: L("Світло є, фура пішла без огляду, а на столі з'явилися купюри.", "Lights restored, truck waved past, cash left on desk."),
+          moneyDelta: 0, usdDelta: 750, timeDelta: 5, riskDelta: 8, sbkDelta: -6, tolikDelta: 15, palychDelta: 0, moraleDelta: 0
+        }
+      ]
+    },
+    {
+      id: "tolik_midnight_tender",
+      title: L("🚐 НІЧНИЙ «ЗЕЛЕНИЙ ТЕНДЕР» СИНДИКАТУ", "🚐 SYNDICATE MIDNIGHT CORRIDOR BID"),
+      desc: L(
+        "Кур'єр Толіка «Бусика» підсовує під скло шифровану пропозицію: вимкнути УФ-сканер на останні 3 машини зміни за королівський бонус — або здати шифровку в СБК.",
+        "Tolik's courier slides an encrypted note under the glass: shut off your UV scanner for the last 3 cars for a royal payout — or hand the note to SBK."
+      ),
+      portrait: { gender: "M", skinTone: 1, faceShape: 3, hairStyle: 5, hairColor: 0, facialHair: 6, glasses: 2, headwear: 0, scarOrDetail: 3, expression: 1, specialId: "TOLIK_SMUGGLER" },
+      options: [
+        {
+          id: "tender_sbk",
+          label: L("🛡️ Передати шифровку майору СБК (+2 000 🪙 +350 💵, +22 СБК, -12% НАБК)", "🛡️ Hand cipher to SBK Major (+2,000 🪙 +350 💵, +22 SBK, -12% NABK)"),
+          outcome: L("Розвідка перехопила весь канал контрабанди! Премія СБК вже на рахунку!", "Intel intercepted the smuggling channel! SBK bounty credited!"),
+          moneyDelta: 2000, usdDelta: 350, timeDelta: 0, riskDelta: -12, sbkDelta: 22, tolikDelta: -10, palychDelta: 0, moraleDelta: 10
+        },
+        {
+          id: "tender_accept",
+          label: L("💵 Прийняти умови синдикату (+1 600 💵, +22 Толік, +16% НАБК)", "💵 Accept syndicate bid (+1,600 💵, +22 Tolik, +16% NABK)"),
+          outcome: L("Толік цінує надійних людей: 1 600 💵 гріють кишеню.", "Tolik values reliable insiders: 1,600 💵 warms your pocket."),
+          moneyDelta: 0, usdDelta: 1600, timeDelta: 0, riskDelta: 16, sbkDelta: -14, tolikDelta: 22, palychDelta: 5, moraleDelta: 0
         }
       ]
     }
@@ -2406,6 +2554,7 @@
       arrestFull: cfg.arrestFull,
       arrestToned: cfg.arrestToned,
       hasContraband: !!cfg.hasContraband,
+      hasPassenger: !!cfg.hasPassenger,
       bribeOffer: cfg.bribeOffer || null,
       shouldBeApproved: !!cfg.shouldBeApproved,
       violations: cfg.violations || [],
@@ -3495,6 +3644,7 @@
           sealDisc: null
         });
       }
+      let honestHasPassenger = false;
       if (dir === "EXIT" && gender === "M" && age >= 18 && age <= 60) {
         const reasons = archKey === "MAJOR_VIP"
           ? [
@@ -3511,14 +3661,23 @@
                 L("Офіційне бронювання енергокомпанії «Кийград-Світло»", "Kyihrad Power Grid Critical Exemption"),
                 L("Супровід особи з інвалідністю І групи", "Accompanying 1st-degree disabled relative")
               ]);
+        const chosenBasis = pick(reasons);
+        const certFields = [
+          { label: L("Особа", "Holder"), value: fullName, disc: null },
+          { label: L("Підстава", "Basis"), value: chosenBasis, disc: null }
+        ];
+        if (chosenBasis.uk.includes("Багатодітний батько")) {
+          const y1 = randInt(2010, 2013), y2 = randInt(2014, 2017), y3 = randInt(2018, 2021);
+          certFields.push({ label: L("Діти (р.н.)", "Children (YoB)"), value: L(`${y1}, ${y2}, ${y3} (усі до 18 р.)`, `${y1}, ${y2}, ${y3} (all under 18)`), disc: null });
+        } else if (chosenBasis.uk.includes("Супровід особи") && trMeta.isCar) {
+          honestHasPassenger = true;
+          certFields.push({ label: L("Присутність у салоні", "In Vehicle Cabin"), value: L("Підопічний присутній (МСЕК І гр.)", "Relative present in cabin"), disc: null });
+        }
         extraDocs.push({
           type: "EXEMPTION_CERT",
           title: L("ДОВІДКА ПРО ВІДСТРОЧКУ", "EXEMPTION CERTIFICATE"),
           subtitle: L(`ЦНАП м. ${city.uk}`, `CNAP ${city.en}`),
-          fields: [
-            { label: L("Особа", "Holder"), value: fullName, disc: null },
-            { label: L("Підстава", "Basis"), value: pick(reasons), disc: null }
-          ],
+          fields: certFields,
           sealText: L(`ЦНАП / ДПСК • ${city.uk.toUpperCase()}`, `CNAP / SBGS • VALID`),
           sealDisc: null
         });
@@ -3540,6 +3699,7 @@
       const giveTip = Math.random() < 0.35;
       return buildTravelerFromParts({
         fullName, age, gender, direction: dir, portrait, transport: trMeta,
+        hasPassenger: honestHasPassenger,
         passportSub: L(`Серія ${city.code}-${randInt(100000, 999999)} • м. ${city.uk}`, `No. ${city.code}-${randInt(100000, 999999)} • ${city.en}`),
         passportFields: [
           { label: L("ПІБ", "Full Name"), value: fullName, disc: null },
@@ -3579,54 +3739,89 @@
 
     if (scheme === 0) {
       // Formal violation (requiresDetention: false — DENY or small bribe!):
-      // Girl / Elderly man with expired doc, OR Male 18-60 with expired doc / no permit
+      // Girl / Elderly man with expired doc, Male 18-60 with expired/no permit, OR adult-child / absent-guardian fraud!
       const rollType = Math.random();
-      const isGirl = rollType < 0.35;
-      const isOldMan = !isGirl && rollType < 0.65;
+      const isGirl = rollType < 0.28;
+      const isOldMan = !isGirl && rollType < 0.52;
+      const isParentOrGuardianFraud = !isGirl && !isOldMan && rollType < 0.76;
+      const isAdultChildFraud = isParentOrGuardianFraud && Math.random() < 0.5;
       const gender = isGirl ? "F" : "M";
       const fullName = randomFullName(gender);
-      const age = isOldMan ? randInt(62, 76) : randInt(22, 48);
-      const scheme0Arch = isGirl ? "GLAM_LADY" : (isOldMan ? "PENSIONER" : "WORKER_DRIVER");
+      const age = isOldMan ? randInt(62, 76) : randInt(24, 49);
+      const scheme0Arch = isGirl ? "GLAM_LADY" : (isOldMan ? "PENSIONER" : pick(["WORKER_DRIVER", "IT_VOLUNTEER", "FARMER_AGRO"]));
       const portrait = buildArchetypePortrait(scheme0Arch, gender);
-      const scheme0Tr = pickTransportForShapes(TRAVELER_ARCHETYPES[scheme0Arch].shapes, city.code, daySpec && daySpec.twoWheelerBias);
-      const isExpired = isGirl || isOldMan || Math.random() < 0.55;
-      const disc = isExpired ? DISCREPANCY.EXPIRED_DATE : DISCREPANCY.AGE_RESTRICTION_NO_PERMIT;
+      const carOnlyPool = TRANSPORT_CATALOG.filter(m => m.isCar && TRAVELER_ARCHETYPES[scheme0Arch].shapes.includes(m.shape));
+      const scheme0Tr = isParentOrGuardianFraud
+        ? makeTransportMeta(pick(carOnlyPool.length ? carOnlyPool : TRANSPORT_CATALOG.filter(m => m.isCar)), null, generatePlate(city.code, true))
+        : pickTransportForShapes(TRAVELER_ARCHETYPES[scheme0Arch].shapes, city.code, daySpec && daySpec.twoWheelerBias);
+      const isExpired = !isParentOrGuardianFraud && (isGirl || isOldMan || Math.random() < 0.55);
+      const disc = isParentOrGuardianFraud
+        ? (isAdultChildFraud ? DISCREPANCY.CHILDREN_AGE_FRAUD : DISCREPANCY.GUARDIAN_NO_PASSENGER)
+        : (isExpired ? DISCREPANCY.EXPIRED_DATE : DISCREPANCY.AGE_RESTRICTION_NO_PERMIT);
       const expYear = pick(["2019", "2020", "2021"]);
       const offersSmallBribe = Math.random() < 0.55;
       const smallBribeObj = offersSmallBribe
         ? (Math.random() < 0.5
-          ? { amount: randInt(6, 11) * 10, currency: "USD", requiresDiscovery: true, nabkRiskJump: 6, isStingTrap: false, syndicateFavor: false }
-          : { amount: randInt(26, 44) * 10, currency: "UAH", requiresDiscovery: true, nabkRiskJump: 5, isStingTrap: false, syndicateFavor: false })
+          ? { amount: randInt(7, 14) * 10, currency: "USD", requiresDiscovery: true, nabkRiskJump: 6, isStingTrap: false, syndicateFavor: false }
+          : { amount: randInt(28, 48) * 10, currency: "UAH", requiresDiscovery: true, nabkRiskJump: 5, isStingTrap: false, syndicateFavor: false })
         : null;
       const bribeDisplayStr = smallBribeObj
         ? (smallBribeObj.currency === "USD" ? `${smallBribeObj.amount} 💵` : `${smallBribeObj.amount} 🪙`)
         : "";
+      const s0ExtraDocs = isParentOrGuardianFraud ? [{
+        type: "EXEMPTION_CERT",
+        title: L("ДОВІДКА ПРО ВІДСТРОЧКУ", "EXEMPTION CERTIFICATE"),
+        subtitle: L(`ЦНАП м. ${city.uk}`, `CNAP ${city.en}`),
+        fields: isAdultChildFraud ? [
+          { label: L("Особа", "Holder"), value: fullName, disc: null },
+          { label: L("Підстава", "Basis"), value: L("Багатодітний батько (3 дітей до 18 років)", "Father of 3 minor children"), disc: null },
+          { label: L("Діти (р.н.)", "Children (YoB)"), value: L("2004 (22 р.), 2013, 2017", "2004 (22 y/o), 2013, 2017"), disc: DISCREPANCY.CHILDREN_AGE_FRAUD }
+        ] : [
+          { label: L("Особа", "Holder"), value: fullName, disc: null },
+          { label: L("Підстава", "Basis"), value: L("Супровід особи з інвалідністю І групи", "Accompanying 1st-degree disabled relative"), disc: null },
+          { label: L("Присутність у салоні", "In Vehicle Cabin"), value: L("Водій їде САМ (підопічний відсутній)", "Driver ALONE (relative absent)"), disc: DISCREPANCY.GUARDIAN_NO_PASSENGER }
+        ],
+        sealText: L(`ЦНАП / ДПСК • ${city.uk.toUpperCase()}`, `CNAP / SBGS • VALID`),
+        sealDisc: null
+      }] : [];
       return buildTravelerFromParts({
         fullName, age, gender, direction: "EXIT", portrait, transport: scheme0Tr,
+        hasPassenger: false,
         passportSub: L(`Серія ${city.code}-${randInt(100000, 999999)} • м. ${city.uk}`, `No. ${city.code}-${randInt(100000, 999999)}`),
         passportFields: [
           { label: L("ПІБ", "Full Name"), value: fullName, disc: null },
           { label: L("Вік / Стать", "Age / Sex"), value: L(`${age} р. • ${gender === "M" ? "ЧОЛ" : "ЖІН"}`, `${age} y/o • ${gender}`), disc: null },
           { label: L("Напрямок", "Direction"), value: L("ВИЇЗД → Варшавка", "EXIT → Varshavka"), disc: null },
-          isExpired
-            ? { label: L("Дійсний до", "Valid Until"), value: L(`03.05.${expYear}`, `${expYear}-05-03`), disc }
-            : { label: L("Відстрочка 18–60", "Exit Permit"), value: L("Без оформленої підстави", "None submitted"), disc }
+          isParentOrGuardianFraud
+            ? { label: L("Дійсний до", "Valid Until"), value: L("19.08.2030", "2030-08-19"), disc: null }
+            : (isExpired
+              ? { label: L("Дійсний до", "Valid Until"), value: L(`03.05.${expYear}`, `${expYear}-05-03`), disc }
+              : { label: L("Відстрочка 18–60", "Exit Permit"), value: L("Без оформленої підстави", "None submitted"), disc })
         ],
+        extraDocs: s0ExtraDocs,
         includeDecl: daySpec.requireVehicleDecl,
         declaredCargo: isOldMan ? L("Домашня консервація, плед", "Homemade jars, blanket") : L("Валізи, одяг", "Suitcases, clothes"),
-        greeting: isGirl
-          ? L(`«Привіт! Ой, так спізнилась на автобус у Варшавку з м. ${city.uk}... гляньте швиденько!»`, `'Hi! Running late for my bus from ${city.en}... quick check please!'`)
-          : (isOldMan
-            ? L(`«Доброго здоров'я, синку! Дід їде до онуків з м. ${city.uk}, усе по-старому!»`, `'Good health, son! Grandpa heading to visit grandkids from ${city.en}!'`)
-            : (isExpired
-              ? L(`«Ой, добрий день! Так поспішали з м. ${city.uk} на рейс до Варшавки!»`, `'Hello! Rushing from ${city.en} for Varshavka!'`)
-              : L("«Добрий день! Їду на тиждень, думав, по біометричному без довідки пускають!»", "'Good day! Thought biometric passport was enough without a permit!'"))),
-        interrogationReply: offersSmallBribe
-          ? (isGirl
-            ? L(`«Ой, серйозно прострочений?! Ну не розвертайте мене! Ось ${bribeDisplayStr} на каву з круасаном — не помічайте дату!»`, `'Seriously expired?! Don't turn me back! Here is ${bribeDisplayStr} for coffee — ignore the date!'`)
+        greeting: isParentOrGuardianFraud
+          ? (isAdultChildFraud
+            ? L("«Добрий день! Маю трьох дітей, усе офіційно — ось посвідчення!»", "'Good day! Father of 3 kids, all official — check my permit!'")
+            : L("«Вітаю! Везу... тобто їду забирати маму з інвалідністю прямо за кордоном, вона там чекає!»", "'Hello! Driving to... pick up my disabled mom waiting just across the border!'"))
+          : (isGirl
+            ? L(`«Привіт! Ой, так спізнилась на автобус у Варшавку з м. ${city.uk}... гляньте швиденько!»`, `'Hi! Running late for my bus from ${city.en}... quick check please!'`)
             : (isOldMan
-              ? L(`«От халепа, старий забув оновити! Візьми, синку, ${bribeDisplayStr} на бензин і пропусти діда!»`, `'Darn, forgot to renew! Take ${bribeDisplayStr} for gas and let grandpa pass!'`)
-              : L(`«Та йой, дрібна формальність! Тримай ${bribeDisplayStr} зверху — не псуй людям поїздку!»`, `'Just a small slip! Take ${bribeDisplayStr} — don't ruin the trip!'`)))
+              ? L(`«Доброго здоров'я, синку! Дід їде до онуків з м. ${city.uk}, усе по-старому!»`, `'Good health, son! Grandpa heading to visit grandkids from ${city.en}!'`)
+              : (isExpired
+                ? L(`«Ой, добрий день! Так поспішали з м. ${city.uk} на рейс до Варшавки!»`, `'Hello! Rushing from ${city.en} for Varshavka!'`)
+                : L("«Добрий день! Їду на тиждень, думав, по біометричному без довідки пускають!»", "'Good day! Thought biometric passport was enough without a permit!'")))),
+        interrogationReply: offersSmallBribe
+          ? (isParentOrGuardianFraud
+            ? (isAdultChildFraud
+              ? L(`«Та старшому тільки виповнилося, тиснути на серце не треба! Ось ${bribeDisplayStr} — не присікуйся до року народження!»`, `'Oldest just turned 18! Here is ${bribeDisplayStr} — ignore the birth year!'`)
+              : L(`«Мама вже на тій стороні на вокзалі! Візьми ${bribeDisplayStr} — я миттю туди й назад!»`, `'Mom is waiting across the gate! Take ${bribeDisplayStr} — quick round trip!'`))
+            : (isGirl
+              ? L(`«Ой, серйозно прострочений?! Ну не розвертайте мене! Ось ${bribeDisplayStr} на каву з круасаном — не помічайте дату!»`, `'Seriously expired?! Don't turn me back! Here is ${bribeDisplayStr} for coffee — ignore the date!'`)
+              : (isOldMan
+                ? L(`«От халепа, старий забув оновити! Візьми, синку, ${bribeDisplayStr} на бензин і пропусти діда!»`, `'Darn, forgot to renew! Take ${bribeDisplayStr} for gas and let grandpa pass!'`)
+                : L(`«Та йой, дрібна формальність! Тримай ${bribeDisplayStr} зверху — не псуй людям поїздку!»`, `'Just a small slip! Take ${bribeDisplayStr} — don't ruin the trip!'`))))
           : L("«Будь ласка, пане інспекторе! По-доброму прошу — квитки згоряють, пропустіть по-людськи!»", "'Please, Inspector! Asking kindly — our tickets expire, let us through!'"),
         intimidateReply: L("«*Нервово ковтає* Та це ж дрібна формальність у паперах, не кличте СБК!»", "'*Gulps* It's just a paperwork slip, don't call SBK!'"),
         coffeeReply: L("«Дякую за каву... будь ласка, увійдіть у становище!»", "'Thanks for the coffee... please understand my situation!'"),
@@ -3999,6 +4194,7 @@
     if (!isDualCitizen) {
       return buildTravelerFromParts({
         fullName, age, gender, direction: dir, portrait, transport: trMeta,
+        hasPassenger: false,
         passportTitle: L(`ПАСПОРТ: ${fc.name.uk.toUpperCase()}`, `PASSPORT: ${fc.name.en.toUpperCase()}`),
         passportSub: L(`Іноземний громадянин • ${fc.code}-${randInt(10000, 99999)}`, `Foreign Citizen • ${fc.code}-${randInt(10000, 99999)}`),
         passportFields: [
@@ -4135,6 +4331,7 @@
   // Non-repeating queue builder across all Story + 12 Shytomyr Legends + War/Intel + Combinatorial travelers
   let usedStoryTags = new Set();
   let usedShytomyrRun = new Set();
+  let usedEncounterIds = new Set();
 
   function generateDailyQueue(daySpec, count) {
     const q = [];
@@ -4402,6 +4599,138 @@
       const sx = (sn * 29 + tSec * 18) % w;
       const sy = (sn * 19 + tSec * 28) % h;
       ctx.fillRect(sx, sy, 1.8, 1.8);
+    }
+  }
+
+  function drawMorningBanner(canvas, dayNumber, tSec = 0) {
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width, h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
+
+    // Dawn gradient sky
+    const sky = ctx.createLinearGradient(0, 0, 0, h * 0.68);
+    sky.addColorStop(0, dayNumber >= 4 ? "#1A233A" : "#243B55");
+    sky.addColorStop(1, "#D6824B");
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, w, h);
+
+    // Rising sun glow
+    const sunY = h * 0.54 - Math.sin(tSec * 0.8) * 2;
+    ctx.fillStyle = "rgba(255, 224, 130, 0.25)";
+    ctx.beginPath(); ctx.arc(w * 0.22, sunY, 26, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#FFD54F";
+    ctx.beginPath(); ctx.arc(w * 0.22, sunY, 13, 0, Math.PI * 2); ctx.fill();
+
+    // Horizon silhouettes + pine trees
+    ctx.fillStyle = "#18221D";
+    ctx.fillRect(0, h * 0.56, w, h * 0.44);
+    for (let tx = 8; tx < w * 0.65; tx += 18) {
+      ctx.beginPath(); ctx.moveTo(tx, h * 0.56); ctx.lineTo(tx + 6, h * 0.40); ctx.lineTo(tx + 12, h * 0.56); ctx.fill();
+    }
+
+    // Road + Checkpoint Canopy on right
+    ctx.fillStyle = "#2A322E";
+    ctx.fillRect(0, h * 0.66, w, h * 0.34);
+    ctx.fillStyle = "#202824";
+    ctx.fillRect(w * 0.66, h * 0.26, w * 0.28, h * 0.46);
+    ctx.fillStyle = "#E0B145";
+    ctx.fillRect(w * 0.70, h * 0.40, 34, 16);
+
+    // Rotating radar dish on booth roof
+    const radSweep = Math.sin(tSec * 3.0) * 6;
+    ctx.strokeStyle = "#80DEEA";
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(w * 0.79, h * 0.26); ctx.lineTo(w * 0.79, h * 0.14); ctx.stroke();
+    ctx.beginPath(); ctx.arc(w * 0.79 + radSweep * 0.4, h * 0.14, 6, Math.PI, 0); ctx.stroke();
+
+    // Flag
+    ctx.fillStyle = "#1565C0"; ctx.fillRect(w * 0.90, h * 0.14, 14, 5);
+    ctx.fillStyle = "#FBC02D"; ctx.fillRect(w * 0.90, h * 0.19, 14, 5);
+  }
+
+  function drawEveningBanner(canvas, st, tSec = 0) {
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width, h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
+
+    const owned = st.ownedAssets || [];
+    const sky = ctx.createLinearGradient(0, 0, 0, h * 0.72);
+    sky.addColorStop(0, "#0A111A");
+    sky.addColorStop(1, "#1C2A36");
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, w, h);
+
+    // Twinkling night stars
+    [[24, 14], [78, 22], [140, 12], [220, 19], [310, 11], [380, 24]].forEach(([sx, sy], i) => {
+      const a = 0.35 + 0.4 * Math.sin(tSec * 2 + i);
+      ctx.fillStyle = `rgba(255,250,220,${a.toFixed(2)})`;
+      ctx.fillRect(sx, sy, 2, 2);
+    });
+
+    // Ground / Driveway
+    ctx.fillStyle = "#1B2420";
+    ctx.fillRect(0, h * 0.68, w, h * 0.32);
+
+    // Home Architecture evolves with owned realty!
+    const hasVilla = owned.includes("spain_villa") || owned.includes("dnipro_mansion");
+    const hasPenthouse = owned.includes("kyivhrad_flat") || owned.includes("carpathian_chalet");
+    const hasHouse = owned.includes("suburban_brick_house") || owned.includes("border_hotel");
+
+    if (hasVilla) {
+      // Grand modern villa + palm/pool glow
+      ctx.fillStyle = "#EDE7F6"; ctx.fillRect(w * 0.08, h * 0.24, 125, 42);
+      ctx.fillStyle = "#E0B145"; ctx.fillRect(w * 0.06, h * 0.20, 133, 6);
+      ctx.fillStyle = "#4FC3F7"; ctx.fillRect(w * 0.42, h * 0.56, 48, 12);
+    } else if (hasPenthouse) {
+      // City tower / alpine chalet
+      ctx.fillStyle = "#37474F"; ctx.fillRect(w * 0.08, h * 0.16, 78, 50);
+      ctx.fillStyle = "#FFE082";
+      for (let wy = 0; wy < 3; wy++) {
+        for (let wx = 0; wx < 3; wx++) {
+          ctx.fillRect(w * 0.11 + wx * 20, h * 0.22 + wy * 13, 10, 7);
+        }
+      }
+    } else {
+      // Cozy home / brick house
+      ctx.fillStyle = hasHouse ? "#6D4C41" : "#3E4A45";
+      ctx.fillRect(w * 0.10, h * 0.36, 74, 30);
+      ctx.fillStyle = "#263238";
+      ctx.beginPath(); ctx.moveTo(w * 0.08, h * 0.36); ctx.lineTo(w * 0.10 + 37, h * 0.18); ctx.lineTo(w * 0.10 + 78, h * 0.36); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = "#FFD54F";
+      ctx.fillRect(w * 0.14, h * 0.44, 14, 12);
+      ctx.fillRect(w * 0.21, h * 0.44, 14, 12);
+    }
+
+    // Shawarma Kiosk neon badge if owned
+    if (owned.includes("shawarma_kiosk")) {
+      const neon = 0.65 + 0.35 * Math.sin(tSec * 4.5);
+      ctx.fillStyle = "#4E342E"; ctx.fillRect(w * 0.45, h * 0.40, 42, 26);
+      ctx.fillStyle = `rgba(255, 138, 101, ${neon.toFixed(2)})`;
+      ctx.fillRect(w * 0.46, h * 0.35, 40, 6);
+    }
+
+    // Best Car in Garage showcase!
+    let carCol = null, carStyle = null;
+    if (owned.includes("monako_hypercar") || owned.includes("porsche_911")) { carCol = "#E53935"; carStyle = "SPORT"; }
+    else if (owned.includes("euro_bmw")) { carCol = "#1C242B"; carStyle = "SUV"; }
+    else if (owned.includes("lanos_sport")) { carCol = "#455A64"; carStyle = "SEDAN"; }
+    else if (owned.includes("steppe_ebike")) { carCol = "#00ACC1"; carStyle = "E_SCOOTER"; }
+
+    if (carCol) {
+      const cx = w * 0.66, cy = h * 0.48;
+      ctx.fillStyle = carCol;
+      ctx.beginPath(); ctx.roundRect(cx, cy + 6, 68, carStyle === "SPORT" ? 13 : 16, 4); ctx.fill();
+      ctx.fillStyle = "#263238";
+      ctx.beginPath(); ctx.roundRect(cx + 12, cy, 38, 10, 3); ctx.fill();
+      ctx.fillStyle = "#111";
+      ctx.beginPath(); ctx.arc(cx + 15, cy + 20, 5, 0, Math.PI * 2); ctx.arc(cx + 53, cy + 20, 5, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#FFF59D"; ctx.fillRect(cx + 63, cy + 9, 4, 3);
+    } else {
+      ctx.fillStyle = "#546E7A";
+      ctx.font = "bold 10px monospace";
+      ctx.fillText("🏠 GARAGE EMPTY", w * 0.62, h * 0.56);
     }
   }
 
@@ -5111,6 +5440,12 @@
       ctx.beginPath();
       ctx.roundRect(winX, vy + 3.5, winW, 9.5, 2.5);
       ctx.fill();
+      if (opts.hasPassenger) {
+        ctx.fillStyle = "#90A4AE";
+        ctx.beginPath(); ctx.arc(winX + winW * 0.34, vy + 8, 3.0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "#CFD8DC";
+        ctx.beginPath(); ctx.arc(winX + winW * 0.68, vy + 8, 2.8, 0, Math.PI * 2); ctx.fill();
+      }
       ctx.strokeStyle = "rgba(255,255,255,0.28)";
       ctx.lineWidth = 1.4;
       ctx.beginPath(); ctx.moveTo(winX + 5, vy + 12); ctx.lineTo(winX + 12, vy + 4); ctx.stroke();
@@ -5258,7 +5593,7 @@
     }
 
     // Draw detailed animated transport!
-    drawTransportInBooth(ctx, w, h, opts.transportShape || "SEDAN", opts.colorHex || "#607D8B", opts.roofHex || "#455A64", { timeSec: tSec, isLive });
+    drawTransportInBooth(ctx, w, h, opts.transportShape || "SEDAN", opts.colorHex || "#607D8B", opts.roofHex || "#455A64", { timeSec: tSec, isLive, hasPassenger: !!opts.hasPassenger });
 
     // Booth counter divider & Traveler portrait on RIGHT window!
     ctx.fillStyle = "rgba(18, 22, 20, 0.46)";
@@ -5462,6 +5797,7 @@
     const currency = offer.currency === "USD" ? "USD" : "UAH";
     const modMult = state.sandboxMod ? (state.sandboxMod.bribeMult || 1) : 1;
     const jacketMult = (state.ownedAssets && state.ownedAssets.includes("balenci_jacket")) ? 1.15 : 1.0;
+    const prepMult = 1 + (state.nextBribeBoost || 0);
     let rankScale = 1;
     if (currency === "USD" && !offer.isStingTrap) {
       const d = state.daySpec ? state.daySpec.dayNumber : 1;
@@ -5470,7 +5806,7 @@
       else if (d >= 3) rankScale = 1.1;
       else rankScale = 1.0;
     }
-    const amt = Math.round(offer.amount * rankScale * modMult * jacketMult);
+    const amt = Math.round(offer.amount * rankScale * modMult * jacketMult * prepMult);
     return {
       amount: amt,
       currency,
@@ -5628,7 +5964,7 @@
     };
   }
 
-  function getEscapeTarget() { return state.isSandbox ? 20000 : 12000; }
+  function getEscapeTarget() { return state.isSandbox ? 35000 : 25000; }
   function getEscapeTolikRep() { return state.isSandbox ? 65 : 55; }
   function getRank() {
     if (state.sbkColonelPromoted) {
@@ -5732,9 +6068,9 @@
   }
 
   function getEffectiveBossCut() {
-    const bribeUsd = state.shiftBribesTotal > 0 ? Math.round((state.shiftBribesTotal * 0.22) / USD_UAH_RATE) : 0;
-    const baseUsd = Math.min(450, Math.max(25, 25 + bribeUsd));
-    return state.ownedAssets.includes("rolex_watch") ? Math.max(10, Math.round(baseUsd * 0.5)) : baseUsd;
+    const bribeUsd = state.shiftBribesTotal > 0 ? Math.round((state.shiftBribesTotal * 0.26) / USD_UAH_RATE) : 0;
+    const baseUsd = Math.min(1800, Math.max(50, 35 + bribeUsd));
+    return state.ownedAssets.includes("rolex_watch") ? Math.max(15, Math.round(baseUsd * 0.5)) : baseUsd;
   }
 
   function getPassiveRent() {
@@ -5760,12 +6096,13 @@
     const rolledRare = shuffle(unlocked.filter(item => item.isRare && Math.random() < (item.chance || 0.2)));
     const common = shuffle(unlocked.filter(item => !item.isRare && Math.random() < (item.chance || 1.0)));
     const combined = rolledRare.slice(0, 1).concat(common);
-    return combined.slice(0, 3);
+    return combined.slice(0, 4);
   }
 
   function startNewGame(sandbox) {
     usedStoryTags = new Set();
     usedShytomyrRun = new Set();
+    usedEncounterIds = new Set();
     usedSandboxModIds = new Set();
     const meta = getMetaPerkFlags();
 
@@ -5823,6 +6160,8 @@
       spiesCaughtAsAgent: 0,
       sbkColonelPromoted: false,
       tolikEscapeOffered: false,
+      nextTimeBoost: 0,
+      nextBribeBoost: 0,
       eveningTab: 0,
       encounterTriggered: false,
       activeEndingId: null,
@@ -5858,7 +6197,8 @@
     const meta = getMetaPerkFlags();
     const baseSec = state.isSandbox ? 215 : 195;
     const modDelta = state.sandboxMod ? (state.sandboxMod.shiftSecDelta || 0) : 0;
-    const bonusSec = getShiftBonusSec() + meta.shiftTimeBonus + modDelta;
+    const bonusSec = getShiftBonusSec() + meta.shiftTimeBonus + modDelta + (state.nextTimeBoost || 0);
+    state.nextTimeBoost = 0;
     state.phase = "BOOTH_SHIFT";
     state.shiftSec = Math.max(150, baseSec + bonusSec);
     state.travelerIdx = 0;
@@ -5970,6 +6310,7 @@
   function finishShift() {
     state.phase = "SHIFT_SUMMARY";
     state.sirenActive = false;
+    state.nextBribeBoost = 0;
     if (state.shiftBribesTotal === 0 && state.shiftProcessed >= 5) {
       unlockAgencyBadge("NABK_CLEAN");
       state.underSurveillance = false;
@@ -6231,7 +6572,13 @@
 
     if (state.travelerIdx === 4 && !state.encounterTriggered) {
       state.encounterTriggered = true;
-      const enc = MID_SHIFT_ENCOUNTERS[(state.daySpec.dayNumber - 1) % MID_SHIFT_ENCOUNTERS.length];
+      let encPool = MID_SHIFT_ENCOUNTERS.filter(e => !usedEncounterIds.has(e.id));
+      if (encPool.length === 0) {
+        usedEncounterIds.clear();
+        encPool = MID_SHIFT_ENCOUNTERS.slice();
+      }
+      const enc = pick(encPool);
+      usedEncounterIds.add(enc.id);
       openEncounterModal(enc);
     }
   }
@@ -7079,6 +7426,9 @@
       }
       root.innerHTML = `
         <div style="display:flex;flex-direction:column;gap:10px;flex:1;">
+          <div style="border-radius:8px;overflow:hidden;border:1px solid #354039;background:#101714;">
+            <canvas id="morning-canvas" width="420" height="84" style="width:100%;height:auto;display:block;"></canvas>
+          </div>
           <p style="color:#E0B145;font-family:monospace;font-size:13px;">${tr(d.dateLabel, state.lang)}</p>
           <h1 style="font-size:21px;font-weight:800;">${tr(d.headline, state.lang)}</h1>
           <section class="card-radio">
@@ -7109,6 +7459,20 @@
         </div>
         <button type="button" id="btn-enter-booth" class="btn-primary-green">${tr(L("ЗАСТУПИТИ НА ЗМІНУ В БУДКУ →", "ENTER CHECKPOINT BOOTH →"), state.lang)}</button>
       `;
+      const mCanvas = document.getElementById("morning-canvas");
+      if (window._phaseBannerRaf) { cancelAnimationFrame(window._phaseBannerRaf); window._phaseBannerRaf = null; }
+      if (mCanvas) {
+        let lastM = 0;
+        const tickMorning = (ts) => {
+          if (state.phase !== "MORNING_BRIEFING" || document.getElementById("morning-canvas") !== mCanvas) {
+            window._phaseBannerRaf = null; return;
+          }
+          if (!lastM || ts - lastM >= 36) { lastM = ts; drawMorningBanner(mCanvas, d.dayNumber, (ts || Date.now()) * 0.001); }
+          window._phaseBannerRaf = requestAnimationFrame(tickMorning);
+        };
+        drawMorningBanner(mCanvas, d.dayNumber, Date.now() * 0.001);
+        if (typeof requestAnimationFrame === "function") window._phaseBannerRaf = requestAnimationFrame(tickMorning);
+      }
       document.getElementById("btn-enter-booth").addEventListener("click", () => { audio.playTap(); beginShift(); });
       return;
     }
@@ -7465,6 +7829,7 @@
         uvActive: state.uvActive,
         snifferActive: state.vehicleInspected,
         hasContraband: t.hasContraband,
+        hasPassenger: t.hasPassenger,
         storyTag: t.storyTag,
         hasCloneCar: t.violations.some(v => v.code === "VEHICLE_MISMATCH"),
         isLive: true
@@ -7954,12 +8319,16 @@
 
     if (state.phase === "HOME_EVENING") {
       const rent = getPassiveRent();
+      const rentUsd = getPassiveUsd();
       const rk = getRank();
       const canRetire = state.isSandbox && state.daySpec.dayNumber >= 5;
 
       root.innerHTML = `
         <div style="display:flex;flex-direction:column;gap:10px;flex:1;">
           <h1 style="color:#E0B145;font-size:20px;">${tr(L(`🌙 ВЕЧІР УДОМА (Після Дня ${state.daySpec.dayNumber})`, `🌙 EVENING AT HOME (After Day ${state.daySpec.dayNumber})`), state.lang)}</h1>
+          <div style="border-radius:8px;overflow:hidden;border:1px solid #354039;background:#0D1318;">
+            <canvas id="evening-canvas" width="420" height="88" style="width:100%;height:auto;display:block;"></canvas>
+          </div>
           <section class="card-slate" style="display:flex;flex-direction:column;gap:4px;font-size:13px;">
             <div style="display:flex;flex-direction:column;gap:2px;font-size:15px;font-weight:800;">
               <div style="color:#E0B145;">🪙 ${tr(L("Гримники", "Hrymnyky"), state.lang)}: ${state.money.toLocaleString("en-US")} 🪙</div>
@@ -8000,7 +8369,7 @@
                 </div>
               `;
             })()}
-            ${rent > 0 ? `<div style="color:#81C784;font-weight:700;">🏢 ${tr(L("Пасивний дохід та оклад СБК", "Passive & Covert Income"), state.lang)}: +${rent} 🪙/${tr(L("ранок", "morning"), state.lang)}</div>` : ""}
+            ${(rent > 0 || rentUsd > 0) ? `<div style="color:#81C784;font-weight:700;">🏢 ${tr(L("Пасивний дохід та оклад СБК", "Passive & Covert Income"), state.lang)}: ${rent > 0 ? `+${rent.toLocaleString("en-US")} 🪙` : ""}${rentUsd > 0 ? ` +${rentUsd.toLocaleString("en-US")} 💵` : ""}/${tr(L("ранок", "morning"), state.lang)}</div>` : ""}
             <div style="color:#64B5F6;font-weight:700;">🎖️ ${tr(rk.title, state.lang)}${state.isUndercoverSbkAgent ? ` (${tr(L("Спіймано агентури", "Operatives caught"), state.lang)}: ${state.spiesCaughtAsAgent}/4)` : ""}</div>
             <div>🏠 ${tr(L("Настрій сім'ї", "Family Morale"), state.lang)}: ${state.familyMorale}% | 🕵️ НАБК: <span style="color:${state.nabkRisk >= 60 ? "#FF5252" : "#FFF"};">${state.nabkRisk}%</span> | СБК: ${state.sbkRep}</div>
             <div style="color:#E0B145;font-weight:700;">🚐 ${tr(L("Фонд утечі", "Escape Fund"), state.lang)}: ${state.escapeFund.toLocaleString("en-US")} / ${getEscapeTarget().toLocaleString("en-US")} 💵 (${tr(L("Толік", "Tolik"), state.lang)}: ${state.tolikRep}/${getEscapeTolikRep()})</div>
@@ -8259,6 +8628,8 @@
             if (exp.reprimandHeal) state.reprimands = Math.max(0, (state.reprimands || 0) - exp.reprimandHeal);
             if (exp.tolikDelta) state.tolikRep = Math.max(0, Math.min(100, state.tolikRep + exp.tolikDelta));
             if (exp.palychDelta) state.palychRep = Math.max(0, Math.min(100, state.palychRep + exp.palychDelta));
+            if (exp.nextTimeBoost) state.nextTimeBoost = (state.nextTimeBoost || 0) + exp.nextTimeBoost;
+            if (exp.nextBribeBoost) state.nextBribeBoost = (state.nextBribeBoost || 0) + exp.nextBribeBoost;
             if (exp.isRare) unlockDiscovery("DISC_NIGHT_RARE");
             state.familyMorale = Math.max(0, Math.min(100, state.familyMorale + exp.morale));
             state.escapeFund += (exp.escape || 0);
@@ -8380,6 +8751,20 @@
         });
       }
 
+      const evCanvas = document.getElementById("evening-canvas");
+      if (window._phaseBannerRaf) { cancelAnimationFrame(window._phaseBannerRaf); window._phaseBannerRaf = null; }
+      if (evCanvas) {
+        let lastEv = 0;
+        const tickEvening = (ts) => {
+          if (state.phase !== "HOME_EVENING" || document.getElementById("evening-canvas") !== evCanvas) {
+            window._phaseBannerRaf = null; return;
+          }
+          if (!lastEv || ts - lastEv >= 40) { lastEv = ts; drawEveningBanner(evCanvas, state, (ts || Date.now()) * 0.001); }
+          window._phaseBannerRaf = requestAnimationFrame(tickEvening);
+        };
+        drawEveningBanner(evCanvas, state, Date.now() * 0.001);
+        if (typeof requestAnimationFrame === "function") window._phaseBannerRaf = requestAnimationFrame(tickEvening);
+      }
       document.getElementById("btn-next-day").addEventListener("click", () => { audio.playTap(); advanceToNextDay(false); });
       return;
     }
