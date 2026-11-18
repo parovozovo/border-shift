@@ -2,8 +2,8 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v8.3";
-  const DAILY_OBNAL_LIMIT_USD = 1500;
+  const BUILD_VERSION = "v8.4";
+  const DAILY_OBNAL_LIMIT_USD = 15000;
   let confirmResetArmed = false;
 
   // Fallback for older Safari lacking CanvasRenderingContext2D.roundRect
@@ -607,181 +607,191 @@
       minDay: 1, chance: 1.0, currency: "UAH",
       title: L("🛒 Закупити харчі, павербанки та бензин у генератор (+15% сім'я)", "🛒 Buy groceries, powerbanks & generator fuel (+15% family)"),
       subtitle: L("Дім у теплі й зі світлом — можна пропустити 1–2 вечори", "Keep home warm and lit — optional if savings are tight"),
-      cost: 950, morale: 15, escape: 0, riskDelta: 0, sbkDelta: 0
+      cost: 3800, morale: 15, escape: 0, riskDelta: 0, sbkDelta: 0
     },
     {
       id: "reb_donation",
       minDay: 1, chance: 1.0, currency: "UAH",
       title: L("📡 Скинутися куму з ЗСК на купольний РЕБ проти «мопедів» (+15 СБК, +12% сім'я)", "📡 Chip in for an anti-drone EW jammer (+15 SBK, +12% family)"),
       subtitle: L("Військові дякують, а майор СБК «Тихий» ставить плюсик у досьє", "Troops thank you and SBK Major Quiet logs your support"),
-      cost: 1400, morale: 12, escape: 0, riskDelta: -8, sbkDelta: 15
+      cost: 5500, morale: 12, escape: 0, riskDelta: -8, sbkDelta: 15
     },
     {
       id: "mother_truskavets",
       minDay: 1, chance: 0.85, currency: "UAH",
       title: L("⛲ Путівка для мами й тещі у Трускавецьк на мінеральні води (+25% сім'я)", "⛲ Send mom & mother-in-law to Truskavetsk mineral spa (+25% family)"),
       subtitle: L("Удома панує благословенна тиша на тиждень вперед!", "Blessed peace and quiet at home all week!"),
-      cost: 1800, morale: 25, escape: 0, riskDelta: 0, sbkDelta: 0
+      cost: 7200, morale: 25, escape: 0, riskDelta: 0, sbkDelta: 0
     },
     {
       id: "dog_vet_spa",
       minDay: 1, chance: 0.9, currency: "UAH",
       title: L("🐕 СПА та вітаміни для пса «Бавовни» (+10 СБК, +10% сім'я)", "🐕 Vet Spa & Vitamins for Sniffer Dog 'Bavovna' (+10 SBK, +10% family)"),
       subtitle: L("Пес радісно махає хвостом і краще чує контрабанду", "Happy sniffer dog stays sharp at the gate"),
-      cost: 1100, morale: 10, escape: 0, riskDelta: 0, sbkDelta: 10
+      cost: 4200, morale: 10, escape: 0, riskDelta: 0, sbkDelta: 10
     },
     {
       id: "shred_evidence",
       minDay: 2, chance: 0.75, currency: "USD",
       title: L("🕵️‍♂️ Адвокат-«рішала» з Кийграда: зачистити хвости в НАБК (-25% ризику НАБК)", "🕵️‍♂️ Kyihrad fixer lawyer: scrub NABK investigation tails (-25% NABK risk)"),
       subtitle: L("Порятунок, якщо брав товсті конверти або прикупив майно", "Lifesaver if you took fat envelopes or bought luxury assets"),
-      cost: 900, morale: 0, escape: 0, riskDelta: -25, sbkDelta: 0
+      cost: 2800, morale: 0, escape: 0, riskDelta: -25, sbkDelta: 0
     },
     {
       id: "smuggler_poker",
       minDay: 2, chance: 0.55, currency: "USD",
       title: L("🃏 Закритий покер із перевізниками Толіка (+18 Толік, +12% сім'я)", "🃏 Backroom Poker with Tolik's Crew (+18 Tolik, +12% family)"),
       subtitle: L("Живі зв'язки з синдикатом та шанс зірвати банк (+6% НАБК)", "Build syndicate trust (+6% NABK risk)"),
-      cost: 600, morale: 12, escape: 0, riskDelta: 6, sbkDelta: 0, tolikDelta: 18
+      cost: 1800, morale: 12, escape: 0, riskDelta: 6, sbkDelta: 0, tolikDelta: 18
     },
     {
       id: "crypto_signal_vip",
       minDay: 3, chance: 0.45, currency: "USD",
-      title: L("📈 Вкластися в закритий крипто-інсайд «Шитомир-Коїн» (+1 600 💵!)", "📈 Join 'Shytomyr-Coin' Crypto Insider Pool (+1,600 💵!)"),
-      subtitle: L("Поступово відкривається з Дня 3+ — подвоює вкладені 800 💵!", "Unlocks Day 3+ — doubles your 800 💵 stake!"),
-      cost: 800, morale: 8, escape: 0, riskDelta: 4, sbkDelta: 0, usdReward: 1600
+      title: L("📈 Вкластися в закритий крипто-інсайд «Шитомир-Коїн» (+7 500 💵!)", "📈 Join 'Shytomyr-Coin' Crypto Insider Pool (+7,500 💵!)"),
+      subtitle: L("Поступово відкривається з Дня 3+ — множить вкладені 3 000 💵 у 2.5 рази!", "Unlocks Day 3+ — turns 3,000 💵 into 7,500 💵!"),
+      cost: 3000, morale: 8, escape: 0, riskDelta: 4, sbkDelta: 0, usdReward: 7500
     },
     {
       id: "secret_shytomyr_party",
       minDay: 2, chance: 0.22, isRare: true, currency: "USD",
       title: L("🧦 Таємна вечірка «Підземний Шитомир» (+35% сім'я, -10% НАБК)", "🧦 Secret 'Underground Shytomyr' Party (+35% family, -10% NABK)"),
       subtitle: L("✨ Рідкісна нічна подія (22% шанс): земляки накривають стіл!", "✨ Rare night event (22% chance): Shytomyr legends host a feast!"),
-      cost: 500, morale: 35, escape: 0, riskDelta: -10, sbkDelta: 0, tolikDelta: 15
+      cost: 1600, morale: 35, escape: 0, riskDelta: -10, sbkDelta: 0, tolikDelta: 15
     },
     {
       id: "witch_fortune",
       minDay: 3, chance: 0.18, isRare: true, currency: "UAH",
       title: L("🔮 Карпатська мольфарка: зняти «порчу НАБК» (-20% НАБК, +18% сім'я)", "🔮 Carpathian Mystic: Cleanse 'NABK Hex' (-20% NABK, +18% family)"),
       subtitle: L("✨ Рідкісна подія (18% шанс): димить травами прямо над декларацією!", "✨ Rare event (18% chance): herbal smoke clears your audit karma!"),
-      cost: 2200, morale: 18, escape: 0, riskDelta: -20, sbkDelta: 5
+      cost: 8500, morale: 18, escape: 0, riskDelta: -20, sbkDelta: 5
     },
     {
       id: "shady_kazino_night",
       minDay: 2, chance: 0.24, isRare: true, currency: "USD",
-      title: L("🎰 Підпільне «Казино КПП-777» (Шанс виграти +1 500 💵!)", "🎰 Underground 'Gate-777 Casino' (Win up to +1,500 💵!)"),
-      subtitle: L("✨ Рідкісна подія (24% шанс): крутиш рулетку за 400 💵!", "✨ Rare event (24% chance): spin the midnight wheel for 400 💵!"),
-      cost: 400, morale: 15, escape: 0, riskDelta: 5, sbkDelta: 0, usdReward: 1500
+      title: L("🎰 Підпільне «Казино КПП-777» (Виграй +6 000 💵!)", "🎰 Underground 'Gate-777 Casino' (Win +6,000 💵!)"),
+      subtitle: L("✨ Рідкісна подія (24% шанс): крутиш рулетку за 1 500 💵!", "✨ Rare event (24% chance): spin the midnight wheel for 1,500 💵!"),
+      cost: 1500, morale: 15, escape: 0, riskDelta: 5, sbkDelta: 0, usdReward: 6000
     },
     {
       id: "black_market_drone_lens",
       minDay: 3, chance: 0.20, isRare: true, currency: "USD",
       title: L("🛸 Нічний аукціон трофейної оптики для ГУР-М (+30 СБК, -12% НАБК)", "🛸 Midnight Trophy Optics Auction for GUR-M (+30 SBK, -12% NABK)"),
       subtitle: L("✨ Рідкісна подія (20% шанс): розвідка цінує такий підгін!", "✨ Rare event (20% chance): GUR-M remembers top-grade optics!"),
-      cost: 1500, morale: 0, escape: 0, riskDelta: -12, sbkDelta: 30
+      cost: 4200, morale: 0, escape: 0, riskDelta: -12, sbkDelta: 30
     },
     {
       id: "diplomat_banquet",
       minDay: 4, chance: 0.16, isRare: true, currency: "USD",
       title: L("🥂 Закритий банкет консулів Франції-Люкс (+25 Палич, +25 СБК, -15% НАБК)", "🥂 Francia-Lux Consuls Banquet (+25 Palych, +25 SBK, -15% NABK)"),
       subtitle: L("✨ Елітна подія Дня 4+ (16% шанс): найвищі зв'язки на кордоні!", "✨ Rare Day 4+ event (16% chance): elite diplomatic connections!"),
-      cost: 2500, morale: 20, escape: 0, riskDelta: -15, sbkDelta: 25, palychDelta: 25
+      cost: 4500, morale: 20, escape: 0, riskDelta: -15, sbkDelta: 25, palychDelta: 25
     },
     {
       id: "bukovel_weekend",
       minDay: 1, chance: 0.9, currency: "UAH",
       title: L("🎿 Сімейні вихідні в аквапарку Буковельська (+22% сім'я, -5% стресу НАБК)", "🎿 Family weekend at Bukovelsk spa resort (+22% family)"),
       subtitle: L("Справжнє перезавантаження між важкими змінами", "Real reset between intense shifts"),
-      cost: 1600, morale: 22, escape: 0, riskDelta: -5, sbkDelta: 5
+      cost: 6500, morale: 22, escape: 0, riskDelta: -5, sbkDelta: 5
     },
     {
       id: "midnight_shawarma_crawl",
       minDay: 1, chance: 0.85, currency: "UAH",
       title: L("🥙 Нічний рейд по шаурмі з псом «Бавовною» (+12% сім'я, +5 СБК)", "🥙 Midnight Shawarma Run with Bavovna (+12% family, +5 SBK)"),
       subtitle: L("Смачно, ситно й пес у захваті!", "Tasty, filling, and Bavovna approves!"),
-      cost: 700, morale: 12, escape: 0, riskDelta: 0, sbkDelta: 5
+      cost: 3500, morale: 12, escape: 0, riskDelta: 0, sbkDelta: 5
     },
     {
       id: "midnight_fishing",
       minDay: 2, chance: 0.65, currency: "UAH",
       title: L("🎣 Нічна рибалка на Тетереві з Пал Паличем (+20 Палич, -8% НАБК)", "🎣 Night Fishing with Pal Palych (+20 Palych, -8% NABK)"),
       subtitle: L("Спільна юшка на березі зближує краще за будь-який звіт", "Riverbank fish soup beats any paperwork"),
-      cost: 1300, morale: 8, escape: 0, riskDelta: -8, sbkDelta: 0, palychDelta: 20
+      cost: 5200, morale: 8, escape: 0, riskDelta: -8, sbkDelta: 0, palychDelta: 20
     },
     {
       id: "donate_drones_crew",
       minDay: 2, chance: 0.6, currency: "UAH",
       title: L("🚁 Нічний збір на FPV-рій для розвідки ГУР-М (+28 СБК, -10% НАБК)", "🚁 Fund FPV Drone Swarm for GUR-M (+28 SBK, -10% NABK)"),
       subtitle: L("Хлопці на передку передають подяку й прикривають твій тил", "Frontline scouts appreciate the gear"),
-      cost: 2800, morale: 15, escape: 0, riskDelta: -10, sbkDelta: 28
+      cost: 9500, morale: 15, escape: 0, riskDelta: -10, sbkDelta: 28
     },
     {
       id: "underground_mma",
       minDay: 2, chance: 0.5, currency: "USD",
       title: L("🥊 Підпільні бої «Митниця vs Контрабас» (+22 Толік, +12% сім'я)", "🥊 Underground Fight Night: Customs vs Smugglers (+22 Tolik)"),
       subtitle: L("Ставиш на Толікового бійця — повага в синдикаті зростає (+5% НАБК)", "Syndicate street cred rises (+5% NABK)"),
-      cost: 350, morale: 12, escape: 0, riskDelta: 5, sbkDelta: 0, tolikDelta: 22
+      cost: 1200, morale: 12, escape: 0, riskDelta: 5, sbkDelta: 0, tolikDelta: 22
     },
     {
       id: "fake_auction_painting",
       minDay: 3, chance: 0.45, currency: "USD",
       title: L("🖼️ Купити картину «Козак Мамай на крипто-полотні» (+30% сім'я)", "🖼️ Buy 'Kozak Mamai on Crypto-Canvas' (+30% family)"),
       subtitle: L("Дружина в захваті, а критики кажуть, що це чистий авангард", "Wife loves it, critics call it pure avant-garde"),
-      cost: 1100, morale: 30, escape: 0, riskDelta: -6, sbkDelta: 0
+      cost: 3200, morale: 30, escape: 0, riskDelta: -6, sbkDelta: 0
     },
     {
       id: "vip_sauna_delegates",
       minDay: 3, chance: 0.22, isRare: true, currency: "USD",
       title: L("🧖 VIP-сауна з делегатами Карпатії (+25 Палич, +15 Толік, +15% сім'я)", "🧖 VIP Sauna with Karpatia Delegates (+25 Palych, +15 Tolik)"),
       subtitle: L("✨ Рідкісна нічна подія (22% шанс): усі важливі питання вирішуються в парі!", "✨ Rare event (22% chance): deals sealed in steam!"),
-      cost: 950, morale: 15, escape: 0, riskDelta: 4, sbkDelta: 0, palychDelta: 25, tolikDelta: 15
+      cost: 2800, morale: 15, escape: 0, riskDelta: 4, sbkDelta: 0, palychDelta: 25, tolikDelta: 15
     },
     {
       id: "hack_registry_night",
       minDay: 4, chance: 0.19, isRare: true, currency: "USD",
       title: L("💻 Замовити «Сірого Хакера» почистити логи КПП (-35% НАБК, -1 Догана!)", "💻 Hire 'Gray Hacker' to wipe checkpoint logs (-35% NABK, -1 Reprimand!)"),
       subtitle: L("✨ Рідкісна подія Дня 4+ (19% шанс): зникають навіть старі догани!", "✨ Rare Day 4+ event (19% chance): even reprimands vanish!"),
-      cost: 1800, morale: 0, escape: 0, riskDelta: -35, sbkDelta: 0, reprimandHeal: 1
+      cost: 4000, morale: 0, escape: 0, riskDelta: -35, sbkDelta: 0, reprimandHeal: 1
     },
     {
       id: "smuggler_treasure_map",
       minDay: 4, chance: 0.17, isRare: true, currency: "USD",
-      title: L("🗺️ Купити в Толіка «карту забутого складу» (+2 400 💵 заначки!)", "🗺️ Buy 'Forgotten Stash Map' from Tolik (+2,400 💵 haul!)"),
-      subtitle: L("✨ Рідкісна подія Дня 4+ (17% шанс): за 700 💵 відкопуєш старий сейф!", "✨ Rare Day 4+ event (17% chance): dig up an old stash!"),
-      cost: 700, morale: 10, escape: 0, riskDelta: 8, sbkDelta: 0, usdReward: 2400
+      title: L("🗺️ Купити в Толіка «карту забутого складу» (+9 500 💵 заначки!)", "🗺️ Buy 'Forgotten Stash Map' from Tolik (+9,500 💵 haul!)"),
+      subtitle: L("✨ Рідкісна подія Дня 4+ (17% шанс): за 2 500 💵 відкопуєш старий сейф!", "✨ Rare Day 4+ event (17% chance): dig up an old stash!"),
+      cost: 2500, morale: 10, escape: 0, riskDelta: 8, sbkDelta: 0, usdReward: 9500
     },
     {
       id: "extra_k9_handler",
       minDay: 1, chance: 0.85, currency: "UAH",
       title: L("🐕 Додатковий інструктор для «Бавовни» (+20с часу на наступну зміну)", "🐕 Extra K9 Trainer for 'Bavovna' (+20s next shift)"),
       subtitle: L("Тактична підготовка пса до завтрашньої черги", "Prep your sniffer dog for tomorrow's rush"),
-      cost: 1500, morale: 5, escape: 0, riskDelta: 0, sbkDelta: 5, nextTimeBoost: 20
+      cost: 6000, morale: 5, escape: 0, riskDelta: 0, sbkDelta: 5, nextTimeBoost: 20
     },
     {
       id: "customs_broker_tip",
       minDay: 2, chance: 0.65, currency: "USD",
       title: L("💼 Інсайд митного брокера на завтра (+25% до конвертів наступної зміни)", "💼 Customs Broker Insider (+25% bribe offers next shift)"),
       subtitle: L("Попередить жирних клієнтів про твою зміну (+4% НАБК)", "Steers richer VIPs to your booth (+4% NABK)"),
-      cost: 650, morale: 5, escape: 0, riskDelta: 4, sbkDelta: 0, nextBribeBoost: 0.25
+      cost: 2200, morale: 5, escape: 0, riskDelta: 4, sbkDelta: 0, nextBribeBoost: 0.25
     },
     {
       id: "frontier_charity_cup",
       minDay: 2, chance: 0.70, currency: "UAH",
       title: L("🏆 Спонсорувати кубок прикордонників (+18 Палич, +15 СБК, -10% НАБК)", "🏆 Sponsor Border Guard Cup (+18 Palych, +15 SBK, -10% NABK)"),
       subtitle: L("Зміцнює авторитет серед керівництва та контррозвідки", "Builds goodwill with both Palych and SBK"),
-      cost: 2200, morale: 10, escape: 0, riskDelta: -10, sbkDelta: 15, palychDelta: 18
+      cost: 8000, morale: 10, escape: 0, riskDelta: -10, sbkDelta: 15, palychDelta: 18
     }
   ];
 
-  // Rebalanced Shop: 30 Assets — Honest Tools/Real Estate in UAH (🪙), Corruption Status/Offshores in USD ($)!
+  // Rebalanced High-Stakes Shop: 41 Main Assets + 12 Add-ons (53 Total) — Honest Tools/Biz in Hrymnyky (🪙), Clout/Luxury in Baksiky (💵)!
   const ASSET_UPGRADES = [
+    {
+      id: "thermos_tray",
+      category: "TECH",
+      currency: "UAH",
+      onlyUah: true,
+      icon: "🥐",
+      title: L("Набір термосів та підігрівач круасанів у будку", "Thermos & Croissant Warmer Set"),
+      subtitle: L("+10с до кожної зміни назавжди та +250 🪙 до чайових за каву", "+10s shift time permanently & +250 🪙 coffee tips"),
+      cost: 12000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 5
+    },
     {
       id: "espresso_machine",
       category: "TECH",
       currency: "UAH",
       icon: "☕",
       title: L("Італійська кавомашина «Еспресо-Магнат» у будку", "Italian 'Espresso-Magnat' Machine"),
-      subtitle: L("+25 секунд до кожної зміни назавжди + +35 🪙 до чайових за каву", "+25s to every shift permanently + +35 🪙 coffee tips"),
-      cost: 4200, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 5
+      subtitle: L("+25 секунд до кожної зміни назавжди + +450 🪙 до чайових за каву", "+25s to every shift permanently + +450 🪙 coffee tips"),
+      cost: 28000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 5
     },
     {
       id: "parrot_kesha",
@@ -790,8 +800,8 @@
       onlyUah: true,
       icon: "🦜",
       title: L("Говорящий папуга «Майор Кеша» у будку", "Talking Parrot 'Major Kesha' in Booth"),
-      subtitle: L("Розважає водіїв (+40 🪙 до чайових за каву), -3% НАБК/день +10% сім'ї!", "Entertains drivers (+40 🪙 coffee tips), -3% daily NABK +10% family!"),
-      cost: 5500, passiveIncome: 0, passiveUsd: 0, dailyRisk: -3, tolikBoost: 0, palychBoost: 5, moraleBoost: 10
+      subtitle: L("Розважає водіїв (+500 🪙 до чайових за каву), -3% НАБК/день +10% сім'ї!", "Entertains drivers (+500 🪙 coffee tips), -3% daily NABK +10% family!"),
+      cost: 35000, passiveIncome: 0, passiveUsd: 0, dailyRisk: -3, tolikBoost: 0, palychBoost: 5, moraleBoost: 10
     },
     {
       id: "heated_booth_seat",
@@ -799,9 +809,19 @@
       currency: "UAH",
       onlyUah: true,
       icon: "🪑",
-      title: L("Ортопедичне крісло з підігрівом у будку", "Heated Ergonomic Booth Chair"),
-      subtitle: L("Менше втоми взимку: +12 секунд до кожної зміни назавжди!", "Less fatigue on cold shifts: +12s to every shift permanently!"),
-      cost: 7400, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 5
+      title: L("Ортопедичне крісло «Шеф-Комфорт» із підігрівом", "Heated Ergonomic Chair 'Chef-Comfort'"),
+      subtitle: L("Менше втоми взимку: +14 секунд до кожної зміни назавжди!", "Less fatigue on cold shifts: +14s to every shift permanently!"),
+      cost: 42000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 5
+    },
+    {
+      id: "money_detector",
+      category: "TECH",
+      currency: "UAH",
+      onlyUah: true,
+      icon: "🔎",
+      title: L("Детектор купюр та оптична лупа «Спектр-УФ»", "Banknote Detector & Optical Loupe 'Spektr-UV'"),
+      subtitle: L("+250 🪙 премії ДПСК за кожне правильне рішення в будці!", "+250 🪙 SBGS bonus on every correct booth decision!"),
+      cost: 48000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 5
     },
     {
       id: "uv_spotlight",
@@ -810,7 +830,16 @@
       icon: "🔦",
       title: L("Потужний стаціонарний УФ-прожектор «Сова-М»", "Heavy UV Spotlight 'Sova-M'"),
       subtitle: L("Чіткіше підсвічує документи: -10% штрафів за помилки (діє найкращий захист)", "Sharper inspection: -10% protocol fines (best-only protection)"),
-      cost: 7800, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 0, moraleBoost: 0
+      cost: 55000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 0, moraleBoost: 0
+    },
+    {
+      id: "iphon_17_pro",
+      category: "TECH",
+      currency: "UAH",
+      icon: "📱",
+      title: L("Смартфон «ЯблуФон 17 Про» (Швидкий довідник)", "Phone 'YabloPhon 17 Pro'"),
+      subtitle: L("Помилковий клік при вказуванні коштує -1с замість -2с + -3% комісії обміну!", "Wrong inspect click costs -1s instead of -2s + -3% exchange fee!"),
+      cost: 65000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 5, palychBoost: 5, moraleBoost: 15
     },
     {
       id: "laser_plate_reader",
@@ -820,7 +849,7 @@
       icon: "📡",
       title: L("Лазерний зчитувач номерів «Рубіж-Сканер»", "Optical Plate Reader 'Rubizh-Scan'"),
       subtitle: L("Прискорює оформлення в журналі: +3 секунди за кожне правильне рішення!", "Speeds up logging: +3s added on every correct decision!"),
-      cost: 9200, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 0
+      cost: 68000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 0
     },
     {
       id: "uv_endoscope",
@@ -829,7 +858,17 @@
       icon: "🐕",
       title: L("Мобільний рентген-сканер + вітаміни для пса «Бавовни»", "Mobile X-Ray Scanner + Dog Treats for 'Bavovna'"),
       subtitle: L("Миттєвий рентген авто за 1 клік (-3с до вартості пса, мін. 2с)", "Instant 1-click vehicle X-Ray search (-3s dog cost, min 2s)"),
-      cost: 10500, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 0, moraleBoost: 0
+      cost: 75000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 0, moraleBoost: 0
+    },
+    {
+      id: "diesel_generator",
+      category: "TECH",
+      currency: "UAH",
+      onlyUah: true,
+      icon: "⚡",
+      title: L("Безшумний інверторний генератор «Хонда-КПП 5 кВт»", "Silent Inverter Generator 'Honda-KPP 5kW'"),
+      subtitle: L("Світло й тепло без перебоїв: +15с до кожної зміни назавжди + 10 Паличу й сім'ї!", "Nonstop booth power: +15s every shift permanently & +10 Palych/family!"),
+      cost: 82000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 10, moraleBoost: 10
     },
     {
       id: "sbk_database_tablet",
@@ -838,44 +877,16 @@
       icon: "💻",
       title: L("Закритий планшет розвідки «Оберіг-Контур»", "Classified Intel Tablet 'Oberig-Kontur'"),
       subtitle: L("Додаткова часткова підказка в досьє розшуку + +20% до премій за арешт!", "Extra partial clue in Wanted Dossier + +20% SBK arrest bounties!"),
-      cost: 12000, passiveIncome: 0, passiveUsd: 0, dailyRisk: -3, tolikBoost: 0, palychBoost: 0, moraleBoost: 0
+      cost: 95000, passiveIncome: 0, passiveUsd: 0, dailyRisk: -3, tolikBoost: 0, palychBoost: 0, moraleBoost: 0
     },
     {
       id: "tactical_vest",
       category: "TECH",
       currency: "UAH",
       icon: "🦺",
-      title: L("Тактичний жилет ДПСК «Кордон-Про»", "Tactical Vest 'Border-Pro'"),
-      subtitle: L("Солідний вигляд: -25% штрафів за помилки (не стакається з прожектором) + 10 СБК", "Authority look: -25% protocol fines (best-only) & +10 SBK rep"),
-      cost: 14500, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 5
-    },
-    {
-      id: "iphon_17_pro",
-      category: "TECH",
-      currency: "UAH",
-      icon: "📱",
-      title: L("Смартфон «ЯблуФон 17 Про» (Швидкий довідник)", "Phone 'YabloPhon 17 Pro'"),
-      subtitle: L("Помилковий клік при вказуванні коштує -1с замість -2с + -3% комісії обміну!", "Wrong inspect click costs -1s instead of -2s + -3% exchange fee!"),
-      cost: 18500, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 5, palychBoost: 5, moraleBoost: 15
-    },
-    {
-      id: "shawarma_kiosk",
-      category: "REALTY",
-      currency: "UAH",
-      icon: "🥙",
-      title: L("Кіоск «Шаурма Шлагбаум-Люкс» біля КПП", "'Barrier-Lux Shawarma' Kiosk outside Checkpoint"),
-      subtitle: L("Білий бізнес! Приносить +950 🪙 щоранку та знижує комісію відмивання!", "Legal business! +950 🪙 every morning & lowers laundering fee!"),
-      cost: 16000, passiveIncome: 950, passiveUsd: 0, dailyRisk: 0, tolikBoost: 5, palychBoost: 10, moraleBoost: 10
-    },
-    {
-      id: "tire_service_sto",
-      category: "REALTY",
-      currency: "UAH",
-      onlyUah: true,
-      icon: "🔧",
-      title: L("Шиномонтаж і СТО «Шлагбаум-Сервіс»", "Highway Tire Shop & Garage 'Barrier-Service'"),
-      subtitle: L("Білий бізнес на трасі! +1 350 🪙 щоранку без уваги НАБК (+5% сім'я)", "Clean road business! +1,350 🪙 every morning, 0% NABK risk"),
-      cost: 24000, passiveIncome: 1350, passiveUsd: 0, dailyRisk: 0, tolikBoost: 10, palychBoost: 5, moraleBoost: 5
+      title: L("Тактичний бронежилет ДПСК «Кордон-Про»", "Tactical Armor Vest 'Border-Pro'"),
+      subtitle: L("Солідний вигляд: -25% штрафів за помилки (діє найкращий захист) + 10 СБК", "Authority look: -25% protocol fines (best-only) & +10 SBK rep"),
+      cost: 110000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 5
     },
     {
       id: "steppe_ebike",
@@ -885,7 +896,7 @@
       icon: "🏍️",
       title: L("Електро-байк «Степовий Вітер»", "Electric Bike 'Steppe Wind'"),
       subtitle: L("+14с до кожної зміни (найкраще авто в гаражі), 0% ризику НАБК!", "+14s shift time (best ride only), 0% NABK risk!"),
-      cost: 11500, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 5, palychBoost: 5, moraleBoost: 10
+      cost: 58000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 5, palychBoost: 5, moraleBoost: 10
     },
     {
       id: "lanos_sport",
@@ -895,17 +906,111 @@
       icon: "🚗",
       title: L("«Ланос-Спорт 1.6» (Чесна робоча конячка)", "'Lanos-Sport 1.6' Workhorse"),
       subtitle: L("+18с до зміни (діє найкраще авто в гаражі) +10 сім'ї та Паличу, 0% НАБК!", "+18s shift time (best car only), +10 family & Palych, 0% NABK!"),
-      cost: 19000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 10, moraleBoost: 10
+      cost: 145000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 10, moraleBoost: 10
+    },
+    {
+      id: "camry_35",
+      category: "AUTO",
+      currency: "UAH",
+      onlyUah: true,
+      icon: "🚘",
+      title: L("«Тайота Кемрі 3.5» (Солідна класика)", "'Tayota Kemri 3.5' Classic Sedan"),
+      subtitle: L("+21с до зміни (найкраще авто), +12 Паличу та +10 Толіку, 0% НАБК!", "+21s shift time (best car), +12 Palych & +10 Tolik, 0% NABK!"),
+      cost: 380000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 10, palychBoost: 12, moraleBoost: 12
     },
     {
       id: "skoda_octavia_rs",
       category: "AUTO",
       currency: "UAH",
       onlyUah: true,
-      icon: "🚘",
+      icon: "🚙",
       title: L("«Шкоднік Октавія RS» (Універсал бізнес-класу)", "'Shkodnik Octavia RS' Estate"),
-      subtitle: L("+22с до зміни (найкраще авто), комфортна поїздка +12% сім'ї та +10 Паличу!", "+22s shift time (best car), +12% family & +10 Palych, 0% NABK!"),
-      cost: 29000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 5, palychBoost: 10, moraleBoost: 12
+      subtitle: L("+24с до зміни (найкраще авто), комфортна поїздка +12% сім'ї та +10 Паличу!", "+24s shift time (best car), +12% family & +10 Palych, 0% NABK!"),
+      cost: 520000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 5, palychBoost: 10, moraleBoost: 12
+    },
+    {
+      id: "audi_q7_blyakha",
+      category: "AUTO",
+      currency: "USD",
+      icon: "🚙",
+      title: L("«Ауді Q7» на дипломатичних номерах", "'Audi Q7' on Diplomatic Plates"),
+      subtitle: L("+25с до зміни (найкраще авто), +15 Толіку та +10% до суми всіх конвертів!", "+25s shift time (best car), +15 Tolik & +10% larger bribe envelopes!"),
+      cost: 14500, passiveIncome: 0, passiveUsd: 0, dailyRisk: 2, tolikBoost: 15, palychBoost: 10, moraleBoost: 12
+    },
+    {
+      id: "euro_bmw",
+      category: "AUTO",
+      currency: "USD",
+      icon: "🚙",
+      title: L("Чорна «Беха Х5» (Повний фарш)", "Black 'Beha X5' Executive"),
+      subtitle: L("+28с до зміни (найкраще авто), повага Толіка (+20) і Палича (+15), +4% НАБК/день", "+28s shift (best car), Tolik (+20) & Palych (+15), +4% daily NABK risk"),
+      cost: 24000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 4, tolikBoost: 20, palychBoost: 15, moraleBoost: 15
+    },
+    {
+      id: "gelik_v8",
+      category: "AUTO",
+      currency: "USD",
+      icon: "🚐",
+      title: L("Броньований «Гелік-Кубик V8 AMG»", "Armored 'Gelik-Kubik V8 AMG'"),
+      subtitle: L("+31с до зміни, +25 Паличу і Толіку, та -15% ціни вечірніх підкупів!", "+31s shift (best car), +25 Palych & Tolik, -15% evening bribe costs!"),
+      cost: 42000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 5, tolikBoost: 25, palychBoost: 25, moraleBoost: 20
+    },
+    {
+      id: "porsche_911",
+      category: "AUTO",
+      currency: "USD",
+      icon: "🏎️",
+      title: L("Спорткар «Стріла 911 Турбо»", "Sports Car 'Strila 911 Turbo'"),
+      subtitle: L("+35с до кожної зміни назавжди +25 поваги Толіка та +20 щастя сім'ї!", "+35s to every shift permanently +25 Tolik rep & +20 family morale!"),
+      cost: 65000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 4, tolikBoost: 25, palychBoost: 10, moraleBoost: 20
+    },
+    {
+      id: "monako_hypercar",
+      category: "AUTO",
+      currency: "USD",
+      icon: "🏎️",
+      title: L("Гіперкар «Фурія-V12 Монаківка»", "Hypercar 'Furia-V12 Monakivka'"),
+      subtitle: L("+40с до кожної зміни, +35 Толіку, +25 Паличу та +25% сім'ї!", "+40s shift time, +35 Tolik, +25 Palych & +25% family!"),
+      cost: 110000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 5, tolikBoost: 35, palychBoost: 25, moraleBoost: 25
+    },
+    {
+      id: "coffee_vending",
+      category: "REALTY",
+      currency: "UAH",
+      onlyUah: true,
+      icon: "🥤",
+      title: L("Кавомат самообслуговування перед шлагбаумом", "Self-Service Coffee Kiosk at Gate"),
+      subtitle: L("Білий мікро-бізнес! +12 000 🪙 гримників щоранку без уваги НАБК!", "Clean micro-biz! +12,000 🪙 hrymnyky every morning, 0% NABK!"),
+      cost: 75000, passiveIncome: 12000, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 8
+    },
+    {
+      id: "shawarma_kiosk",
+      category: "REALTY",
+      currency: "UAH",
+      icon: "🥙",
+      title: L("Кіоск «Шаурма Шлагбаум-Люкс» біля КПП", "'Barrier-Lux Shawarma' Kiosk outside Checkpoint"),
+      subtitle: L("Білий бізнес! Приносить +22 000 🪙 щоранку та знижує комісію відмивання!", "Legal business! +22,000 🪙 every morning & lowers laundering fee!"),
+      cost: 140000, passiveIncome: 22000, passiveUsd: 0, dailyRisk: 0, tolikBoost: 5, palychBoost: 10, moraleBoost: 10
+    },
+    {
+      id: "car_wash_lux",
+      category: "REALTY",
+      currency: "UAH",
+      onlyUah: true,
+      icon: "🧼",
+      title: L("Автомийка самообслуговування «Піна-Кордон»", "Self-Serve Car Wash 'Foam-Border'"),
+      subtitle: L("Черга миє авто перед митницею: +32 000 🪙 щоранку, 0% ризику НАБК!", "Drivers wash up before customs: +32,000 🪙 every morning, 0% NABK!"),
+      cost: 210000, passiveIncome: 32000, passiveUsd: 0, dailyRisk: 0, tolikBoost: 5, palychBoost: 8, moraleBoost: 10
+    },
+    {
+      id: "tire_service_sto",
+      category: "REALTY",
+      currency: "UAH",
+      onlyUah: true,
+      icon: "🔧",
+      title: L("Шиномонтаж і СТО «Шлагбаум-Сервіс»", "Highway Tire Shop & Garage 'Barrier-Service'"),
+      subtitle: L("Білий бізнес на трасі! +45 000 🪙 щоранку без уваги НАБК (+5% сім'я)", "Clean road business! +45,000 🪙 every morning, 0% NABK risk"),
+      cost: 290000, passiveIncome: 45000, passiveUsd: 0, dailyRisk: 0, tolikBoost: 10, palychBoost: 5, moraleBoost: 5
     },
     {
       id: "blogger_minivan",
@@ -913,9 +1018,9 @@
       currency: "UAH",
       onlyUah: true,
       icon: "🚐",
-      title: L("Мінівен «Тік-Ток Блогер-Мобіль»", "'Tik-Tok Blogger-Mobile' Minivan"),
-      subtitle: L("Реклама прикордонних лайфхаків: +1 600 🪙 щоранку +15% щастя сім'ї!", "Ad revenue: +1,600 🪙 every morning +15% family morale!"),
-      cost: 31000, passiveIncome: 1600, passiveUsd: 0, dailyRisk: 0, tolikBoost: 10, palychBoost: 0, moraleBoost: 15
+      title: L("Медіа-студія та мінівен «Тік-Ток Блогер-Мобіль»", "'Tik-Tok Blogger-Mobile' Media Studio"),
+      subtitle: L("Реклама прикордонних лайфхаків: +55 000 🪙 щоранку +15% щастя сім'ї!", "Ad revenue: +55,000 🪙 every morning +15% family morale!"),
+      cost: 360000, passiveIncome: 55000, passiveUsd: 0, dailyRisk: 0, tolikBoost: 10, palychBoost: 0, moraleBoost: 15
     },
     {
       id: "suburban_brick_house",
@@ -923,9 +1028,9 @@
       currency: "UAH",
       onlyUah: true,
       icon: "🏡",
-      title: L("Цегляна хата в передмісті (Теплиця + льох)", "Suburban Brick House (Greenhouse & Cellar)"),
-      subtitle: L("Біла нерухомість! +1 900 🪙 щоранку та +18% щастя сім'ї (0% НАБК).", "Clean home! +1,900 🪙 every morning & +18% family morale (0% NABK)."),
-      cost: 38000, passiveIncome: 1900, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 18
+      title: L("Котедж у передмісті з теплицею та сонячними панелями", "Suburban Cottage with Solar Panels"),
+      subtitle: L("Біла нерухомість! +75 000 🪙 щоранку та +20% щастя сім'ї (0% НАБК).", "Clean home! +75,000 🪙 every morning & +20% family morale (0% NABK)."),
+      cost: 580000, passiveIncome: 75000, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 20
     },
     {
       id: "border_hotel",
@@ -933,9 +1038,54 @@
       currency: "UAH",
       onlyUah: true,
       icon: "🏨",
-      title: L("Мотель «Нічний Шлагбаум» біля траси", "'Night Barrier' Highway Motel"),
-      subtitle: L("Білий бізнес! +2 400 🪙 щоранку і +15% щастя сім'ї (0% НАБК)", "Clean business! +2,400 🪙 every morning & +15% family morale (0% NABK)"),
-      cost: 46000, passiveIncome: 2400, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 15
+      title: L("Готель-комплекс «Нічний Шлагбаум» біля траси", "'Night Barrier' Highway Hotel Complex"),
+      subtitle: L("Білий бізнес! +110 000 🪙 щоранку і +18% щастя сім'ї (0% НАБК)", "Clean business! +110,000 🪙 every morning & +18% family morale (0% NABK)"),
+      cost: 850000, passiveIncome: 110000, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 18
+    },
+    {
+      id: "duty_free_share",
+      category: "REALTY",
+      currency: "USD",
+      icon: "🛍️",
+      title: L("Частка в магазині «Д'юті-Фрі Захід-04»", "Stake in 'Duty-Free Zakhid-04'"),
+      subtitle: L("Тіньова торгівля алкоголем і сигаретами: +3 200 💵 щоранку +15 Паличу!", "Border duty-free dividends: +3,200 💵 every morning & +15 Palych!"),
+      cost: 18000, passiveIncome: 0, passiveUsd: 3200, dailyRisk: 3, tolikBoost: 10, palychBoost: 15, moraleBoost: 10
+    },
+    {
+      id: "kyivhrad_flat",
+      category: "REALTY",
+      currency: "USD",
+      icon: "🏢",
+      title: L("Пентхаус у ЖК «Липки-Гранд» (Кийград) на тещу", "Kyihrad Penthouse (in Mother-in-Law's Name)"),
+      subtitle: L("Елітна оренда +85 000 🪙 та +2 500 💵 щоранку! (+5% уваги НАБК/день)", "Rental yield +85,000 🪙 & +2,500 💵 every morning! (+5% daily NABK)"),
+      cost: 48000, passiveIncome: 85000, passiveUsd: 2500, dailyRisk: 5, tolikBoost: 0, palychBoost: 0, moraleBoost: 25
+    },
+    {
+      id: "carpathian_chalet",
+      category: "REALTY",
+      currency: "USD",
+      icon: "🏔️",
+      title: L("Шале з чанами в Буковельську (Із вертолітним майданчиком)", "Bukovelsk Mountain Chalet with Helipad"),
+      subtitle: L("Курортний бізнес: +110 000 🪙 та +4 800 💵 щоранку + 25% щастя сім'ї!", "Resort income: +110,000 🪙 & +4,800 💵 every morning +25% family!"),
+      cost: 75000, passiveIncome: 110000, passiveUsd: 4800, dailyRisk: 4, tolikBoost: 10, palychBoost: 15, moraleBoost: 25
+    },
+    {
+      id: "spain_villa",
+      category: "REALTY",
+      currency: "USD",
+      icon: "🏖️",
+      title: L("Вілла на березі Алікантово (Іспанщина) + Золотий паспорт", "Alikantovo Seafront Villa (Spainia) & Golden Visa"),
+      subtitle: L("Імперія нерухомості + пасивні +140 000 🪙 і +8 500 💵 щоранку!", "Real-estate empire + 140,000 🪙 & 8,500 💵 passive yield every morning!"),
+      cost: 135000, passiveIncome: 140000, passiveUsd: 8500, dailyRisk: 0, tolikBoost: 0, palychBoost: 0, moraleBoost: 35
+    },
+    {
+      id: "dnipro_mansion",
+      category: "REALTY",
+      currency: "USD",
+      icon: "🏰",
+      title: L("Маєток на березі Дніпра (Із причалом та бункером)", "Riverfront Estate with Private Pier & Bunker"),
+      subtitle: L("+12 000 💵 оренди щоранку та +35% щастя сім'ї!", "+12,000 💵 yield every morning & +35% family morale!"),
+      cost: 175000, passiveIncome: 0, passiveUsd: 12000, dailyRisk: 5, tolikBoost: 15, palychBoost: 15, moraleBoost: 35
     },
     {
       id: "balenci_jacket",
@@ -943,8 +1093,17 @@
       currency: "UAH",
       icon: "🧥",
       title: L("Бренд-куртка «Баляга-Шок Піксель»", "Luxury Jacket 'Balyaga-Shok Pixel'"),
-      subtitle: L("+25% до всіх чайових за каву та +15% до конвертів від VIP-клієнтів!", "+25% coffee tips & +15% larger VIP bribe envelopes!"),
-      cost: 15000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 1, tolikBoost: 10, palychBoost: 10, moraleBoost: 10
+      subtitle: L("+35% до всіх чайових за каву та +20% до конвертів від порушників!", "+35% coffee tips & +20% larger bribe envelopes!"),
+      cost: 95000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 1, tolikBoost: 10, palychBoost: 10, moraleBoost: 10
+    },
+    {
+      id: "customs_seal_ring",
+      category: "LUXURY",
+      currency: "USD",
+      icon: "💍",
+      title: L("Золотий перстень «Ветеран Митниці»", "Gold 'Customs Veteran' Signet Ring"),
+      subtitle: L("Авторитет у темноті: +15% до суми всіх конвертів та +12 Паличу і Толіку!", "Instant clout: +15% larger bribe envelopes & +12 Palych/Tolik!"),
+      cost: 3500, passiveIncome: 0, passiveUsd: 0, dailyRisk: 2, tolikBoost: 12, palychBoost: 12, moraleBoost: 5
     },
     {
       id: "rolex_watch",
@@ -953,7 +1112,7 @@
       icon: "⌚",
       title: L("Золотий хронограф «Кролекс» (Як у генерала митниці)", "Gold 'Krolex' Chronograph"),
       subtitle: L("Пал Палич падає на коліна перед статусом і ріже свою вечірню частку на -50%!", "Pal Palych bows to the clout and halves his evening cut by 50%!"),
-      cost: 2400, passiveIncome: 0, passiveUsd: 0, dailyRisk: 3, tolikBoost: 10, palychBoost: 25, moraleBoost: 10
+      cost: 8500, passiveIncome: 0, passiveUsd: 0, dailyRisk: 3, tolikBoost: 10, palychBoost: 25, moraleBoost: 10
     },
     {
       id: "fake_diplomat_id",
@@ -962,7 +1121,7 @@
       icon: "🛂",
       title: L("Дипломатичний паспорт «Офшорія-VIP»", "Diplomatic Passport 'Ofshoria-VIP'"),
       subtitle: L("Прикриття статусом: пасивно -6% ризику НАБК щоранку та +15 Паличу", "Immunity cover: passively -6% NABK risk every morning & +15 Palych"),
-      cost: 3200, passiveIncome: 0, passiveUsd: 0, dailyRisk: -6, tolikBoost: 5, palychBoost: 15, moraleBoost: 10
+      cost: 12000, passiveIncome: 0, passiveUsd: 0, dailyRisk: -6, tolikBoost: 5, palychBoost: 15, moraleBoost: 10
     },
     {
       id: "lawyer_retainer",
@@ -970,17 +1129,8 @@
       currency: "USD",
       icon: "⚖️",
       title: L("Абонемент топ-адвоката з Кийграда", "Top Kyihrad Defense Lawyer Retainer"),
-      subtitle: L("-5% НАБК щоранку та +12% шансу успіху всіх вечірніх підкупів!", "-5% daily NABK risk & +12% success chance on all evening bribes!"),
-      cost: 4200, passiveIncome: 0, passiveUsd: 0, dailyRisk: -5, tolikBoost: 5, palychBoost: 10, moraleBoost: 5
-    },
-    {
-      id: "euro_bmw",
-      category: "AUTO",
-      currency: "USD",
-      icon: "🚙",
-      title: L("Чорна «Беха Х5» (Повний фарш)", "Black 'Beha X5' Executive"),
-      subtitle: L("+26с до зміни (найкраще авто), повага Толіка (+20) і Палича (+15), +4% НАБК/день", "+26s shift (best car), Tolik (+20) & Palych (+15), +4% daily NABK risk"),
-      cost: 3800, passiveIncome: 0, passiveUsd: 0, dailyRisk: 4, tolikBoost: 20, palychBoost: 15, moraleBoost: 15
+      subtitle: L("-6% НАБК щоранку та +15% шансу успіху всіх вечірніх підкупів!", "-6% daily NABK risk & +15% success chance on all evening bribes!"),
+      cost: 16000, passiveIncome: 0, passiveUsd: 0, dailyRisk: -6, tolikBoost: 5, palychBoost: 10, moraleBoost: 5
     },
     {
       id: "simba_zoo",
@@ -988,26 +1138,8 @@
       currency: "USD",
       icon: "🦁",
       title: L("Міні-зоопарк із ручним левом «Сімба» на дачі", "Backyard Mini-Zoo with Pet Lion 'Simba'"),
-      subtitle: L("Приносить +2 000 🪙 щоранку від квитків +30% щастя сім'ї!", "Yields +2,000 🪙 ticket income every morning +30% family!"),
-      cost: 5400, passiveIncome: 2000, passiveUsd: 0, dailyRisk: 3, tolikBoost: 15, palychBoost: 10, moraleBoost: 30
-    },
-    {
-      id: "kyivhrad_flat",
-      category: "REALTY",
-      currency: "USD",
-      icon: "🏢",
-      title: L("Пентхаус у ЖК «Липки-Гранд» (Кийград) на тещу", "Kyihrad Penthouse (in Mother-in-Law's Name)"),
-      subtitle: L("Стабільна оренда +2 500 🪙 щоранку! (+5% уваги НАБК/день)", "Rental yield +2,500 🪙 every morning! (+5% daily NABK attention)"),
-      cost: 6500, passiveIncome: 2500, passiveUsd: 0, dailyRisk: 5, tolikBoost: 0, palychBoost: 0, moraleBoost: 25
-    },
-    {
-      id: "porsche_911",
-      category: "AUTO",
-      currency: "USD",
-      icon: "🏎️",
-      title: L("Спорткар «Стріла 911 Турбо»", "Sports Car 'Strila 911 Turbo'"),
-      subtitle: L("+32с до кожної зміни назавжди +25 поваги Толіка та +20 щастя сім'ї!", "+32s to every shift permanently +25 Tolik rep & +20 family morale!"),
-      cost: 7800, passiveIncome: 0, passiveUsd: 0, dailyRisk: 4, tolikBoost: 25, palychBoost: 10, moraleBoost: 20
+      subtitle: L("Приносить +95 000 🪙 щоранку від VIP-екскурсій +30% щастя сім'ї!", "Yields +95,000 🪙 ticket income every morning +30% family!"),
+      cost: 28000, passiveIncome: 95000, passiveUsd: 0, dailyRisk: 3, tolikBoost: 15, palychBoost: 10, moraleBoost: 30
     },
     {
       id: "cyprus_offshore",
@@ -1015,17 +1147,8 @@
       currency: "USD",
       icon: "🏝️",
       title: L("Холодний крипто-гаманець та траст в Офшорії", "Cold Crypto Wallet & Ofshoria Offshore Trust"),
-      subtitle: L("Ховає декларацію: -8% ризику НАБК щодня, більший ліміт відмивання і +400 💵 дивідендів!", "Shields assets: -8% daily NABK, higher cap & +400 💵/morning!"),
-      cost: 9500, passiveIncome: 0, passiveUsd: 400, dailyRisk: -8, tolikBoost: 15, palychBoost: 0, moraleBoost: 10
-    },
-    {
-      id: "carpathian_chalet",
-      category: "REALTY",
-      currency: "USD",
-      icon: "🏔️",
-      title: L("Шале з чанами в Буковельську (Із вертолітним майданчиком)", "Bukovelsk Mountain Chalet with Hot Tubs"),
-      subtitle: L("Курортний бізнес: +3 200 🪙 та +350 💵 щоранку + 25% щастя сім'ї!", "Resort income: +3,200 🪙 & +350 💵 every morning +25% family!"),
-      cost: 11500, passiveIncome: 3200, passiveUsd: 350, dailyRisk: 4, tolikBoost: 10, palychBoost: 15, moraleBoost: 25
+      subtitle: L("Ховає декларацію: -8% НАБК щодня, +15 000 💵 ліміту відмивання і +5 500 💵 щоранку!", "Shields assets: -8% daily NABK, +15,000 💵 cap & +5,500 💵/morning!"),
+      cost: 38000, passiveIncome: 0, passiveUsd: 5500, dailyRisk: -8, tolikBoost: 15, palychBoost: 0, moraleBoost: 10
     },
     {
       id: "monako_yacht",
@@ -1033,39 +1156,12 @@
       currency: "USD",
       icon: "🚤",
       title: L("Яхта «Хвиля Монаківки» (Стоїть на причалі)", "Yacht 'Monakivka Wave'"),
-      subtitle: L("Здається туристам: +550 💵 щоранку та +10 щастя сім'ї щодня!", "Charter income: +550 💵 every morning & +10 daily family morale!"),
-      cost: 13000, passiveIncome: 0, passiveUsd: 550, dailyRisk: 3, tolikBoost: 15, palychBoost: 10, moraleBoost: 25
-    },
-    {
-      id: "monako_hypercar",
-      category: "AUTO",
-      currency: "USD",
-      icon: "🏎️",
-      title: L("Гіперкар «Фурія-V12 Монаківка»", "Hypercar 'Furia-V12 Monakivka'"),
-      subtitle: L("+38с до кожної зміни, +35 Толіку, +25 Паличу та +25% сім'ї!", "+38s shift time, +35 Tolik, +25 Palych & +25% family!"),
-      cost: 14500, passiveIncome: 0, passiveUsd: 0, dailyRisk: 5, tolikBoost: 35, palychBoost: 25, moraleBoost: 25
-    },
-    {
-      id: "spain_villa",
-      category: "REALTY",
-      currency: "USD",
-      icon: "🏖️",
-      title: L("Вілла на березі Алікантово (Іспанщина) + Золотий паспорт", "Alikantovo Seafront Villa (Spainia) & Golden Visa"),
-      subtitle: L("Імперія нерухомості + пасивні +3 500 🪙 і +650 💵 щоранку!", "Real-estate empire + 3,500 🪙 & 650 💵 passive yield every morning!"),
-      cost: 18000, passiveIncome: 3500, passiveUsd: 650, dailyRisk: 0, tolikBoost: 0, palychBoost: 0, moraleBoost: 35
-    },
-    {
-      id: "dnipro_mansion",
-      category: "REALTY",
-      currency: "USD",
-      icon: "🏰",
-      title: L("Особняк на березі Дніпра (З власним причалом)", "Riverfront Mansion with Private Pier"),
-      subtitle: L("+950 💵 оренди щоранку та +30% щастя сім'ї!", "+950 💵 rent every morning & +30% family morale!"),
-      cost: 22000, passiveIncome: 0, passiveUsd: 950, dailyRisk: 5, tolikBoost: 15, palychBoost: 15, moraleBoost: 30
+      subtitle: L("Здається туристам: +7 500 💵 щоранку та +10% щастя сім'ї щодня!", "Charter income: +7,500 💵 every morning & +10% daily family morale!"),
+      cost: 90000, passiveIncome: 0, passiveUsd: 7500, dailyRisk: 3, tolikBoost: 15, palychBoost: 10, moraleBoost: 25
     }
   ];
 
-  // Add-ons & Upgrades unlocked once you own the base asset (Crocs pool, OSINT app, etc.!)
+  // 12 Add-ons & Upgrades unlocked once you own the base asset!
   const ASSET_ADDONS = [
     {
       id: "addon_syrup_bar",
@@ -1073,8 +1169,17 @@
       currency: "UAH",
       icon: "🍯",
       title: L("Сироп-бар та круасани у будці", "Syrup Bar & Croissants"),
-      subtitle: L("+40 🪙 до кожних чайових за каву!", "+40 🪙 bonus to every coffee tip!"),
-      cost: 3200, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 5
+      subtitle: L("+350 🪙 до кожних чайових за каву!", "+350 🪙 bonus to every coffee tip!"),
+      cost: 18000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 5
+    },
+    {
+      id: "addon_gold_cage",
+      parentId: "parrot_kesha",
+      currency: "UAH",
+      icon: "🎙️",
+      title: L("Золота клітка + мікрофон для «Кеші»", "Gold Cage & Mic for 'Kesha'"),
+      subtitle: L("+300 🪙 до кожних чайових за каву (Кеша розважає чергу)!", "+300 🪙 coffee tip bonus (Kesha entertains the line)!"),
+      cost: 22000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 10
     },
     {
       id: "addon_osint_app",
@@ -1082,8 +1187,8 @@
       currency: "UAH",
       icon: "🛰️",
       title: L("Захищений VPN-канал «Тінь-Контур»", "Encrypted VPN 'Shadow-Kontur'"),
-      subtitle: L("-20% стрибка ризику НАБК при взятті конвертів + +600 💵 до ліміту відмивання!", "-20% NABK jump when taking bribes + +600 💵 daily laundering cap!"),
-      cost: 14000, passiveIncome: 0, passiveUsd: 0, dailyRisk: -2, tolikBoost: 0, palychBoost: 0, moraleBoost: 5
+      subtitle: L("-20% стрибка ризику НАБК при взятті конвертів + +10 000 💵 до ліміту відмивання!", "-20% NABK jump when taking bribes + +10,000 💵 daily laundering cap!"),
+      cost: 45000, passiveIncome: 0, passiveUsd: 0, dailyRisk: -2, tolikBoost: 0, palychBoost: 0, moraleBoost: 5
     },
     {
       id: "addon_night_grill",
@@ -1091,8 +1196,26 @@
       currency: "UAH",
       icon: "🔥",
       title: L("Цілодобовий нічний гриль + чебуреки", "24/7 Night Grill Extension"),
-      subtitle: L("+800 🪙 чистого білого прибутку щоранку!", "+800 🪙 legal profit every morning!"),
-      cost: 12000, passiveIncome: 800, passiveUsd: 0, dailyRisk: 0, tolikBoost: 5, palychBoost: 5, moraleBoost: 5
+      subtitle: L("+16 000 🪙 чистого білого прибутку щоранку!", "+16,000 🪙 legal profit every morning!"),
+      cost: 65000, passiveIncome: 16000, passiveUsd: 0, dailyRisk: 0, tolikBoost: 5, palychBoost: 5, moraleBoost: 5
+    },
+    {
+      id: "addon_tire_import",
+      parentId: "tire_service_sto",
+      currency: "UAH",
+      icon: "🛞",
+      title: L("Склад європейської гуми та дисків без розмитнення", "Un-cleared Euro Tire & Rim Depot"),
+      subtitle: L("+28 000 🪙 та +800 💵 пасивно щоранку!", "+28,000 🪙 & +800 💵 every morning!"),
+      cost: 120000, passiveIncome: 28000, passiveUsd: 800, dailyRisk: 2, tolikBoost: 10, palychBoost: 5, moraleBoost: 5
+    },
+    {
+      id: "addon_hotel_casino",
+      parentId: "border_hotel",
+      currency: "USD",
+      icon: "🎰",
+      title: L("Підпільна VIP-кімната покеру в підвалі готелю", "Underground Hotel Poker Room"),
+      subtitle: L("+2 200 💵 тіньового прибутку щоранку!", "+2,200 💵 underground income every morning!"),
+      cost: 9500, passiveIncome: 0, passiveUsd: 2200, dailyRisk: 3, tolikBoost: 15, palychBoost: 10, moraleBoost: 10
     },
     {
       id: "addon_migalka",
@@ -1101,7 +1224,7 @@
       icon: "🚨",
       title: L("Стробоскопи та «блатні» номери КР 0001", "VIP Strobes & KR 0001 Plates"),
       subtitle: L("+12с до кожної зміни (доїзд без пробок) + 15 поваги Толіка і Палича!", "+12s shift time + 15 Tolik & Palych rep!"),
-      cost: 1200, passiveIncome: 0, passiveUsd: 0, dailyRisk: 3, tolikBoost: 15, palychBoost: 15, moraleBoost: 5
+      cost: 4500, passiveIncome: 0, passiveUsd: 0, dailyRisk: 3, tolikBoost: 15, palychBoost: 15, moraleBoost: 5
     },
     {
       id: "addon_croc_pool",
@@ -1109,8 +1232,8 @@
       currency: "USD",
       icon: "🐊",
       title: L("Басейн на даху з ручним крокодилом «Гена»", "Rooftop Pool with Pet Crocodile 'Gena'"),
-      subtitle: L("+1 600 🪙 оренди за VIP-вечірки щоранку + 20% щастя сім'ї!", "+1,600 🪙 VIP party rent every morning + 20% family morale!"),
-      cost: 2200, passiveIncome: 1600, passiveUsd: 0, dailyRisk: 3, tolikBoost: 10, palychBoost: 10, moraleBoost: 20
+      subtitle: L("+45 000 🪙 оренди за VIP-вечірки щоранку + 20% щастя сім'ї!", "+45,000 🪙 VIP party rent every morning + 20% family morale!"),
+      cost: 11000, passiveIncome: 45000, passiveUsd: 0, dailyRisk: 3, tolikBoost: 10, palychBoost: 10, moraleBoost: 20
     },
     {
       id: "addon_heli_pad",
@@ -1118,8 +1241,8 @@
       currency: "USD",
       icon: "🚁",
       title: L("Персональний гелікоптер «Бджілка-М»", "Private Helicopter 'Bdzhilka-M'"),
-      subtitle: L("+280 💵 чартеру щоранку та -6% ризику НАБК щодня!", "+280 💵 charter every morning & -6% daily NABK risk!"),
-      cost: 3400, passiveIncome: 0, passiveUsd: 280, dailyRisk: -6, tolikBoost: 10, palychBoost: 10, moraleBoost: 15
+      subtitle: L("+3 200 💵 чартеру щоранку та -6% ризику НАБК щодня!", "+3,200 💵 charter every morning & -6% daily NABK risk!"),
+      cost: 18000, passiveIncome: 0, passiveUsd: 3200, dailyRisk: -6, tolikBoost: 10, palychBoost: 10, moraleBoost: 15
     },
     {
       id: "addon_gold_jacuzzi",
@@ -1127,17 +1250,8 @@
       currency: "USD",
       icon: "🛁",
       title: L("Золоте джакузі на верхній палубі", "Gold Deck Jacuzzi"),
-      subtitle: L("+220 💵 чартерного доходу щоранку!", "+220 💵 extra charter income every morning!"),
-      cost: 2800, passiveIncome: 0, passiveUsd: 220, dailyRisk: 2, tolikBoost: 10, palychBoost: 5, moraleBoost: 15
-    },
-    {
-      id: "addon_gold_cage",
-      parentId: "parrot_kesha",
-      currency: "UAH",
-      icon: "🎙️",
-      title: L("Золота клітка + мікрофон для «Кеші»", "Gold Cage & Mic for 'Kesha'"),
-      subtitle: L("+25 🪙 до кожних чайових за каву (Кеша розважає чергу)!", "+25 🪙 coffee tip bonus (Kesha entertains the line)!"),
-      cost: 4200, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 10
+      subtitle: L("+2 800 💵 чартерного доходу щоранку!", "+2,800 💵 extra charter income every morning!"),
+      cost: 15000, passiveIncome: 0, passiveUsd: 2800, dailyRisk: 2, tolikBoost: 10, palychBoost: 5, moraleBoost: 15
     },
     {
       id: "addon_nitro_spoiler",
@@ -1146,7 +1260,7 @@
       icon: "🔥",
       title: L("Нітро-турбіна та карбоновий спойлер", "Nitro Turbine & Carbon Spoiler"),
       subtitle: L("Ще +15с до кожної зміни та +15 поваги Толіка!", "Extra +15s shift time & +15 Tolik rep!"),
-      cost: 2600, passiveIncome: 0, passiveUsd: 0, dailyRisk: 2, tolikBoost: 15, palychBoost: 5, moraleBoost: 5
+      cost: 14000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 2, tolikBoost: 15, palychBoost: 5, moraleBoost: 5
     },
     {
       id: "addon_vineyard",
@@ -1154,8 +1268,8 @@
       currency: "USD",
       icon: "🍷",
       title: L("Власний виноградник та бункер на березі", "Private Vineyard & Coastal Bunker"),
-      subtitle: L("+450 💵 прибутку щоранку!", "+450 💵 passive yield every morning!"),
-      cost: 4800, passiveIncome: 0, passiveUsd: 450, dailyRisk: -4, tolikBoost: 0, palychBoost: 0, moraleBoost: 20
+      subtitle: L("+4 500 💵 прибутку щоранку та -4% НАБК!", "+4,500 💵 passive yield every morning & -4% NABK!"),
+      cost: 25000, passiveIncome: 0, passiveUsd: 4500, dailyRisk: -4, tolikBoost: 0, palychBoost: 0, moraleBoost: 20
     }
   ];
 
@@ -6182,7 +6296,10 @@
     if (!offer) return null;
     const currency = offer.currency === "USD" ? "USD" : "UAH";
     const modMult = state.sandboxMod ? (state.sandboxMod.bribeMult || 1) : 1;
-    const jacketMult = (state.ownedAssets && state.ownedAssets.includes("balenci_jacket")) ? 1.15 : 1.0;
+    const hasAsset = id => Boolean(state.ownedAssets && state.ownedAssets.includes(id));
+    const jacketMult = hasAsset("balenci_jacket") ? 1.20 : 1.0;
+    const ringMult = hasAsset("customs_seal_ring") ? 1.15 : 1.0;
+    const audiMult = hasAsset("audi_q7_blyakha") ? 1.10 : 1.0;
     const prepMult = 1 + (state.nextBribeBoost || 0);
     let rankScale = 1;
     if (currency === "USD" && !offer.isStingTrap) {
@@ -6192,7 +6309,8 @@
       else if (d >= 3) rankScale = 1.1;
       else rankScale = 1.0;
     }
-    const amt = Math.round(offer.amount * rankScale * modMult * jacketMult * prepMult);
+    const baseAmt = currency === "USD" ? (Math.max(450, offer.amount) * 3.2) : (offer.amount * 8);
+    const amt = Math.round(baseAmt * rankScale * modMult * jacketMult * ringMult * audiMult * prepMult);
     return {
       amount: amt,
       currency,
@@ -6350,14 +6468,14 @@
     };
   }
 
-  function getEscapeTarget() { return state.isSandbox ? 20000 : 14000; }
+  function getEscapeTarget() { return state.isSandbox ? 100000 : 60000; }
   function getEscapeTolikRep() { return state.isSandbox ? 65 : 55; }
   function getRank() {
     if (state.sbkColonelPromoted) {
       return {
         id: "SBK_COLONEL",
         title: L("🕵️ Таємний Полковник СБК («Кордон-7»)", "🕵️ Covert SBK Colonel ('Border-7')"),
-        salary: 1800,
+        salary: 11000,
         perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 🪙 • -8% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 🪙 • -8% NABK/day"),
         dogCost: 0,
         freeFirstMistake: true,
@@ -6368,8 +6486,8 @@
       return {
         id: "SBK_AGENT",
         title: L("🕵️ Негласний агент СБК («Кордон-7»)", "🕵️ Undercover SBK Agent ('Border-7')"),
-        salary: 1200,
-        perkLabel: L("🔓 Перк: +1 200 🪙/арешт • Пес -4с", "🔓 Perk: +1,200 🪙/arrest • Dog -4s"),
+        salary: 6500,
+        perkLabel: L("🔓 Перк: +12 000 🪙/арешт • Пес -4с", "🔓 Perk: +12,000 🪙/arrest • Dog -4s"),
         dogCost: 4,
         freeFirstMistake: false,
         dailyRiskHeal: 4
@@ -6379,7 +6497,7 @@
       return {
         id: "CAMPAIGN_INSPECTOR",
         title: L("Інспектор ДПСК", "SBGS Inspector"),
-        salary: 650,
+        salary: 3500,
         perkLabel: L("Сюжетний режим (перки Архіву активні)", "Story mode (Archive perks active)"),
         dogCost: 8,
         freeFirstMistake: false,
@@ -6391,7 +6509,7 @@
       return {
         id: "REGIONAL_CURATOR",
         title: L("Регіональний куратор ДПСК", "Regional SBGS Curator"),
-        salary: 2300,
+        salary: 14000,
         perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 🪙 • -8% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 🪙 • -8% NABK/day"),
         dogCost: 0,
         freeFirstMistake: true,
@@ -6402,7 +6520,7 @@
       return {
         id: "CHECKPOINT_CHIEF",
         title: L("Начальник КПП", "Checkpoint Chief"),
-        salary: 1800,
+        salary: 10000,
         perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 🪙 • -6% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 🪙 • -6% NABK/day"),
         dogCost: 0,
         freeFirstMistake: true,
@@ -6413,7 +6531,7 @@
       return {
         id: "CHIEF_CUSTOMS",
         title: L("Старший офіцер митниці", "Chief Customs Officer"),
-        salary: 1400,
+        salary: 8000,
         perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 🪙 • -5% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 🪙 • -5% NABK/day"),
         dogCost: 0,
         freeFirstMistake: true,
@@ -6424,7 +6542,7 @@
       return {
         id: "DEPUTY_PALYCH",
         title: L("Заступник Пал Палича", "Palych's Deputy"),
-        salary: 1100,
+        salary: 6000,
         perkLabel: L("🔓 Перки: 1-ша помилка 0 🪙 • Пес -4с", "🔓 Perks: 1st Mistake 0 🪙 • Dog -4s"),
         dogCost: 4,
         freeFirstMistake: true,
@@ -6435,7 +6553,7 @@
       return {
         id: "SENIOR_SHIFT",
         title: L("Старший зміни", "Senior Shift Inspector"),
-        salary: 850,
+        salary: 4500,
         perkLabel: L("🔓 Перк: Пес «Бавовна» витрачає 4с замість 8с", "🔓 Perk: Sniffer dog costs 4s instead of 8s"),
         dogCost: 4,
         freeFirstMistake: false,
@@ -6445,7 +6563,7 @@
     return {
       id: "JUNIOR",
       title: L("Молодший інспектор", "Junior Inspector"),
-      salary: 650,
+      salary: 3200,
       perkLabel: L("Підніміться до Дня 3 для 1-го рангового перку!", "Reach Day 3 to unlock your first Rank Perk!"),
       dogCost: 8,
       freeFirstMistake: false,
@@ -6454,15 +6572,15 @@
   }
 
   function getEffectiveBossCut() {
-    const bribeUsd = state.shiftBribesTotal > 0 ? Math.round((state.shiftBribesTotal * 0.26) / USD_UAH_RATE) : 0;
-    const baseUsd = Math.min(1800, Math.max(50, 35 + bribeUsd));
-    return state.ownedAssets.includes("rolex_watch") ? Math.max(15, Math.round(baseUsd * 0.5)) : baseUsd;
+    const bribeUsd = state.shiftBribesTotal > 0 ? Math.round((state.shiftBribesTotal * 0.22) / USD_UAH_RATE) : 0;
+    const baseUsd = Math.min(12000, Math.max(300, 150 + bribeUsd));
+    return state.ownedAssets.includes("rolex_watch") ? Math.max(100, Math.round(baseUsd * 0.5)) : baseUsd;
   }
 
   function getPassiveRent() {
     const assetRent = ASSET_UPGRADES.filter(a => state.ownedAssets.includes(a.id)).reduce((s, a) => s + a.passiveIncome, 0);
     const addonRent = ASSET_ADDONS.filter(a => state.ownedAssets.includes(a.id)).reduce((s, a) => s + a.passiveIncome, 0);
-    const sbkCovertPay = state.isUndercoverSbkAgent ? (state.sbkColonelPromoted ? 2500 : 1200) : 0;
+    const sbkCovertPay = state.isUndercoverSbkAgent ? (state.sbkColonelPromoted ? 35000 : 16000) : 0;
     return assetRent + addonRent + sbkCovertPay;
   }
   function getPassiveUsd() {
@@ -6523,7 +6641,7 @@
       spottedCodes: [],
       lastFeedback: null,
       barrierState: "CLOSED",
-      money: 400 + meta.startCashBonus,
+      money: 15000 + meta.startCashBonus * 10,
       escapeFund: 0,
       familyMorale: 80,
       nabkRisk: Math.max(0, 10 - meta.startNabkHeal),
@@ -6553,7 +6671,7 @@
       eveningTab: 0,
       encounterTriggered: false,
       activeEndingId: null,
-      usd: 0,
+      usd: 500,
       campaignFlags: {},
       factionFinaleDone: false,
       reprimands: 0,
@@ -6570,18 +6688,23 @@
     const has = id => state.ownedAssets.includes(id);
     const bestCarSec = Math.max(
       0,
-      has("monako_hypercar") ? 38 : 0,
-      has("porsche_911") ? 32 : 0,
-      has("euro_bmw") ? 26 : 0,
-      has("skoda_octavia_rs") ? 22 : 0,
+      has("monako_hypercar") ? 40 : 0,
+      has("porsche_911") ? 35 : 0,
+      has("gelik_v8") ? 31 : 0,
+      has("euro_bmw") ? 28 : 0,
+      has("audi_q7_blyakha") ? 25 : 0,
+      has("skoda_octavia_rs") ? 24 : 0,
+      has("camry_35") ? 21 : 0,
       has("lanos_sport") ? 18 : 0,
       has("steppe_ebike") ? 14 : 0
     );
     const coffeeSec = has("espresso_machine") ? 25 : 0;
-    const chairSec = has("heated_booth_seat") ? 12 : 0;
+    const thermosSec = has("thermos_tray") ? 10 : 0;
+    const chairSec = has("heated_booth_seat") ? 14 : 0;
+    const genSec = has("diesel_generator") ? 15 : 0;
     const sockRelicSec = (state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_KEVLAR_SOCKS")) ? 8 : 0;
     const bestAddonSec = Math.max(0, has("addon_nitro_spoiler") ? 15 : 0, has("addon_migalka") ? 12 : 0);
-    return bestCarSec + coffeeSec + chairSec + sockRelicSec + bestAddonSec;
+    return bestCarSec + coffeeSec + thermosSec + chairSec + genSec + sockRelicSec + bestAddonSec;
   }
 
   function beginShift() {
@@ -6752,25 +6875,28 @@
       }
     } else if (ruleCorrect) {
       const salMult = (state.sandboxMod && state.sandboxMod.salaryMult ? state.sandboxMod.salaryMult : 1.0) * meta.salaryBonusMult;
-      salaryDelta = Math.round(rank.salary * salMult);
+      const detectorBonus = state.ownedAssets.includes("money_detector") ? 250 : 0;
+      salaryDelta = Math.round(rank.salary * salMult) + detectorBonus;
       if (isDetain && canDetain) {
         const badges = loadAgencyBadges();
-        const undercoverBounty = state.isUndercoverSbkAgent ? 1200 : 0;
+        const undercoverBounty = state.isUndercoverSbkAgent ? 12000 : 0;
         const isHighValueSpyOrVip = t.isWantedTarget || t.storyTag === "FSM_SPY" || t.storyTag === "SABOTEUR" || t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE";
-        // Bounties grow with career progress: day 1 = 60%, day 9+ = 160% of base (spies pay ~11-18k 🪙 + USD agency bonus!)
+        // Bounties grow with career progress: day 1 = 60%, day 9+ = 160% of base (high-stakes bounties!)
         const bountyDay = state.daySpec ? state.daySpec.dayNumber : 1;
         const bountyRamp = Math.min(1.6, 0.6 + 0.12 * (bountyDay - 1));
         const baseDetainBounty = Math.round((isHighValueSpyOrVip
-          ? (7000 + Math.floor(Math.random() * 4501))
-          : (700 + Math.floor(Math.random() * 701))) * bountyRamp);
-        const badgeBonus = (badges.includes("SBK_SHIELD") ? 600 : 0) + (badges.includes("VSP_GUARD") && (t.storyTag === "DUAL_CITIZEN" || t.storyTag === "VIP_DIVERSE") ? 800 : 0);
+          ? (38000 + Math.floor(Math.random() * 25001))
+          : (12000 + Math.floor(Math.random() * 8001))) * bountyRamp);
+        const badgeBonus = (badges.includes("SBK_SHIELD") ? 8000 : 0) + (badges.includes("VSP_GUARD") && (t.storyTag === "DUAL_CITIZEN" || t.storyTag === "VIP_DIVERSE") ? 10000 : 0);
         const tabletBonus = state.ownedAssets.includes("sbk_database_tablet") ? Math.round(baseDetainBounty * 0.2) : 0;
         const amberBonus = (state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_AMBER_BEETLE")) ? Math.round(baseDetainBounty * 0.15) : 0;
-        detainBonus = baseDetainBounty + undercoverBounty + badgeBonus + tabletBonus + amberBonus + (state.sandboxMod ? state.sandboxMod.detainExtra : 0);
+        detainBonus = baseDetainBounty + undercoverBounty + badgeBonus + tabletBonus + amberBonus + (state.sandboxMod ? state.sandboxMod.detainExtra * 4 : 0);
         if (isHighValueSpyOrVip) {
-          usdBonus = Math.round((250 + Math.floor(Math.random() * 301)) * bountyRamp) + (state.isUndercoverSbkAgent ? 150 : 0);
-          state.usd += usdBonus;
+          usdBonus = Math.round((1800 + Math.floor(Math.random() * 1801)) * bountyRamp) + (state.isUndercoverSbkAgent ? 900 : 0);
+        } else {
+          usdBonus = Math.round((400 + Math.floor(Math.random() * 401)) * bountyRamp);
         }
+        state.usd += usdBonus;
         state.sbkRep = Math.min(100, state.sbkRep + (isHighValueSpyOrVip ? 14 : 4));
         state.totalCareerDetained += 1;
         if (state.totalCareerDetained >= 3) unlockAgencyBadge("SBK_SHIELD");
@@ -6792,21 +6918,21 @@
     } else {
       const isHighRiskTarget = t.isWantedTarget || t.storyTag === "FSM_SPY" || t.storyTag === "SABOTEUR" || t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE";
       if (isDetain && t.shouldBeApproved) {
-        fineDelta = 1200;
+        fineDelta = 4500;
         state.sbkRep = Math.max(0, state.sbkRep - 12);
         state.palychRep = Math.max(0, state.palychRep - 10);
       } else if (isApprove && !t.shouldBeApproved && isHighRiskTarget) {
-        fineDelta = 3500;
+        fineDelta = 12000;
         state.sbkRep = Math.max(0, state.sbkRep - 28);
         state.nabkRisk = Math.min(100, state.nabkRisk + 20);
         state.palychRep = Math.max(0, state.palychRep - 12);
       } else if (isApprove && !t.shouldBeApproved) {
-        fineDelta = 1500;
+        fineDelta = 5500;
         state.sbkRep = Math.max(0, state.sbkRep - 10);
         state.nabkRisk = Math.min(100, state.nabkRisk + 12);
         state.palychRep = Math.max(0, state.palychRep - 8);
       } else {
-        fineDelta = excessiveDetain ? 500 : 600;
+        fineDelta = excessiveDetain ? 2000 : 2400;
         if (state.shiftMistakes === 0 && rank.freeFirstMistake) {
           fineDelta = 0;
         } else if (state.shiftMistakes === 0 && meta.halfFirstFine) {
@@ -7734,7 +7860,7 @@
                   </div>
                   <div>
                     <div style="font-size:13.5px;font-weight:900;">${tr(L("ВІЛЬНА ГРА", "ENDLESS SANDBOX"), state.lang)}</div>
-                    <div style="font-size:10.5px;opacity:0.84;margin-top:2px;">${tr(L("Випадкові укази, ранги, 20 000 💵 втеча", "Random decrees, ranks & escape"), state.lang)}</div>
+                    <div style="font-size:10.5px;opacity:0.84;margin-top:2px;">${tr(L("Випадкові укази, ранги, 100 000 💵 втеча", "Random decrees, ranks & escape"), state.lang)}</div>
                   </div>
                 </button>
               </div>
@@ -7838,13 +7964,13 @@
             "#E0B145", "🛂",
             L("Передісторія: КПП «Захід-04»", "Backstory: Checkpoint 'Zakhid-04'"),
             L("Країна Kraina • Воєнний стан • Твоя перша зміна", "State of Kraina • Martial Law • Your First Shift"),
-            L("Попереднього інспектора забрали вночі оперативники НАБК після скандалу з фальшивими довідками. На ранок тебе терміново перевели на віддалений карпатський пункт «Захід-04».\n\nВдома чекає сім'я з купою рахунків, на КПП тиснуть контрабандисти й мажори, а в кишені лише 400 🪙.", "The previous inspector was arrested overnight by NABK over fake exit permits. You've been reassigned to remote mountain gate 'Zakhid-04'.\n\nAt home your family waits with rising bills; at the gate smugglers & VIPs push through — and you start with just 400 🪙.")
+            L("Попереднього інспектора забрали вночі оперативники НАБК після скандалу з фальшивими довідками. На ранок тебе терміново перевели на віддалений карпатський пункт «Захід-04».\n\nВдома чекає сім'я з купою рахунків, на КПП тиснуть контрабандисти й мажори, а на старті маєш лише 15 000 🪙.", "The previous inspector was arrested overnight by NABK over fake exit permits. You've been reassigned to remote mountain gate 'Zakhid-04'.\n\nAt home your family waits with rising bills; at the gate smugglers & VIPs push through — and you start with just 15,000 🪙.")
           ),
           renderOnboardCard(
             "#4CAF50", "🛤️",
             L("Три шляхи інспектора", "Three Inspector Paths"),
             L("Обирай свій стиль служби на кожному кроці", "Shape your career with every stamp"),
-            L("1️⃣ Чесна служба: тримай устав ДПСК, допомагай розвідці ГУР/СБК та отримай офіційну подяку.\n2️⃣ Подвійний агент «Кордон-7»: завоюй довіру контррозвідки й піднімись до полковника під прикриттям.\n3️⃣ Великий куш та втеча: збирай баксіки 💵, відмивай гримники 🪙 та виїжджай за кордон через Толіка (14 000 💵 у Кампанії / 20 000 💵 у Вільній грі).", "1️⃣ Honest Service: follow SBGS directives, aid GUR/SBK, earn Kyiv commendations.\n2️⃣ Covert Agent 'Border-7': earn SBK trust and rise to undercover Colonel.\n3️⃣ Big Score & Escape: collect baksiky 💵 bribes, launder cash 🪙 and flee abroad via Tolik (14,000 💵 Story / 20,000 💵 Freeplay).")
+            L("1️⃣ Чесна служба: тримай устав ДПСК, допомагай розвідці ГУР/СБК та отримай офіційну подяку.\n2️⃣ Подвійний агент «Кордон-7»: завоюй довіру контррозвідки й піднімись до полковника під прикриттям.\n3️⃣ Великий куш та втеча: збирай баксіки 💵, відмивай гримники 🪙 та виїжджай за кордон через Толіка (60 000 💵 у Кампанії / 100 000 💵 у Вільній грі).", "1️⃣ Honest Service: follow SBGS directives, aid GUR/SBK, earn Kyiv commendations.\n2️⃣ Covert Agent 'Border-7': earn SBK trust and rise to undercover Colonel.\n3️⃣ Big Score & Escape: collect baksiky 💵 bribes, launder cash 🪙 and flee abroad via Tolik (60,000 💵 Story / 100,000 💵 Freeplay).")
           )
         ].join("");
       } else if (tab === 1) {
@@ -8853,9 +8979,10 @@
         if (!state.coffeeTipGiven && t.coffeeTip > 0) {
           state.coffeeTipGiven = true;
           const meta = getMetaPerkFlags();
-          const cMult = (state.sandboxMod ? (state.sandboxMod.coffeeMult || 1) : 1) * (state.ownedAssets.includes("balenci_jacket") ? 1.25 : 1);
-          const sockTip = (state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_KEVLAR_SOCKS")) ? 30 : 0;
-          const tip = Math.round(t.coffeeTip * cMult) + (state.ownedAssets.includes("espresso_machine") ? 35 : 0) + (state.ownedAssets.includes("parrot_kesha") ? 40 : 0) + (state.ownedAssets.includes("addon_syrup_bar") ? 40 : 0) + (state.ownedAssets.includes("addon_gold_cage") ? 25 : 0) + sockTip + meta.coffeeTipBonus;
+          const has = id => state.ownedAssets.includes(id);
+          const cMult = (state.sandboxMod ? (state.sandboxMod.coffeeMult || 1) : 1) * (has("balenci_jacket") ? 1.35 : 1);
+          const sockTip = (state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_KEVLAR_SOCKS")) ? 300 : 0;
+          const tip = Math.round(t.coffeeTip * 5 * cMult) + (has("thermos_tray") ? 250 : 0) + (has("espresso_machine") ? 450 : 0) + (has("parrot_kesha") ? 500 : 0) + (has("addon_syrup_bar") ? 350 : 0) + (has("addon_gold_cage") ? 300 : 0) + sockTip + (meta.coffeeTipBonus * 5);
           state.money += tip;
           state.lastFeedback = {
             ok: true,
@@ -9083,31 +9210,35 @@
             ${(() => {
               const dir = state.exchDir || "USD_TO_UAH";
               const hasBiz = state.ownedAssets.includes("shawarma_kiosk") || state.ownedAssets.includes("cyprus_offshore");
-              const capToday = DAILY_OBNAL_LIMIT_USD + (hasBiz ? 1000 : 0) + (state.ownedAssets.includes("addon_osint_app") ? 600 : 0) + ((state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_404_FLOPPY")) ? 300 : 0);
+              const capToday = DAILY_OBNAL_LIMIT_USD
+                + (state.ownedAssets.includes("shawarma_kiosk") ? 12000 : 0)
+                + (state.ownedAssets.includes("cyprus_offshore") ? 15000 : 0)
+                + (state.ownedAssets.includes("addon_osint_app") ? 10000 : 0)
+                + ((state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_404_FLOPPY")) ? 4000 : 0);
               const launderFee = Math.max(0.05, (hasBiz ? 0.10 : 0.18) - (state.ownedAssets.includes("iphon_17_pro") ? 0.03 : 0));
               const feePct = Math.round(launderFee * 100);
               const remObnal = Math.max(0, capToday - (state.obnalUsedToday || 0));
               const maxUsd = dir === "USD_TO_UAH"
                 ? Math.min(state.usd, remObnal)
                 : Math.floor(state.money / USD_UAH_RATE);
-              const step = maxUsd >= 100 ? 50 : 10;
-              const initVal = maxUsd > 0 ? Math.min(maxUsd, Math.max(step, Math.floor(maxUsd / 2 / 10) * 10 || maxUsd)) : 0;
+              const step = maxUsd >= 500 ? 100 : (maxUsd >= 100 ? 50 : 10);
+              const initVal = maxUsd > 0 ? Math.min(maxUsd, Math.max(step, Math.floor(maxUsd / 2 / step) * step || maxUsd)) : 0;
               const initUahOut = Math.round(Math.max(10, initVal) * USD_UAH_RATE * (1 - launderFee));
               return `
                 <div style="background:rgba(0,0,0,0.22);border:1px solid #455A64;border-radius:6px;padding:7px;margin:3px 0;display:flex;flex-direction:column;gap:5px;">
                   <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
                     <span style="font-size:11px;font-weight:800;color:#FFE082;">
                       ${dir === "USD_TO_UAH"
-                        ? tr(L(`🧼 Відмивання 💵→🪙 (-${feePct}% комісія • Ліміт: ${remObnal}/${capToday} 💵)`, `🧼 Launder 💵→🪙 (-${feePct}% fee • Cap: ${remObnal}/${capToday} 💵)`), state.lang)
+                        ? tr(L(`🧼 Відмивання 💵→🪙 (-${feePct}% комісія • Ліміт: ${remObnal.toLocaleString("en-US")}/${capToday.toLocaleString("en-US")} 💵)`, `🧼 Launder 💵→🪙 (-${feePct}% fee • Cap: ${remObnal.toLocaleString("en-US")}/${capToday.toLocaleString("en-US")} 💵)`), state.lang)
                         : tr(L("💱 Купити 💵 за 🪙 (Курс 41 🪙)", "💱 Buy 💵 with 🪙 (Rate 41 🪙)"), state.lang)}
                     </span>
                     <button type="button" id="btn-exch-flip" class="btn-outline" style="padding:2px 7px;font-size:10.5px;">⇄ ${dir === "USD_TO_UAH" ? "🪙→💵" : "💵→🪙"}</button>
                   </div>
                   ${maxUsd >= 10 ? `
-                    <input type="range" id="exch-slider" min="10" max="${maxUsd}" step="${maxUsd >= 50 ? 10 : 1}" value="${Math.max(10, initVal)}" style="width:100%;accent-color:#E0B145;">
+                    <input type="range" id="exch-slider" min="10" max="${maxUsd}" step="${maxUsd >= 500 ? 100 : (maxUsd >= 50 ? 10 : 1)}" value="${Math.max(10, initVal)}" style="width:100%;accent-color:#E0B145;">
                     <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
                       <span id="exch-preview" style="font-size:11.5px;font-weight:700;color:#81C784;">
-                        ${dir === "USD_TO_UAH" ? `${Math.max(10, initVal)} 💵 → +${initUahOut.toLocaleString("en-US")} 🪙 (-${feePct}%)` : `${(Math.max(10, initVal) * USD_UAH_RATE).toLocaleString("en-US")} 🪙 → +${Math.max(10, initVal)} 💵`}
+                        ${dir === "USD_TO_UAH" ? `${Math.max(10, initVal).toLocaleString("en-US")} 💵 → +${initUahOut.toLocaleString("en-US")} 🪙 (-${feePct}%)` : `${(Math.max(10, initVal) * USD_UAH_RATE).toLocaleString("en-US")} 🪙 → +${Math.max(10, initVal).toLocaleString("en-US")} 💵`}
                       </span>
                       <button type="button" id="btn-do-exchange" class="btn-mustard" style="padding:4px 10px;font-size:11px;">${dir === "USD_TO_UAH" ? tr(L("Відмити", "Launder"), state.lang) : tr(L("Купити 💵", "Buy 💵"), state.lang)}</button>
                     </div>
@@ -9148,15 +9279,19 @@
       const doExchBtn = document.getElementById("btn-do-exchange");
       if (sliderEl && previewEl && doExchBtn) {
         const hasBiz = state.ownedAssets.includes("shawarma_kiosk") || state.ownedAssets.includes("cyprus_offshore");
-        const capToday = DAILY_OBNAL_LIMIT_USD + (hasBiz ? 1000 : 0) + (state.ownedAssets.includes("addon_osint_app") ? 600 : 0) + ((state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_404_FLOPPY")) ? 300 : 0);
+        const capToday = DAILY_OBNAL_LIMIT_USD
+          + (state.ownedAssets.includes("shawarma_kiosk") ? 12000 : 0)
+          + (state.ownedAssets.includes("cyprus_offshore") ? 15000 : 0)
+          + (state.ownedAssets.includes("addon_osint_app") ? 10000 : 0)
+          + ((state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_404_FLOPPY")) ? 4000 : 0);
         const launderFee = Math.max(0.05, (hasBiz ? 0.10 : 0.18) - (state.ownedAssets.includes("iphon_17_pro") ? 0.03 : 0));
         const feePct = Math.round(launderFee * 100);
         sliderEl.addEventListener("input", () => {
           const val = Number(sliderEl.value) || 0;
           const dir = state.exchDir || "USD_TO_UAH";
           previewEl.textContent = dir === "USD_TO_UAH"
-            ? `${val} 💵 → +${Math.round(val * USD_UAH_RATE * (1 - launderFee)).toLocaleString("en-US")} 🪙 (-${feePct}%)`
-            : `${(val * USD_UAH_RATE).toLocaleString("en-US")} 🪙 → +${val} 💵`;
+            ? `${val.toLocaleString("en-US")} 💵 → +${Math.round(val * USD_UAH_RATE * (1 - launderFee)).toLocaleString("en-US")} 🪙 (-${feePct}%)`
+            : `${(val * USD_UAH_RATE).toLocaleString("en-US")} 🪙 → +${val.toLocaleString("en-US")} 💵`;
         });
         doExchBtn.addEventListener("click", () => {
           const val = Number(sliderEl.value) || 0;
@@ -9170,7 +9305,7 @@
               state.usd -= take;
               state.money += Math.round(take * USD_UAH_RATE * (1 - launderFee));
               state.obnalUsedToday = (state.obnalUsedToday || 0) + take;
-              if (take >= 500) state.nabkRisk = Math.min(100, state.nabkRisk + 3);
+              if (take >= 5000) state.nabkRisk = Math.min(100, state.nabkRisk + 3);
             }
           } else {
             const costUah = val * USD_UAH_RATE;
@@ -9200,10 +9335,11 @@
         }
 
         const shiftBribeUsd = Math.round((state.shiftBribesTotal || 0) / USD_UAH_RATE);
-        const wealthFactor = Math.round(Math.min(4500, shiftBribeUsd * 0.14 + state.usd * 0.06));
+        const wealthFactor = Math.round(Math.min(12000, shiftBribeUsd * 0.14 + state.usd * 0.05));
+        const gelikMult = state.ownedAssets.includes("gelik_v8") ? 0.85 : 1.0;
 
         if ((state.reprimands > 0 || state.underSurveillance || state.nabkRisk >= 25) && !state.purchasedExpensesToday.includes("krysha_bribe")) {
-          const baseKUsd = Math.max(450, Math.round(450 + state.nabkRisk * 12 + (state.reprimands || 0) * 350 + wealthFactor * 0.75));
+          const baseKUsd = Math.max(1500, Math.round((1500 + state.nabkRisk * 40 + (state.reprimands || 0) * 1200 + wealthFactor * 0.75) * gelikMult));
           const kCostUsd = state.isUndercoverSbkAgent ? Math.round(baseKUsd * 0.65) : baseKUsd;
           const canK = state.usd >= kCostUsd;
           const kCard = document.createElement("div");
@@ -9247,7 +9383,7 @@
             id: "bribe_sbk",
             icon: "🕵️",
             title: L("Підкупити куратора СБК (+24 СБК, -10% НАБК)", "Bribe SBK Handler (+24 SBK, -10% NABK)"),
-            cost: (state.sbkRep < 35 ? 1250 : 650) + Math.round(wealthFactor * 0.9),
+            cost: Math.round(((state.sbkRep < 35 ? 3800 : 2000) + Math.round(wealthFactor * 0.65)) * gelikMult),
             chance: state.sbkRep < 35 ? 0.45 : (state.sbkRep < 60 ? 0.72 : 0.90),
             onSuccess: () => { state.sbkRep = Math.min(100, state.sbkRep + 24); state.nabkRisk = Math.max(0, state.nabkRisk - 10); },
             onFail: () => { state.sbkRep = Math.max(0, state.sbkRep - 10); state.nabkRisk = Math.min(100, state.nabkRisk + 12); }
@@ -9256,7 +9392,7 @@
             id: "bribe_palych",
             icon: "🧢",
             title: L("Підкупити Пал Палича (+22 Палич, -1 догана)", "Bribe Pal Palych (+22 Palych, -1 reprimand)"),
-            cost: ((state.reprimands || 0) >= 2 ? 750 : 400) + Math.round(wealthFactor * 0.6),
+            cost: Math.round((((state.reprimands || 0) >= 2 ? 2500 : 1400) + Math.round(wealthFactor * 0.45)) * gelikMult),
             chance: (state.palychRep < 30 || (state.reprimands || 0) >= 2) ? 0.55 : 0.88,
             onSuccess: () => { state.palychRep = Math.min(100, state.palychRep + 22); state.reprimands = Math.max(0, (state.reprimands || 0) - 1); },
             onFail: () => { state.palychRep = Math.max(0, state.palychRep - 8); }
@@ -9265,7 +9401,7 @@
             id: "bribe_tolik",
             icon: "🚐",
             title: L("Задобрити Толіка (+25 Толік — ближче до втечі)", "Grease Tolik (+25 Tolik rep)"),
-            cost: (state.tolikRep < 30 ? 850 : 450) + Math.round(wealthFactor * 0.65),
+            cost: Math.round(((state.tolikRep < 30 ? 2800 : 1500) + Math.round(wealthFactor * 0.5)) * gelikMult),
             chance: state.tolikRep < 30 ? 0.50 : 0.88,
             onSuccess: () => { state.tolikRep = Math.min(100, state.tolikRep + 25); },
             onFail: () => { state.tolikRep = Math.max(0, state.tolikRep - 8); }
@@ -9274,13 +9410,13 @@
             id: "bribe_nabk",
             icon: "⚖️",
             title: L("Підмазати ревізора НАБК (-25% НАБК, зняти нагляд)", "Bribe NABK Auditor (-25% NABK, clear watch)"),
-            cost: (state.nabkRisk >= 65 ? 1800 : 950) + Math.round(wealthFactor * 1.25),
+            cost: Math.round(((state.nabkRisk >= 65 ? 5500 : 3000) + Math.round(wealthFactor * 0.85)) * gelikMult),
             chance: state.nabkRisk >= 70 ? 0.45 : (state.underSurveillance ? 0.60 : 0.80),
             onSuccess: () => { state.nabkRisk = Math.max(0, state.nabkRisk - 25); state.underSurveillance = false; },
             onFail: () => { state.nabkRisk = Math.min(100, state.nabkRisk + 15); }
           }
         ];
-        const lawyerBoost = state.ownedAssets.includes("lawyer_retainer") ? 0.12 : 0;
+        const lawyerBoost = state.ownedAssets.includes("lawyer_retainer") ? 0.15 : 0;
         factionBribes.forEach(fb => {
           const effChance = Math.min(0.96, fb.chance + lawyerBoost);
           const used = state.purchasedExpensesToday.includes(fb.id);
@@ -9290,7 +9426,7 @@
           row.innerHTML = `
             <div style="flex:1;">
               <div style="font-size:12.5px;font-weight:700;">${fb.icon} ${tr(fb.title, state.lang)}</div>
-              <div style="font-size:11px;color:#CFD8DC;">${fb.cost} 💵 • ${tr(L(`Шанс успіху: ${pct}%`, `Success chance: ${pct}%`), state.lang)}</div>
+              <div style="font-size:11px;color:#CFD8DC;">${fb.cost.toLocaleString("en-US")} 💵 • ${tr(L(`Шанс успіху: ${pct}%`, `Success chance: ${pct}%`), state.lang)}</div>
             </div>
           `;
           const btn = document.createElement("button");
@@ -9320,15 +9456,15 @@
         });
       } else if (state.eveningTab === 0) {
         if (state.escapeFund < getEscapeTarget()) {
-          const escStep = 1000;
+          const escStep = 5000;
           const canEsc = state.usd >= escStep;
           const eCard = document.createElement("div");
           eCard.className = "card-slate row-between";
           eCard.innerHTML = `
             <div style="flex:1;">
-              <div style="font-size:13px;font-weight:800;color:#81C784;">🚐 ${tr(L("Фонд утечі через Толіка (+1 000 💵, +10 Толік)", "Tolik Escape Fund (+1,000 💵, +10 Tolik)"), state.lang)}</div>
+              <div style="font-size:13px;font-weight:800;color:#81C784;">🚐 ${tr(L("Фонд утечі через Толіка (+5 000 💵, +10 Толік)", "Tolik Escape Fund (+5,000 💵, +10 Tolik)"), state.lang)}</div>
               <div style="color:#CFD8DC;font-size:11px;">${tr(L(`Зібрано: ${state.escapeFund.toLocaleString("en-US")} / ${getEscapeTarget().toLocaleString("en-US")} 💵`, `Saved: ${state.escapeFund.toLocaleString("en-US")} / ${getEscapeTarget().toLocaleString("en-US")} 💵`), state.lang)}</div>
-              <div style="color:#E0B145;font-size:12px;font-weight:800;">1 000 💵 (≈ ${(1000 * USD_UAH_RATE).toLocaleString("en-US")} 🪙)</div>
+              <div style="color:#E0B145;font-size:12px;font-weight:800;">5 000 💵 (≈ ${(5000 * USD_UAH_RATE).toLocaleString("en-US")} 🪙)</div>
             </div>
           `;
           const eb = document.createElement("button");
@@ -9411,7 +9547,7 @@
         listEl.appendChild(catBar);
 
         const filteredAssets = ASSET_UPGRADES
-          .filter(a => a.category === curCat || (curCat === "AUTO" && (a.id === "porsche_911" || a.id === "steppe_ebike" || a.id === "monako_hypercar" || a.id === "skoda_octavia_rs")))
+          .filter(a => a.category === curCat)
           .sort((a, b) => Number(state.ownedAssets.includes(a.id)) - Number(state.ownedAssets.includes(b.id)));
 
         filteredAssets.forEach(asset => {
