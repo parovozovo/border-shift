@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v7.4";
+  const BUILD_VERSION = "v7.5";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -3470,6 +3470,31 @@
       const coffeeReply = L(rawCoffee.uk.replace(/%CITY%/g, city.uk), rawCoffee.en.replace(/%CITY%/g, city.en));
 
       const extraDocs = [];
+      if (daySpec.dailyRule === "MED_INSURANCE" && dir === "EXIT") {
+        extraDocs.push({
+          type: "EXEMPTION_CERT",
+          title: L("🏥 САНІТАРНА СТРАХОВКА", "🏥 MEDICAL INSURANCE"),
+          subtitle: L("Міжнародний поліс", "International Policy"),
+          fields: [
+            { label: L("Застрахований", "Insured"), value: fullName, disc: null },
+            { label: L("Дійсний до", "Valid Until"), value: L(`18.10.${randInt(2027, 2030)}`, `20${randInt(27, 30)}-10-18`), disc: null }
+          ],
+          sealText: L("МЕД-СТРАХ KRAINA • ДІЙСНИЙ", "MED-INSURE KRAINA • VALID"),
+          sealDisc: null
+        });
+      } else if (daySpec.dailyRule === "TRANSIT_PERMIT" && dir === "EXIT") {
+        extraDocs.push({
+          type: "EXEMPTION_CERT",
+          title: L("🛣️ ТРАНЗИТНИЙ ТАЛОН", "🛣️ TRANSIT PERMIT"),
+          subtitle: L(`Маршрут з м. ${city.uk}`, `Route from ${city.en}`),
+          fields: [
+            { label: L("Водій / Пасажир", "Holder"), value: fullName, disc: null },
+            { label: L("Дійсний до", "Valid Until"), value: L(`25.11.${randInt(2027, 2030)}`, `20${randInt(27, 30)}-11-25`), disc: null }
+          ],
+          sealText: L("МІНТРАНС KRAINA • ДОЗВІЛ", "TRANSIT AUTH • VALID"),
+          sealDisc: null
+        });
+      }
       if (dir === "EXIT" && gender === "M" && age >= 18 && age <= 60) {
         const reasons = archKey === "MAJOR_VIP"
           ? [
@@ -3751,16 +3776,48 @@
     }
 
     if (scheme === 4 && daySpec.requireVehicleDecl) {
-      // VEHICLE_MISMATCH (Car parked outside vs paper Declaration color/model mismatch!)
-      const gender = Math.random() < 0.4 ? "F" : "M";
+      // VEHICLE_MISMATCH: realistic mismatch — Plate (35%), Color (35%), or Same-Class Model (30%)!
+      const s4Arch = pick(["WORKER_DRIVER", "MAJOR_VIP", "GLAM_LADY", "BIKER_TRAVELER", "FARMER_AGRO"]);
+      const gender = s4Arch === "GLAM_LADY" ? "F" : (Math.random() < 0.35 ? "F" : "M");
       const fullName = randomFullName(gender);
       const age = randInt(25, 52);
-      const portrait = randomPortrait(gender);
-      const realCol = pick([getColorById("RED"), getColorById("YELLOW"), getColorById("EMERALD")]);
-      const fakeCol = getColorById("BLACK");
-      const carOnly = pick(TRANSPORT_CATALOG.filter(m => m.isCar));
-      const fakeCar = pick(TRANSPORT_CATALOG.filter(m => m.isCar && m.name.uk !== carOnly.name.uk));
-      const realTr = makeTransportMeta(carOnly, realCol, generatePlate(city.code, true));
+      const portrait = buildArchetypePortrait(s4Arch, gender);
+
+      const s4Cars = TRANSPORT_CATALOG.filter(m => m.isCar && TRAVELER_ARCHETYPES[s4Arch].shapes.includes(m.shape));
+      const carOnly = pick(s4Cars.length ? s4Cars : TRANSPORT_CATALOG.filter(m => m.isCar));
+      const realCol = pick(VEHICLE_COLORS);
+      const realPlate = generatePlate(city.code, true);
+      const realTr = makeTransportMeta(carOnly, realCol, realPlate);
+
+      const mismatchKind = pick(["PLATE", "COLOR", "MODEL"]);
+      let fakeModelName = null;
+      let fakeColorName = null;
+      let fakePlate = null;
+      let greetMsg, interrMsg;
+
+      if (mismatchKind === "PLATE") {
+        fakePlate = generatePlate(pick(CITIES).code, true);
+        if (fakePlate === realPlate) fakePlate = "КГ 9941 ВХ";
+        greetMsg = L("«Вітаю, інспекторе! Переганяю авто після перереєстрації, усе на місці!»", "'Greetings! Driving after re-registration, everything is in order!'");
+        interrMsg = L("«Та в МРЕО одну літеру на номерах переплутали! Пропустіть, будь ласка!»", "'DMV mixed up a digit on the plate! Please let me pass!'");
+      } else if (mismatchKind === "COLOR") {
+        const otherCols = VEHICLE_COLORS.filter(c => c.id !== realCol.id);
+        fakeColorName = pick(otherCols).name;
+        greetMsg = L("«Добрий день! Машина після свіжого детейлінгу — на світлі колір трохи грає!»", "'Good day! Fresh detailing — the paint shifts shade in the light!'");
+        interrMsg = L("«Слухай, на СТО перефарбували вчора й не вписали в техпаспорт!»", "'Repainted it at the shop yesterday and forgot to update the title!'");
+      } else {
+        const sameClass = TRANSPORT_CATALOG.filter(m => m.isCar && m.shape === carOnly.shape && m.name.uk !== carOnly.name.uk);
+        const fakeCar = sameClass.length ? pick(sameClass) : pick(TRANSPORT_CATALOG.filter(m => m.isCar && m.name.uk !== carOnly.name.uk));
+        fakeModelName = fakeCar.name;
+        greetMsg = L("«Вітаю! Ось техпаспорт на авто, усе перевіряли перед виїздом!»", "'Hello! Here is the car registration, checked before departure!'");
+        interrMsg = L("«Ой, переплутав техпаспорт із другою машиною брата в гаражі!»", "'Oops, grabbed my brother's similar car registration from the garage!'");
+      }
+
+      const offersSeriousBribe4 = Math.random() < 0.45;
+      const bribe4Amt = randInt(14, 22) * 100;
+      if (offersSeriousBribe4) {
+        interrMsg = L(`«Тихіше, інспекторе... тачка «гаряча», візьми ${bribe4Amt.toLocaleString("en-US")} 💵 і забудь про техпаспорт!»`, `'Easy, inspector... car is hot, take ${bribe4Amt.toLocaleString("en-US")} 💵 and forget the title!'`);
+      }
 
       return buildTravelerFromParts({
         fullName, age, gender, portrait, transport: realTr,
@@ -3781,18 +3838,19 @@
           sealDisc: null
         }] : [],
         includeDecl: true,
-        fakeModelName: fakeCar.name,
-        fakeColorName: fakeCol.name,
+        fakeModelName,
+        fakeColorName,
+        fakePlate,
         vehMismatchDisc: DISCREPANCY.VEHICLE_MISMATCH,
         declaredCargo: L("Особисті речі водія", "Driver personal luggage"),
         vehicleSearchResult: L("Звірка VIN-коду: номери перебито болгаркою! Автомобіль у розшуку Інтерполу як «двійник»!", "VIN Check: Grinder marks on chassis! Stolen cloned car!"),
-        greeting: L("«Вітаю, інспекторе! Переганяю машину по довіреності, колір... ну, під ліхтарем може здаватися іншим!»", "'Greetings! Driving on power-of-attorney, the paint... uh, looks different under streetlamps!'"),
-        interrogationReply: L("«Слухай, на СТО пофарбували вчора й не вписали! Ось 650 🪙 — не перевіряй техпаспорт!»", "'Repainted it yesterday! Take 650 🪙 and ignore the title!'"),
-        intimidateReply: L("«*Різко закриває вікно наполовину* Це... це плівка-хамелеон!»", "'*Rolls window halfway up* It's... chameleon wrap!'"),
+        greeting: greetMsg,
+        interrogationReply: interrMsg,
+        intimidateReply: L("«*Різко закриває вікно наполовину* Це... це помилка бази сервісного центру!»", "'*Rolls window halfway up* It's... a registry typo!'"),
         coffeeReply: L("«Дякую! Гаряча кава краще за будь-яке СТО!»", "'Thanks! Better than any mechanic!'"),
         arrestFull: L("Авто-двійника з перебитими номерами конфісковано, водія затримано!", "Cloned vehicle confiscated and driver arrested!"),
         arrestToned: L("Виявлено невідповідність транспорту техпаспорту.", "Vehicle mismatch detained."),
-        bribeOffer: { amount: 180, currency: "USD", requiresDiscovery: true, isStingTrap: false, syndicateFavor: false },
+        bribeOffer: offersSeriousBribe4 ? { amount: bribe4Amt, currency: "USD", requiresDiscovery: true, nabkRiskJump: 14, isStingTrap: false, syndicateFavor: false } : null,
         shouldBeApproved: false,
         violations: [DISCREPANCY.VEHICLE_MISMATCH]
       });
@@ -5508,12 +5566,13 @@
     const mod = pick(pool);
     usedSandboxModIds.add(mod.id);
     const twist = pick(SANDBOX_TWISTS);
-    const requireOblikQr = Boolean(mod.forceOblik || twist.forceOblik || (dayNumber >= 4 && Math.random() < 0.45));
+    const dailyRule = dayNumber >= 2 ? pick(["MED_INSURANCE", "TRANSIT_PERMIT", "OBLIK_SURGE", "STRICT_CLONES"]) : "NONE";
+    const requireOblikQr = Boolean(mod.forceOblik || twist.forceOblik || dailyRule === "OBLIK_SURGE" || (dayNumber >= 4 && Math.random() < 0.45));
     const hasSiren = Boolean(mod.forceSiren || Math.random() < 0.4);
     const twoWheelerBias = Boolean(mod.twoWheelerBias || twist.twoWheelerBias);
     const extraShytomyr = Boolean(mod.extraShytomyr || twist.extraShytomyr);
     const extraWar = Boolean(mod.extraWar || twist.extraWar);
-    const extraCloneChance = Boolean(twist.extraCloneChance || mod.id === "CONTRABAND_BOOM");
+    const extraCloneChance = Boolean(twist.extraCloneChance || mod.id === "CONTRABAND_BOOM" || dailyRule === "STRICT_CLONES");
     const coffeeMult = Math.max(mod.coffeeMult || 1, twist.coffeeMult || 1);
 
     const briefings = [
@@ -5538,6 +5597,13 @@
         : L("2. Чоловіки 18–60 (ВИЇЗД): Обов'язкова дійсна Довідка про відстрочку.", "2. Males 18–60 (EXIT): Valid Exemption Certificate required."),
       L("3. Транспорт: модель, КОЛІР і держномер у декларації мають збігатися з авто у вікні.", "3. Transport: model, COLOR & plate must match what's at the gate.")
     ];
+    if (dailyRule === "MED_INSURANCE") {
+      rulesList.push(L("4. ОСОБЛИВЕ ПРАВИЛО ДНЯ: На ВИЇЗД обов'язкова 🏥 Санітарна страховка на столі.", "4. DAILY SPECIAL RULE: 🏥 Medical Insurance is required on EXIT."));
+    } else if (dailyRule === "TRANSIT_PERMIT") {
+      rulesList.push(L("4. ОСОБЛИВЕ ПРАВИЛО ДНЯ: На ВИЇЗД обов'язковий 🛣️ Транзитний талон на столі.", "4. DAILY SPECIAL RULE: 🛣️ Transit Permit is required on EXIT."));
+    } else if (dailyRule === "STRICT_CLONES") {
+      rulesList.push(L("4. ОСОБЛИВЕ ПРАВИЛО ДНЯ: Рейд на двійників — ретельно звіряйте держномер та колір авто!", "4. DAILY SPECIAL RULE: Cloned-car sweep — inspect plates & colors closely!"));
+    }
 
     return {
       mod: Object.assign({}, mod, { coffeeMult }),
@@ -5550,6 +5616,7 @@
         rulesList,
         requireOblikQr,
         requireVehicleDecl: true,
+        dailyRule,
         wantedHint: twist.label,
         bossCut: Math.min(420, 170 + dayNumber * 20),
         hasSiren,
