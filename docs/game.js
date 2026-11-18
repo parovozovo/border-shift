@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v8.1";
+  const BUILD_VERSION = "v8.2";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -35,7 +35,15 @@
   const CAMPAIGN_CHECKPOINTS_KEY = "border_shift_campaign_checkpoints_v1";
   const AGENCY_BADGES_KEY = "border_shift_agency_badges_v1";
   const GAME_DISCOVERIES_KEY = "border_shift_discoveries_v1";
+  const ONBOARDING_SEEN_KEY = "border_shift_onboarding_seen_v1";
   const USD_UAH_RATE = 41;
+
+  function hasSeenOnboarding() {
+    try { return localStorage.getItem(ONBOARDING_SEEN_KEY) === "1"; } catch (_) { return false; }
+  }
+  function markOnboardingSeen() {
+    try { localStorage.setItem(ONBOARDING_SEEN_KEY, "1"); } catch (_) {}
+  }
 
   const AGENCY_BADGE_DEFS = [
     {
@@ -4570,11 +4578,17 @@
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // 4. Checkpoint Canopy & Booth on Right
+    // 4. Checkpoint Canopy & Booth on Right + Rotating Roof Radar + Signal Lamp
     ctx.fillStyle = "#24302A";
     ctx.fillRect(w * 0.68, h * 0.34, w * 0.27, h * 0.36);
     ctx.fillStyle = "#141B18";
     ctx.fillRect(w * 0.64, h * 0.28, w * 0.34, 11);
+    // Rotating radar dish on booth canopy roof
+    const dishOsc = Math.sin(tSec * 2.4) * 5;
+    ctx.strokeStyle = "#80DEEA";
+    ctx.lineWidth = 1.8;
+    ctx.beginPath(); ctx.moveTo(w * 0.80, h * 0.28); ctx.lineTo(w * 0.80, h * 0.16); ctx.stroke();
+    ctx.beginPath(); ctx.arc(w * 0.80 + dishOsc * 0.35, h * 0.15, 6, Math.PI, 0); ctx.stroke();
     // Warm lit booth window + animated inspector silhouette
     const inspBob = Math.sin(tSec * 2.2) * 1.2;
     ctx.fillStyle = "#E0B145";
@@ -4583,11 +4597,31 @@
     ctx.beginPath(); ctx.arc(w * 0.79, h * 0.55 + inspBob, 6.5, 0, Math.PI * 2); ctx.fill();
     ctx.fillRect(w * 0.768, h * 0.61 + inspBob * 0.5, 16, 9);
 
-    // Checkpoint flag stripe (Blue / Yellow)
+    // Checkpoint flag stripe (Blue / Yellow) & Glowing Signal Lamp
     ctx.fillStyle = "#1565C0";
     ctx.fillRect(w * 0.66, h * 0.34, 4, 12);
     ctx.fillStyle = "#FBC02D";
     ctx.fillRect(w * 0.66, h * 0.34 + 12, 4, 12);
+
+    // 5a. Distant Waiting Vehicle Silhouette on Left Queue
+    const qCarX = w * 0.03, qCarY = h * 0.63 + Math.sin(tSec * 15) * 0.35;
+    const qHead = ctx.createLinearGradient(qCarX + 54, qCarY + 14, qCarX + 100, qCarY + 18);
+    qHead.addColorStop(0, "rgba(255, 240, 150, 0.20)");
+    qHead.addColorStop(1, "rgba(255, 240, 150, 0)");
+    ctx.fillStyle = qHead;
+    ctx.beginPath();
+    ctx.moveTo(qCarX + 54, qCarY + 11);
+    ctx.lineTo(qCarX + 100, qCarY + 7);
+    ctx.lineTo(qCarX + 100, qCarY + 23);
+    ctx.lineTo(qCarX + 54, qCarY + 17);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = "#131B20";
+    ctx.beginPath(); ctx.roundRect(qCarX, qCarY + 6, 56, 17, 4); ctx.fill();
+    ctx.fillStyle = "#1E282E";
+    ctx.beginPath(); ctx.roundRect(qCarX + 9, qCarY, 34, 9, 3); ctx.fill();
+    ctx.fillStyle = "#D32F2F"; ctx.fillRect(qCarX + 1, qCarY + 10, 3, 4);
+    ctx.fillStyle = "#FFF59D"; ctx.fillRect(qCarX + 52, qCarY + 11, 3, 4);
 
     // 5. Lead SUV at the Gate + Engine Vibration + Exhaust + Warm Headlight Cone
     const engineVib = Math.sin(tSec * 20) * 0.5;
@@ -4630,11 +4664,13 @@
     ctx.fillStyle = "#FFF59D";
     ctx.beginPath(); ctx.arc(carX + 92, carY + 20, 3.5, 0, Math.PI * 2); ctx.fill();
 
-    // 6. Red-and-White Barrier Gate in front of the SUV
+    // 6. Red-and-White Barrier Gate in front of the SUV + Signal Halo
     const barPostX = w * 0.56, barY = h * 0.63;
     ctx.fillStyle = "#37474F";
     ctx.fillRect(barPostX, h * 0.54, 10, 36);
     const pulse = 0.5 + 0.5 * Math.sin(tSec * 4.0);
+    ctx.fillStyle = `rgba(255, 23, 68, ${(pulse * 0.25).toFixed(2)})`;
+    ctx.beginPath(); ctx.arc(barPostX + 5, h * 0.52, 12, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = `rgba(255, 23, 68, ${pulse.toFixed(2)})`;
     ctx.beginPath(); ctx.arc(barPostX + 5, h * 0.52, 4, 0, Math.PI * 2); ctx.fill();
     for (let s = 0; s < 6; s++) {
@@ -4696,6 +4732,131 @@
     // Flag
     ctx.fillStyle = "#1565C0"; ctx.fillRect(w * 0.90, h * 0.14, 14, 5);
     ctx.fillStyle = "#FBC02D"; ctx.fillRect(w * 0.90, h * 0.19, 14, 5);
+  }
+
+  function drawOnboardingBanner(canvas, tabIdx, tSec = 0) {
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width, h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
+
+    if (tabIdx === 0) {
+      // Tab 0: Night arrival at Checkpoint "Zakhid-04"
+      const sky = ctx.createLinearGradient(0, 0, 0, h);
+      sky.addColorStop(0, "#0A1318");
+      sky.addColorStop(1, "#1F2E28");
+      ctx.fillStyle = sky; ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = "#131C18";
+      ctx.beginPath();
+      ctx.moveTo(0, h * 0.68);
+      ctx.quadraticCurveTo(w * 0.25, h * 0.30, w * 0.52, h * 0.62);
+      ctx.quadraticCurveTo(w * 0.78, h * 0.34, w, h * 0.65);
+      ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.closePath(); ctx.fill();
+      // Searchlight beam
+      const sweep = Math.sin(tSec * 1.4) * 55;
+      const beam = ctx.createLinearGradient(w * 0.18, 12, w * 0.26 + sweep, h);
+      beam.addColorStop(0, "rgba(255, 224, 130, 0.26)");
+      beam.addColorStop(1, "rgba(255, 224, 130, 0)");
+      ctx.fillStyle = beam;
+      ctx.beginPath();
+      ctx.moveTo(w * 0.18, 12);
+      ctx.lineTo(w * 0.10 + sweep, h);
+      ctx.lineTo(w * 0.36 + sweep, h);
+      ctx.closePath(); ctx.fill();
+      // Road + Gate + Warm Booth Window
+      ctx.fillStyle = "#111615"; ctx.fillRect(0, h * 0.70, w, h * 0.30);
+      ctx.fillStyle = "#26332C"; ctx.fillRect(w * 0.70, h * 0.26, 78, h * 0.44);
+      ctx.fillStyle = "#E0B145"; ctx.fillRect(w * 0.74, h * 0.38, 36, 18);
+      for (let s = 0; s < 6; s++) {
+        ctx.fillStyle = s % 2 === 0 ? "#C62828" : "#ECEFF1";
+        ctx.fillRect(w * 0.44 + s * 16, h * 0.67, 16, 5);
+      }
+      // Rain streaks
+      ctx.strokeStyle = "rgba(180, 220, 235, 0.28)";
+      ctx.lineWidth = 1;
+      for (let r = 0; r < 18; r++) {
+        const rx = (r * 27 + tSec * 45) % w;
+        const ry = (r * 19 + tSec * 90) % h;
+        ctx.beginPath(); ctx.moveTo(rx, ry); ctx.lineTo(rx - 4, ry + 8); ctx.stroke();
+      }
+    } else if (tabIdx === 1) {
+      // Tab 1: State Agencies Command Radar (5 pulsing nodes)
+      const bg = ctx.createLinearGradient(0, 0, w, h);
+      bg.addColorStop(0, "#0A1726");
+      bg.addColorStop(1, "#112822");
+      ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h);
+      ctx.strokeStyle = "rgba(79, 195, 247, 0.18)";
+      ctx.lineWidth = 1;
+      for (let gx = 20; gx < w; gx += 28) {
+        ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, h); ctx.stroke();
+      }
+      const labels = ["ДПСК", "СБК", "ГУР-М", "ВСП", "НАБК"];
+      const cols = ["#4CAF50", "#42A5F5", "#FFA726", "#AB47BC", "#EF5350"];
+      labels.forEach((lbl, i) => {
+        const nx = 46 + i * 82, ny = h * 0.48 + Math.sin(tSec * 2 + i) * 3;
+        const ring = 14 + ((tSec * 14 + i * 4) % 10);
+        ctx.strokeStyle = cols[i];
+        ctx.globalAlpha = 0.25;
+        ctx.beginPath(); ctx.arc(nx, ny, ring, 0, Math.PI * 2); ctx.stroke();
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = "#101B24";
+        ctx.beginPath(); ctx.arc(nx, ny, 14, 0, Math.PI * 2); ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = "#ECEFF1";
+        ctx.font = "bold 9px monospace";
+        ctx.textAlign = "center";
+        ctx.fillText(lbl, nx, ny + 3);
+      });
+      ctx.textAlign = "left";
+    } else if (tabIdx === 2) {
+      // Tab 2: Shadow Players & Threats
+      const bg = ctx.createLinearGradient(0, 0, w, h);
+      bg.addColorStop(0, "#1C1414");
+      bg.addColorStop(0.5, "#171D1A");
+      bg.addColorStop(1, "#111420");
+      ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h);
+      // Palych Envelope & Gold glow on left
+      ctx.fillStyle = "#3E2723"; ctx.fillRect(28, 30, 62, 34);
+      ctx.fillStyle = "#E0B145"; ctx.fillRect(34, 38, 18, 12);
+      ctx.fillStyle = "#81C784"; ctx.font = "bold 12px monospace"; ctx.fillText("$", 58, 52);
+      // Tolik Sprinter van in middle
+      const vanX = 166 + Math.sin(tSec * 3) * 2;
+      ctx.fillStyle = "#263238";
+      ctx.beginPath(); ctx.roundRect(vanX, 32, 86, 30, 5); ctx.fill();
+      ctx.fillStyle = "#101618"; ctx.fillRect(vanX + 54, 37, 22, 11);
+      ctx.fillStyle = "#000"; ctx.beginPath(); ctx.arc(vanX + 18, 64, 6, 0, Math.PI * 2); ctx.arc(vanX + 68, 64, 6, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#FFF59D"; ctx.fillRect(vanX + 82, 46, 4, 4);
+      // FSM Target Reticle on right
+      const rx = 345, ry = 44;
+      ctx.strokeStyle = "#FF5252"; ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.arc(rx, ry, 18 + Math.sin(tSec * 4) * 2, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(rx - 24, ry); ctx.lineTo(rx + 24, ry); ctx.moveTo(rx, ry - 24); ctx.lineTo(rx, ry + 24); ctx.stroke();
+    } else {
+      // Tab 3: Booth Desk & UV / Dog / Stamps
+      ctx.fillStyle = "#3B291B"; ctx.fillRect(0, 0, w, h);
+      // Cream document + purple UV beam
+      ctx.fillStyle = "#F1E8D2"; ctx.fillRect(28, 16, 108, 58);
+      ctx.fillStyle = "#4E342E"; ctx.fillRect(40, 26, 54, 6); ctx.fillRect(40, 38, 74, 4); ctx.fillRect(40, 48, 60, 4);
+      const uvSweep = Math.sin(tSec * 2.5) * 22;
+      ctx.fillStyle = "rgba(179, 136, 255, 0.30)";
+      ctx.beginPath(); ctx.arc(82 + uvSweep, 45, 22, 0, Math.PI * 2); ctx.fill();
+      // Sniffer Dog badge
+      ctx.fillStyle = "#1D2621";
+      ctx.beginPath(); ctx.roundRect(166, 20, 74, 48, 8); ctx.fill();
+      ctx.strokeStyle = "#8D6E63"; ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.font = "22px sans-serif"; ctx.fillText("🐕", 190, 52);
+      // Three decision stamps
+      [
+        { x: 266, col: "#2E7D32", txt: "✔" },
+        { x: 314, col: "#C62828", txt: "✖" },
+        { x: 362, col: "#1565C0", txt: "🚨" }
+      ].forEach(st => {
+        ctx.fillStyle = st.col;
+        ctx.beginPath(); ctx.roundRect(st.x, 22, 38, 44, 6); ctx.fill();
+        ctx.fillStyle = "#FFF"; ctx.font = "bold 16px sans-serif";
+        ctx.fillText(st.txt, st.x + 11, 50);
+      });
+    }
   }
 
   function drawEveningBanner(canvas, st, tSec = 0) {
@@ -5807,6 +5968,8 @@
     tolikEscapeOffered: false,
     eveningTab: 0,
     archiveTab: 0,
+    onboardingTab: 0,
+    pendingStartMode: null,
     encounterTriggered: false,
     activeEndingId: null,
     usd: 0,
@@ -6939,7 +7102,8 @@
         btn.disabled = true;
       }
       btn.addEventListener("click", () => {
-        audio.playBribe();
+        if (opt.tapSound) audio.playTap();
+        else audio.playBribe();
         state.money = Math.max(0, state.money + opt.moneyDelta);
         if (opt.usdDelta) state.usd = Math.max(0, state.usd + opt.usdDelta);
         state.shiftSec = Math.max(10, state.shiftSec + opt.timeDelta);
@@ -7212,6 +7376,51 @@
     }
   }
 
+  function requestGameStart(sandbox) {
+    if (hasSeenOnboarding()) {
+      startNewGame(sandbox);
+      return;
+    }
+    openEncounterModal({
+      id: "first_time_onboarding_offer",
+      title: L("📖 ІНСТРУКТАЖ ТА ПЕРЕДІСТОРІЯ КПП «ЗАХІД-04»", "📖 CHECKPOINT 'ZAKHID-04' BRIEFING & LORE"),
+      desc: L(
+        "Ти вперше заступаєш на зміну! На кордоні діють різні відомства (ДПСК, СБК, ГУР-М, ВСП, НАБК) та тіньові гравці (Пал Палич, Толік «Бусик», агентура ФСМ).\n\nБажаєш пройти коротку передісторію та дізнатися, хто за що відповідає, перед початком зміни?",
+        "This is your first shift! Multiple state agencies (SBGS, SBK, GUR-M, VSP, NABK) and shadow factions (Pal Palych, Tolik 'Busyk', FSM agents) operate at the border.\n\nWould you like to view the short backstory and agency guide before starting?"
+      ),
+      portrait: { gender: "M", skinTone: 1, faceShape: 0, hairStyle: 1, hairColor: 2, facialHair: 1, glasses: 0, headwear: 4, scarOrDetail: 0, expression: 0 },
+      options: [
+        {
+          id: "view_onboarding",
+          tapSound: true,
+          label: L("📖 Пройти передісторію та інструктаж (Рекомендовано)", "📖 View Backstory & Agency Guide (Recommended)"),
+          outcome: "",
+          moneyDelta: 0, timeDelta: 0, riskDelta: 0, sbkDelta: 0, tolikDelta: 0, palychDelta: 0, moraleDelta: 0,
+          onSelect: () => {
+            markOnboardingSeen();
+            state.pendingStartMode = sandbox ? "SANDBOX" : "CAMPAIGN";
+            state.onboardingTab = 0;
+            state.phase = "ONBOARDING";
+            render();
+            return true;
+          }
+        },
+        {
+          id: "skip_onboarding",
+          tapSound: true,
+          label: L("⚡ Пропустити — одразу заступити на зміну →", "⚡ Skip — Start Shift Immediately →"),
+          outcome: "",
+          moneyDelta: 0, timeDelta: 0, riskDelta: 0, sbkDelta: 0, tolikDelta: 0, palychDelta: 0, moraleDelta: 0,
+          onSelect: () => {
+            markOnboardingSeen();
+            startNewGame(sandbox);
+            return true;
+          }
+        }
+      ]
+    });
+  }
+
   function render() {
     stopMenuAnimation();
     updateMood();
@@ -7228,30 +7437,60 @@
       const canResume = hasSavedGame();
       const unlockedCount = loadUnlockedArchetypes().length;
       const shytCount = loadUnlockedShytomyr().length;
+      const badges = loadAgencyBadges();
+      const discoveries = loadDiscoveries();
+      const totalServDisc = AGENCY_BADGE_DEFS.length + GAME_DISCOVERY_DEFS.length;
+      const openServDisc = badges.length + discoveries.length;
+      const stats = loadCareerStats();
+      const onboardingNew = !hasSeenOnboarding();
       const shieldSvg = `<svg width="36" height="36" viewBox="0 0 64 64" style="flex-shrink:0;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.7));"><path d="M32 4L56 14v18c0 14-10 24-24 28C18 56 8 46 8 32V14L32 4z" fill="#1B3B2B" stroke="#E0B145" stroke-width="3"/><rect x="14" y="28" width="36" height="7" rx="2" fill="#C62828"/><rect x="22" y="28" width="8" height="7" fill="#ECEFF1"/><rect x="38" y="28" width="8" height="7" fill="#ECEFF1"/><polygon points="32,11 35,19 43,19 36,23 38,31 32,26 26,31 28,23 21,19 29,19" fill="#E0B145"/></svg>`;
 
       root.innerHTML = `
         <div class="game-menu-wrap">
-          <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;flex-direction:column;gap:9px;">
             <div class="game-menu-hero">
-              <canvas id="menu-canvas" width="436" height="196"></canvas>
+              <canvas id="menu-canvas" width="436" height="204"></canvas>
               <div class="game-menu-hero-overlay">
                 <div style="display:flex;justify-content:space-between;align-items:center;">
-                  <span style="font-size:10px;font-weight:800;color:#E0B145;background:rgba(0,0,0,0.55);padding:3px 8px;border-radius:4px;border:1px solid rgba(224,177,69,0.35);">
-                    ${tr(L("КПП «ЗАХІД-04» • ДПСК KRAINA", "GATE 04 • SBGS KRAINA"), state.lang)}
+                  <span style="font-size:10px;font-weight:800;color:#E0B145;background:rgba(0,0,0,0.62);padding:3px 8px;border-radius:4px;border:1px solid rgba(224,177,69,0.4);">
+                    🟢 ${tr(L("КПП «ЗАХІД-04» • ДПСК KRAINA", "GATE 04 • SBGS KRAINA"), state.lang)}
                   </span>
                   <div style="display:flex;gap:5px;">
                     <button type="button" id="menu-lang" class="ctrl-pill">${state.lang === "UK" ? "🇺🇦 UA" : "🇬🇧 EN"}</button>
                     <button type="button" id="menu-music" class="ctrl-pill" aria-label="Toggle music">${audio.musicEnabled ? "🔊" : "🔇"}</button>
                   </div>
                 </div>
-                <div class="game-menu-brand">
-                  ${shieldSvg}
-                  <div>
-                    <div class="game-menu-title">BORDER SHIFT: KRAINA</div>
-                    <div class="game-menu-sub">${tr(L("Симулятор прикордонного контролю, контрабанди та вибору", "Border control, smuggling & choices simulator"), state.lang)}</div>
+                <div>
+                  <div class="game-menu-brand">
+                    ${shieldSvg}
+                    <div>
+                      <div class="game-menu-title">BORDER SHIFT: KRAINA</div>
+                      <div class="game-menu-sub">${tr(L("Симулятор прикордонного контролю, спецслужб та вибору", "Border control, agencies, smuggling & choices"), state.lang)}</div>
+                    </div>
+                  </div>
+                  <div class="menu-faction-strip">
+                    <span class="menu-faction-pill">🛂 ${tr(L("ДПСК", "SBGS"), state.lang)}</span>
+                    <span class="menu-faction-pill">🕵️ ${tr(L("СБК", "SBK"), state.lang)}</span>
+                    <span class="menu-faction-pill">🦅 ${tr(L("ГУР-М", "GUR-M"), state.lang)}</span>
+                    <span class="menu-faction-pill">🎖️ ${tr(L("ВСП", "VSP"), state.lang)}</span>
+                    <span class="menu-faction-pill">⚖️ ${tr(L("НАБК", "NABK"), state.lang)}</span>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            <div class="menu-dossier-strip">
+              <div class="menu-dossier-cell">
+                <span class="menu-dossier-val">${stats.totalProcessed}</span>
+                <span class="menu-dossier-lbl">${tr(L("Оформлено авто", "Travelers Checked"), state.lang)}</span>
+              </div>
+              <div class="menu-dossier-cell">
+                <span class="menu-dossier-val">${unlockedCount}/16</span>
+                <span class="menu-dossier-lbl">${tr(L("Титули Долі", "Fate Titles"), state.lang)}</span>
+              </div>
+              <div class="menu-dossier-cell">
+                <span class="menu-dossier-val">${openServDisc + shytCount}/${totalServDisc + SHYTOMYR_LEGENDS.length}</span>
+                <span class="menu-dossier-lbl">${tr(L("Служби і Легенди", "Agencies & Legends"), state.lang)}</span>
               </div>
             </div>
 
@@ -7260,32 +7499,54 @@
                 <button type="button" id="btn-resume" class="game-btn game-btn-gold">
                   <div>
                     <div style="font-size:14px;font-weight:900;">⏯ ${tr(L("ПРОДОВЖИТИ ЗМІНУ", "RESUME SHIFT"), state.lang)}</div>
-                    <div style="font-size:11px;opacity:0.82;">${tr(L("Повернутися до збереженого дня", "Continue your saved shift"), state.lang)}</div>
+                    <div style="font-size:11px;opacity:0.84;">${tr(L("Повернутися до збереженого дня та бюджету", "Return to your saved shift & funds"), state.lang)}</div>
                   </div>
                   <span style="font-size:18px;">→</span>
                 </button>
               ` : ""}
-              <button type="button" id="btn-start-camp" class="game-btn game-btn-primary">
-                <div>
-                  <div style="font-size:14px;font-weight:900;">🛂 ${tr(L("КАМПАНІЯ (7 ДНІВ + КАР'ЄРА)", "STORY CAMPAIGN (7 DAYS)"), state.lang)}</div>
-                  <div style="font-size:11px;opacity:0.82;">${tr(L("Сюжетні події, вербування, вибори та фінал", "Story events, factions, choices & finale"), state.lang)}</div>
+
+              <div class="menu-modes-grid">
+                <button type="button" id="btn-start-camp" class="game-btn game-btn-primary">
+                  <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+                    <span style="font-size:18px;">🛂</span>
+                    <span style="font-size:10px;font-weight:800;color:#A5D6A7;background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;">${tr(L("СЮЖЕТ", "7 DAYS"), state.lang)}</span>
+                  </div>
+                  <div>
+                    <div style="font-size:13.5px;font-weight:900;">${tr(L("КАМПАНІЯ", "STORY CAMPAIGN"), state.lang)}</div>
+                    <div style="font-size:10.5px;opacity:0.84;margin-top:2px;">${tr(L("7 днів + кар'єра, вербування та фінал", "Story events, ranks & finale"), state.lang)}</div>
+                  </div>
+                </button>
+                <button type="button" id="btn-start-sand" class="game-btn game-btn-sandbox">
+                  <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+                    <span style="font-size:18px;">♾️</span>
+                    <span style="font-size:10px;font-weight:800;color:#90CAF9;background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;">${tr(L("ВІЛЬНА ГРА", "FREEPLAY"), state.lang)}</span>
+                  </div>
+                  <div>
+                    <div style="font-size:13.5px;font-weight:900;">${tr(L("СЕНДБОКС", "ENDLESS SANDBOX"), state.lang)}</div>
+                    <div style="font-size:10.5px;opacity:0.84;margin-top:2px;">${tr(L("Випадкові укази, ранги, 20 000 💵 втеча", "Random decrees, ranks & escape"), state.lang)}</div>
+                  </div>
+                </button>
+              </div>
+
+              <button type="button" id="btn-open-onboarding" class="game-btn game-btn-onboard">
+                <div style="flex:1;">
+                  <div style="display:flex;align-items:center;gap:6px;">
+                    <span style="font-size:13.5px;font-weight:900;color:#FFE082;">📖 ${tr(L("ПЕРЕДІСТОРІЯ ТА СЛУЖБИ (ОНБОРДІНГ)", "BACKSTORY & AGENCIES GUIDE"), state.lang)}</span>
+                    ${onboardingNew ? `<span class="menu-badge-new">${tr(L("ВАЖЛИВО", "NEW"), state.lang)}</span>` : ""}
+                  </div>
+                  <div style="font-size:10.5px;color:#CFD8DC;margin-top:2px;">${tr(L("Хто такі ДПСК, СБК, ГУР-М, ВСП, НАБК, Толік та як перевіряти авто", "Who are SBGS, SBK, GUR-M, VSP, NABK, Tolik & how to inspect"), state.lang)}</div>
                 </div>
-                <span style="font-size:18px;">▶</span>
+                <span style="font-size:16px;color:#FFE082;">📘</span>
               </button>
-              <button type="button" id="btn-start-sand" class="game-btn">
+
+              <button type="button" id="btn-open-archive" class="game-btn" style="padding:10px 13px;">
                 <div>
-                  <div style="font-size:14px;font-weight:900;">♾️ ${tr(L("ВІЛЬНА СЛУЖБА (СЕНДБОКС)", "ENDLESS SANDBOX"), state.lang)}</div>
-                  <div style="font-size:11px;opacity:0.82;">${tr(L("Випадкові укази, ранги та нескінченні зміни", "Random daily decrees, ranks & endless shifts"), state.lang)}</div>
-                </div>
-                <span style="font-size:18px;">∞</span>
-              </button>
-              <button type="button" id="btn-open-archive" class="game-btn" style="padding:10px 14px;">
-                <div>
-                  <div style="font-size:13px;font-weight:800;">🗄️ ${tr(L("АРХІВ ТА КОЛЕКЦІЯ", "ARCHIVE & COLLECTION"), state.lang)}</div>
-                  <div style="font-size:10.5px;opacity:0.75;">${tr(L(`Титули: ${unlockedCount}/16 • Шитомир: ${shytCount}/${SHYTOMYR_LEGENDS.length}`, `Titles: ${unlockedCount}/16 • Shytomyr: ${shytCount}/${SHYTOMYR_LEGENDS.length}`), state.lang)}</div>
+                  <div style="font-size:13px;font-weight:800;">🗄️ ${tr(L("АРХІВ ДПСК ТА КОЛЕКЦІЯ", "ARCHIVE & COLLECTION"), state.lang)}</div>
+                  <div style="font-size:10.5px;opacity:0.78;">${tr(L(`Титули: ${unlockedCount}/16 • Шитомир: ${shytCount}/${SHYTOMYR_LEGENDS.length} • Відзнаки: ${openServDisc}/${totalServDisc}`, `Titles: ${unlockedCount}/16 • Shytomyr: ${shytCount}/${SHYTOMYR_LEGENDS.length} • Medals: ${openServDisc}/${totalServDisc}`), state.lang)}</div>
                 </div>
                 <span style="font-size:15px;">📂</span>
               </button>
+
               ${(() => {
                 const cps = loadCampaignCheckpoints();
                 const days = [1, 2, 3, 4, 5, 6, 7].filter(d => cps["day_" + d]);
@@ -7314,8 +7575,16 @@
       document.getElementById("menu-lang").addEventListener("click", () => { state.lang = state.lang === "UK" ? "EN" : "UK"; render(); });
       document.getElementById("menu-music").addEventListener("click", () => { audio.ensureCtx(); audio.musicEnabled = !audio.musicEnabled; render(); });
       if (canResume) document.getElementById("btn-resume").addEventListener("click", () => { audio.playApprove(); loadSavedGame(); });
-      document.getElementById("btn-start-camp").addEventListener("click", () => { audio.playApprove(); startNewGame(false); });
-      document.getElementById("btn-start-sand").addEventListener("click", () => { audio.playApprove(); startNewGame(true); });
+      document.getElementById("btn-start-camp").addEventListener("click", () => { audio.playApprove(); requestGameStart(false); });
+      document.getElementById("btn-start-sand").addEventListener("click", () => { audio.playApprove(); requestGameStart(true); });
+      document.getElementById("btn-open-onboarding").addEventListener("click", () => {
+        audio.playTap();
+        markOnboardingSeen();
+        state.pendingStartMode = null;
+        state.onboardingTab = 0;
+        state.phase = "ONBOARDING";
+        render();
+      });
       document.getElementById("btn-open-archive").addEventListener("click", () => { audio.playTap(); state.phase = "ARCHIVE"; render(); });
       document.getElementById("btn-reset-progress").addEventListener("click", () => {
         audio.playTap();
@@ -7333,6 +7602,7 @@
           localStorage.removeItem(CAMPAIGN_CHECKPOINTS_KEY);
           localStorage.removeItem(AGENCY_BADGES_KEY);
           localStorage.removeItem(GAME_DISCOVERIES_KEY);
+          localStorage.removeItem(ONBOARDING_SEEN_KEY);
         } catch (_) {}
         render();
       });
@@ -7345,6 +7615,202 @@
           restoreCampaignCheckpoint(Number(btn.getAttribute("data-cp-day")));
         });
       });
+      return;
+    }
+
+    if (state.phase === "ONBOARDING") {
+      const tab = state.onboardingTab || 0;
+      const renderOnboardCard = (borderColor, iconHtml, titleObj, roleObj, bodyObj) => `
+        <div class="onboard-agency-card" style="border-left-color:${borderColor};">
+          <div class="onboard-agency-icon">${iconHtml}</div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:900;color:#FFE082;">${tr(titleObj, state.lang)}</div>
+            <div style="font-size:10.5px;font-weight:700;color:#81C784;margin-top:1px;">${tr(roleObj, state.lang)}</div>
+            <p style="font-size:11.5px;line-height:1.42;color:#CFD8DC;margin-top:4px;white-space:pre-line;">${tr(bodyObj, state.lang)}</p>
+          </div>
+        </div>
+      `;
+
+      let tabBody = "";
+      if (tab === 0) {
+        tabBody = [
+          renderOnboardCard(
+            "#E0B145", "🛂",
+            L("Передісторія: КПП «Захід-04»", "Backstory: Checkpoint 'Zakhid-04'"),
+            L("Країна Kraina • Воєнний стан • Твоя перша зміна", "State of Kraina • Martial Law • Your First Shift"),
+            L("Попереднього інспектора забрали вночі оперативники НАБК після скандалу з фальшивими довідками. На ранок тебе терміново перевели на віддалений карпатський пункт «Захід-04».\n\nВдома чекає сім'я з купою рахунків, на КПП тиснуть контрабандисти й мажори, а в кишені лише 400 🪙.", "The previous inspector was arrested overnight by NABK over fake exit permits. You've been reassigned to remote mountain gate 'Zakhid-04'.\n\nAt home your family waits with rising bills; at the gate smugglers & VIPs push through — and you start with just 400 🪙.")
+          ),
+          renderOnboardCard(
+            "#4CAF50", "🛤️",
+            L("Три шляхи інспектора", "Three Inspector Paths"),
+            L("Обирай свій стиль служби на кожному кроці", "Shape your career with every stamp"),
+            L("1️⃣ Чесна служба: тримай устав ДПСК, допомагай розвідці ГУР/СБК та отримай офіційну подяку.\n2️⃣ Подвійний агент «Кордон-7»: завоюй довіру контррозвідки й піднімись до полковника під прикриттям.\n3️⃣ Великий куш та втеча: збирай долари 💵, відмивай готівку 🪙 та виїжджай за кордон через Толіка (14 000 💵 у Кампанії / 20 000 💵 у Сендбоксі).", "1️⃣ Honest Service: follow SBGS directives, aid GUR/SBK, earn Kyiv commendations.\n2️⃣ Covert Agent 'Border-7': earn SBK trust and rise to undercover Colonel.\n3️⃣ Big Score & Escape: collect USD 💵 bribes, launder cash 🪙 and flee abroad via Tolik (14,000 💵 Story / 20,000 💵 Sandbox).")
+          )
+        ].join("");
+      } else if (tab === 1) {
+        tabBody = [
+          renderOnboardCard(
+            "#4CAF50", "🛂",
+            L("ДПСК — Прикордонна служба", "SBGS — State Border Guard"),
+            L("Офіційний статус • Зарплата 🪙 • Догани", "Official Status • Salary 🪙 • Reprimands"),
+            L("Твоє основне відомство. Платить ставку за кожне оформлене авто й видає ранкові директиви.\n• Дотримання правил: +зарплата і ранг.\n• Помилка на шлагбаумі: штраф 🪙 та ризик догани (3 догани = звільнення!).", "Your primary command. Pays per traveler and sets daily directives.\n• Follow directives: +salary & rank perks.\n• Mistakes: 🪙 fines and reprimands (3 reprimands = fired!).")
+          ),
+          renderOnboardCard(
+            "#42A5F5", "🕵️",
+            L("СБК — Служба безпеки та контррозвідка", "SBK — Counter-Intelligence"),
+            L("🎯 Розшук • 🚨 Арешти • Агент «Кордон-7»", "🎯 Wanted Dossiers • 🚨 Arrests • Agent 'Border-7'"),
+            L("Контррозвідка на кордоні. Перед зміною видає 🎯 Довідник Розшуку з частковими зачіпками (фото, авто або прізвище) і наводки по рації.\n• Затримання злочинців: солідні премії (🪙 та 💵), репутація СБК і шанс завербуватись негласним агентом «Кордон-7».\n• Низька репутація СБК: підкуп дорожчає, зате при високій СБК прикриє в операціях.", "Fights spies & smugglers. Provides partial 🎯 Wanted Dossiers & radio alerts.\n• Arresting criminals pays 🪙 & 💵 bounties, boosts SBK trust, and unlocks the covert Agent 'Border-7' branch.")
+          ),
+          renderOnboardCard(
+            "#FFA726", "🦅",
+            L("ГУР-М — Воєнна розвідка", "GUR-M — Military Intelligence"),
+            L("Спецконвої • Дрони на фронт • Відзнака «Сокіл»", "Secret Convoys • Drone Cargo • 'Falcon' Medal"),
+            L("Проводить секретні вантажі через кордон («у темну» або з паролем). Перевозить FPV-дрони й РЕБ.\n• Допомога ГУР: відкриває відзнаку «Сокіл» (-2с часу огляду пса назавжди) та премії.", "Moves classified war supplies across the gate.\n• Helping GUR-M earns rewards and the 'Falcon' Medal (-2s faster dog inspection permanently).")
+          ),
+          renderOnboardCard(
+            "#AB47BC", "🎖️",
+            L("ВСП та Реєстр «Облік+»", "VSP & 'Oblik+' Registry"),
+            L("Військовий правопорядок • Виїзд чоловіків • QR-код", "Military Law • Male Exit Rules • QR Scans"),
+            L("Контролює законність виїзду військовозобов'язаних чоловіків та волонтерів.\n• Звіряй QR у «Облік+» кнопкою сканування, перевіряй довідки «Шлях» та документи супроводу.\n• Затримання ухилянтів з подвійним паспортом: подяка ВСП і +800 🪙 бонусу.", "Enforces martial law exit rules.\n• Scan QR in 'Oblik+' manually and check exemption permits.\n• Catching dual-citizen evaders unlocks the VSP Guard bonus (+800 🪙 per evader).")
+          ),
+          renderOnboardCard(
+            "#EF5350", "⚖️",
+            L("НАБК — Антикорупційне бюро", "NABK — Anti-Corruption Bureau"),
+            L("Ризик викриття 0–100% • Підсадні агенти • Арешт", "Exposure Risk 0–100% • Sting Agents • Prison"),
+            L("Полює на хабарників! Кожен взятий конверт або «ліві» бакси піднімають шкалу НАБК%.\n• Підсадні агенти пропонують хабар із мікрокамерою та міченими купюрами (перевіряй 🔦 УФ-лампою і 🐕 псом!).\n• НАБК = 100%: негайний рейд і тюрма (Кінець гри).", "Hunts corrupt officers! Bribes raise NABK% risk.\n• Undercover stings carry lapel mics and marked UV bills — inspect with 🔦 UV & 🐕 dog!\n• Reach 100% NABK = instant raid & prison.")
+          )
+        ].join("");
+      } else if (tab === 2) {
+        tabBody = [
+          renderOnboardCard(
+            "#C9972C", `<canvas id="onboard-palych-c" width="52" height="52"></canvas>`,
+            L("🧢 Пал Палич — Начальник поста", "🧢 Pal Palych — Shift Chief"),
+            L("Вечірня частка ($) • Догани • Прикриття", "Nightly Cut ($) • Reprimands • Cover-Ups"),
+            L("Хитрий начальник зміни. Щовечора приходить по «частку на генератор» (у 💵).\n• Платиш частку: росте довіра, знімає догани та закриває очі на дрібні проколи.\n• Відмовляєшся: економиш гроші, але ризикуєш звільненням при помилках.", "Cunning station commander who demands an evening cut in 💵.\n• Paying builds loyalty and clears reprimands; refusing saves USD but risks firing.")
+          ),
+          renderOnboardCard(
+            "#81C784", `<canvas id="onboard-tolik-c" width="52" height="52"></canvas>`,
+            L("🚐 Толік «Бусик» — Тіньовий синдикат", "🚐 Tolik 'Busyk' — Smuggling Syndicate"),
+            L("Курс валют • Відмивання • Нічна втеча за кордон", "Money Exchange • Laundering • Midnight Escape"),
+            L("Тримає канали контрабанди та чорний обмінник.\n• Пропускай його «своїх» бусів — заробляй повагу Толіка і солідні конверти в 💵.\n• Увечері обмінює гривні 🪙 на 💵 та при високій довірі вивезе тебе за кордон.", "Runs smuggling convoys and shadow exchange.\n• Clearing his vans builds Tolik rep & USD income; high rep unlocks the escape corridor abroad.")
+          ),
+          renderOnboardCard(
+            "#FF5252", `<canvas id="onboard-fsm-c" width="52" height="52"></canvas>`,
+            L("🕷️ Агентура ФСМ (Диверсанти ворога)", "🕷️ FSM Operatives (Enemy Saboteurs)"),
+            L("Шпигуни • Підроблені печатки • Вибухівка", "Spies • Forged Seals • Explosives"),
+            L("Ворожа розвідка. Маскуються під волонтерів, священиків чи дипломатів із підробленим фото, штампом або схроном у авто.\n• Тільки 🚨 СБК / АРЕШТ! Якщо пропустиш диверсанта — отримаєш тяжкий штраф і удар по СБК.", "Enemy saboteurs disguised as travelers with forged docs, wrong photos or hidden weapons.\n• Always 🚨 SBK / ARREST! Letting them pass causes severe fines & SBK penalty.")
+          ),
+          renderOnboardCard(
+            "#B39DDB", "🧦",
+            L("Шитомирське братство", "The Shytomyr Brotherhood"),
+            L("12 легендарних персонажів • Таємна мережа", "12 Legendary Travelers • Secret Network"),
+            L("Загадкові мандрівники з міста Шитомир (переселенці, майстри дронів, барди та кур'єри). Збирай їх у своїй Колекції та відкривай особливі фінальні історії!", "Mysterious visitors from the mythical town of Shytomyr. Meet all 12 in Shifts to unlock unique archive entries and epilogues.")
+          )
+        ].join("");
+      } else {
+        tabBody = [
+          renderOnboardCard(
+            "#E0B145", "💵",
+            L("Дві валюти: 🪙 (Гривні) vs 💵 (Долари)", "Two Currencies: 🪙 (Coins) vs 💵 (USD)"),
+            L("Зарплата + Білий бізнес  |  Хабарі + Офшори", "Salary + Legal Biz  |  Bribes + Escape"),
+            L("• 🪙 Гривні йдуть на побут сім'ї, інструменти будки, авто та «білі» кіоски/СТО (0% ризику НАБК).\n• 💵 Бакси дають хабарі, премії спецслужб та валютний обмін — потрібні для частки Палича, елітних активів та фонду втечі.", "• 🪙 pays for family bills, booth gear, cars & clean businesses (0% NABK risk).\n• 💵 comes from envelopes, agency bounties & exchange — needed for Palych, luxury assets & the Escape Fund.")
+          ),
+          renderOnboardCard(
+            "#4FC3F7", "🔍",
+            L("Як проводити перевірку в будці", "How to Inspect at the Gate"),
+            L("🔦 УФ-лампа • 🐕 Пес «Бавовна» • 👆 Вказати на помилку", "🔦 UV Lamp • 🐕 Sniffer Dog • 👆 Point Out Issue"),
+            L("1. Натисни на паспорт/довідку на столі — уважно звір ПІБ, вік, фото, термін і печатку.\n2. Клікни на вікно авто (або тег машини) — звір модель/колір/номер із техпаспортом.\n3. УВІМКНИ 🔦 УФ-лампу, щоб побачити водяні знаки чи мічені купюри, та клікни «Вказати на помилку» на підозрілому полі.\n4. Виклич 🐕 пса «Бавовну» (багажник / запаска / бардачок), щоб знайти тайники чи мікрофони НАБК.", "1. Open documents on the desk to check name, age, photo, expiry and seal.\n2. Click the booth car or vehicle tag to match model/color/plates.\n3. Toggle 🔦 UV Lamp for hidden watermarks or marked bills, and click 'Point Out Issue' on any mismatch.\n4. Send 🐕 Dog 'Bavovna' to search trunk, spare wheel & glovebox.")
+          ),
+          renderOnboardCard(
+            "#81C784", "🎯",
+            L("Три штампи рішення та часткові орієнтування", "Three Decision Stamps & Partial Alerts"),
+            L("✔ ПРОПУСТИТИ  •  ✖ ВІДМОВИТИ  •  🚨 АРЕШТ", "✔ APPROVE  •  ✖ DENY  •  🚨 ARREST"),
+            L("• 🎯 Розшук та Рація тепер дають лише часткову зачіпку (або фото, або авто, або прізвище) — перевіряй уважно!\n• ✔ ПРОПУСТИТИ — документи чисті (або взято конверт).\n• ✖ ВІДМОВИТИ — відсутня довідка, прострочений паспорт чи розбіжність у реєстрі.\n• 🚨 СБК / АРЕШТ — контрабанда, зброя, підроблене фото/печатка, агент НАБК/ФСМ або пропозиція хабаря.", "• 🎯 Wanted & Radio now give only ONE partial clue — verify carefully!\n• ✔ APPROVE — valid docs (or pocketed bribe).\n• ✖ DENY — missing permit, expired ID or registry mismatch.\n• 🚨 ARREST — contraband, fake seal/photo, spy or bribe attempt.")
+          )
+        ].join("");
+      }
+
+      root.innerHTML = `
+        <div class="row-between">
+          <button type="button" id="onboard-back" class="ctrl-pill">← ${tr(L("В меню", "Menu"), state.lang)}</button>
+          <span style="color:#E0B145;font-family:monospace;font-weight:800;font-size:12.5px;">📖 ${tr(L(`ДОСЬЄ ІНСПЕКТОРА • ${tab + 1}/4`, `INSPECTOR DOSSIER • ${tab + 1}/4`), state.lang)}</span>
+        </div>
+
+        <div style="border-radius:8px;overflow:hidden;border:1px solid #354039;background:#101714;">
+          <canvas id="onboarding-canvas" width="420" height="88" style="width:100%;height:auto;display:block;"></canvas>
+        </div>
+
+        <div class="onboard-tabs">
+          <button type="button" id="onboard-tab-0" class="${tab === 0 ? "btn-mustard" : "btn-secondary"}" style="padding:7px 4px;font-size:11px;">📜 ${tr(L("Історія", "Story"), state.lang)}</button>
+          <button type="button" id="onboard-tab-1" class="${tab === 1 ? "btn-mustard" : "btn-secondary"}" style="padding:7px 4px;font-size:11px;">🛡️ ${tr(L("Служби", "Agencies"), state.lang)}</button>
+          <button type="button" id="onboard-tab-2" class="${tab === 2 ? "btn-mustard" : "btn-secondary"}" style="padding:7px 4px;font-size:11px;">🕶️ ${tr(L("Тінь", "Shadow"), state.lang)}</button>
+          <button type="button" id="onboard-tab-3" class="${tab === 3 ? "btn-mustard" : "btn-secondary"}" style="padding:7px 4px;font-size:11px;">⚙️ ${tr(L("Будка", "Booth"), state.lang)}</button>
+        </div>
+
+        <div id="onboarding-content" class="onboard-scroll">${tabBody}</div>
+
+        <div style="display:flex;flex-direction:column;gap:6px;margin-top:auto;">
+          <div style="display:flex;gap:6px;">
+            ${tab > 0 ? `<button type="button" id="onboard-prev" class="btn-secondary" style="flex:1;padding:9px;">← ${tr(L("Назад", "Prev"), state.lang)}</button>` : ""}
+            ${tab < 3 ? `<button type="button" id="onboard-next" class="btn-mustard" style="flex:1;padding:9px;">${tr(L("Далі →", "Next →"), state.lang)}</button>` : ""}
+          </div>
+          ${state.pendingStartMode ? `
+            <button type="button" id="onboard-start-btn" class="btn-primary-green" style="padding:11px;">
+              ${state.pendingStartMode === "SANDBOX" ? tr(L("♾️ ЗАСТУПИТИ НА ВІЛЬНУ СЛУЖБУ →", "♾️ START ENDLESS SANDBOX →"), state.lang) : tr(L("🛂 ЗАСТУПИТИ НА ЗМІНУ КАМПАНІЇ →", "🛂 START CAMPAIGN SHIFT →"), state.lang)}
+            </button>
+          ` : (tab === 3 ? `
+            <div style="display:flex;gap:6px;">
+              <button type="button" id="onboard-start-camp" class="btn-primary-green" style="flex:1;padding:10px;font-size:12.5px;">🛂 ${tr(L("Почати Кампанію", "Start Campaign"), state.lang)}</button>
+              <button type="button" id="onboard-start-sand" class="btn-primary-blue" style="flex:1;padding:10px;font-size:12.5px;">♾️ ${tr(L("Почати Сендбокс", "Start Sandbox"), state.lang)}</button>
+            </div>
+          ` : "")}
+        </div>
+      `;
+
+      const obCanvas = document.getElementById("onboarding-canvas");
+      if (window._phaseBannerRaf) { cancelAnimationFrame(window._phaseBannerRaf); window._phaseBannerRaf = null; }
+      if (obCanvas) {
+        let lastOb = 0;
+        const tickOb = (ts) => {
+          if (state.phase !== "ONBOARDING" || document.getElementById("onboarding-canvas") !== obCanvas) {
+            window._phaseBannerRaf = null; return;
+          }
+          if (!lastOb || ts - lastOb >= 36) { lastOb = ts; drawOnboardingBanner(obCanvas, tab, (ts || Date.now()) * 0.001); }
+          window._phaseBannerRaf = requestAnimationFrame(tickOb);
+        };
+        drawOnboardingBanner(obCanvas, tab, Date.now() * 0.001);
+        if (typeof requestAnimationFrame === "function") window._phaseBannerRaf = requestAnimationFrame(tickOb);
+      }
+
+      if (tab === 2) {
+        const palCanvas = document.getElementById("onboard-palych-c");
+        if (palCanvas) drawPortrait(palCanvas.getContext("2d"), { gender: "M", skinTone: 2, faceShape: 2, hairStyle: 3, hairColor: 1, facialHair: 2, glasses: 1, headwear: 4, scarOrDetail: 0, expression: 1 }, 26, 51, 0.38);
+        const tolCanvas = document.getElementById("onboard-tolik-c");
+        if (tolCanvas) drawPortrait(tolCanvas.getContext("2d"), { gender: "M", skinTone: 1, faceShape: 1, hairStyle: 4, hairColor: 0, facialHair: 2, glasses: 2, headwear: 1, scarOrDetail: 3, expression: 1, specialId: "TOLIK_SMUGGLER" }, 26, 51, 0.38);
+        const fsmCanvas = document.getElementById("onboard-fsm-c");
+        if (fsmCanvas) drawPortrait(fsmCanvas.getContext("2d"), { gender: "M", skinTone: 0, faceShape: 1, hairStyle: 0, hairColor: 0, facialHair: 0, glasses: 2, headwear: 5, scarOrDetail: 2, expression: 2 }, 26, 51, 0.38);
+      }
+
+      document.getElementById("onboard-back").addEventListener("click", () => { audio.playTap(); state.pendingStartMode = null; state.phase = "MAIN_MENU"; render(); });
+      for (let ti = 0; ti < 4; ti++) {
+        const tb = document.getElementById(`onboard-tab-${ti}`);
+        if (tb) tb.addEventListener("click", () => { audio.playTap(); state.onboardingTab = ti; render(); });
+      }
+      const prevBtn = document.getElementById("onboard-prev");
+      if (prevBtn) prevBtn.addEventListener("click", () => { audio.playTap(); state.onboardingTab = Math.max(0, tab - 1); render(); });
+      const nextBtn = document.getElementById("onboard-next");
+      if (nextBtn) nextBtn.addEventListener("click", () => { audio.playTap(); state.onboardingTab = Math.min(3, tab + 1); render(); });
+      const startBtn = document.getElementById("onboard-start-btn");
+      if (startBtn) startBtn.addEventListener("click", () => {
+        audio.playApprove();
+        const isSand = state.pendingStartMode === "SANDBOX";
+        state.pendingStartMode = null;
+        startNewGame(isSand);
+      });
+      const startCampBtn = document.getElementById("onboard-start-camp");
+      if (startCampBtn) startCampBtn.addEventListener("click", () => { audio.playApprove(); markOnboardingSeen(); startNewGame(false); });
+      const startSandBtn = document.getElementById("onboard-start-sand");
+      if (startSandBtn) startSandBtn.addEventListener("click", () => { audio.playApprove(); markOnboardingSeen(); startNewGame(true); });
       return;
     }
 

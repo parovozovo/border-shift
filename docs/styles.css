@@ -761,7 +761,7 @@ button:disabled {
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: 12px;
+  gap: 10px;
   justify-content: space-between;
 }
 
@@ -769,26 +769,27 @@ button:disabled {
   position: relative;
   border-radius: 12px;
   overflow: hidden;
-  border: 1.5px solid rgba(224, 177, 69, 0.38);
+  border: 1.5px solid rgba(224, 177, 69, 0.42);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.65);
   background: #0D1512;
-  min-height: 196px;
+  min-height: 204px;
 }
 
 .game-menu-hero canvas {
   width: 100%;
-  height: 196px;
+  height: 204px;
   display: block;
 }
 
 .game-menu-hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(10,16,13,0.25) 0%, rgba(10,16,13,0.45) 55%, rgba(10,16,13,0.94) 100%);
+  background: linear-gradient(180deg, rgba(10,16,13,0.22) 0%, rgba(10,16,13,0.48) 52%, rgba(10,16,13,0.95) 100%);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 10px 12px;
+  gap: 6px;
 }
 
 .game-menu-brand {
@@ -798,7 +799,7 @@ button:disabled {
 }
 
 .game-menu-title {
-  font-size: 22px;
+  font-size: 21px;
   font-weight: 900;
   letter-spacing: 1px;
   color: #FFE082;
@@ -811,6 +812,56 @@ button:disabled {
   font-weight: 700;
   color: #A5D6A7;
   letter-spacing: 0.4px;
+  margin-top: 2px;
+}
+
+.menu-faction-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.menu-faction-pill {
+  font-size: 9.5px;
+  font-weight: 800;
+  font-family: monospace;
+  color: #DCE3DF;
+  background: rgba(15, 23, 19, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 4px;
+  padding: 2px 6px;
+  letter-spacing: 0.3px;
+}
+
+.menu-dossier-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.menu-dossier-cell {
+  background: #1B231E;
+  border: 1px solid #313E36;
+  border-radius: 8px;
+  padding: 6px 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.menu-dossier-val {
+  font-size: 13px;
+  font-weight: 900;
+  color: #FFE082;
+  font-family: monospace;
+}
+
+.menu-dossier-lbl {
+  font-size: 9.5px;
+  color: #9EAEB5;
+  font-weight: 700;
 }
 
 .game-menu-actions {
@@ -819,13 +870,28 @@ button:disabled {
   gap: 8px;
 }
 
+.menu-modes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.menu-modes-grid .game-btn {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-height: 92px;
+  padding: 11px 11px;
+  gap: 6px;
+}
+
 .game-btn {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
   width: 100%;
-  padding: 12px 14px;
+  padding: 11px 13px;
   border-radius: 9px;
   text-align: left;
   color: #F4F1EA;
@@ -838,10 +904,76 @@ button:disabled {
   background: linear-gradient(135deg, #1E4D32 0%, #143622 100%);
   border-color: #4CAF50;
 }
+.game-btn-sandbox {
+  background: linear-gradient(135deg, #1F3545 0%, #142430 100%);
+  border-color: #42A5F5;
+}
 .game-btn-gold {
   background: linear-gradient(135deg, #5A4518 0%, #382A0D 100%);
   border-color: #E0B145;
   color: #FFF3CD;
+}
+.game-btn-onboard {
+  background: linear-gradient(135deg, #263B34 0%, #182722 100%);
+  border: 1.5px solid #E0B145;
+  box-shadow: 0 4px 14px rgba(224, 177, 69, 0.16);
+}
+.menu-badge-new {
+  display: inline-block;
+  background: #E0B145;
+  color: #1A1610;
+  font-size: 9.5px;
+  font-weight: 900;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.4px;
+  animation: pulseBadge 1.8s ease-in-out infinite;
+}
+@keyframes pulseBadge {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.78; transform: scale(0.96); }
+}
+
+/* === ONBOARDING & BACKSTORY SCREEN === */
+.onboard-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+
+.onboard-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  max-height: calc(100dvh - 255px);
+  min-height: 220px;
+  padding-right: 3px;
+}
+
+.onboard-agency-card {
+  background-color: #1D2521;
+  border: 1px solid #35433B;
+  border-left: 4px solid #E0B145;
+  border-radius: 8px;
+  padding: 10px 11px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.onboard-agency-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: #121815;
+  border: 1px solid #3A483F;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 21px;
+  flex-shrink: 0;
+  overflow: hidden;
 }
 
 .shop-cat-grid {
