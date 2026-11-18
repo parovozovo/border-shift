@@ -19,6 +19,13 @@
     reactionState: "NONE", // "NONE" | "INTIMIDATED" | "COFFEE_GIVEN"
     coffeeTipGiven: false,
     uvActive: false,
+    intimidateUsed: false,
+    intimidateBribeBoosted: false,
+    intimidateClueMsg: null,
+    intimidateClueIsWarn: false,
+    uvCompartmentRevealed: false,
+    uvSecretClaimed: false,
+    currentUvEasterEgg: null,
     justShook: false,
     spottedCodes: [],
     lastFeedback: null,
@@ -86,6 +93,93 @@
     }
   }
 
+  const UV_SECRET_STAMPS = [
+    {
+      id: "CODE_GUR_NIGHT",
+      title: L("🦉 Шифр ГУР «Нічний Сокіл»", "🦉 GUR Cipher 'Night Falcon'"),
+      logText: L("🦉 UV-знахідка: розшифровано мітку ГУР «Нічний Сокіл»!", "🦉 UV find: decoded GUR 'Night Falcon' mark!"),
+      uah: 1400, usd: 0, sbkDelta: 6, riskDelta: 0, palychDelta: 0, tolikDelta: 0, timeDelta: 0
+    },
+    {
+      id: "NABK_MARKER",
+      title: L("🎙️ Потайний штамп аудитора НАБК", "🎙️ Hidden NABK Auditor Stamp"),
+      logText: L("🎙️ UV-знахідка: виявлено й знешкоджено мітку аудиту НАБК!", "🎙️ UV find: detected & neutralized hidden NABK audit stamp!"),
+      uah: 1200, usd: 0, sbkDelta: 0, riskDelta: -6, palychDelta: 0, tolikDelta: 0, timeDelta: 0
+    },
+    {
+      id: "SYNDICATE_MARK",
+      title: L("🕶️ Символ «Караван Варшавки»", "🕶️ 'Varshavka Caravan' Mark"),
+      logText: L("🕶️ UV-знахідка: підтверджено таємний знак синдикату Толіка!", "🕶️ UV find: confirmed Tolik syndicate UV mark!"),
+      uah: 1100, usd: 0, sbkDelta: 0, riskDelta: 0, palychDelta: 0, tolikDelta: 6, timeDelta: 0
+    },
+    {
+      id: "PALYCH_SEAL",
+      title: L("🥃 Архівна мітка «Палич-Фонд 1998»", "🥃 Archive Stamp 'Palych-Fund 1998'"),
+      logText: L("🥃 UV-знахідка: знайдено архівну печатку Палича!", "🥃 UV find: logged Palych archival UV stamp!"),
+      uah: 1000, usd: 0, sbkDelta: 0, riskDelta: 0, palychDelta: 6, tolikDelta: 0, timeDelta: 0
+    },
+    {
+      id: "CYBER_CIPHER",
+      title: L("🔐 Мікро-QR кібердепартаменту", "🔐 Cyber Dept Micro-QR"),
+      logText: L("🔐 UV-знахідка: перехоплено прихований мікро-QR!", "🔐 UV find: intercepted hidden cyber micro-QR!"),
+      uah: 1600, usd: 0, sbkDelta: 5, riskDelta: 0, palychDelta: 0, tolikDelta: 0, timeDelta: 0
+    },
+    {
+      id: "SHYTOMYR_RUNE",
+      title: L("🛸 Люмінесцентний «Дерун-Енерджі»", "🛸 Glowing 'Derun-Energy' Stamp"),
+      logText: L("🛸 UV-знахідка: магічний штамп шитомирських майстрів (+час і премія)!", "🛸 UV find: Shytomyr craftsman UV stamp (+time & bonus)!"),
+      uah: 1350, usd: 0, sbkDelta: 0, riskDelta: 0, palychDelta: 0, tolikDelta: 0, timeDelta: 2
+    },
+    {
+      id: "OFFSHORE_WATERMARK",
+      title: L("🌴 Невидима віза «Офшор-Монаківка»", "🌴 Invisible 'Monakivka Offshore' Visa"),
+      logText: L("🌴 UV-знахідка: зафіксовано елітну офшорну водяну мітку!", "🌴 UV find: logged VIP offshore watermark!"),
+      uah: 0, usd: 130, sbkDelta: 0, riskDelta: 0, palychDelta: 0, tolikDelta: 4, timeDelta: 0
+    },
+    {
+      id: "VIP_CHANCELLERY",
+      title: L("📜 Закрита резолюція «Без черги»", "📜 Secret Resolution 'VIP Lane'"),
+      logText: L("📜 UV-знахідка: знайдено закриту візу канцелярії!", "📜 UV find: spotted VIP chancellery UV seal!"),
+      uah: 0, usd: 120, sbkDelta: 0, riskDelta: 0, palychDelta: 4, tolikDelta: 0, timeDelta: 0
+    }
+  ];
+
+  function getUvSecretAward(traveler) {
+    if (!traveler) return null;
+    const mult = (state.ownedAssets && state.ownedAssets.includes("uv_spotlight")) ? 1.5 : 1.0;
+    let base = null;
+    if (traveler.storyTag === "NABK_STING") {
+      base = {
+        id: "STORY_NABK_WIRE",
+        title: L("🎙️ Мікрокамера НАБК та мічені купюри", "🎙️ NABK Micro-Cam & Marked Bills"),
+        logText: L("🎙️ UV-викриття: зафіксовано мічені купюри й жучок НАБК!", "🎙️ UV catch: logged NABK wiretap & marked bills!"),
+        uah: 1800, usd: 0, sbkDelta: 8, riskDelta: -10, palychDelta: 0, tolikDelta: 0, timeDelta: 0
+      };
+    } else if (traveler.storyTag === "FSM_SPY") {
+      base = {
+        id: "STORY_FSM_INK",
+        title: L("🕵️ Флуоресцентна фарба типографії ФСМ", "🕵️ Fluorescent FSM Print Ink"),
+        logText: L("🕵️ UV-експертиза: знято пробу секретної фарби ФСМ!", "🕵️ UV forensic: sampled fluorescent FSM ink!"),
+        uah: 2000, usd: 0, sbkDelta: 10, riskDelta: 0, palychDelta: 0, tolikDelta: 0, timeDelta: 0
+      };
+    } else if (traveler.storyTag === "INTEL_ALLY") {
+      base = {
+        id: "STORY_GUR_TRIDENT",
+        title: L("🦅 Невидимий тризуб-голограма ГУР-М", "🦅 Invisible GUR-M Trident Hologram"),
+        logText: L("🦅 UV-підтвердження: активовано спецголограму ГУР-М!", "🦅 UV verify: activated covert GUR-M hologram!"),
+        uah: 0, usd: 150, sbkDelta: 10, riskDelta: 0, palychDelta: 0, tolikDelta: 0, timeDelta: 0
+      };
+    } else if (state.currentUvEasterEgg) {
+      base = state.currentUvEasterEgg;
+    }
+    if (!base) return null;
+    return {
+      ...base,
+      uah: Math.round((base.uah || 0) * mult),
+      usd: Math.round((base.usd || 0) * mult)
+    };
+  }
+
   function getComputedBribe(offer) {
     if (!offer) return null;
     const currency = offer.currency === "USD" ? "USD" : "UAH";
@@ -95,6 +189,7 @@
     const ringMult = hasAsset("customs_seal_ring") ? 1.15 : 1.0;
     const audiMult = hasAsset("audi_q7_blyakha") ? 1.10 : 1.0;
     const prepMult = 1 + (state.nextBribeBoost || 0);
+    const intimidateMult = (state.intimidateBribeBoosted && !offer.isFriendlyGift) ? 1.30 : 1.0;
     let rankScale = 1;
     if (currency === "USD" && !offer.isStingTrap) {
       const d = state.daySpec ? state.daySpec.dayNumber : 1;
@@ -104,14 +199,15 @@
       else rankScale = 1.0;
     }
     const baseAmt = currency === "USD" ? (Math.max(450, offer.amount) * 3.2) : (offer.amount * 8);
-    const amt = Math.round(baseAmt * rankScale * modMult * jacketMult * ringMult * audiMult * prepMult);
+    const amt = Math.round(baseAmt * rankScale * modMult * jacketMult * ringMult * audiMult * prepMult * intimidateMult);
     return {
       amount: amt,
       currency,
       symbol: currency === "USD" ? "💵" : "🪙",
       display: currency === "USD" ? `${amt.toLocaleString("en-US")} 💵` : `${amt.toLocaleString("en-US")} 🪙`,
       isInstant: Boolean(offer.instantOffer),
-      requiresDiscovery: Boolean(offer.requiresDiscovery)
+      requiresDiscovery: Boolean(offer.requiresDiscovery),
+      boostedByIntimidate: Boolean(state.intimidateBribeBoosted && !offer.isFriendlyGift)
     };
   }
 
@@ -431,6 +527,13 @@
       reactionState: "NONE",
       coffeeTipGiven: false,
       uvActive: false,
+      intimidateUsed: false,
+      intimidateBribeBoosted: false,
+      intimidateClueMsg: null,
+      intimidateClueIsWarn: false,
+      uvCompartmentRevealed: false,
+      uvSecretClaimed: false,
+      currentUvEasterEgg: null,
       justShook: false,
       spottedCodes: [],
       lastFeedback: null,
@@ -542,6 +645,8 @@
   function prepareCurrentTraveler() {
     state.selectedDocIdx = 0;
     state.uvActive = false;
+    state.uvCompartmentRevealed = false;
+    state.uvSecretClaimed = false;
     state.docFolded = true;
     state.vehicleInspected = false;
     state.trunkPanelOpen = false;
@@ -551,6 +656,10 @@
     state.bribeAccepted = false;
     state.reactionState = "NONE";
     state.coffeeTipGiven = false;
+    state.intimidateUsed = false;
+    state.intimidateBribeBoosted = false;
+    state.intimidateClueMsg = null;
+    state.intimidateClueIsWarn = false;
     state.justShook = false;
     state.spottedCodes = [];
     state.inspectMode = false;
@@ -560,6 +669,12 @@
     state.oblikIsScreenshot = Boolean(t && t.violations.some(v => v.code === "INVALID_QR_CODE") && Math.random() < 0.5);
     const zones = ["TRUNK", "SPARE", "GLOVE"];
     state.dogTargetZone = (t && (t.hasContraband || t.storyTag === "DUAL_CITIZEN")) ? pick(zones) : null;
+    if (t && !t.storyTag) {
+      const h = Math.abs((t.id || "TRV").split("").reduce((acc, ch) => acc * 31 + ch.charCodeAt(0), 7));
+      state.currentUvEasterEgg = (h % 2 === 0) ? UV_SECRET_STAMPS[h % UV_SECRET_STAMPS.length] : null;
+    } else {
+      state.currentUvEasterEgg = null;
+    }
   }
 
   setInterval(() => {

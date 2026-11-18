@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v8.5";
+  const BUILD_VERSION = "v8.6";
   const DAILY_OBNAL_LIMIT_USD = 15000;
   let confirmResetArmed = false;
 
@@ -829,7 +829,7 @@
       currency: "UAH",
       icon: "🔦",
       title: L("Потужний стаціонарний УФ-прожектор «Сова-М»", "Heavy UV Spotlight 'Sova-M'"),
-      subtitle: L("Чіткіше підсвічує документи: -10% штрафів за помилки (діє найкращий захист)", "Sharper inspection: -10% protocol fines (best-only protection)"),
+      subtitle: L("Широкий промінь УФ-лампи + +50% премій за секретні УФ-шифри та -10% штрафів за помилки", "Wide UV beam + +50% bonuses from secret UV ciphers & -10% protocol fines"),
       cost: 55000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 0, moraleBoost: 0
     },
     {
@@ -6225,6 +6225,13 @@
     reactionState: "NONE", // "NONE" | "INTIMIDATED" | "COFFEE_GIVEN"
     coffeeTipGiven: false,
     uvActive: false,
+    intimidateUsed: false,
+    intimidateBribeBoosted: false,
+    intimidateClueMsg: null,
+    intimidateClueIsWarn: false,
+    uvCompartmentRevealed: false,
+    uvSecretClaimed: false,
+    currentUvEasterEgg: null,
     justShook: false,
     spottedCodes: [],
     lastFeedback: null,
@@ -6292,6 +6299,93 @@
     }
   }
 
+  const UV_SECRET_STAMPS = [
+    {
+      id: "CODE_GUR_NIGHT",
+      title: L("🦉 Шифр ГУР «Нічний Сокіл»", "🦉 GUR Cipher 'Night Falcon'"),
+      logText: L("🦉 UV-знахідка: розшифровано мітку ГУР «Нічний Сокіл»!", "🦉 UV find: decoded GUR 'Night Falcon' mark!"),
+      uah: 1400, usd: 0, sbkDelta: 6, riskDelta: 0, palychDelta: 0, tolikDelta: 0, timeDelta: 0
+    },
+    {
+      id: "NABK_MARKER",
+      title: L("🎙️ Потайний штамп аудитора НАБК", "🎙️ Hidden NABK Auditor Stamp"),
+      logText: L("🎙️ UV-знахідка: виявлено й знешкоджено мітку аудиту НАБК!", "🎙️ UV find: detected & neutralized hidden NABK audit stamp!"),
+      uah: 1200, usd: 0, sbkDelta: 0, riskDelta: -6, palychDelta: 0, tolikDelta: 0, timeDelta: 0
+    },
+    {
+      id: "SYNDICATE_MARK",
+      title: L("🕶️ Символ «Караван Варшавки»", "🕶️ 'Varshavka Caravan' Mark"),
+      logText: L("🕶️ UV-знахідка: підтверджено таємний знак синдикату Толіка!", "🕶️ UV find: confirmed Tolik syndicate UV mark!"),
+      uah: 1100, usd: 0, sbkDelta: 0, riskDelta: 0, palychDelta: 0, tolikDelta: 6, timeDelta: 0
+    },
+    {
+      id: "PALYCH_SEAL",
+      title: L("🥃 Архівна мітка «Палич-Фонд 1998»", "🥃 Archive Stamp 'Palych-Fund 1998'"),
+      logText: L("🥃 UV-знахідка: знайдено архівну печатку Палича!", "🥃 UV find: logged Palych archival UV stamp!"),
+      uah: 1000, usd: 0, sbkDelta: 0, riskDelta: 0, palychDelta: 6, tolikDelta: 0, timeDelta: 0
+    },
+    {
+      id: "CYBER_CIPHER",
+      title: L("🔐 Мікро-QR кібердепартаменту", "🔐 Cyber Dept Micro-QR"),
+      logText: L("🔐 UV-знахідка: перехоплено прихований мікро-QR!", "🔐 UV find: intercepted hidden cyber micro-QR!"),
+      uah: 1600, usd: 0, sbkDelta: 5, riskDelta: 0, palychDelta: 0, tolikDelta: 0, timeDelta: 0
+    },
+    {
+      id: "SHYTOMYR_RUNE",
+      title: L("🛸 Люмінесцентний «Дерун-Енерджі»", "🛸 Glowing 'Derun-Energy' Stamp"),
+      logText: L("🛸 UV-знахідка: магічний штамп шитомирських майстрів (+час і премія)!", "🛸 UV find: Shytomyr craftsman UV stamp (+time & bonus)!"),
+      uah: 1350, usd: 0, sbkDelta: 0, riskDelta: 0, palychDelta: 0, tolikDelta: 0, timeDelta: 2
+    },
+    {
+      id: "OFFSHORE_WATERMARK",
+      title: L("🌴 Невидима віза «Офшор-Монаківка»", "🌴 Invisible 'Monakivka Offshore' Visa"),
+      logText: L("🌴 UV-знахідка: зафіксовано елітну офшорну водяну мітку!", "🌴 UV find: logged VIP offshore watermark!"),
+      uah: 0, usd: 130, sbkDelta: 0, riskDelta: 0, palychDelta: 0, tolikDelta: 4, timeDelta: 0
+    },
+    {
+      id: "VIP_CHANCELLERY",
+      title: L("📜 Закрита резолюція «Без черги»", "📜 Secret Resolution 'VIP Lane'"),
+      logText: L("📜 UV-знахідка: знайдено закриту візу канцелярії!", "📜 UV find: spotted VIP chancellery UV seal!"),
+      uah: 0, usd: 120, sbkDelta: 0, riskDelta: 0, palychDelta: 4, tolikDelta: 0, timeDelta: 0
+    }
+  ];
+
+  function getUvSecretAward(traveler) {
+    if (!traveler) return null;
+    const mult = (state.ownedAssets && state.ownedAssets.includes("uv_spotlight")) ? 1.5 : 1.0;
+    let base = null;
+    if (traveler.storyTag === "NABK_STING") {
+      base = {
+        id: "STORY_NABK_WIRE",
+        title: L("🎙️ Мікрокамера НАБК та мічені купюри", "🎙️ NABK Micro-Cam & Marked Bills"),
+        logText: L("🎙️ UV-викриття: зафіксовано мічені купюри й жучок НАБК!", "🎙️ UV catch: logged NABK wiretap & marked bills!"),
+        uah: 1800, usd: 0, sbkDelta: 8, riskDelta: -10, palychDelta: 0, tolikDelta: 0, timeDelta: 0
+      };
+    } else if (traveler.storyTag === "FSM_SPY") {
+      base = {
+        id: "STORY_FSM_INK",
+        title: L("🕵️ Флуоресцентна фарба типографії ФСМ", "🕵️ Fluorescent FSM Print Ink"),
+        logText: L("🕵️ UV-експертиза: знято пробу секретної фарби ФСМ!", "🕵️ UV forensic: sampled fluorescent FSM ink!"),
+        uah: 2000, usd: 0, sbkDelta: 10, riskDelta: 0, palychDelta: 0, tolikDelta: 0, timeDelta: 0
+      };
+    } else if (traveler.storyTag === "INTEL_ALLY") {
+      base = {
+        id: "STORY_GUR_TRIDENT",
+        title: L("🦅 Невидимий тризуб-голограма ГУР-М", "🦅 Invisible GUR-M Trident Hologram"),
+        logText: L("🦅 UV-підтвердження: активовано спецголограму ГУР-М!", "🦅 UV verify: activated covert GUR-M hologram!"),
+        uah: 0, usd: 150, sbkDelta: 10, riskDelta: 0, palychDelta: 0, tolikDelta: 0, timeDelta: 0
+      };
+    } else if (state.currentUvEasterEgg) {
+      base = state.currentUvEasterEgg;
+    }
+    if (!base) return null;
+    return {
+      ...base,
+      uah: Math.round((base.uah || 0) * mult),
+      usd: Math.round((base.usd || 0) * mult)
+    };
+  }
+
   function getComputedBribe(offer) {
     if (!offer) return null;
     const currency = offer.currency === "USD" ? "USD" : "UAH";
@@ -6301,6 +6395,7 @@
     const ringMult = hasAsset("customs_seal_ring") ? 1.15 : 1.0;
     const audiMult = hasAsset("audi_q7_blyakha") ? 1.10 : 1.0;
     const prepMult = 1 + (state.nextBribeBoost || 0);
+    const intimidateMult = (state.intimidateBribeBoosted && !offer.isFriendlyGift) ? 1.30 : 1.0;
     let rankScale = 1;
     if (currency === "USD" && !offer.isStingTrap) {
       const d = state.daySpec ? state.daySpec.dayNumber : 1;
@@ -6310,14 +6405,15 @@
       else rankScale = 1.0;
     }
     const baseAmt = currency === "USD" ? (Math.max(450, offer.amount) * 3.2) : (offer.amount * 8);
-    const amt = Math.round(baseAmt * rankScale * modMult * jacketMult * ringMult * audiMult * prepMult);
+    const amt = Math.round(baseAmt * rankScale * modMult * jacketMult * ringMult * audiMult * prepMult * intimidateMult);
     return {
       amount: amt,
       currency,
       symbol: currency === "USD" ? "💵" : "🪙",
       display: currency === "USD" ? `${amt.toLocaleString("en-US")} 💵` : `${amt.toLocaleString("en-US")} 🪙`,
       isInstant: Boolean(offer.instantOffer),
-      requiresDiscovery: Boolean(offer.requiresDiscovery)
+      requiresDiscovery: Boolean(offer.requiresDiscovery),
+      boostedByIntimidate: Boolean(state.intimidateBribeBoosted && !offer.isFriendlyGift)
     };
   }
 
@@ -6637,6 +6733,13 @@
       reactionState: "NONE",
       coffeeTipGiven: false,
       uvActive: false,
+      intimidateUsed: false,
+      intimidateBribeBoosted: false,
+      intimidateClueMsg: null,
+      intimidateClueIsWarn: false,
+      uvCompartmentRevealed: false,
+      uvSecretClaimed: false,
+      currentUvEasterEgg: null,
       justShook: false,
       spottedCodes: [],
       lastFeedback: null,
@@ -6748,6 +6851,8 @@
   function prepareCurrentTraveler() {
     state.selectedDocIdx = 0;
     state.uvActive = false;
+    state.uvCompartmentRevealed = false;
+    state.uvSecretClaimed = false;
     state.docFolded = true;
     state.vehicleInspected = false;
     state.trunkPanelOpen = false;
@@ -6757,6 +6862,10 @@
     state.bribeAccepted = false;
     state.reactionState = "NONE";
     state.coffeeTipGiven = false;
+    state.intimidateUsed = false;
+    state.intimidateBribeBoosted = false;
+    state.intimidateClueMsg = null;
+    state.intimidateClueIsWarn = false;
     state.justShook = false;
     state.spottedCodes = [];
     state.inspectMode = false;
@@ -6766,6 +6875,12 @@
     state.oblikIsScreenshot = Boolean(t && t.violations.some(v => v.code === "INVALID_QR_CODE") && Math.random() < 0.5);
     const zones = ["TRUNK", "SPARE", "GLOVE"];
     state.dogTargetZone = (t && (t.hasContraband || t.storyTag === "DUAL_CITIZEN")) ? pick(zones) : null;
+    if (t && !t.storyTag) {
+      const h = Math.abs((t.id || "TRV").split("").reduce((acc, ch) => acc * 31 + ch.charCodeAt(0), 7));
+      state.currentUvEasterEgg = (h % 2 === 0) ? UV_SECRET_STAMPS[h % UV_SECRET_STAMPS.length] : null;
+    } else {
+      state.currentUvEasterEgg = null;
+    }
   }
 
   setInterval(() => {
@@ -8044,8 +8159,8 @@
           renderOnboardCard(
             "#4FC3F7", "🔍",
             L("Як проводити перевірку в будці", "How to Inspect at the Gate"),
-            L("🔦 УФ-лампа • 🐕 Пес «Бавовна» • 👆 Вказати на помилку", "🔦 UV Lamp • 🐕 Sniffer Dog • 👆 Point Out Issue"),
-            L("1. Натисни на паспорт/довідку на столі — уважно звір ПІБ, вік, фото, термін і печатку.\n2. Клікни на вікно авто (або тег машини) — звір модель/колір/номер із техпаспортом.\n3. УВІМКНИ 🔦 УФ-лампу, щоб побачити водяні знаки чи мічені купюри, та клікни «Вказати на помилку» на підозрілому полі.\n4. Виклич 🐕 пса «Бавовну» (багажник / запаска / бардачок), щоб знайти тайники чи мікрофони НАБК.", "1. Open documents on the desk to check name, age, photo, expiry and seal.\n2. Click the booth car or vehicle tag to match model/color/plates.\n3. Toggle 🔦 UV Lamp for hidden watermarks or marked bills, and click 'Point Out Issue' on any mismatch.\n4. Send 🐕 Dog 'Bavovna' to search trunk, spare wheel & glovebox.")
+            L("🔦 УФ-лампа • 📢 Нагримати • 🐕 Пес «Бавовна»", "🔦 UV Lamp • 📢 Knock • 🐕 Sniffer Dog"),
+            L("1. Натисни на паспорт/довідку на столі — уважно звір ПІБ, вік, фото, термін і печатку.\n2. Клікни на вікно авто (або тег машини) — звір модель/колір/номер із техпаспортом.\n3. УВІМКНИ 🔦 УФ-лампу: вона підсвічує правлені поля прямо на бланку, секретні УФ-шифри з премією та сліди контрабанди на митній декларації (значно дешевший обшук псом).\n4. Тиск 📢 «Нагримати»: винний водій нервує, видає зачіпку в журналі й докладає +30% у конверт (або дістає заначку) — але обережно з чесними, бо скаржаться Паличу (-3) і скасовують чайові!", "1. Open documents on the desk to check name, age, photo, expiry and seal.\n2. Click the booth car or vehicle tag to match model/color/plates.\n3. Toggle 🔦 UV Lamp: highlights tampered document fields, secret bonus UV stamps & customs compartment prints (halves dog search cost).\n4. Use 📢 'Knock' carefully: guilty drivers panic, reveal clues & raise bribes by +30%, while clean drivers cancel coffee tips and complain to Palych (-3).")
           ),
           renderOnboardCard(
             "#81C784", "🎯",
@@ -8447,7 +8562,7 @@
             </div>
             ${bribeVisible ? `
               <button type="button" id="btn-take-bribe" style="background:${t.bribeOffer.isFriendlyGift ? "#1B5E20" : "#6D4C41"};color:#E0B145;padding:5px 8px;font-size:11px;width:100%;margin-top:4px;">
-                ${t.bribeOffer.isFriendlyGift ? tr(L(`🤝 ВЗЯТИ ПІДГОН НА КАВУ (+${bribeInfo.display})`, `🤝 ACCEPT GIFT (+${bribeInfo.display})`), state.lang) : tr(L(`✉️ ВЗЯТИ КОНВЕРТ (+${bribeInfo.display})`, `✉️ TAKE ENVELOPE (+${bribeInfo.display})`), state.lang)}
+                ${t.bribeOffer.isFriendlyGift ? tr(L(`🤝 ВЗЯТИ ПІДГОН НА КАВУ (+${bribeInfo.display})`, `🤝 ACCEPT GIFT (+${bribeInfo.display})`), state.lang) : tr(L(`✉️ ВЗЯТИ КОНВЕРТ (+${bribeInfo.display})`, `✉️ TAKE ENVELOPE (+${bribeInfo.display})`), state.lang)}${bribeInfo.boostedByIntimidate ? ` <span style="background:#FF8F00;color:#111;padding:1px 5px;border-radius:4px;font-size:9.5px;font-weight:900;">${tr(L("📢 +30% ВИБИТО", "📢 +30% SHAKEN"), state.lang)}</span>` : ""}
               </button>
               ${!t.bribeOffer.isFriendlyGift ? `<div style="font-size:10px;color:${state.nabkRisk >= 65 || state.underSurveillance ? "#FF5252" : "#FFAB91"};margin-top:2px;">${state.nabkRisk >= 65 || state.underSurveillance ? tr(L(`⚠️ НАБК ${state.nabkRisk}% — дуже небезпечно брати! Краще 🚨 Затримати`, `⚠️ NABK ${state.nabkRisk}% — risky! Better 🚨 Detain`), state.lang) : tr(L("⚖️ Пропозиція хабаря — кримінал (можна 🚨 Затримати)", "Offering a bribe is a crime (can 🚨 Detain)"), state.lang)}</div>` : ""}
             ` : (state.bribeAccepted ? `<div style="color:#81C784;font-size:11px;font-weight:700;margin-top:4px;">${tr(L("✔ У кишені (тисни ✔ ПРОПУСТИТИ)", "✔ Pocketed (press ✔ APPROVE)"), state.lang)}</div>` : "")}
@@ -8460,6 +8575,11 @@
           <button type="button" id="react-uv" class="reaction-btn ${state.uvActive ? "uv-on" : ""}">🔦 ${tr(L(state.uvActive ? "УФ: ВКЛ" : "УФ-лампа", state.uvActive ? "UV: ON" : "UV Lamp"), state.lang)}</button>
           <button type="button" id="react-dog" class="reaction-btn ${state.vehicleInspected ? "done" : ""}" ${state.vehicleInspected ? "disabled" : ""}>🐕 ${state.vehicleInspected ? tr(L("Перевірено", "Checked"), state.lang) : tr(L(`Пес ${searchCost}`, `Dog ${searchCost}`), state.lang)}</button>
         </div>
+        ${state.intimidateClueMsg ? `
+          <div id="intimidate-tell-banner" class="intimidate-feedback-banner ${state.intimidateClueIsWarn ? "offended" : "tell"}">
+            <span>${tr(state.intimidateClueMsg, state.lang)}</span>
+          </div>
+        ` : ""}
         ${state.trunkPanelOpen && !state.vehicleInspected ? (() => {
           const hasEndoscope = state.ownedAssets.includes("uv_endoscope");
           const checked = state.checkedZones || [];
@@ -8473,13 +8593,18 @@
           <div id="trunk-search-panel" style="background:#1B221E;border:1.5px solid #E0B145;border-radius:6px;padding:7px;display:flex;flex-direction:column;gap:5px;">
             <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#E0B145;font-weight:800;">
               <span>🐕 ${tr(L(`ОБШУК: Перевір будь-які відсіки (${stepCostText}/відсік):`, `DOG SEARCH: Check any compartments (${stepCostText}/zone):`), state.lang)}</span>
-              ${hasEndoscope && state.dogTargetZone ? `<span style="color:#80DEEA;">🩻 🐾</span>` : ""}
+              ${hasEndoscope && state.dogTargetZone ? `<span style="color:#80DEEA;">🩻 🐾</span>` : (state.uvCompartmentRevealed && state.dogTargetZone ? `<span style="color:#00E5FF;">🧪 UV</span>` : "")}
             </div>
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;">
               ${zonesList.map(z => {
                 const isChecked = checked.includes(z.id);
                 const hintScents = hasEndoscope && state.dogTargetZone === z.id;
-                return `<button type="button" class="btn-outline trunk-zone-btn" data-zone="${z.id}" ${isChecked ? "disabled" : ""} style="padding:6px 4px;font-size:11px;${isChecked ? "opacity:0.55;border-color:#546E7A;color:#90A4AE;" : (hintScents ? "border-color:#FF5252;color:#FFE082;" : "")}">${z.icon} ${tr(z.name, state.lang)}${isChecked ? " ✓" : (hintScents ? " 🐾" : "")}</button>`;
+                const uvZoneHit = state.uvCompartmentRevealed && state.dogTargetZone === z.id;
+                const badge = isChecked ? " ✓" : (hintScents ? " 🐾" : (uvZoneHit ? " 🧪-1s" : ""));
+                const extraStyle = isChecked
+                  ? "opacity:0.55;border-color:#546E7A;color:#90A4AE;"
+                  : (hintScents ? "border-color:#FF5252;color:#FFE082;" : (uvZoneHit ? "border-color:#00E5FF;color:#80F9FF;box-shadow:0 0 8px rgba(0,229,255,0.28);" : ""));
+                return `<button type="button" class="btn-outline trunk-zone-btn" data-zone="${z.id}" ${isChecked ? "disabled" : ""} style="padding:6px 4px;font-size:11px;${extraStyle}">${z.icon} ${tr(z.name, state.lang)}${badge}</button>`;
               }).join("")}
             </div>
             ${state.zoneCheckMsg ? `<div style="font-size:11px;color:#FFE082;font-weight:700;">🔎 ${tr(state.zoneCheckMsg, state.lang)}</div>` : ""}
@@ -8558,7 +8683,7 @@
             const unfoldCls = state.justUnfoldedDoc ? "doc-unfold" : "";
             state.justUnfoldedDoc = false;
             return `
-          <div id="doc-paper-el" class="doc-paper ${unfoldCls} ${docTheme} ${state.uvActive ? "uv-mode" : ""}">
+          <div id="doc-paper-el" class="doc-paper ${unfoldCls} ${docTheme} ${state.uvActive ? "uv-mode" : ""} ${state.uvActive && state.ownedAssets.includes("uv_spotlight") ? "uv-pro" : ""}">
             ${state.uvActive ? `<div class="uv-lens-overlay" id="uv-lens-overlay"></div>` : ""}
             <div style="display:flex;justify-content:space-between;align-items:center;font-size:9.5px;font-weight:900;letter-spacing:0.5px;opacity:0.78;border-bottom:1px dashed rgba(0,0,0,0.18);padding-bottom:3px;">
               <span>${headerBanner}</span>
@@ -8608,29 +8733,25 @@
             ${state.uvActive ? (() => {
               const uvFindings = [];
               let uvColor = "#00E5FF";
-              if (t.storyTag === "NABK_STING") {
+              const hasFieldTamper = doc.fields && doc.fields.some(f => f.disc && !state.spottedCodes.includes(f.disc.code));
+              if (hasFieldTamper) {
                 uvColor = "#FF4081";
-                uvFindings.push(L("🎙️ UV: На лацкані світиться мікрокамера НАБК та мічені купюри «ХАБАР»!", "🎙️ UV: NABK lapel micro-cam & marked bribe bills glowing!"));
-              } else if (t.storyTag === "FSM_SPY") {
-                uvColor = "#FF4081";
-                uvFindings.push(L("🕵️ UV: Паспорт світиться флуоресцентною фарбою типографії ФСМ!", "🕵️ UV: Fluorescent FSM print ink detected on pages!"));
-              } else if (t.storyTag === "INTEL_ALLY") {
-                uvColor = "#FFD54F";
-                uvFindings.push(L("🦅 UV: Проявився невидимий тризуб-голограма ГУР-М!", "🦅 UV: Hidden GUR-M trident hologram revealed!"));
+                uvFindings.push(L("🔦 UV: На підсвіченому полі видно правку! Натисни на підсвічений рядок вище.", "🔦 UV: Tampered ink revealed! Click the glowing field above."));
               }
               if (doc.sealDisc) {
                 uvColor = "#FF4081";
-                uvFindings.push(L("🔴 UV: Кустарний штамп, нуль захисних волокон!", "🔴 UV: Forged stamp, zero state security fibers!"));
+                uvFindings.push(L("🔴 UV: Кустарний штамп, нуль захисних волокон! Клікни на печатку нижче.", "🔴 UV: Forged stamp, zero state security fibers! Click seal below."));
               }
               if (doc.type === "VEHICLE_CUSTOMS" && t.violations.some(v => v.code === "VEHICLE_MISMATCH")) {
                 uvColor = "#FF4081";
-                uvFindings.push(L("🚗 UV: На авто сліди перебитого VIN-номера та свіжої фарби!", "🚗 UV: Repainted hull & tampered VIN traces visible!"));
+                uvFindings.push(L("🚗 UV: На техпаспорті сліди перебитого VIN-номера та свіжої фарби!", "🚗 UV: Repainted hull & tampered VIN traces visible!"));
               }
-              if (t.hasContraband) {
+              if (t.hasContraband && doc.type !== "VEHICLE_CUSTOMS") {
                 if (uvColor === "#00E5FF") uvColor = "#76FF03";
-                uvFindings.push(L("🧪 UV: На обкладинці сліди мазуту та бурштинового пилу — варто пустити пса!", "🧪 UV: Grease & amber dust smudges — send the sniffer dog!"));
+                uvFindings.push(L("🧪 UV: На обкладинці сліди мазуту та бурштинового пилу — відкрий Митну декларацію під УФ або пускай пса!", "🧪 UV: Grease & amber dust — inspect Customs Declaration under UV or send the dog!"));
               }
-              if (uvFindings.length === 0) {
+              const uvSecret = getUvSecretAward(t);
+              if (uvFindings.length === 0 && !uvSecret && !(doc.type === "VEHICLE_CUSTOMS" && state.dogTargetZone)) {
                 const cleanNotes = [
                   L("✨ UV: Державні волокна ДПСК світяться чітко (+ жирна пляма від шаурми).", "✨ UV: State fibers OK (+ a faint shawarma grease stain)."),
                   L("✨ UV: Водяні знаки в нормі. На палітурці дитячий малюнок котика.", "✨ UV: Watermarks OK. Tiny UV-ink kitten drawn on cover."),
@@ -8640,7 +8761,40 @@
                 const idx = Math.abs((t.id || "").split("").reduce((a, c) => a + c.charCodeAt(0), 0)) % cleanNotes.length;
                 uvFindings.push(cleanNotes[idx]);
               }
-              return `<div class="uv-watermark" style="color:${uvColor};display:flex;flex-direction:column;gap:2px;">${uvFindings.map(item => `<div>${tr(item, state.lang)}</div>`).join("")}</div>`;
+              let customsTraceBtn = "";
+              if (doc.type === "VEHICLE_CUSTOMS" && state.dogTargetZone) {
+                const zoneLabels = {
+                  TRUNK: L("🧳 БАГАЖНИК", "🧳 TRUNK"),
+                  SPARE: L("🛞 ЗАПАСКА", "🛞 SPARE"),
+                  GLOVE: L("🧤 САЛОН", "🧤 CABIN")
+                };
+                const zLabel = zoneLabels[state.dogTargetZone] || L("🧳 БАГАЖНИК", "🧳 TRUNK");
+                customsTraceBtn = state.uvCompartmentRevealed
+                  ? `<div style="padding:5px 8px;border-radius:6px;background:rgba(0,229,255,0.12);border:1px dashed #76FF03;color:#76FF03;font-size:11px;font-weight:800;">🧪 ${tr(L(`UV-СЛІД ЗАФІКСОВАНО: сліди мазуту ведуть у ${zLabel.uk} (Пес: -1s)!`, `UV TRACE LOCKED: grease smudge points to ${zLabel.en} (Dog: -1s)!`), state.lang)}</div>`
+                  : `<button type="button" id="btn-uv-customs-trace" class="uv-interactive-btn" style="border-color:#76FF03;color:#B2FF59;"><span>🧪 ${tr(L(`UV-ВІДБИТКИ БІЛЯ СЛОВА: ${zLabel.uk}`, `UV PRINTS NEAR WORD: ${zLabel.en}`), state.lang)}</span><span>${tr(L("Вказати (-1s пес) →", "Lock Hint (-1s Dog) →"), state.lang)}</span></button>`;
+              }
+              let secretBtn = "";
+              if (uvSecret) {
+                const bonusTags = [];
+                if (uvSecret.uah > 0) bonusTags.push(`+${uvSecret.uah.toLocaleString("en-US")} 🪙`);
+                if (uvSecret.usd > 0) bonusTags.push(`+${uvSecret.usd.toLocaleString("en-US")} 💵`);
+                if (uvSecret.riskDelta < 0) bonusTags.push(`${uvSecret.riskDelta}% НАБК`);
+                if (uvSecret.sbkDelta > 0) bonusTags.push(`+${uvSecret.sbkDelta} СБК`);
+                if (uvSecret.tolikDelta > 0) bonusTags.push(`+${uvSecret.tolikDelta} ${tr(L("Толік", "Tolik"), state.lang)}`);
+                if (uvSecret.palychDelta > 0) bonusTags.push(`+${uvSecret.palychDelta} ${tr(L("Палич", "Palych"), state.lang)}`);
+                if (uvSecret.timeDelta > 0) bonusTags.push(`+${uvSecret.timeDelta}s`);
+                const bonusStr = bonusTags.join(" • ");
+                secretBtn = state.uvSecretClaimed
+                  ? `<button type="button" id="btn-uv-secret-stamp" class="uv-interactive-btn uv-claimed" disabled><span>${tr(uvSecret.title, state.lang)}</span><span>✅ ${tr(L("ЗАФІКСОВАНО", "CLAIMED"), state.lang)}</span></button>`
+                  : `<button type="button" id="btn-uv-secret-stamp" class="uv-interactive-btn"><span>${tr(uvSecret.title, state.lang)}</span><span style="color:#FFD54F;">${bonusStr}</span></button>`;
+              }
+              return `
+                <div style="display:flex;flex-direction:column;gap:4px;margin-top:2px;">
+                  ${uvFindings.length > 0 ? `<div class="uv-watermark" style="color:${uvColor};display:flex;flex-direction:column;gap:2px;align-self:stretch;">${uvFindings.map(item => `<div>${tr(item, state.lang)}</div>`).join("")}</div>` : ""}
+                  ${customsTraceBtn}
+                  ${secretBtn}
+                </div>
+              `;
             })() : ""}
             <button type="button" id="btn-doc-seal" class="seal-stamp ${doc.sealDisc && state.spottedCodes.includes(doc.sealDisc.code) ? "forged-spotted" : ""} ${state.uvActive && doc.sealDisc ? "forged-uv" : ""}">
               ✪ ${tr(doc.sealText, state.lang)}
@@ -8903,15 +9057,27 @@
         if (toggleLogsBtn) toggleLogsBtn.textContent = `▾ ${topLogs.length}`;
       });
 
+      const UV_FIELD_TAGS = {
+        EXPIRED_DATE: L("🔦 UV: ВИПРАВЛЕНО ЛЕЗОМ", "🔦 UV: RAZOR-ALTERED"),
+        NAME_MISMATCH: L("🔦 UV: ЧУЖЕ ЧОРНИЛО", "🔦 UV: OVERWRITTEN INK"),
+        PHOTO_MISMATCH: L("🔦 UV: ПІДКЛЕЄНЕ ФОТО", "🔦 UV: GLUED PHOTO EDGE"),
+        FAKE_ISSUER_SEAL: L("🔦 UV: ФАЛЬШИВИЙ ШТАМП", "🔦 UV: FAKE WATERMARK"),
+        AGE_RESTRICTION_NO_PERMIT: L("🔦 UV: ПРАВКА ПІДСТАВИ", "🔦 UV: ALTERED BASIS"),
+        CHILDREN_AGE_FRAUD: L("🔦 UV: ПЕРЕПИСАНИЙ ВІК", "🔦 UV: ALTERED AGE"),
+        GUARDIAN_NO_PASSENGER: L("🔦 UV: КУСТАРНИЙ БЛАНК", "🔦 UV: FAKE FORM TRACE")
+      };
+
       const fieldsList = document.getElementById("doc-fields-list");
       if (fieldsList) doc.fields.forEach(f => {
         const isSpotted = f.disc && state.spottedCodes.includes(f.disc.code);
+        const uvTampered = Boolean(state.uvActive && f.disc && !isSpotted);
+        const uvTag = uvTampered ? (UV_FIELD_TAGS[f.disc.code] || L("🔦 UV: ХІМІЧНА ПРАВКА", "🔦 UV: CHEMICAL EDIT")) : null;
         const rowBtn = document.createElement("button");
         rowBtn.type = "button";
-        rowBtn.className = "doc-field-row" + (isSpotted ? " spotted" : "");
+        rowBtn.className = "doc-field-row" + (isSpotted ? " spotted" : "") + (uvTampered ? " uv-tampered" : "");
         rowBtn.innerHTML = `
           <span style="color:#4E342E;font-size:12px;font-weight:600;flex:0 0 38%;">${tr(f.label, state.lang)}:</span>
-          <span style="color:${isSpotted ? "#C62828" : "#1F1D1A"};font-size:12px;font-weight:700;flex:1;">${tr(f.value, state.lang)}${isSpotted ? " [❗]" : ""}</span>
+          <span style="color:${isSpotted ? "#C62828" : "#1F1D1A"};font-size:12px;font-weight:700;flex:1;">${tr(f.value, state.lang)}${isSpotted ? " [❗]" : ""}${uvTag ? `<span class="uv-field-badge">${tr(uvTag, state.lang)}</span>` : ""}</span>
         `;
         rowBtn.addEventListener("click", () => {
           audio.playTap();
@@ -8920,6 +9086,9 @@
               state.spottedCodes.push(f.disc.code);
               state.interrogated = true;
               state.inspectMode = false;
+              if (state.uvActive) {
+                pushShiftLog("#FF4081", L(`🔦 UV: викрито підробку — ${f.disc.title.uk}`, `🔦 UV: spotted forgery — ${f.disc.title.en}`));
+              }
               render();
             } else {
               reportAlreadySpotted();
@@ -8939,6 +9108,9 @@
             state.spottedCodes.push(doc.sealDisc.code);
             state.interrogated = true;
             state.inspectMode = false;
+            if (state.uvActive) {
+              pushShiftLog("#FF4081", L(`🔦 UV: зафіксовано фальшиву печатку — ${doc.sealDisc.title.uk}`, `🔦 UV: spotted forged seal — ${doc.sealDisc.title.en}`));
+            }
             render();
           } else {
             reportAlreadySpotted();
@@ -8948,19 +9120,113 @@
         }
       });
 
+      const uvCustomsBtn = document.getElementById("btn-uv-customs-trace");
+      if (uvCustomsBtn) {
+        uvCustomsBtn.addEventListener("click", () => {
+          audio.playApprove();
+          state.uvCompartmentRevealed = true;
+          const zNames = { TRUNK: L("Багажник", "Trunk"), SPARE: L("Запаска", "Spare"), GLOVE: L("Салон", "Cabin") };
+          const zn = zNames[state.dogTargetZone] || L("Багажник", "Trunk");
+          pushShiftLog("#76FF03", L(`🧪 UV-відбитки на декларації вказують на «${zn.uk}» (перевірка псом: -1s)!`, `🧪 UV prints on declaration point to '${zn.en}' (dog search: -1s)!`));
+          render();
+        });
+      }
+
+      const uvSecretBtn = document.getElementById("btn-uv-secret-stamp");
+      if (uvSecretBtn) {
+        uvSecretBtn.addEventListener("click", () => {
+          const uvSecret = getUvSecretAward(t);
+          if (!uvSecret || state.uvSecretClaimed) return;
+          audio.playApprove();
+          state.uvSecretClaimed = true;
+          if (uvSecret.uah > 0) state.money += uvSecret.uah;
+          if (uvSecret.usd > 0) state.usd += uvSecret.usd;
+          if (uvSecret.sbkDelta) state.sbkRep = Math.max(0, Math.min(100, state.sbkRep + uvSecret.sbkDelta));
+          if (uvSecret.riskDelta) state.nabkRisk = Math.max(0, Math.min(100, state.nabkRisk + uvSecret.riskDelta));
+          if (uvSecret.palychDelta) state.palychRep = Math.max(0, Math.min(100, state.palychRep + uvSecret.palychDelta));
+          if (uvSecret.tolikDelta) state.tolikRep = Math.max(0, Math.min(100, state.tolikRep + uvSecret.tolikDelta));
+          if (uvSecret.timeDelta) state.shiftSec = Math.min(340, state.shiftSec + uvSecret.timeDelta);
+          const rewUk = [], rewEn = [];
+          if (uvSecret.uah > 0) { rewUk.push(`+${uvSecret.uah.toLocaleString("en-US")} 🪙`); rewEn.push(`+${uvSecret.uah.toLocaleString("en-US")} 🪙`); }
+          if (uvSecret.usd > 0) { rewUk.push(`+${uvSecret.usd.toLocaleString("en-US")} 💵`); rewEn.push(`+${uvSecret.usd.toLocaleString("en-US")} 💵`); }
+          if (uvSecret.sbkDelta) { rewUk.push(`+${uvSecret.sbkDelta} СБК`); rewEn.push(`+${uvSecret.sbkDelta} SBK`); }
+          if (uvSecret.riskDelta) { rewUk.push(`${uvSecret.riskDelta}% НАБК`); rewEn.push(`${uvSecret.riskDelta}% NABK`); }
+          if (uvSecret.tolikDelta) { rewUk.push(`+${uvSecret.tolikDelta} Толік`); rewEn.push(`+${uvSecret.tolikDelta} Tolik`); }
+          if (uvSecret.palychDelta) { rewUk.push(`+${uvSecret.palychDelta} Палич`); rewEn.push(`+${uvSecret.palychDelta} Palych`); }
+          if (uvSecret.timeDelta) { rewUk.push(`+${uvSecret.timeDelta}s`); rewEn.push(`+${uvSecret.timeDelta}s`); }
+          const sUk = rewUk.length ? ` (${rewUk.join(", ")})` : "";
+          const sEn = rewEn.length ? ` (${rewEn.join(", ")})` : "";
+          pushShiftLog("#00E5FF", L(`${uvSecret.logText.uk}${sUk}`, `${uvSecret.logText.en}${sEn}`));
+          render();
+        });
+      }
+
       // Inspector Reactions Bar Events
       document.getElementById("react-intimidate").addEventListener("click", () => {
         audio.playKnock();
-        const firstKnock = state.reactionState !== "INTIMIDATED";
-        state.reactionState = "INTIMIDATED";
         state.justShook = true;
-        if (firstKnock && state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_CRYO_CONE")) {
-          state.shiftSec = Math.min(340, state.shiftSec + 2);
-        }
-        // Real effect: shouting at a guilty suspect can crack their nerves and expose a paper/wire clue!
-        if (!t.shouldBeApproved && state.spottedCodes.length === 0 && Math.random() < 0.6) {
-          const clue = t.violations.find(v => v.code !== "CONTRABAND_CARGO" && v.code !== "VEHICLE_MISMATCH");
-          if (clue) state.spottedCodes.push(clue.code);
+        if (!state.intimidateUsed) {
+          state.intimidateUsed = true;
+          state.reactionState = "INTIMIDATED";
+          if (state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_CRYO_CONE")) {
+            state.shiftSec = Math.min(340, state.shiftSec + 2);
+          }
+          const isGuilty = !t.shouldBeApproved || (t.violations && t.violations.length > 0) || t.hasContraband;
+          if (isGuilty) {
+            state.intimidateClueIsWarn = false;
+            let shookBribe = false;
+            if (t.bribeOffer && !t.bribeOffer.isFriendlyGift && !state.bribeAccepted) {
+              state.intimidateBribeBoosted = true;
+              state.interrogated = true;
+              shookBribe = true;
+            } else if (!t.bribeOffer && !state.bribeAccepted && t.storyTag !== "FSM_SPY" && t.storyTag !== "NABK_STING") {
+              t.bribeOffer = {
+                amount: 220,
+                currency: "UAH",
+                reason: L("За мовчання (вибито тиском)", "Hush money (shaken down)"),
+                instantOffer: true
+              };
+              state.intimidateBribeBoosted = true;
+              state.interrogated = true;
+              shookBribe = true;
+            }
+
+            let tellPair;
+            const codes = (t.violations || []).map(v => v.code);
+            if (t.storyTag === "NABK_STING") {
+              tellPair = L("💦 Занервував і машинально прикрив лацкан піджака — схоже на прихований мікрофон/НАБК!", "💦 Nervously covered jacket lapel — possible hidden NABK wire!");
+            } else if (t.storyTag === "FSM_SPY" || codes.includes("WANTED_CRIMINAL_OR_SPY")) {
+              tellPair = L("💦 Кинув переляканий погляд на довідник розшуку — звір орієнтування СБК!", "💦 Shot a panicked glance at the Wanted board — check SBK alerts!");
+            } else if (t.hasContraband || t.storyTag === "DUAL_CITIZEN") {
+              tellPair = L("💦 Різко зблід і скосив очі на авто — у машині схованка, пускай пса «Бавовну»!", "💦 Turned pale staring at the car — hidden stash inside, send dog 'Bavovna'!");
+            } else if (codes.includes("GUARDIAN_NO_PASSENGER")) {
+              tellPair = L("💦 Зам'явся і озирнувся на порожнє сидіння позаду — перевір, чи є підопічний у салоні!", "💦 Stammed looking at the empty back seat — check if disabled passenger is present!");
+            } else if (codes.includes("PHOTO_MISMATCH")) {
+              tellPair = L("💦 Інстинктивно прикрив пальцем фото в паспорті — звір обличчя!", "💦 Covered passport photo with his thumb — compare the face!");
+            } else if (codes.includes("VEHICLE_MISMATCH")) {
+              tellPair = L("💦 Смикнувся, коли ти глянув на машину за вікном — звір авто з техпаспортом!", "💦 Flinched when you eyed the car — compare vehicle against registration!");
+            } else if (codes.includes("INVALID_QR_CODE")) {
+              tellPair = L("💦 Квапливо притишив екран телефону з «Облік+» — обов'язково відскануй QR!", "💦 Quickly dimmed Oblik+ phone screen — scan that QR code!");
+            } else if (codes.includes("FAKE_ISSUER_SEAL")) {
+              tellPair = L("💦 Тремтячою рукою поправив печатку внизу бланка — перевір штамп!", "💦 Adjusted the bottom document seal with trembling hands — inspect the stamp!");
+            } else {
+              tellPair = L("💦 Почав плутатися в датах, ПІБ та підставах — проклікай рядки документа!", "💦 Started stammering over dates, name & permit — inspect the text fields!");
+            }
+            const bribeSuffixUk = shookBribe ? " 💸 З переляку витяг/доклав +30% у конверт!" : "";
+            const bribeSuffixEn = shookBribe ? " 💸 Panicked & added +30% to the envelope!" : "";
+            state.intimidateClueMsg = L(tellPair.uk + bribeSuffixUk, tellPair.en + bribeSuffixEn);
+            pushShiftLog("#FFE082", L(`📢 Нагримав: ${state.intimidateClueMsg.uk}`, `📢 Knock: ${state.intimidateClueMsg.en}`));
+          } else {
+            state.intimidateClueIsWarn = true;
+            t.coffeeTip = 0;
+            state.coffeeTipGiven = true;
+            state.palychRep = Math.max(0, state.palychRep - 3);
+            state.intimidateClueMsg = L(
+              "😡 Чесний громадянин образився на крик! Чайові за каву скасовано, Паличу пішла скарга (-3 Палич).",
+              "😡 Honest traveler offended by yelling! Coffee tip canceled & Palych got a complaint (-3 Palych)."
+            );
+            pushShiftLog("#FF8A80", L(`📢 ${state.intimidateClueMsg.uk}`, `📢 ${state.intimidateClueMsg.en}`));
+          }
         }
         render();
       });
@@ -9023,10 +9289,11 @@
         btn.addEventListener("click", () => {
           const zone = btn.getAttribute("data-zone");
           const hasEndoscope = state.ownedAssets.includes("uv_endoscope");
+          const isUvZoneHit = Boolean(state.uvCompartmentRevealed && state.dogTargetZone === zone);
           audio.playDogSniff();
           if (!state.checkedZones) state.checkedZones = [];
           if (!state.checkedZones.includes(zone)) state.checkedZones.push(zone);
-          const stepSec = hasEndoscope ? 1 : 2;
+          const stepSec = (hasEndoscope || isUvZoneHit) ? 1 : 2;
           if (stepSec > 0) state.shiftSec = Math.max(5, state.shiftSec - stepSec);
 
           if (state.dogTargetZone && state.dogTargetZone === zone) {

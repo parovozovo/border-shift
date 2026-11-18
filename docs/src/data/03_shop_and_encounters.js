@@ -55,7 +55,7 @@
       currency: "UAH",
       icon: "🔦",
       title: L("Потужний стаціонарний УФ-прожектор «Сова-М»", "Heavy UV Spotlight 'Sova-M'"),
-      subtitle: L("Чіткіше підсвічує документи: -10% штрафів за помилки (діє найкращий захист)", "Sharper inspection: -10% protocol fines (best-only protection)"),
+      subtitle: L("Широкий промінь УФ-лампи + +50% премій за секретні УФ-шифри та -10% штрафів за помилки", "Wide UV beam + +50% bonuses from secret UV ciphers & -10% protocol fines"),
       cost: 55000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 0, moraleBoost: 0
     },
     {
