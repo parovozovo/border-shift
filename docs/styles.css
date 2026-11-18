@@ -521,9 +521,90 @@ button:disabled {
 .doc-tab.active { outline: 2px solid #E0B145; font-weight: 800; transform: translateY(-1px); }
 
 .doc-paper.uv-mode {
+  position: relative;
   background-color: #1A1635;
   color: #D1C4E9;
   box-shadow: inset 0 0 18px rgba(101, 31, 255, 0.45);
+}
+
+.uv-lens-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 2;
+  background: radial-gradient(circle 92px at var(--uv-x, 50%) var(--uv-y, 48%), rgba(179, 136, 255, 0.28) 0%, rgba(101, 31, 255, 0.12) 48%, rgba(8, 5, 18, 0.62) 100%);
+}
+
+/* === OBLIK+ LIVE QR WIDGET === */
+.oblik-qr-box {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: rgba(15, 32, 22, 0.85);
+  border: 1.5px solid #2E7D32;
+  border-radius: 6px;
+  padding: 7px;
+  margin-top: 2px;
+}
+
+.oblik-qr-canvas {
+  width: 64px;
+  height: 64px;
+  background: #FFFFFF;
+  border-radius: 4px;
+  padding: 2px;
+  flex-shrink: 0;
+}
+
+@keyframes pulseLiveDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.8); }
+}
+
+.oblik-live-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #00E676;
+  animation: pulseLiveDot 1.1s infinite;
+  margin-right: 4px;
+}
+
+.oblik-frozen-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #90A4AE;
+  margin-right: 4px;
+}
+
+.oblik-scan-btn {
+  position: relative;
+  overflow: hidden;
+  background: #1B5E20;
+  color: #E8F5E9;
+  border: 1px solid #66BB6A;
+  border-radius: 5px;
+  padding: 5px 8px;
+  font-size: 11px;
+  font-weight: 800;
+  width: 100%;
+  text-align: center;
+  user-select: none;
+}
+
+.oblik-scan-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0%;
+  background: rgba(105, 240, 174, 0.35);
+  pointer-events: none;
+  transition: width 0.45s linear;
 }
 
 .doc-paper.uv-mode .doc-field-row span:first-child {

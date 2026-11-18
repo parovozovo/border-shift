@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v7.5";
+  const BUILD_VERSION = "v7.6";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -5907,7 +5907,9 @@
     state.spottedCodes = [];
     state.inspectMode = false;
     state.justUnfoldedDoc = false;
+    state.oblikScanned = false;
     const t = state.queue[state.travelerIdx];
+    state.oblikIsScreenshot = Boolean(t && t.violations.some(v => v.code === "INVALID_QR_CODE") && Math.random() < 0.5);
     const zones = ["TRUNK", "SPARE", "GLOVE"];
     state.dogTargetZone = (t && (t.hasContraband || t.storyTag === "DUAL_CITIZEN")) ? pick(zones) : null;
     if (t && state.ownedAssets.includes("uv_endoscope")) {
@@ -7333,7 +7335,8 @@
             const unfoldCls = state.justUnfoldedDoc ? "doc-unfold" : "";
             state.justUnfoldedDoc = false;
             return `
-          <div class="doc-paper ${unfoldCls} ${docTheme} ${state.uvActive ? "uv-mode" : ""}">
+          <div id="doc-paper-el" class="doc-paper ${unfoldCls} ${docTheme} ${state.uvActive ? "uv-mode" : ""}">
+            ${state.uvActive ? `<div class="uv-lens-overlay" id="uv-lens-overlay"></div>` : ""}
             <div style="display:flex;justify-content:space-between;align-items:center;font-size:9.5px;font-weight:900;letter-spacing:0.5px;opacity:0.78;border-bottom:1px dashed rgba(0,0,0,0.18);padding-bottom:3px;">
               <span>${headerBanner}</span>
               <button type="button" id="btn-fold-doc" style="background:transparent;color:inherit;padding:0 4px;font-size:10px;opacity:0.75;">📂 ${tr(L("Скласти", "Fold"), state.lang)}</button>
@@ -7351,6 +7354,34 @@
             </div>
             <hr style="border:none;border-top:1px solid ${state.uvActive ? "#5E35B1" : "#BCAAA4"};margin:2px 0;">
             <div id="doc-fields-list" style="display:flex;flex-direction:column;gap:3px;"></div>
+            ${doc.type === "MILITARY_ID" ? (() => {
+              const hasQrErr = t.violations.some(v => v.code === "INVALID_QR_CODE");
+              const isFrozen = hasQrErr && state.oblikIsScreenshot;
+              const nowTimeStr = new Date().toTimeString().slice(0, 8);
+              return `
+                <div class="oblik-qr-box" id="oblik-qr-box">
+                  <canvas id="oblik-qr-canvas" class="oblik-qr-canvas" width="64" height="64"></canvas>
+                  <div style="flex:1;display:flex;flex-direction:column;gap:4px;">
+                    <div style="font-size:10.5px;color:#C8E6C9;font-weight:700;display:flex;align-items:center;">
+                      <span class="${isFrozen ? "oblik-frozen-dot" : "oblik-live-dot"}"></span>
+                      <span id="oblik-live-clock">${isFrozen ? "11:42:07 (СКРІН)" : `LIVE ${nowTimeStr}`}</span>
+                    </div>
+                    ${state.oblikScanned ? `
+                      <div style="font-size:11px;font-weight:800;color:${hasQrErr ? "#FF8A80" : "#69F0AE"};">
+                        ${hasQrErr
+                          ? tr(isFrozen ? "⚠️ ПІДРОБКА: ЗАСТИГЛИЙ СКРІНШОТ!" : "🚨 БАЗА: ВІЙСЬКОВИЙ РОЗШУК (ERR-409)!", isFrozen ? "⚠️ FAKE: FROZEN SCREENSHOT!" : "🚨 REGISTRY: WANTED (ERR-409)!")
+                          : tr("✅ РЕЄСТР: ДІЙСНИЙ (ОНОВЛЕНО)", "✅ REGISTRY: VALID (UPDATED)")}
+                      </div>
+                    ` : `
+                      <button type="button" id="btn-scan-oblik-qr" class="oblik-scan-btn">
+                        <span class="oblik-scan-bar" id="oblik-scan-bar"></span>
+                        <span style="position:relative;z-index:1;">📱 ${tr(L("Сканувати QR (тап / утримай)", "Scan QR (tap / hold)"), state.lang)}</span>
+                      </button>
+                    `}
+                  </div>
+                </div>
+              `;
+            })() : ""}
             ${state.uvActive ? (() => {
               const uvFindings = [];
               let uvColor = "#00E5FF";
@@ -7457,6 +7488,10 @@
           boothSceneOpts.reactionState = state.reactionState;
           boothSceneOpts.snifferActive = state.vehicleInspected;
           drawBoothScene(boothCanvasEl, boothSceneOpts);
+          const oblikClk = document.getElementById("oblik-live-clock");
+          if (oblikClk && !state.oblikIsScreenshot) {
+            oblikClk.textContent = `LIVE ${new Date().toTimeString().slice(0, 8)}`;
+          }
         }
         window._boothAnimRaf = requestAnimationFrame(tickBoothAnim);
       }
@@ -7468,6 +7503,65 @@
       if (miniC) {
         const mctx = miniC.getContext("2d");
         drawPortrait(mctx, t.passportPortrait, miniC.width * 0.5, miniC.height * 0.98, 0.44);
+      }
+
+      const qrC = document.getElementById("oblik-qr-canvas");
+      if (qrC) {
+        const qctx = qrC.getContext("2d");
+        qctx.fillStyle = "#FFFFFF";
+        qctx.fillRect(0, 0, 64, 64);
+        qctx.fillStyle = "#111111";
+        // Deterministic pseudo-QR matrix
+        const seed = (t.id || "TRV").split("").reduce((a, ch) => a + ch.charCodeAt(0), 0);
+        for (let gy = 0; gy < 8; gy++) {
+          for (let gx = 0; gx < 8; gx++) {
+            const isCorner = (gx < 2 && gy < 2) || (gx > 5 && gy < 2) || (gx < 2 && gy > 5);
+            if (isCorner || ((gx * 7 + gy * 13 + seed) % 3 === 0)) {
+              qctx.fillRect(4 + gx * 7, 4 + gy * 7, 6, 6);
+            }
+          }
+        }
+      }
+
+      const scanQrBtn = document.getElementById("btn-scan-oblik-qr");
+      if (scanQrBtn) {
+        let holdTimer = null;
+        const finishQrScan = () => {
+          if (holdTimer) { clearTimeout(holdTimer); holdTimer = null; }
+          if (state.oblikScanned) return;
+          audio.playTap();
+          state.oblikScanned = true;
+          if (t.violations.some(v => v.code === "INVALID_QR_CODE") && !state.spottedCodes.includes("INVALID_QR_CODE")) {
+            state.spottedCodes.push("INVALID_QR_CODE");
+            state.interrogated = true;
+          }
+          render();
+        };
+        if (scanQrBtn.addEventListener) {
+          scanQrBtn.addEventListener("pointerdown", () => {
+            const bar = document.getElementById("oblik-scan-bar");
+            if (bar) bar.style.width = "100%";
+            holdTimer = setTimeout(finishQrScan, 450);
+          });
+          scanQrBtn.addEventListener("pointerup", finishQrScan);
+          scanQrBtn.addEventListener("click", finishQrScan);
+        }
+      }
+
+      const docPaperEl = document.getElementById("doc-paper-el");
+      if (docPaperEl && state.uvActive && docPaperEl.addEventListener) {
+        const moveUvLens = (clientX, clientY) => {
+          const r = docPaperEl.getBoundingClientRect();
+          if (!r || !r.width || !r.height) return;
+          const xPct = Math.max(0, Math.min(100, ((clientX - r.left) / r.width) * 100));
+          const yPct = Math.max(0, Math.min(100, ((clientY - r.top) / r.height) * 100));
+          docPaperEl.style.setProperty("--uv-x", xPct.toFixed(1) + "%");
+          docPaperEl.style.setProperty("--uv-y", yPct.toFixed(1) + "%");
+        };
+        docPaperEl.addEventListener("pointermove", (ev) => moveUvLens(ev.clientX, ev.clientY));
+        docPaperEl.addEventListener("touchmove", (ev) => {
+          if (ev.touches && ev.touches[0]) moveUvLens(ev.touches[0].clientX, ev.touches[0].clientY);
+        }, { passive: true });
       }
 
       const deskSection = root.querySelector ? root.querySelector(".desk-area") : null;
