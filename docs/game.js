@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v8.2";
+  const BUILD_VERSION = "v8.3";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -2343,210 +2343,270 @@
     };
   }
 
-  // ★ 12 UNIQUE MYTHICAL SHYTOMYR LEGENDS (Shytomyr = Житомир parody: socks, ice cream, spaceport, quarry, M-06, memes!) ★
+  // ★ 12 REWRITTEN SHYTOMYR LEGENDS WITH COLLECTIBLE BOOTH RELICS & UNIQUE GIFTS ★
   const SHYTOMYR_LEGENDS = [
     {
       tag: "SHYTOMYR_SOCKS",
-      name: L("Тарас Панчішний", "Taras Panchishnyi"),
-      age: 34, gender: "M",
-      role: L("Директор підпільної панчішної фабрики", "Sock Empire Director"),
+      name: L("Кузьма «Титан» Панчішний", "Kuzma 'Titan' Panchishnyi"),
+      age: 37, gender: "M",
+      role: L("Магістр Трикотажної Ложі", "Grandmaster of Knitwear Lodge"),
       portrait: { gender: "M", skinTone: 0, faceShape: 1, hairStyle: 0, hairColor: 1, facialHair: 1, glasses: 2, headwear: 0, scarOrDetail: 3, expression: 1, outfitStyle: 1, specialId: "SHYTOMYR_BRO" },
+      gift: {
+        relicId: "RELIC_KEVLAR_SOCKS", icon: "🧦",
+        title: L("Кевларові термошкарпетки Ложі", "Kevlar Thermal Socks"),
+        desc: L("Реліквія в будку: +8с до кожної зміни та +30 🪙 до чайових за каву", "Booth Relic: +8s shift time & +30 🪙 coffee tips")
+      },
       stories: [{
         shape: "RETRO", colorId: "YELLOW", plate: "ШТ 0001 ШК",
         model: L("«Таврія-Нова Люкс» на титанах", "'Tavriya-Nova Lux'"),
-        cargo: L("600 пар термошкарпеток «Шитомир-Стандарт» та 3 термоси кави", "600 pairs of 'Shytomyr-Standard' thermal socks & coffee"),
-        permitReason: L("Стратегічне постачання утеплювача для союзних сил (ОВА)", "Strategic Thermal Supply Convoy"),
-        greeting: L("«Здоров, братан! Тарас Панчішний, 34! Дивись прописку — м. Шитомир! Хтось каже, що нашого міста не існує, а шкарпетки мої на всіх ногах! Пропустиш?»", "'Hey bro! Taras Panchishnyi! Check the birthplace — Shytomyr City! They say our city doesn't exist, yet everyone wears our socks!'"),
-        reply: L("«Усе чітко за накладною, навіть колір носків задекларовано!»", "'Everything is 100% legal on the manifest!'"),
-        intimidate: L("«Ей, не стукай по склу, там же 600 пар бавовни!»", "'Hey, easy on the glass!'"),
-        coffee: L("«За каву респект! Тримай 75 🪙 на круасани для поста!»", "'Respect for the coffee! Catch 75 🪙 for snacks!'")
+        cargo: L("800 пар кевларових термошкарпеток «Броня-Нога» та термос карпатського чаю", "800 pairs of kevlar thermal socks & thermos"),
+        permitReason: L("Секретне замовлення Трикотажної Ложі (ОВА)", "Secret Lodge Winter Supply"),
+        greeting: L("«Салют, брате! Кузьма Панчішний, Магістр шкарпетковий! На картах нас не шукають, а мої кевларові носки навіть уламки спиняють! Став штамп — піджену ексклюзив у будку!»", "'Salute, bro! Kuzma the Sock Grandmaster! Maps deny we exist, yet my kevlar socks stop shrapnel! Clear me and take a booth relic!'"),
+        reply: L("«Усі нитки й накладні зашиті бездоганно!»", "'Every thread and manifest is stitched tight!'"),
+        intimidate: L("«Тихше! Розбудиш дух старого ткацького верстата!»", "'Easy! You'll wake the sacred loom!'"),
+        coffee: L("«Краса! Лови 100 🪙 гримників на печиво!»", "'Nice! Catch 100 🪙 hrymnyky for biscuits!'")
       }]
     },
     {
       tag: "SHYTOMYR_COSMOS",
-      name: L("Соломія Космодроменко", "Solomiia Kosmodromenko"),
-      age: 28, gender: "F",
-      role: L("Інженерка Космодрому ім. Корольова", "Spaceport Engineer"),
+      name: L("Професорка Соломія Орбітальна", "Prof. Solomiia Orbitalna"),
+      age: 30, gender: "F",
+      role: L("Директорка Підземного Космодрому «Тетерів-9»", "Director of 'Teteriv-9' Underground Spaceport"),
       portrait: { gender: "F", skinTone: 0, faceShape: 0, hairStyle: 2, hairColor: 3, facialHair: 0, glasses: 1, headwear: 0, scarOrDetail: 0, expression: 1, lipColor: 1, earrings: 2, outfitStyle: 1, specialId: "SHYTOMYR_BRO" },
+      gift: {
+        relicId: "RELIC_TETERIV_METEOR", icon: "☄️",
+        title: L("Левітуючий метеорит із Тетерівки", "Levitating Teterivka Meteorite"),
+        desc: L("Реліквія в будку: -8% штрафів за помилки та космічне сяйво на столі", "Booth Relic: -8% protocol fines & cosmic desk glow")
+      },
       stories: [{
         shape: "E_SCOOTER", colorId: "EMERALD", plate: "ШТ-ОРБІТА",
-        model: L("Електросамокат «Вжух-Про 3000» з антеною", "'Vzhykh-Pro 3000' E-Scooter"),
-        cargo: L("Шолом скафандра, уламок метеорита з Тетерівки та 2 павербанки", "Spacesuit helmet, meteorite fragment & 2 powerbanks"),
-        permitReason: L("Міжнародний симпозіум Музею Космонавтики", "Space Museum International Symposium"),
-        greeting: L("«Привіт, земле! Соломія з Шитомира! Усі сміються з нашого космодрому, а ми вже в Варшавці телескоп забираємо! Глянеш паспорт?»", "'Hi Earthling! Solomiia from Shytomyr! Picking up a telescope in Varshavka!'"),
-        reply: L("«Усе космічно точно, печатка державна!»", "'Astronomically accurate papers!'"),
-        intimidate: L("«Обережно, це не просто самокат — тут прототип іонного двигуна!»", "'Careful, that is an ion-drive prototype!'"),
-        coffee: L("«Спасибі за каву! Як у невагомості — лови 60 🪙!»", "'Thanks for the coffee! Have 60 🪙!'")
+        model: L("Іонний самокат «Тетерів-Вояджер»", "'Teteriv-Voyager' Ion Scooter"),
+        cargo: L("Фрагмент метеорита в магнітному футлярі та креслення ліфта на Місяць", "Levitating meteorite core & lunar elevator plans"),
+        permitReason: L("Експедиція космічного центру", "Spaceport Research Mission"),
+        greeting: L("«На зв'язку «Тетерів-9»! Поки світ сперечається, чи є Шитомир, наш космодром уже запустив супутник над Варшавкою! Пропустиш із вітерцем?»", "'Teteriv-9 calling! While outsiders doubt Shytomyr, we launched a satellite over Varshavka! Clear for takeoff?'"),
+        reply: L("«Орбітальна точність — жодного відхилення в паперах!»", "'Orbital precision — zero paper drift!'"),
+        intimidate: L("«Обережніше з магнітом, бо шлагбаум сам підніметься на орбіту!»", "'Careful with the magnet or the barrier will lift into orbit!'"),
+        coffee: L("«Паливо на рівні! Тримай 75 🪙 гримників!»", "'Fuel levels nominal! Take 75 🪙!'")
       }]
     },
     {
       tag: "SHYTOMYR_ICECREAM",
-      name: L("Орест Морозивенко", "Orest Morozyvenko"),
-      age: 45, gender: "M",
-      role: L("Технолог заводу «Шинка-Рудь»", "Ice Cream Factory Technologist"),
+      name: L("Орест Пломбірович Крижень", "Orest Plombirovych Kryzhen"),
+      age: 46, gender: "M",
+      role: L("Кріо-інженер «Рудь-Антарктида»", "Cryo-Engineer 'Rud-Antarctica'"),
       portrait: { gender: "M", skinTone: 1, faceShape: 2, hairStyle: 1, hairColor: 2, facialHair: 4, glasses: 0, headwear: 1, scarOrDetail: 0, expression: 1, outfitStyle: 0, specialId: "SHYTOMYR_BRO" },
+      gift: {
+        relicId: "RELIC_CRYO_CONE", icon: "🍦",
+        title: L("Нетанучий Кріо-Пломбір -40°C", "Unmelting Cryo-Ice Cream"),
+        desc: L("Реліквія в будку: +2с часу при першому «Нагримати» на водія", "Booth Relic: +2s shift time on first 'Knock' per driver")
+      },
       stories: [{
         shape: "MINIBUS", colorId: "WHITE", plate: "ШТ 1978 МР",
-        model: L("«Мерс Спрінтер Бусик» (Рефрижератор)", "'Mers Sprinter Van' (Reefer)"),
-        cargo: L("Експериментальне морозиво «Шитомирський Пломбір» зі смаком дерунів і сала", "Experimental deruny-flavored ice cream"),
-        permitReason: L("Харчовий експортний коридор (Держпродспожив)", "Certified Food Export Corridor"),
-        greeting: L("«Свіжий холод у будку! Орест із заводу «Шинка-Рудь», м. Шитомир! Везу пробну партію пломбіру на виставку в Поландію!»", "'Fresh chill to the booth! Orest from Shynka-Rud plant, Shytomyr!'"),
-        reply: L("«Документи на рефрижератор і сертифікати якості в повному порядку!»", "'Reefer & quality certificates are spotless!'"),
-        intimidate: L("«Та чого ти гримаєш — у мене ж пломбір розтане!»", "'Stop yelling, the ice cream will melt!'"),
-        coffee: L("«Гаряча кава до пломбіру — ідеально! Ось 80 🪙 на пост!»", "'Hot coffee with ice cream — perfection! 80 🪙 for the booth!'")
+        model: L("Кріо-фургон «Мерс Пломбір-Турбо»", "'Mers Plombir-Turbo' Cryo Van"),
+        cargo: L("Дослідний кріо-пломбір -40°C та рідкий азот зі смаком суниці", "Experimental -40C cryo-ice cream crates"),
+        permitReason: L("Стратегічний кріо-експорт (ОВА)", "Strategic Cryo-Export Corridor"),
+        greeting: L("«Брр, свіжість у будку! Орест Крижень, завод «Рудь»! Везу нетанучий пломбір, який заморожує навіть погляд ревізора. Документи кришталеві!»", "'Fresh chill! Orest from the cryo-plant! Carrying unmelting ice cream that freezes even auditor stares!'"),
+        reply: L("«Температура -40°C, пломби й накладні ідеальні!»", "'-40°C locked, seals and manifests spotless!'"),
+        intimidate: L("«Охолоньте, інспекторе — краще візьміть ріжок!»", "'Chill out officer — better take a cone!'"),
+        coffee: L("«Контраст вогняний! +85 🪙 гримників у касу!»", "'Fire & ice! +85 🪙 hrymnyky for the booth!'")
       }]
     },
     {
       tag: "SHYTOMYR_RIVER",
-      name: L("Богдана Тетерівська", "Bohdana Teterivska"),
-      age: 31, gender: "F",
-      role: L("Капітанка флотилії р. Тетерівка", "River Flotilla Captain"),
+      name: L("Капітанша Богдана «Сонар» Тетерівська", "Capt. Bohdana 'Sonar' Teterivska"),
+      age: 32, gender: "F",
+      role: L("Командирка підводного човна р. Тетерів", "Teteriv Submarine Flotilla Commander"),
       portrait: { gender: "F", skinTone: 1, faceShape: 1, hairStyle: 3, hairColor: 0, facialHair: 0, glasses: 2, headwear: 0, scarOrDetail: 0, expression: 1, lipColor: 0, earrings: 1, outfitStyle: 2, specialId: "SHYTOMYR_BRO" },
+      gift: {
+        relicId: null, bonusMoney: 250, bonusSbk: 6, icon: "🧭",
+        title: L("Сонарний компас флотилії Тетерева", "Teteriv Submarine Compass"),
+        desc: L("Підгін: миттєво +250 🪙 гримників та +6 до репутації СБК", "Gift: instant +250 🪙 & +6 SBK rep")
+      },
       stories: [{
         shape: "SEDAN", colorId: "BLUE", plate: "ШТ 0404 РТ",
-        model: L("«Фолькс Пассат Б5»", "'Folks Passat B5'"),
-        cargo: L("Надувний човен, весла і сувенірна карта «Шитомир: ми реально існуємо»", "Inflatable boat, oars & 'Shytomyr Exists' map"),
-        permitReason: L("Закупівля рятувальних катерів для ДСНС", "Rescue Boat Procurement"),
-        greeting: L("«Сім футів під шлагбаумом! Богдана з берегів Тетерівки, м. Шитомир! Їду за моторами для рятувальників!»", "'Smooth sailing at the barrier! Bohdana from Teterivka river, Shytomyr!'"),
-        reply: L("«Усі бортові журнали та паспорти звірені!»", "'Logbooks and passports verified!'"),
-        intimidate: L("«Я шторм на Тетерівці пережила, а ви мені по склу стукаєте!»", "'I survived storms on Teterivka!'"),
-        coffee: L("«Дякую за гарячий кофеїн на борту! 70 🪙 на флот!»", "'Thanks for the coffee! 70 🪙 tip!'")
+        model: L("«Фолькс Пассат Б5» (Перископ-Едішн)", "'Folks Passat B5' (Periscope Ed.)"),
+        cargo: L("Титановий перископ, 2 сонари та секретна карта фарватеру Тетерева", "Titanium periscope, 2 sonars & river chart"),
+        permitReason: L("Спецрейс річкової гідророзвідки", "River Hydro-Recon Mission"),
+        greeting: L("«Пінг-пінг! Богдана «Сонар», командую підводним флотом Тетерева! Кажуть, річка мілка — а ми звідти до самого Балтійського виходимо. Глянеш папери?»", "'Ping-ping! Bohdana Sonar, commanding Teteriv's sub fleet! We navigate straight out to the Baltic!'"),
+        reply: L("«Усі глибини й сертифікати проскановано сонаром!»", "'All depths and certificates sonar-verified!'"),
+        intimidate: L("«На підводному човні не такими стуками лякали!»", "'Depth charges rattle louder than your knock!'"),
+        coffee: L("«За бадьорий кофеїн — +80 🪙 гримників!»", "'Thanks for the caffeine — +80 🪙!'")
       }]
     },
     {
       tag: "SHYTOMYR_QUARRY",
-      name: L("Гнат Кар'єрний", "Hnat Kariernyi"),
-      age: 54, gender: "M",
-      role: L("Старший майстер Соколовського кар'єру", "Granite Quarry Master"),
+      name: L("Дід Гнат «Гранітний Голем»", "Grandpa Hnat 'Granite Golem'"),
+      age: 56, gender: "M",
+      role: L("Хранитель Соколовського розлому", "Guardian of Sokolovskyi Fault"),
       portrait: { gender: "M", skinTone: 2, faceShape: 3, hairStyle: 4, hairColor: 2, facialHair: 3, glasses: 0, headwear: 1, scarOrDetail: 0, expression: 0, outfitStyle: 3, specialId: "SHYTOMYR_BRO" },
+      gift: {
+        relicId: null, bonusMoney: 250, bonusPalych: 8, icon: "🪨",
+        title: L("Базальтовий штамп-оберіг", "Basalt Quarry Seal"),
+        desc: L("Підгін: миттєво +250 🪙 гримників та +8 до поваги Пал Палича", "Gift: instant +250 🪙 & +8 Palych respect")
+      },
       stories: [{
         shape: "G_WAGON", colorId: "BLACK", plate: "ШТ 8888 ГР",
-        model: L("«Гелік-Кубик V8»", "'Gelik-Kubik V8'"),
-        cargo: L("Зразки лабрадориту з Соколовського кар'єру та перфоратор", "Granite labradorite samples & rotary hammer"),
-        permitReason: L("Державне замовлення на укріплення рубежів", "Border Fortification Contractor"),
-        greeting: L("«Доброго здоров'я, синку! Гнат із Соколовського кар'єру, м. Шитомир. Кремінь, а не мужик! Документи залізні — глянь!»", "'Greetings! Hnat from Sokolovskyi Quarry, Shytomyr. Rock-solid papers!'"),
-        reply: L("«Камінь не бреше, і печатка теж справжня!»", "'Stone doesn't lie, seal is genuine!'"),
-        intimidate: L("«Ха! Гранітник від стукоту не здригається!»", "'Ha! A quarryman doesn't flinch at knocking!'"),
-        coffee: L("«Міцна кава, як наш граніт! Тримай 90 🪙!»", "'Strong as granite! Take 90 🪙!'")
+        model: L("Броньований «Гелік-Граніт V8»", "'Gelik-Granite V8'"),
+        cargo: L("Шмат чорного лабрадориту вагою в півтонни й базальтова печатка", "Half-ton black labradorite slab & basalt seal"),
+        permitReason: L("Поставка броньованого каменю для рубежів", "Border Fortification Stone Supply"),
+        greeting: L("«Здоров будь, внучку! Дід Гнат із Соколовського розлому! Наш камінь кулі відбиває, а документи вибиті в базальті. Передаш привіт Паличу!»", "'Good health, son! Grandpa Hnat from Sokolovskyi fault! Our stone stops bullets and my papers are carved clean!'"),
+        reply: L("«Міцніше за базальт — жодної тріщини в документах!»", "'Solid as basalt — zero cracks in papers!'"),
+        intimidate: L("«Та хоч кувалдою бий — граніт не здригнеться!»", "'Swing a sledgehammer — granite won't blink!'"),
+        coffee: L("«Гаряча, як камінь у липні! +95 🪙 гримників!»", "'Hot like quarry stone in July! +95 🪙!'")
       }]
     },
     {
       tag: "SHYTOMYR_DERUN",
-      name: L("Марта Поліська-Дерун", "Marta Poliska-Derun"),
-      age: 38, gender: "F",
-      role: L("Чемпіонка фестивалю дерунів", "Deruny Festival Champion"),
+      name: L("Баба Марфа «Алхімік Дерунів»", "Granny Marfa 'Derun Alchemist'"),
+      age: 42, gender: "F",
+      role: L("Магістр Чавунної Пательні 98-го октану", "Master of the 98-Octane Cast Skillet"),
       portrait: { gender: "F", skinTone: 0, faceShape: 0, hairStyle: 0, hairColor: 4, facialHair: 0, glasses: 0, headwear: 2, scarOrDetail: 0, expression: 1, lipColor: 2, earrings: 2, outfitStyle: 0, specialId: "SHYTOMYR_BRO" },
+      gift: {
+        relicId: "RELIC_GOLD_DERUN", icon: "🥞",
+        title: L("Золотий Дерун у сметанному вакуумі", "Golden Vacuum Derun"),
+        desc: L("Реліквія в будку: +6% настрою сім'ї щовечора та +2с за пригощання кавою", "Booth Relic: +6% evening family morale & +2s on coffee")
+      },
       stories: [{
         shape: "SEDAN", colorId: "RED", plate: "ШТ 2024 ДР",
-        model: L("«Занос 1.5» (Газ/Бензин)", "'Zanos 1.5' (LPG)"),
-        cargo: L("Велетенська чавунна пательня, 2 відра сметани та мішок бульби", "Giant cast-iron skillet & 2 buckets of sour cream"),
-        permitReason: L("Культурна дипломатія та благодійний ярмарок", "Charity Food Fair Envoy"),
-        greeting: L("«Привітик із Польової-Авеню, м. Шитомир! Марта їде на благодійний ярмарок смажити деруни на всю Поландію!»", "'Hello from Polova Ave, Shytomyr! Heading to a charity deruny fair!'"),
-        reply: L("«Папери підсмажені ідеально, жодної помилки!»", "'Papers cooked to perfection!'"),
-        intimidate: L("«Ой не кричи, бо сметана скисне!»", "'Don't yell or the sour cream will curdle!'"),
-        coffee: L("«Дякую, золотко! Ось тобі 65 🪙 і рецепт хрумких дерунів!»", "'Thank you dear! Have 65 🪙!'")
+        model: L("«Занос 1.5» (На картопляному біодизелі)", "'Zanos 1.5' (Potato Biodiesel)"),
+        cargo: L("Кована чавунна сковорода, золотий дерун у вакуумі й 20 літрів сметани", "Cast skillet, golden vacuum derun & sour cream"),
+        permitReason: L("Гастро-дипломатія та благодійний ярмарок", "Gastro-Diplomacy Fair"),
+        greeting: L("«Доброго вечорочка, соколику! Марфа з Польової-Авеню! Мої деруни надихають так, що навіть НАБК про корупцію забуває. Пропускай до Варшавки!»", "'Evening dear! Marfa from Polova Ave! My deruny taste so heavenly even auditors forget their checklists!'"),
+        reply: L("«Папери підрум'янені з обох боків, усе законно!»", "'Papers browned evenly on both sides!'"),
+        intimidate: L("«Ой не шуми, бо тісто осяде!»", "'Hush dear, you'll deflate the batter!'"),
+        coffee: L("«Солоденький ти мій! Лови 70 🪙 гримників і золоту скоринку!»", "'Sweetheart! Take 70 🪙 hrymnyky!'")
       }]
     },
     {
       tag: "SHYTOMYR_PHANTOM",
-      name: L("Ілля «Фантом» Богунський", "Illia 'Phantom' Bohunskyi"),
+      name: L("Ілля «Помилка 404» Богунський", "Illia 'Error 404' Bohunskyi"),
       age: 29, gender: "M",
-      role: L("Сисадмін із Богунії-Сіті", "Sysadmin from Bohunia-City"),
+      role: L("Архітектор Матриці Шитомира", "Architect of Shytomyr Matrix"),
       portrait: { gender: "M", skinTone: 0, faceShape: 1, hairStyle: 2, hairColor: 1, facialHair: 1, glasses: 1, headwear: 0, scarOrDetail: 0, expression: 1, outfitStyle: 1, specialId: "SHYTOMYR_BRO" },
+      gift: {
+        relicId: "RELIC_404_FLOPPY", icon: "💾",
+        title: L("Голографічна дискета «404: Місто-Привид»", "Holographic '404' Floppy"),
+        desc: L("Реліквія в будку: -3% ризику НАБК щоранку та +300 💵 до ліміту відмивання", "Booth Relic: -3% daily NABK risk & +300 💵 laundering cap")
+      },
       stories: [{
         shape: "SPORT", colorId: "SILVER", plate: "ШТ 0404 ІР",
-        model: L("«Тесла Модел Ш» (На автопілоті)", "'Tesla Model Sh'"),
-        cargo: L("Серверна стійка, 3 роутери й тарілка «Зорелінк»", "Server rack, 3 routers & 'Zorelink' dish"),
-        permitReason: L("Бронювання критичного кібервузла", "Critical Cyber Node Exemption"),
-        greeting: L("«Хелоу! Ілля з Богунії-Сіті, м. Шитомир! Їду в Краків доводити дата-центру, що наш IP не баг у матриці!»", "'Hello! Illia from Bohunia-City, Shytomyr! Proving our IP is real!'"),
-        reply: L("«Усі сертифікати TLS і штамп ДПСК валідні!»", "'All certificates and stamps valid!'"),
-        intimidate: L("«Пінг підскочив, але папери без багів!»", "'Ping spiked, but papers are bug-free!'"),
-        coffee: L("«Кава як патч першого дня! Лови 80 🪙!»", "'Coffee is a day-one patch! 80 🪙 tip!'")
+        model: L("«Тесла Модел Ш» (Стелс-прошивка)", "'Tesla Model Sh' (Stealth OS)"),
+        cargo: L("Серверний кластер «Богунія», глушник радарів і дискета 404", "Server rack, radar cloak & '404' floppy"),
+        permitReason: L("Кіберзахист прикордонної мережі", "Critical Cyber Network Exemption"),
+        greeting: L("«Здоров, адміне шлагбаума! Це я стер Шитомир із супутникових карт, щоб ворог заблукав. Маю папери й дискету, яка ховає сліди від НАБК!»", "'Sup gatekeeper! I'm the guy who erased Shytomyr from satellite maps! Take this 404 disk to cloak your trail!'"),
+        reply: L("«Хеш-сума, QR і бронь зійшлися до байта!»", "'Hash, QR and exemption match to the bit!'"),
+        intimidate: L("«Фаєрвол витримав, паніки 0%!»", "'Firewall held steady, 0% packet loss!'"),
+        coffee: L("«Кращий апгрейд за зміну! +90 🪙 гримників!»", "'Best shift patch! +90 🪙 hrymnyky!'")
       }]
     },
     {
       tag: "SHYTOMYR_ARTIST",
-      name: L("Зоряна Чуднівська", "Zoriana Chudnivska"),
+      name: L("Зоряна «Міраж» Чуднівська", "Zoriana 'Mirage' Chudnivska"),
       age: 26, gender: "F",
-      role: L("Художниця з Чуднівського мосту", "Street Artist"),
+      role: L("Художниця оптичного камуфляжу на мосту", "Optical Camo Artist"),
       portrait: { gender: "F", skinTone: 3, faceShape: 0, hairStyle: 1, hairColor: 1, facialHair: 0, glasses: 0, headwear: 0, scarOrDetail: 0, expression: 1, lipColor: 0, earrings: 1, outfitStyle: 3, specialId: "SHYTOMYR_BRO" },
+      gift: {
+        relicId: null, bonusMoney: 220, bonusRisk: -6, icon: "🎨",
+        title: L("3D-камуфляж від ревізорів", "3D Inspector Camouflage"),
+        desc: L("Підгін: миттєво -6% ризику НАБК та +220 🪙 гримників", "Gift: instant -6% NABK risk & +220 🪙")
+      },
       stories: [{
         shape: "BICYCLE", colorId: "YELLOW", plate: "ПШ-АРТ",
-        model: L("Велосипед «Україна-Спорт» з тубусом", "'Ukraina' Bicycle"),
-        cargo: L("Полотна «Туман над Шитомиром», балончики фарби та пензлі", "Canvas 'Fog over Shytomyr' & paint cans"),
-        permitReason: L("Міжнародна арт-резиденція", "International Art Residency"),
-        greeting: L("«Добрий вечір! Зоряна з Чуднівського мосту, м. Шитомир. Кручу педалі на виставку до Варшавки!»", "'Good evening! Zoriana from Chudnivskyi Bridge, Shytomyr!'"),
-        reply: L("«Перегляньте паспорт — там усе яскраво й чесно!»", "'Check my passport — bright and honest!'"),
-        intimidate: L("«Не лякайте натхнення, будь ласка!»", "'Please don't scare my muse!'"),
-        coffee: L("«Ваша кава надихає! Тримайте 50 🪙 на фарбу для шлагбаума!»", "'Inspiring coffee! 50 🪙 tip!'")
+        model: L("Велосипед «Міраж-Чуднів» із мольбертом", "'Mirage' Bicycle & Easel"),
+        cargo: L("Голографічні банери-приманки та набір флуоресцентних фарб", "Decoy camo banners & fluorescent paints"),
+        permitReason: L("Міжнародна арт-резиденція маскування", "Camouflage Art Residency"),
+        greeting: L("«Привіт! Малюю такі мурали на Чуднівському мосту, що навіть супутники думають, ніби там чисте поле. Підфарбую твою репутацію від перевірок!»", "'Hi! I paint murals so real even satellites see an empty field. Let me paint over your audit trail!'"),
+        reply: L("«Жодних підмальовок — паспорт оригінальний на 100%!»", "'Zero touch-ups — 100% original passport!'"),
+        intimidate: L("«Тсс, не розмажте акрил у повітрі!»", "'Careful, don't smudge the wet canvas!'"),
+        coffee: L("«Натхнення в чашці! +65 🪙 гримників!»", "'Inspiration in a cup! +65 🪙!'")
       }]
     },
     {
       tag: "SHYTOMYR_M06",
-      name: L("Віталій М-06 Трасовий", "Vitalii M-06 Trasovyi"),
+      name: L("Віталій «Гіперлуп М-06» Трасовий", "Vitalii 'Hyperloop M-06'"),
       age: 41, gender: "M",
-      role: L("Гонщик траси Кийград–Шитомир", "Highway M-06 Legend"),
+      role: L("Пілот реактивного пікапа Кийград–Шитомир", "M-06 Jet-Pickup Pilot"),
       portrait: { gender: "M", skinTone: 1, faceShape: 2, hairStyle: 3, hairColor: 0, facialHair: 2, glasses: 2, headwear: 1, scarOrDetail: 0, expression: 0, outfitStyle: 0, specialId: "SHYTOMYR_BRO" },
+      gift: {
+        relicId: null, bonusMoney: 200, bonusSec: 12, icon: "⚡",
+        title: L("Ракетна присадка «Траса М-06»", "M-06 Rocket Fuel Additive"),
+        desc: L("Підгін: миттєво +12 секунд до поточної зміни та +200 🪙 гримників", "Gift: instant +12s shift time & +200 🪙")
+      },
       stories: [{
         shape: "PICKUP", colorId: "OLIVE", plate: "ШТ 0606 МТ",
-        model: L("«Пікап Міцубісі Л200»", "'Pickup L200'"),
-        cargo: L("Каністри пального, буксирувальні троси й 2 тепловізори", "Fuel cans, tow ropes & 2 thermals"),
-        permitReason: L("Волонтерський перегін техніки (Шлях)", "Volunteer Vehicle Convoy"),
-        greeting: L("«Траса М-06 вітає КПП! Віталік з Шитомира, до Кийграда й назад за 40 хвилин, а тепер везу пікап пацанам!»", "'Highway M-06 salutes the gate! Vitalii from Shytomyr hauling gear!'"),
-        reply: L("«Гальма перевірені, довідка і декларація чіткі!»", "'Brakes and permits both solid!'"),
-        intimidate: L("«Та спокійно, я по трасі й не таке бачив!»", "'Easy, I've seen wilder on the M-06!'"),
-        coffee: L("«Дальнобійний респект за каву! 85 🪙 на зміну!»", "'Trucker respect! 85 🪙 tip!'")
+        model: L("Турбо-пікап «L200 Гіперлуп»", "'L200 Hyperloop' Jet Pickup"),
+        cargo: L("Турбо-нагнітач, присадка октан-120 та два тепловізори для хлопців", "Rocket booster additive & 2 thermals"),
+        permitReason: L("Екстрений волонтерський гіпер-перегін (Шлях)", "Express Volunteer Convoy"),
+        greeting: L("«Вжух! Із Кийграда до Шитомира за 22 хвилини — ось це називається логістика! Підкину тобі ракетної присадки в каву, щоб черга летіла!»", "'Whoosh! Kyihrad to Shytomyr in 22 minutes! Here's some rocket fuel to speed up your shift queue!'"),
+        reply: L("«Гальма димлять, а довідка Шляху бездоганна!»", "'Brakes smoking, exit permit spotless!'"),
+        intimidate: L("«Я на 240 км/год ями об'їжджаю, не злякаєш!»", "'I dodge potholes at 240 km/h, you can't rattle me!'"),
+        coffee: L("«Ракета! +90 🪙 гримників на таймер!»", "'Rocket boost! +90 🪙!'")
       }]
     },
     {
       tag: "SHYTOMYR_PARK",
-      name: L("Леся Парк-Гагарінська", "Lesia Park-Haharinska"),
-      age: 62, gender: "F",
-      role: L("Активістка Шодуарівського парку", "Park Activist"),
+      name: L("Пані Леся «Ключниця Шодуара»", "Lady Lesia 'Shoduar Keykeeper'"),
+      age: 63, gender: "F",
+      role: L("Хранителька підземель Шодуарівського парку", "Keeper of Shoduar Park Tunnels"),
       portrait: { gender: "F", skinTone: 2, faceShape: 1, hairStyle: 2, hairColor: 2, facialHair: 0, glasses: 1, headwear: 2, scarOrDetail: 0, expression: 1, lipColor: 1, earrings: 1, outfitStyle: 0, specialId: "SHYTOMYR_BRO" },
+      gift: {
+        relicId: null, bonusMoney: 250, bonusMorale: 10, icon: "🍯",
+        title: L("Медовий еліксир Барона Шодуара", "Baron Shoduar's Honey Balm"),
+        desc: L("Підгін: миттєво +10% щастя сім'ї та +250 🪙 гримників", "Gift: instant +10% family morale & +250 🪙")
+      },
       stories: [{
         shape: "ON_FOOT", colorId: "BLUE", plate: "ПШ-ПАРК",
-        model: L("Пішки з двома баулами «Мрія Перекупа»", "On Foot with Bazaar Plaid Bags"),
-        cargo: L("В'язані светри, липовий мед і 3 кг шитомирських пряників", "Knitted sweaters, linden honey & gingerbread"),
-        permitReason: L("Приватний візит до онуків", "Family Visit"),
-        greeting: L("«Здоровенькі були, дитинко! Леся з Шодуарівського парку, м. Шитомир! Іду пішки, бо в нашому місті трамвай — святе, а до Варшавки й ногами дійду!»", "'Bless you dear! Lesia from Shoduar Park, Shytomyr!'"),
-        reply: L("«Пенсійний вік, паспорт новісінький, дивіться!»", "'Fresh passport, look right here!'"),
-        intimidate: L("«Та не кричи на бабцю, я ж із пряниками!»", "'Don't yell at grandma, I brought cookies!'"),
-        coffee: L("«Яка смачна кава! Ось 50 🪙 і баночка меду!»", "'Lovely coffee! Take 50 🪙!'")
+        model: L("Пішки зі старовинною зв'язкою ключів", "On Foot with Vintage Keyring"),
+        cargo: L("Трав'яний еліксир Барона, медові пряники й ліхтар підземель", "Baron's honey elixir, gingerbread & lantern"),
+        permitReason: L("Приватний візит", "Private Family Visit"),
+        greeting: L("«Щастя в хату, дитинко! Я під Шодуарівським парком три тунелі знаю, де ще старий трамвай ховається. Несу онукам мед, а твоїй родині — добрий гостинець!»", "'Blessings dear! I guard three secret tunnels beneath Shoduar Park! Carrying honey to grandkids — and a treat for your family!'"),
+        reply: L("«Паспорт свіжий, усе по поличках!»", "'Fresh passport, everything neat!'"),
+        intimidate: L("«На ключницю Шодуара ще ніхто голос не підвищував!»", "'Nobody yells at Shoduar's keykeeper!'"),
+        coffee: L("«Дякую, миленький! +60 🪙 гримників!»", "'Thank you dear! +60 🪙!'")
       }]
     },
     {
       tag: "SHYTOMYR_HVIZHS",
-      name: L("Назар Хвіжс-Блогер", "Nazar Khvizhs-Blogger"),
+      name: L("Назар «Ловець Поліського Хвіжса»", "Nazar 'Polissia Khvizhs Hunter'"),
       age: 24, gender: "M",
-      role: L("Мемолог і хвіжс-стрімер", "Meme & Khvizhs Creator"),
+      role: L("Криптозоолог і нічний стрімер із Крошні", "Cryptozoologist & Night Streamer"),
       portrait: { gender: "M", skinTone: 0, faceShape: 0, hairStyle: 1, hairColor: 3, facialHair: 0, glasses: 2, headwear: 0, scarOrDetail: 3, expression: 1, outfitStyle: 1, specialId: "SHYTOMYR_BRO" },
+      gift: {
+        relicId: null, bonusUsd: 150, icon: "📹",
+        title: L("Вірусний донат зі стріму з Хвіжсом", "Viral Khvizhs Stream Donation"),
+        desc: L("Підгін: миттєво +150 💵 чистих баксіків без ризику НАБК!", "Gift: instant +150 💵 clean baksiky with 0% NABK risk!")
+      },
       stories: [{
         shape: "SUV", colorId: "ORANGE", plate: "ШТ 4040 НТ",
-        model: L("«Беха Х5» (Тонована)", "'Beha X5'"),
-        cargo: L("Штативи, мікрофон, 2 дрони «Жужик-3Т» та мерч «404: Місто Знайдено»", "Tripods, mic, 2 'Zhuzyk-3T' drones & merch"),
-        permitReason: L("Акредитований прес-волонтерський рейс", "Accredited Press-Volunteer Run"),
-        greeting: L("«Всім привіт, це хвіжс-патруль з Шитомира! Знімаємо докфільм, шо ми не міраж! Інспекторе, все по закону, ставиш лайк і штамп?»", "'What's up, khvizhs patrol from Shytomyr! Filming proof we exist!'"),
-        reply: L("«Усі прес-карти й довідки в базі, перевіряй!»", "'Press cards and permits verified!'"),
-        intimidate: L("«О, крутий кадр для рілсів — суворий страж кордону!»", "'Ooh great clip for reels!'"),
-        coffee: L("«За каву — 100 🪙 донат на будку без камер!»", "'100 🪙 coffee donation!'")
+        model: L("«Беха Х5» (Сафарі на Хвіжса)", "'Beha X5' (Khvizhs Safari)"),
+        cargo: L("Клітка-приманка для Поліського Хвіжса, екшн-камера й 2 FPV-дрони", "Polissia Khvizhs trap, action cam & 2 FPV drones"),
+        permitReason: L("Акредитована прес-волонтерська експедиція", "Accredited Press-Volunteer Safari"),
+        greeting: L("«Йоу, чат! Ми нарешті впіймали на дах справжнього Поліського Хвіжса з Крошні! Стрім зірвав мільйон переглядів — пропустиш без шуму, закину 150 💵 донату в баксіках!»", "'Yo chat! We caught a real Polissia Khvizhs on our roof! Clear us quietly and take a 150 💵 viral donation!'"),
+        reply: L("«Уся прес-акредитація в базі світиться зеленим!»", "'Press accreditation glowing green in registry!'"),
+        intimidate: L("«Опа! Хвіжс на даху ледь камеру не з'їв!»", "'Whoa! You startled the Khvizhs on the roof!'"),
+        coffee: L("«Чат оцінив! +110 🪙 гримників у банку!»", "'Chat loved that! +110 🪙!'")
       }]
     },
     {
       tag: "SHYTOMYR_STELA",
-      name: L("Вікторія Бурштинова-Стела", "Viktoriia Stela"),
+      name: L("Вікторія Бурштинова-Стела", "Viktoriia Amber-Stela"),
       age: 35, gender: "F",
-      role: L("Архітекторка прикордонних стел", "Border Monument Architect"),
+      role: L("Хранителька Поліського Клондайку", "Keeper of Polissia Amber Klondike"),
       portrait: { gender: "F", skinTone: 0, faceShape: 1, hairStyle: 4, hairColor: 0, facialHair: 0, glasses: 1, headwear: 0, scarOrDetail: 0, expression: 0, lipColor: 2, earrings: 2, outfitStyle: 2, specialId: "SHYTOMYR_BRO" },
+      gift: {
+        relicId: "RELIC_AMBER_BEETLE", icon: "🔶",
+        title: L("Бурштиновий кристал із древнім жуком", "Amber Crystal with Ancient Beetle"),
+        desc: L("Реліквія в будку: +15% до премій СБК за арешти та +5 поваги Палича", "Booth Relic: +15% SBK arrest bounties & +5 Palych rep")
+      },
       stories: [{
         shape: "SPORT", colorId: "BLACK", plate: "ШТ 7700 СТ",
-        model: L("«Порш Кабан Турбо»", "'Porsh Kaban Turbo'"),
-        cargo: L("Креслення стел з корбутівського граніту й 3D-макет вежі КПП", "Granite stele blueprints & 3D tower model"),
-        permitReason: L("Державний проєкт благоустрою КПП", "State Border Architecture Project"),
-        greeting: L("«Вітаю, колего! Вікторія з Корбутівки, м. Шитомир! Їду замовляти підсвітку для нових прикордонних стел!»", "'Hello colleague! Viktoriia from Korbutivka, Shytomyr!'"),
-        reply: L("«Креслення затверджені, QR та довідка активні!»", "'Blueprints approved, QR active!'"),
-        intimidate: L("«Шум це добре, але акустика в будці слабенька — поправлю в проєкті!»", "'Note to self: improve booth acoustics!'"),
-        coffee: L("«Прекрасний еспресо! Ось 95 🪙 на модернізацію кавомашини!»", "'Lovely espresso! 95 🪙 tip!'")
+        model: L("«Порш Кабан Бурштин-Едішн»", "'Porsh Kaban Amber Ed.'"),
+        cargo: L("Зразки ювелірного поліського бурштину з древнім жуком і 3D-макет стели", "Polissia amber crystal & monument blueprint"),
+        permitReason: L("Державний проєкт прикордонної стели", "State Monument Design Project"),
+        greeting: L("«Вітаю, інспекторе! Вікторія з Корбутівки! Везу проект нової стели й поліський бурштин із мільйонрічним жуком — кажуть, він притягує премії за шпигунів!»", "'Hello inspector! Viktoriia from Korbutivka! Bringing our new monument plans and a million-year amber beetle lucky charm!'"),
+        reply: L("«Кошторис, підписи й QR перевірені до крапки!»", "'Blueprints, signatures & QR spotless!'"),
+        intimidate: L("«Кричите голосно, зате акустика біля стели буде супер!»", "'Loud shout — great acoustic test!'"),
+        coffee: L("«Аромат дорогий! Тримай +95 🪙 гримників!»", "'Rich roast! Take +95 🪙!'")
       }]
     }
   ];
@@ -5915,6 +5975,119 @@
       ctx.font = "bold 9px sans-serif";
       ctx.fillText(opts.hasContraband ? "🐕 ТАЙНИК!" : "🐕 ЧИСТО", 8, h - 32);
     }
+
+    // ★ Shytomyr Unique Encounter Effects ★
+    if (opts.storyTag && opts.storyTag.startsWith("SHYTOMYR_")) {
+      ctx.save();
+      ctx.fillStyle = "rgba(13, 30, 56, 0.85)";
+      ctx.strokeStyle = "#E0B145";
+      ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.roundRect(4, 4, 82, 15, 4); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "#FFE082";
+      ctx.font = "bold 9px monospace";
+      ctx.fillText("🧦 М. ШИТОМИР", 8, 14.5);
+
+      if (opts.storyTag === "SHYTOMYR_COSMOS") {
+        // Floating green plasma meteor sparks + orbit ring
+        const cyOrb = h * 0.48 + Math.sin(tSec * 3) * 4;
+        ctx.strokeStyle = "rgba(105, 240, 174, 0.55)";
+        ctx.lineWidth = 1.3;
+        ctx.beginPath(); ctx.ellipse(w * 0.25, cyOrb, 22, 6, -0.25, 0, Math.PI * 2); ctx.stroke();
+        for (let k = 0; k < 4; k++) {
+          const sx = w * 0.14 + k * 14 + Math.sin(tSec * 4 + k) * 3;
+          const sy = h * 0.42 - ((tSec * 16 + k * 9) % 24);
+          ctx.fillStyle = "#69F0AE";
+          ctx.beginPath(); ctx.arc(sx, sy, 2, 0, Math.PI * 2); ctx.fill();
+        }
+      } else if (opts.storyTag === "SHYTOMYR_PHANTOM") {
+        // Floating cyan "404" matrix digits
+        ctx.fillStyle = "rgba(0, 229, 255, 0.72)";
+        ctx.font = "bold 9px monospace";
+        for (let k = 0; k < 4; k++) {
+          const mx = 14 + k * 24;
+          const my = 26 + ((tSec * 22 + k * 17) % 48);
+          ctx.fillText(k % 2 === 0 ? "404" : "01", mx, my);
+        }
+      } else if (opts.storyTag === "SHYTOMYR_HVIZHS") {
+        // Furry glowing-eyed "Polissia Khvizhs" peeking on car roof + floating stream hearts
+        const hx = w * 0.27, hy = h * 0.54 + Math.sin(tSec * 5) * 1.5;
+        ctx.fillStyle = "#4A148C";
+        ctx.beginPath(); ctx.ellipse(hx, hy, 9, 7, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "#FFEA00";
+        ctx.beginPath(); ctx.arc(hx - 3, hy - 1, 1.8, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(hx + 3, hy - 1, 1.8, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "#FF80AB";
+        ctx.font = "bold 10px sans-serif";
+        ctx.fillText("♥", hx + 12, hy - ((tSec * 18) % 22));
+      } else if (opts.storyTag === "SHYTOMYR_M06") {
+        // Blue & orange turbo jet flames behind pickup
+        const flLen = 10 + Math.sin(tSec * 28) * 4;
+        ctx.fillStyle = "#FF6D00";
+        ctx.beginPath(); ctx.moveTo(8, h * 0.78); ctx.lineTo(8 - flLen, h * 0.80); ctx.lineTo(8, h * 0.83); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = "#00E5FF";
+        ctx.beginPath(); ctx.moveTo(8, h * 0.79); ctx.lineTo(8 - flLen * 0.6, h * 0.805); ctx.lineTo(8, h * 0.82); ctx.closePath(); ctx.fill();
+      } else if (opts.storyTag === "SHYTOMYR_ICECREAM") {
+        // Drifting cyan cryo-frost crystals
+        ctx.fillStyle = "rgba(128, 222, 234, 0.75)";
+        for (let k = 0; k < 6; k++) {
+          const fx = 10 + k * 17;
+          const fy = 22 + ((tSec * 20 + k * 19) % 68);
+          ctx.fillRect(fx, fy, 2.5, 2.5);
+        }
+      } else {
+        // Golden sparkles / aroma waves around legend
+        ctx.fillStyle = "rgba(255, 224, 130, 0.8)";
+        for (let k = 0; k < 5; k++) {
+          const gx = w * 0.12 + k * 18 + Math.cos(tSec * 2 + k) * 4;
+          const gy = h * 0.48 + Math.sin(tSec * 3 + k) * 6;
+          ctx.beginPath(); ctx.arc(gx, gy, 1.8, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+      ctx.restore();
+    }
+
+    // ★ Collected Shytomyr Booth Relics Animated on Counter Sill ★
+    const relics = opts.shytomyrRelics || [];
+    if (relics.length > 0) {
+      ctx.save();
+      relics.slice(0, 6).forEach((relId, idx) => {
+        const rx = w * 0.56 + idx * 14.5;
+        const ry = h - 12;
+        if (relId === "RELIC_KEVLAR_SOCKS") {
+          const sway = Math.sin(tSec * 2.5) * 1.2;
+          ctx.fillStyle = "#1565C0"; ctx.fillRect(rx - 3 + sway * 0.4, ry - 6, 6, 8);
+          ctx.fillStyle = "#FFD54F"; ctx.fillRect(rx - 3 + sway * 0.4, ry - 2, 7, 3);
+        } else if (relId === "RELIC_TETERIV_METEOR") {
+          const levY = ry - 6 + Math.sin(tSec * 4) * 2.2;
+          ctx.fillStyle = "rgba(105, 240, 174, 0.35)";
+          ctx.beginPath(); ctx.arc(rx, levY, 6, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = "#00E676";
+          ctx.beginPath(); ctx.arc(rx, levY, 3, 0, Math.PI * 2); ctx.fill();
+        } else if (relId === "RELIC_CRYO_CONE") {
+          ctx.fillStyle = "#D7CCC8";
+          ctx.beginPath(); ctx.moveTo(rx - 3, ry - 4); ctx.lineTo(rx + 3, ry - 4); ctx.lineTo(rx, ry + 4); ctx.closePath(); ctx.fill();
+          ctx.fillStyle = "#80DEEA";
+          ctx.beginPath(); ctx.arc(rx, ry - 6, 3.5, 0, Math.PI * 2); ctx.fill();
+        } else if (relId === "RELIC_GOLD_DERUN") {
+          ctx.fillStyle = "#FFA000";
+          ctx.beginPath(); ctx.ellipse(rx, ry - 2, 5.5, 3, 0, 0, Math.PI * 2); ctx.fill();
+          ctx.strokeStyle = "rgba(255, 245, 157, 0.75)";
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(rx, ry - 6); ctx.lineTo(rx + Math.sin(tSec * 5) * 2, ry - 12); ctx.stroke();
+        } else if (relId === "RELIC_404_FLOPPY") {
+          ctx.fillStyle = "#00E5FF";
+          ctx.fillRect(rx - 4, ry - 8, 8, 8);
+          ctx.fillStyle = "#101820";
+          ctx.fillRect(rx - 2, ry - 7, 4, 3);
+        } else if (relId === "RELIC_AMBER_BEETLE") {
+          ctx.fillStyle = "rgba(255, 179, 0, 0.45)";
+          ctx.beginPath(); ctx.arc(rx, ry - 4, 6 + Math.sin(tSec * 3.5), 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = "#FFB300";
+          ctx.beginPath(); ctx.arc(rx, ry - 4, 3.5, 0, Math.PI * 2); ctx.fill();
+        }
+      });
+      ctx.restore();
+    }
   }
 
   // Main State (starts directly on the atmospheric Checkpoint Main Menu!)
@@ -5960,6 +6133,7 @@
     purchasedExpensesToday: [],
     tonightBills: [],
     shytomyrFriendsMet: [],
+    shytomyrRelics: [],
     shytomyrBrotherhoodUnlocked: false,
     isUndercoverSbkAgent: false,
     sbkRecruitmentOffered: false,
@@ -6299,7 +6473,8 @@
   function getDailyAssetRisk() {
     const baseR = ASSET_UPGRADES.filter(a => state.ownedAssets.includes(a.id)).reduce((s, a) => s + a.dailyRisk, 0);
     const addonR = ASSET_ADDONS.filter(a => state.ownedAssets.includes(a.id)).reduce((s, a) => s + a.dailyRisk, 0);
-    return baseR + addonR;
+    const floppyHeal = (state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_404_FLOPPY")) ? 3 : 0;
+    return baseR + addonR - floppyHeal;
   }
 
   function pickTonightBills(dayNum) {
@@ -6366,6 +6541,7 @@
       purchasedExpensesToday: [],
       tonightBills: pickTonightBills(),
       shytomyrFriendsMet: [],
+      shytomyrRelics: [],
       shytomyrBrotherhoodUnlocked: false,
       isUndercoverSbkAgent: false,
       sbkRecruitmentOffered: false,
@@ -6403,8 +6579,9 @@
     );
     const coffeeSec = has("espresso_machine") ? 25 : 0;
     const chairSec = has("heated_booth_seat") ? 12 : 0;
+    const sockRelicSec = (state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_KEVLAR_SOCKS")) ? 8 : 0;
     const bestAddonSec = Math.max(0, has("addon_nitro_spoiler") ? 15 : 0, has("addon_migalka") ? 12 : 0);
-    return bestCarSec + coffeeSec + chairSec + bestAddonSec;
+    return bestCarSec + coffeeSec + chairSec + sockRelicSec + bestAddonSec;
   }
 
   function beginShift() {
@@ -6588,7 +6765,8 @@
           : (700 + Math.floor(Math.random() * 701))) * bountyRamp);
         const badgeBonus = (badges.includes("SBK_SHIELD") ? 600 : 0) + (badges.includes("VSP_GUARD") && (t.storyTag === "DUAL_CITIZEN" || t.storyTag === "VIP_DIVERSE") ? 800 : 0);
         const tabletBonus = state.ownedAssets.includes("sbk_database_tablet") ? Math.round(baseDetainBounty * 0.2) : 0;
-        detainBonus = baseDetainBounty + undercoverBounty + badgeBonus + tabletBonus + (state.sandboxMod ? state.sandboxMod.detainExtra : 0);
+        const amberBonus = (state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_AMBER_BEETLE")) ? Math.round(baseDetainBounty * 0.15) : 0;
+        detainBonus = baseDetainBounty + undercoverBounty + badgeBonus + tabletBonus + amberBonus + (state.sandboxMod ? state.sandboxMod.detainExtra : 0);
         if (isHighValueSpyOrVip) {
           usdBonus = Math.round((250 + Math.floor(Math.random() * 301)) * bountyRamp) + (state.isUndercoverSbkAgent ? 150 : 0);
           state.usd += usdBonus;
@@ -6638,6 +6816,7 @@
       }
       if (state.ownedAssets.includes("tactical_vest")) fineDelta = Math.round(fineDelta * 0.75);
       else if (state.ownedAssets.includes("uv_spotlight")) fineDelta = Math.round(fineDelta * 0.90);
+      if (state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_TETERIV_METEOR")) fineDelta = Math.round(fineDelta * 0.92);
       state.shiftMistakes += 1;
     }
 
@@ -6649,11 +6828,31 @@
       return;
     }
 
-    // Track all 12 Shytomyr Legends persistently + per run!
+    // Track all 12 Shytomyr Legends persistently + per run + award unique relics & gifts!
     let shytomyrBonusToast = null;
     if (t.storyTag && t.storyTag.startsWith("SHYTOMYR_") && isApprove) {
       if (!state.shytomyrFriendsMet.includes(t.storyTag)) {
         state.shytomyrFriendsMet.push(t.storyTag);
+      }
+      if (!state.shytomyrRelics) state.shytomyrRelics = [];
+      const legSpec = SHYTOMYR_LEGENDS.find(s => s.tag === t.storyTag);
+      if (legSpec && legSpec.gift) {
+        const gf = legSpec.gift;
+        if (gf.relicId && !state.shytomyrRelics.includes(gf.relicId)) {
+          state.shytomyrRelics.push(gf.relicId);
+          if (gf.relicId === "RELIC_AMBER_BEETLE") state.palychRep = Math.min(100, state.palychRep + 5);
+        }
+        if (gf.bonusMoney) detainBonus += gf.bonusMoney;
+        if (gf.bonusUsd) { usdBonus += gf.bonusUsd; state.usd += gf.bonusUsd; }
+        if (gf.bonusSec) state.shiftSec = Math.min(340, state.shiftSec + gf.bonusSec);
+        if (gf.bonusSbk) state.sbkRep = Math.min(100, state.sbkRep + gf.bonusSbk);
+        if (gf.bonusPalych) state.palychRep = Math.min(100, state.palychRep + gf.bonusPalych);
+        if (gf.bonusRisk) state.nabkRisk = Math.max(0, state.nabkRisk + gf.bonusRisk);
+        if (gf.bonusMorale) state.familyMorale = Math.min(100, state.familyMorale + gf.bonusMorale);
+        shytomyrBonusToast = L(
+          `${gf.icon} ШИТОМИРСЬКИЙ ПІДГІН: ${gf.title.uk} (${gf.desc.uk})!`,
+          `${gf.icon} SHYTOMYR GIFT: ${gf.title.en} (${gf.desc.en})!`
+        );
       }
       const globalShytomyr = recordUnlockedShytomyr(t.storyTag);
       if (globalShytomyr.length >= SHYTOMYR_LEGENDS.length && !state.shytomyrBrotherhoodUnlocked) {
@@ -6818,7 +7017,8 @@
 
     const boughtAnyHome = state.purchasedExpensesToday.length > 0;
     const yachtMorale = state.ownedAssets.includes("monako_yacht") ? 10 : 0;
-    state.familyMorale = Math.max(0, Math.min(100, state.familyMorale + (boughtAnyHome ? 0 : -6) + yachtMorale));
+    const derunMorale = (state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_GOLD_DERUN")) ? 6 : 0;
+    state.familyMorale = Math.max(0, Math.min(100, state.familyMorale + (boughtAnyHome ? 0 : -6) + yachtMorale + derunMorale));
 
     if (state.escapeFund >= getEscapeTarget() && state.tolikRep >= getEscapeTolikRep() && !state.tolikEscapeOffered) {
       state.tolikEscapeOffered = true;
@@ -7495,6 +7695,17 @@
             </div>
 
             <div class="game-menu-actions">
+              <button type="button" id="btn-open-onboarding" class="game-btn game-btn-onboard">
+                <div style="flex:1;">
+                  <div style="display:flex;align-items:center;gap:6px;">
+                    <span style="font-size:13.5px;font-weight:900;color:#FFE082;">📖 ${tr(L("ПЕРЕДІСТОРІЯ, СЛУЖБИ ТА ІНСТРУКТАЖ", "BACKSTORY & AGENCIES GUIDE"), state.lang)}</span>
+                    ${onboardingNew ? `<span class="menu-badge-new">${tr(L("ВАЖЛИВО", "NEW"), state.lang)}</span>` : ""}
+                  </div>
+                  <div style="font-size:10.5px;color:#CFD8DC;margin-top:2px;">${tr(L("Хто такі ДПСК, СБК, ГУР-М, ВСП, НАБК, Толік та як перевіряти авто", "Who are SBGS, SBK, GUR-M, VSP, NABK, Tolik & how to inspect"), state.lang)}</div>
+                </div>
+                <span style="font-size:16px;color:#FFE082;">📘</span>
+              </button>
+
               ${canResume ? `
                 <button type="button" id="btn-resume" class="game-btn game-btn-gold">
                   <div>
@@ -7519,25 +7730,14 @@
                 <button type="button" id="btn-start-sand" class="game-btn game-btn-sandbox">
                   <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
                     <span style="font-size:18px;">♾️</span>
-                    <span style="font-size:10px;font-weight:800;color:#90CAF9;background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;">${tr(L("ВІЛЬНА ГРА", "FREEPLAY"), state.lang)}</span>
+                    <span style="font-size:10px;font-weight:800;color:#90CAF9;background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;">${tr(L("НЕСКІНЧЕННО", "FREEPLAY"), state.lang)}</span>
                   </div>
                   <div>
-                    <div style="font-size:13.5px;font-weight:900;">${tr(L("СЕНДБОКС", "ENDLESS SANDBOX"), state.lang)}</div>
+                    <div style="font-size:13.5px;font-weight:900;">${tr(L("ВІЛЬНА ГРА", "ENDLESS SANDBOX"), state.lang)}</div>
                     <div style="font-size:10.5px;opacity:0.84;margin-top:2px;">${tr(L("Випадкові укази, ранги, 20 000 💵 втеча", "Random decrees, ranks & escape"), state.lang)}</div>
                   </div>
                 </button>
               </div>
-
-              <button type="button" id="btn-open-onboarding" class="game-btn game-btn-onboard">
-                <div style="flex:1;">
-                  <div style="display:flex;align-items:center;gap:6px;">
-                    <span style="font-size:13.5px;font-weight:900;color:#FFE082;">📖 ${tr(L("ПЕРЕДІСТОРІЯ ТА СЛУЖБИ (ОНБОРДІНГ)", "BACKSTORY & AGENCIES GUIDE"), state.lang)}</span>
-                    ${onboardingNew ? `<span class="menu-badge-new">${tr(L("ВАЖЛИВО", "NEW"), state.lang)}</span>` : ""}
-                  </div>
-                  <div style="font-size:10.5px;color:#CFD8DC;margin-top:2px;">${tr(L("Хто такі ДПСК, СБК, ГУР-М, ВСП, НАБК, Толік та як перевіряти авто", "Who are SBGS, SBK, GUR-M, VSP, NABK, Tolik & how to inspect"), state.lang)}</div>
-                </div>
-                <span style="font-size:16px;color:#FFE082;">📘</span>
-              </button>
 
               <button type="button" id="btn-open-archive" class="game-btn" style="padding:10px 13px;">
                 <div>
@@ -7644,7 +7844,7 @@
             "#4CAF50", "🛤️",
             L("Три шляхи інспектора", "Three Inspector Paths"),
             L("Обирай свій стиль служби на кожному кроці", "Shape your career with every stamp"),
-            L("1️⃣ Чесна служба: тримай устав ДПСК, допомагай розвідці ГУР/СБК та отримай офіційну подяку.\n2️⃣ Подвійний агент «Кордон-7»: завоюй довіру контррозвідки й піднімись до полковника під прикриттям.\n3️⃣ Великий куш та втеча: збирай долари 💵, відмивай готівку 🪙 та виїжджай за кордон через Толіка (14 000 💵 у Кампанії / 20 000 💵 у Сендбоксі).", "1️⃣ Honest Service: follow SBGS directives, aid GUR/SBK, earn Kyiv commendations.\n2️⃣ Covert Agent 'Border-7': earn SBK trust and rise to undercover Colonel.\n3️⃣ Big Score & Escape: collect USD 💵 bribes, launder cash 🪙 and flee abroad via Tolik (14,000 💵 Story / 20,000 💵 Sandbox).")
+            L("1️⃣ Чесна служба: тримай устав ДПСК, допомагай розвідці ГУР/СБК та отримай офіційну подяку.\n2️⃣ Подвійний агент «Кордон-7»: завоюй довіру контррозвідки й піднімись до полковника під прикриттям.\n3️⃣ Великий куш та втеча: збирай баксіки 💵, відмивай гримники 🪙 та виїжджай за кордон через Толіка (14 000 💵 у Кампанії / 20 000 💵 у Вільній грі).", "1️⃣ Honest Service: follow SBGS directives, aid GUR/SBK, earn Kyiv commendations.\n2️⃣ Covert Agent 'Border-7': earn SBK trust and rise to undercover Colonel.\n3️⃣ Big Score & Escape: collect baksiky 💵 bribes, launder cash 🪙 and flee abroad via Tolik (14,000 💵 Story / 20,000 💵 Freeplay).")
           )
         ].join("");
       } else if (tab === 1) {
@@ -7677,7 +7877,7 @@
             "#EF5350", "⚖️",
             L("НАБК — Антикорупційне бюро", "NABK — Anti-Corruption Bureau"),
             L("Ризик викриття 0–100% • Підсадні агенти • Арешт", "Exposure Risk 0–100% • Sting Agents • Prison"),
-            L("Полює на хабарників! Кожен взятий конверт або «ліві» бакси піднімають шкалу НАБК%.\n• Підсадні агенти пропонують хабар із мікрокамерою та міченими купюрами (перевіряй 🔦 УФ-лампою і 🐕 псом!).\n• НАБК = 100%: негайний рейд і тюрма (Кінець гри).", "Hunts corrupt officers! Bribes raise NABK% risk.\n• Undercover stings carry lapel mics and marked UV bills — inspect with 🔦 UV & 🐕 dog!\n• Reach 100% NABK = instant raid & prison.")
+            L("Полює на хабарників! Кожен взятий конверт або «ліві» баксіки піднімають шкалу НАБК%.\n• Підсадні агенти пропонують хабар із мікрокамерою та міченими купюрами (перевіряй 🔦 УФ-лампою і 🐕 псом!).\n• НАБК = 100%: негайний рейд і тюрма (Кінець гри).", "Hunts corrupt officers! Bribes raise NABK% risk.\n• Undercover stings carry lapel mics and marked UV bills — inspect with 🔦 UV & 🐕 dog!\n• Reach 100% NABK = instant raid & prison.")
           )
         ].join("");
       } else if (tab === 2) {
@@ -7686,13 +7886,13 @@
             "#C9972C", `<canvas id="onboard-palych-c" width="52" height="52"></canvas>`,
             L("🧢 Пал Палич — Начальник поста", "🧢 Pal Palych — Shift Chief"),
             L("Вечірня частка ($) • Догани • Прикриття", "Nightly Cut ($) • Reprimands • Cover-Ups"),
-            L("Хитрий начальник зміни. Щовечора приходить по «частку на генератор» (у 💵).\n• Платиш частку: росте довіра, знімає догани та закриває очі на дрібні проколи.\n• Відмовляєшся: економиш гроші, але ризикуєш звільненням при помилках.", "Cunning station commander who demands an evening cut in 💵.\n• Paying builds loyalty and clears reprimands; refusing saves USD but risks firing.")
+            L("Хитрий начальник зміни. Щовечора приходить по «частку на генератор» (у 💵).\n• Платиш частку: росте довіра, знімає догани та закриває очі на дрібні проколи.\n• Відмовляєшся: економиш баксіки, але ризикуєш звільненням при помилках.", "Cunning station commander who demands an evening cut in 💵.\n• Paying builds loyalty and clears reprimands; refusing saves baksiky but risks firing.")
           ),
           renderOnboardCard(
             "#81C784", `<canvas id="onboard-tolik-c" width="52" height="52"></canvas>`,
             L("🚐 Толік «Бусик» — Тіньовий синдикат", "🚐 Tolik 'Busyk' — Smuggling Syndicate"),
             L("Курс валют • Відмивання • Нічна втеча за кордон", "Money Exchange • Laundering • Midnight Escape"),
-            L("Тримає канали контрабанди та чорний обмінник.\n• Пропускай його «своїх» бусів — заробляй повагу Толіка і солідні конверти в 💵.\n• Увечері обмінює гривні 🪙 на 💵 та при високій довірі вивезе тебе за кордон.", "Runs smuggling convoys and shadow exchange.\n• Clearing his vans builds Tolik rep & USD income; high rep unlocks the escape corridor abroad.")
+            L("Тримає канали контрабанди та чорний обмінник.\n• Пропускай його «своїх» бусів — заробляй повагу Толіка і солідні конверти в 💵.\n• Увечері обмінює гримники 🪙 на 💵 та при високій довірі вивезе тебе за кордон.", "Runs smuggling convoys and shadow exchange.\n• Clearing his vans builds Tolik rep & baksiky income; high rep unlocks the escape corridor abroad.")
           ),
           renderOnboardCard(
             "#FF5252", `<canvas id="onboard-fsm-c" width="52" height="52"></canvas>`,
@@ -7703,17 +7903,17 @@
           renderOnboardCard(
             "#B39DDB", "🧦",
             L("Шитомирське братство", "The Shytomyr Brotherhood"),
-            L("12 легендарних персонажів • Таємна мережа", "12 Legendary Travelers • Secret Network"),
-            L("Загадкові мандрівники з міста Шитомир (переселенці, майстри дронів, барди та кур'єри). Збирай їх у своїй Колекції та відкривай особливі фінальні історії!", "Mysterious visitors from the mythical town of Shytomyr. Meet all 12 in Shifts to unlock unique archive entries and epilogues.")
+            L("12 легенд • Реліквії в будку • Унікальні анімації", "12 Legends • Booth Relics • Live Effects"),
+            L("Загадкові мандрівники з міста Шитомир (від директора Трикотажної Ложі до пілота М-06 і ловця Хвіжса).\n• Пропускай їх на КПП, щоб отримувати реліквії в будку (Кевларові термошкарпетки, Метеорит із Тетерівки, Золотий дерун, Дискета 404 тощо), унікальні анімації та бафи!", "Mysterious visitors from mythical Shytomyr! Approve them at the gate to collect animated booth relics (Kevlar Socks, Meteorite, Golden Derun, 404 Floppy) and lasting buffs!")
           )
         ].join("");
       } else {
         tabBody = [
           renderOnboardCard(
             "#E0B145", "💵",
-            L("Дві валюти: 🪙 (Гривні) vs 💵 (Долари)", "Two Currencies: 🪙 (Coins) vs 💵 (USD)"),
+            L("Дві валюти: 🪙 (Гримники) vs 💵 (Баксіки)", "Two Currencies: 🪙 (Hrymnyky) vs 💵 (Baksiky)"),
             L("Зарплата + Білий бізнес  |  Хабарі + Офшори", "Salary + Legal Biz  |  Bribes + Escape"),
-            L("• 🪙 Гривні йдуть на побут сім'ї, інструменти будки, авто та «білі» кіоски/СТО (0% ризику НАБК).\n• 💵 Бакси дають хабарі, премії спецслужб та валютний обмін — потрібні для частки Палича, елітних активів та фонду втечі.", "• 🪙 pays for family bills, booth gear, cars & clean businesses (0% NABK risk).\n• 💵 comes from envelopes, agency bounties & exchange — needed for Palych, luxury assets & the Escape Fund.")
+            L("• 🪙 Гримники йдуть на побут сім'ї, інструменти будки, авто та «білі» кіоски/СТО (0% ризику НАБК).\n• 💵 Баксіки дають хабарі, премії спецслужб та валютний обмін — потрібні для частки Палича, елітних активів та фонду втечі.", "• 🪙 pays for family bills, booth gear, cars & clean businesses (0% NABK risk).\n• 💵 comes from envelopes, agency bounties & exchange — needed for Palych, luxury assets & the Escape Fund.")
           ),
           renderOnboardCard(
             "#4FC3F7", "🔍",
@@ -7756,12 +7956,12 @@
           </div>
           ${state.pendingStartMode ? `
             <button type="button" id="onboard-start-btn" class="btn-primary-green" style="padding:11px;">
-              ${state.pendingStartMode === "SANDBOX" ? tr(L("♾️ ЗАСТУПИТИ НА ВІЛЬНУ СЛУЖБУ →", "♾️ START ENDLESS SANDBOX →"), state.lang) : tr(L("🛂 ЗАСТУПИТИ НА ЗМІНУ КАМПАНІЇ →", "🛂 START CAMPAIGN SHIFT →"), state.lang)}
+              ${state.pendingStartMode === "SANDBOX" ? tr(L("♾️ ЗАСТУПИТИ У ВІЛЬНУ ГРУ →", "♾️ START ENDLESS SANDBOX →"), state.lang) : tr(L("🛂 ЗАСТУПИТИ НА ЗМІНУ КАМПАНІЇ →", "🛂 START CAMPAIGN SHIFT →"), state.lang)}
             </button>
           ` : (tab === 3 ? `
             <div style="display:flex;gap:6px;">
               <button type="button" id="onboard-start-camp" class="btn-primary-green" style="flex:1;padding:10px;font-size:12.5px;">🛂 ${tr(L("Почати Кампанію", "Start Campaign"), state.lang)}</button>
-              <button type="button" id="onboard-start-sand" class="btn-primary-blue" style="flex:1;padding:10px;font-size:12.5px;">♾️ ${tr(L("Почати Сендбокс", "Start Sandbox"), state.lang)}</button>
+              <button type="button" id="onboard-start-sand" class="btn-primary-blue" style="flex:1;padding:10px;font-size:12.5px;">♾️ ${tr(L("Почати Вільну гру", "Start Freeplay"), state.lang)}</button>
             </div>
           ` : "")}
         </div>
@@ -7879,6 +8079,7 @@
               <div style="font-size:11.5px;margin-top:2px;opacity:0.9;">
                 ${isOpen ? `${tr(leg.role, state.lang)} • ${tr(leg.stories[0].model, state.lang)}` : tr(L(`Натяк: ${leg.role.uk} — пропусти на КПП`, `Hint: ${leg.role.en} — approve at gate`), state.lang)}
               </div>
+              ${leg.gift ? `<div style="font-size:10.5px;margin-top:3px;color:${isOpen ? "#2E7D32" : "#E0B145"};font-weight:700;">${isOpen ? `${leg.gift.icon} ${tr(leg.gift.title, state.lang)} — ${tr(leg.gift.desc, state.lang)}` : tr(L(`🎁 Унікальний підгін: ${leg.gift.icon} ??? (Пропусти на КПП)`, `🎁 Unique Gift: ${leg.gift.icon} ??? (Approve to unlock)`), state.lang)}</div>` : ""}
             </div>
           `;
           wrap.appendChild(card);
@@ -8363,6 +8564,7 @@
         hasContraband: t.hasContraband,
         hasPassenger: t.hasPassenger,
         storyTag: t.storyTag,
+        shytomyrRelics: state.shytomyrRelics || [],
         hasCloneCar: t.violations.some(v => v.code === "VEHICLE_MISMATCH"),
         isLive: true
       };
@@ -8384,6 +8586,7 @@
           boothSceneOpts.uvActive = state.uvActive;
           boothSceneOpts.reactionState = state.reactionState;
           boothSceneOpts.snifferActive = state.vehicleInspected;
+          boothSceneOpts.shytomyrRelics = state.shytomyrRelics || [];
           drawBoothScene(boothCanvasEl, boothSceneOpts);
           const oblikClk = document.getElementById("oblik-live-clock");
           if (oblikClk && !state.oblikIsScreenshot) {
@@ -8622,8 +8825,12 @@
       // Inspector Reactions Bar Events
       document.getElementById("react-intimidate").addEventListener("click", () => {
         audio.playKnock();
+        const firstKnock = state.reactionState !== "INTIMIDATED";
         state.reactionState = "INTIMIDATED";
         state.justShook = true;
+        if (firstKnock && state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_CRYO_CONE")) {
+          state.shiftSec = Math.min(340, state.shiftSec + 2);
+        }
         // Real effect: shouting at a guilty suspect can crack their nerves and expose a paper/wire clue!
         if (!t.shouldBeApproved && state.spottedCodes.length === 0 && Math.random() < 0.6) {
           const clue = t.violations.find(v => v.code !== "CONTRABAND_CARGO" && v.code !== "VEHICLE_MISMATCH");
@@ -8634,7 +8841,11 @@
 
       document.getElementById("react-coffee").addEventListener("click", () => {
         audio.playCoffee();
+        const firstCoffee = state.reactionState !== "COFFEE_GIVEN";
         state.reactionState = "COFFEE_GIVEN";
+        if (firstCoffee && state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_GOLD_DERUN")) {
+          state.shiftSec = Math.min(340, state.shiftSec + 2);
+        }
         if (t.shouldBeApproved && !state.coffeeTipGiven) {
           state.familyMorale = Math.min(100, state.familyMorale + 2);
           if (t.storyTag === "INTEL_ALLY") state.sbkRep = Math.min(100, state.sbkRep + 3);
@@ -8643,7 +8854,8 @@
           state.coffeeTipGiven = true;
           const meta = getMetaPerkFlags();
           const cMult = (state.sandboxMod ? (state.sandboxMod.coffeeMult || 1) : 1) * (state.ownedAssets.includes("balenci_jacket") ? 1.25 : 1);
-          const tip = Math.round(t.coffeeTip * cMult) + (state.ownedAssets.includes("espresso_machine") ? 35 : 0) + (state.ownedAssets.includes("parrot_kesha") ? 40 : 0) + (state.ownedAssets.includes("addon_syrup_bar") ? 40 : 0) + (state.ownedAssets.includes("addon_gold_cage") ? 25 : 0) + meta.coffeeTipBonus;
+          const sockTip = (state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_KEVLAR_SOCKS")) ? 30 : 0;
+          const tip = Math.round(t.coffeeTip * cMult) + (state.ownedAssets.includes("espresso_machine") ? 35 : 0) + (state.ownedAssets.includes("parrot_kesha") ? 40 : 0) + (state.ownedAssets.includes("addon_syrup_bar") ? 40 : 0) + (state.ownedAssets.includes("addon_gold_cage") ? 25 : 0) + sockTip + meta.coffeeTipBonus;
           state.money += tip;
           state.lastFeedback = {
             ok: true,
@@ -8795,12 +9007,12 @@
             <h2 style="color:#E0B145;font-size:16px;margin-bottom:6px;">${tr(hasShiftBribes ? L("🧢 ПАЛ ПАЛИЧ ЧЕКАЄ НА «ЧАСТКУ» (У 💵)", "🧢 PAL PALYCH EXPECTS HIS CUT (IN 💵)") : L("🧢 ПАЛ ПАЛИЧ: «Сьогодні без конвертів?»", "🧢 PAL PALYCH: 'Clean shift today?'"), state.lang)}</h2>
             <p style="font-size:13px;line-height:1.4;">${hasShiftBribes
               ? tr(L(
-                  `«Поклади ${cutUsd} 💵 у шухляду — і я прикрию твої грішки перед штабом та НАБК. Гривні не носіть, тільки зелені!» ${state.ownedAssets.includes("rolex_watch") ? "(Знижка -50% завдяки твоєму золотому «Кролексу»!)" : ""}`,
-                  `'Put ${cutUsd} 💵 in my drawer and I'll cover your slip-ups. Dollars only!' ${state.ownedAssets.includes("rolex_watch") ? "(50% discount from your Gold Krolex!)" : ""}`
+                  `«Поклади ${cutUsd} 💵 у шухляду — і я прикрию твої грішки перед штабом та НАБК. Гримники не носіть, тільки баксіки!» ${state.ownedAssets.includes("rolex_watch") ? "(Знижка -50% завдяки твоєму золотому «Кролексу»!)" : ""}`,
+                  `'Put ${cutUsd} 💵 in my drawer and I'll cover your slip-ups. Baksiky only!' ${state.ownedAssets.includes("rolex_watch") ? "(50% discount from your Gold Krolex!)" : ""}`
                 ), state.lang)
               : tr(L(
-                  "«Конвертів сьогодні не брав, тож доларів у шухляду не вимагаю. Іди додому, але без косяків на наступній зміні!»",
-                  "'No envelopes taken today, so I won't demand dollars. Go rest, just watch your mistakes!'"
+                  "«Конвертів сьогодні не брав, тож баксіків у шухляду не вимагаю. Іди додому, але без косяків на наступній зміні!»",
+                  "'No envelopes taken today, so I won't demand baksiky. Go rest, just watch your mistakes!'"
                 ), state.lang)
             }</p>
           </section>
@@ -8871,7 +9083,7 @@
             ${(() => {
               const dir = state.exchDir || "USD_TO_UAH";
               const hasBiz = state.ownedAssets.includes("shawarma_kiosk") || state.ownedAssets.includes("cyprus_offshore");
-              const capToday = DAILY_OBNAL_LIMIT_USD + (hasBiz ? 1000 : 0) + (state.ownedAssets.includes("addon_osint_app") ? 600 : 0);
+              const capToday = DAILY_OBNAL_LIMIT_USD + (hasBiz ? 1000 : 0) + (state.ownedAssets.includes("addon_osint_app") ? 600 : 0) + ((state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_404_FLOPPY")) ? 300 : 0);
               const launderFee = Math.max(0.05, (hasBiz ? 0.10 : 0.18) - (state.ownedAssets.includes("iphon_17_pro") ? 0.03 : 0));
               const feePct = Math.round(launderFee * 100);
               const remObnal = Math.max(0, capToday - (state.obnalUsedToday || 0));
@@ -8936,7 +9148,7 @@
       const doExchBtn = document.getElementById("btn-do-exchange");
       if (sliderEl && previewEl && doExchBtn) {
         const hasBiz = state.ownedAssets.includes("shawarma_kiosk") || state.ownedAssets.includes("cyprus_offshore");
-        const capToday = DAILY_OBNAL_LIMIT_USD + (hasBiz ? 1000 : 0) + (state.ownedAssets.includes("addon_osint_app") ? 600 : 0);
+        const capToday = DAILY_OBNAL_LIMIT_USD + (hasBiz ? 1000 : 0) + (state.ownedAssets.includes("addon_osint_app") ? 600 : 0) + ((state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_404_FLOPPY")) ? 300 : 0);
         const launderFee = Math.max(0.05, (hasBiz ? 0.10 : 0.18) - (state.ownedAssets.includes("iphon_17_pro") ? 0.03 : 0));
         const feePct = Math.round(launderFee * 100);
         sliderEl.addEventListener("input", () => {
