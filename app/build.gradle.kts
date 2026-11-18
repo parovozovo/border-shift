@@ -11,8 +11,8 @@ android {
     applicationId = "com.lucky.bordershift"
     minSdk = 24
     targetSdk = 36
-    versionCode = 1
-    versionName = "0.1.0-alpha"
+    versionCode = 85
+    versionName = "8.5"
   }
 
   buildTypes {
