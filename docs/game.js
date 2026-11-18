@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v7.3";
+  const BUILD_VERSION = "v7.4";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -7113,7 +7113,7 @@
               <span>📻 ${tr(L("ЖУРНАЛ ПОВІДОМЛЕНЬ ЗМІНИ", "SHIFT MESSAGE LOG"), state.lang)}</span>
               <button type="button" id="btn-close-logs" class="btn-outline" style="padding:1px 6px;font-size:10px;">✕</button>
             </div>
-            ${topLogs.map(lg => `<div style="font-size:11px;line-height:1.3;color:${lg.color};border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:3px;">${tr(lg.text, state.lang)}</div>`).join("")}
+            ${topLogs.length > 2 ? topLogs.slice(2).map(lg => `<div style="font-size:11px;line-height:1.3;color:${lg.color};border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:3px;">${tr(lg.text, state.lang)}</div>`).join("") : `<div style="font-size:11px;color:#78909C;">${tr(L("Усі останні повідомлення показані вище.", "All recent messages are shown above."), state.lang)}</div>`}
           </div>
         </div>
         <header class="top-bar">
@@ -7147,7 +7147,7 @@
               <div style="display:flex;justify-content:space-between;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:2px;">
                 <span style="color:#E0B145;font-weight:700;font-size:12.5px;">${tr(t.fullName, state.lang)} (${t.age})</span>
                 <span style="background:${t.direction === "ENTRY" ? "#1B5E20" : "#8E0000"};color:#FFF;font-size:9.5px;font-weight:900;padding:2px 6px;border-radius:4px;letter-spacing:0.3px;">
-                  ${t.direction === "ENTRY" ? tr(L("🟢 В'ЇЗД", "🟢 ENTRY"), state.lang) : tr(L("🔴 ВИЇЗД", "🔴 EXIT"), state.lang)}
+                  ${t.direction === "ENTRY" ? tr(L("🟢 В'ЇЗД (Додому)", "🟢 ENTRY (Home)"), state.lang) : tr(L("🔴 ВИЇЗД (За кордон)", "🔴 EXIT (Abroad)"), state.lang)}
                 </span>
               </div>
               <button type="button" id="booth-vehicle-info" class="booth-vehicle-tag" title="${tr(L("Натисни, щоб звірити авто", "Click to verify vehicle"), state.lang)}">🚘 ${tr(t.vehicleDesc, state.lang)}</button>
@@ -7614,7 +7614,7 @@
           if (t.violations.some(v => v.code === "VEHICLE_MISMATCH") && !state.spottedCodes.includes("VEHICLE_MISMATCH")) {
             state.spottedCodes.push("VEHICLE_MISMATCH");
           }
-          pushShiftLog(t.hasContraband ? "#EF5350" : "#81C784", L(`🩻🐕 Рентген + Пес: ${t.vehicleSearchResult.uk}`, `🩻🐕 X-Ray + Dog: ${t.vehicleSearchResult.en}`));
+          pushShiftLog(t.hasContraband ? "#EF5350" : "#81C784", L(`🩻🐕 ${t.vehicleSearchResult.uk}`, `🩻🐕 ${t.vehicleSearchResult.en}`));
         } else {
           state.trunkPanelOpen = true;
         }
@@ -7640,7 +7640,7 @@
             if (t.violations.some(v => v.code === "VEHICLE_MISMATCH") && !state.spottedCodes.includes("VEHICLE_MISMATCH")) {
               state.spottedCodes.push("VEHICLE_MISMATCH");
             }
-            pushShiftLog(t.hasContraband ? "#EF5350" : "#81C784", L(`🐕 Огляд авто: ${t.vehicleSearchResult.uk}`, `🐕 Vehicle search: ${t.vehicleSearchResult.en}`));
+            pushShiftLog(t.hasContraband ? "#EF5350" : "#81C784", L(`🐕 ${t.vehicleSearchResult.uk}`, `🐕 ${t.vehicleSearchResult.en}`));
           } else if (state.dogTargetZone) {
             state.zoneCheckMsg = L("Пусто! Тут лише особисті речі — перевір інший відсік.", "Empty! Only personal items — check another compartment.");
           } else if (state.checkedZones.length >= 3) {
@@ -7650,7 +7650,7 @@
             if (t.violations.some(v => v.code === "VEHICLE_MISMATCH") && !state.spottedCodes.includes("VEHICLE_MISMATCH")) {
               state.spottedCodes.push("VEHICLE_MISMATCH");
             }
-            pushShiftLog("#81C784", L(`🐕 Огляд авто: ${t.vehicleSearchResult.uk}`, `🐕 Vehicle search: ${t.vehicleSearchResult.en}`));
+            pushShiftLog("#81C784", L(`🐕 ${t.vehicleSearchResult.uk}`, `🐕 ${t.vehicleSearchResult.en}`));
           } else {
             state.zoneCheckMsg = L("Пусто! Схованки тут немає — можеш перевірити інший відсік або завершити.", "Empty here! Check another compartment or finish search.");
           }
