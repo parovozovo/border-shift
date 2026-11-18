@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v7.7";
+  const BUILD_VERSION = "v7.8";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -2741,7 +2741,7 @@
       arrestFull: L("Псевдоволонтера пакують у бус СБК під його ж власний стрім!", "The fake charity influencer gets cuffed on his own livestream!"),
       arrestToned: L("Затримано за комерційну контрабанду під виглядом гуманітарки.", "Detained for commercial smuggling under false charity guise."),
       hasContraband: true,
-      bribeOffer: { amount: 160, currency: "USD", requiresDiscovery: true, isStingTrap: false, syndicateFavor: false },
+      bribeOffer: { amount: 1650, currency: "USD", requiresDiscovery: true, isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
       violations: [DISCREPANCY.CONTRABAND_CARGO],
       storyTag: "FAKE_BLOGGER"
@@ -3060,24 +3060,24 @@
     L("Фотоштативи, дрон DJI-Іграшка (дитячий) та рюкзак", "Tripods, toy drone & backpack")
   ];
   const CONTRABAND_COVERS = [
-    { decl: L("Старі дерев'яні меблі та килими", "Antique wooden furniture & rugs"), found: L("ПЕС «БАВОВНА» РОЗГРИЗ ОБШИВКУ: У ніжках столу сховано 50 блоків контрабандних сигарет!", "DOG SEARCH: Table legs packed with 50 smuggled cigarette cartons!"), bribeAmount: 220, currency: "USD" },
+    { decl: L("Старі дерев'яні меблі та килими", "Antique wooden furniture & rugs"), found: L("ПЕС «БАВОВНА» РОЗГРИЗ ОБШИВКУ: У ніжках столу сховано 50 блоків контрабандних сигарет!", "DOG SEARCH: Table legs packed with 50 smuggled cigarette cartons!"), bribeAmount: 850, currency: "USD" },
     { decl: L("Мішки з будівельним гіпсом та шпаклівкою", "Sacks of construction plaster"), found: L("ПЕС «БАВОВНА» РОЗКОПАВ ГІПС: Усередині мішків — каміння нелегального бурштину з Бурштинівки!", "DOG SEARCH: Sacks hide raw Burshtynivka amber!"), bribeAmount: 1400, currency: "USD" },
     { decl: L("Запасні автомобільні шини (4 шт.)", "Spare car tires (4 pcs)"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА ЗАПАСКУ: Всередині покришок заховані пачки нелегальної валюти та чужі паспорти!", "DOG SEARCH: Tires stuffed with undeclared cash and forged passports!"), bribeAmount: 2400, currency: "USD" },
-    { decl: L("Паливні баки та запчастини до фур", "Fuel cans & truck spare parts"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ ТАЙНИК: Під сидінням 400 л краденого дизелю та паливні талони!", "DOG SEARCH: Stolen diesel & black-market fuel coupons under the seat!"), bribeAmount: 250, currency: "USD" },
+    { decl: L("Паливні баки та запчастини до фур", "Fuel cans & truck spare parts"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ ТАЙНИК: Під сидінням 400 л краденого дизелю та паливні талони!", "DOG SEARCH: Stolen diesel & black-market fuel coupons under the seat!"), bribeAmount: 900, currency: "USD" },
     { decl: L("Коробки з «гуманітарним одягом»", "Boxes of 'humanitarian clothes'"), found: L("ПЕС «БАВОВНА» ПОРВАВ СКОТЧ: У коробках сховані підсанкційні мікрочіпи й комплектуючі до дронів!", "DOG SEARCH: Boxes hide sanctioned microchips & drone parts!"), bribeAmount: 2800, currency: "USD" },
     { decl: L("Рулони килимів від бабусі", "Rolled vintage carpets"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ СХОВАНКУ: Усередині рулонів — старовинні ікони та срібні монети на вивіз!", "DOG SEARCH: Rolled carpets conceal antique icons & silver coins!"), bribeAmount: 2000, currency: "USD" },
-    { decl: L("Металобрухт на переробку", "Scrap metal for recycling"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА БАГАЖНИК: Під лахміттям вирізані автокаталізатори та бухти мідного кабелю!", "DOG SEARCH: Stolen catalytic converters & copper cables under rags!"), bribeAmount: 280, currency: "USD" },
-    { decl: L("Подарункові кошики з шоколадом", "Gift baskets with chocolate"), found: L("ПЕС «БАВОВНА» ЗІРВАВ ФАЛЬШ-ДНО: Під цукерками — ящики безакцизного алкоголю та вейпів!", "DOG SEARCH: False bottom packed with untaxed liquor & vapes!"), bribeAmount: 320, currency: "USD" },
+    { decl: L("Металобрухт на переробку", "Scrap metal for recycling"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА БАГАЖНИК: Під лахміттям вирізані автокаталізатори та бухти мідного кабелю!", "DOG SEARCH: Stolen catalytic converters & copper cables under rags!"), bribeAmount: 950, currency: "USD" },
+    { decl: L("Подарункові кошики з шоколадом", "Gift baskets with chocolate"), found: L("ПЕС «БАВОВНА» ЗІРВАВ ФАЛЬШ-ДНО: Під цукерками — ящики безакцизного алкоголю та вейпів!", "DOG SEARCH: False bottom packed with untaxed liquor & vapes!"), bribeAmount: 1050, currency: "USD" },
     { decl: L("Тубуси з «дитячими малюнками»", "Tubes with 'kids drawings'"), found: L("ПЕС «БАВОВНА» ПОРВАВ ТУБУСИ: Викрадені музейні полотна XIX століття без декларації!", "DOG SEARCH: Stolen 19th-century museum paintings!"), bribeAmount: 3500, currency: "USD" },
     { decl: L("Холодильник для риби та льоду", "Cooler for fish & ice"), found: L("ПЕС «БАВОВНА» ВІДКРИВ ХОЛОДИЛЬНИК: 18 кг нелегальної чорної ікри та раритетних молюсків!", "DOG SEARCH: 18kg of smuggled black caviar!"), bribeAmount: 1800, currency: "USD" },
     { decl: L("Туристичні намети й каремати", "Camping tents & mats"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ У НАМЕТАХ: 6 тепловізорів подвійного призначення без документів!", "DOG SEARCH: 6 undeclared thermal optics inside tent rolls!"), bribeAmount: 3200, currency: "USD" },
     { decl: L("Книжки з кулінарії та журнали", "Cookbooks & magazines"), found: L("ПЕС «БАВОВНА» ВИРВАВ ОБКЛАДИНКУ: Порожнисті томи набиті контрабандними золотими ланцюжками!", "DOG SEARCH: Hollowed books stuffed with gold chains!"), bribeAmount: 2200, currency: "USD" },
-    { decl: L("Пластикові каністри з водою", "Plastic water jerrycans"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА КАНИСТРИ: Замість води — 60 літрів підпільного спирту!", "DOG SEARCH: 60 liters of bootleg spirit inside water cans!"), bribeAmount: 200, currency: "USD" },
+    { decl: L("Пластикові каністри з водою", "Plastic water jerrycans"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА КАНИСТРИ: Замість води — 60 літрів підпільного спирту!", "DOG SEARCH: 60 liters of bootleg spirit inside water cans!"), bribeAmount: 800, currency: "USD" },
     { decl: L("Акваріумні фільтри та трубки", "Aquarium filters & tubes"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ ТЕРАРІУМ: Контрабанда екзотичних хамелеонів та рідкісних папуг!", "DOG SEARCH: Smuggled exotic chameleons & rare parrots!"), bribeAmount: 1100, currency: "USD" },
     { decl: L("Мікрохвильовки на ремонт (4 шт.)", "Broken microwaves for repair"), found: L("ПЕС «БАВОВНА» РОЗКРИВ КОРПУСИ: Усередині мікрохвильовок сховані 10 ігрових відеокарт RTX!", "DOG SEARCH: Microwave shells hide 10 high-end RTX GPUs!"), bribeAmount: 2600, currency: "USD" },
     { decl: L("Спальні мішки та туристичні каремати", "Sleeping bags & camp mats"), found: L("ПЕС «БАВОВНА» ГАВКАЄ НА СПАЛЬНИКИ: Під купою речей ховаються двоє нелегалів без документів!", "DOG SEARCH: 2 undocumented stowaways hiding under sleeping bags!"), bribeAmount: 3400, currency: "USD" },
-    { decl: L("Консервована тушонка домашня (3 ящики)", "Homemade canned stew (3 crates)"), found: L("ПЕС «БАВОВНА» ПОЧУВ ПОРОХ: У банках під жиром — набої та мисливські гільзи!", "DOG SEARCH: Stew cans conceal undeclared ammo!"), bribeAmount: 350, currency: "USD" },
-    { decl: L("Футляри для спортивного взуття", "Sneaker boxes"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ ПІДРОБКИ: 80 пар палених кросівок без акцизу та мита!", "DOG SEARCH: 80 pairs of counterfeit designer sneakers!"), bribeAmount: 240, currency: "USD" },
+    { decl: L("Консервована тушонка домашня (3 ящики)", "Homemade canned stew (3 crates)"), found: L("ПЕС «БАВОВНА» ПОЧУВ ПОРОХ: У банках під жиром — набої та мисливські гільзи!", "DOG SEARCH: Stew cans conceal undeclared ammo!"), bribeAmount: 1200, currency: "USD" },
+    { decl: L("Футляри для спортивного взуття", "Sneaker boxes"), found: L("ПЕС «БАВОВНА» ЗНАЙШОВ ПІДРОБКИ: 80 пар палених кросівок без акцизу та мита!", "DOG SEARCH: 80 pairs of counterfeit designer sneakers!"), bribeAmount: 900, currency: "USD" },
     { decl: L("Скринька з «дідівськими нагородами»", "Box of 'grandpa trinkets'"), found: L("ПЕС «БАВОВНА» РОЗКУСИВ КЕЙС: Викрадене скіфське золото та античні амфори!", "DOG SEARCH: Looted Scythian gold & ancient amphoras!"), bribeAmount: 3800, currency: "USD" },
     { decl: L("Упаковки прального порошку (12 пачок)", "Laundry detergent packs (12 pcs)"), found: L("ПЕС «БАВОВНА» ЗАЧХАВ: У пачках порошку — підпільні стимулятори та заборонені пігулки!", "DOG SEARCH: Detergent bags hide illicit narcotics!"), bribeAmount: 2900, currency: "USD" },
     { decl: L("Коробки з сувенірними годинниками", "Souvenir watch boxes"), found: L("ПЕС «БАВОВНА» ПІДНЯВ ОБШИВКУ: 15 оригінальних швейцарських хронометрів на 100к+!", "DOG SEARCH: 15 luxury Swiss watches hidden in lining!"), bribeAmount: 3100, currency: "USD" },
@@ -7182,7 +7182,7 @@
               <span>📻 ${tr(L("ЖУРНАЛ ПОВІДОМЛЕНЬ ЗМІНИ", "SHIFT MESSAGE LOG"), state.lang)}</span>
               <button type="button" id="btn-close-logs" class="btn-outline" style="padding:1px 6px;font-size:10px;">✕</button>
             </div>
-            ${topLogs.length > 2 ? topLogs.slice(2).map(lg => `<div style="font-size:11px;line-height:1.3;color:${lg.color};border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:3px;">${tr(lg.text, state.lang)}</div>`).join("") : `<div style="font-size:11px;color:#78909C;">${tr(L("Усі останні повідомлення показані вище.", "All recent messages are shown above."), state.lang)}</div>`}
+            ${topLogs.map(lg => `<div style="font-size:11px;line-height:1.3;color:${lg.color};border-bottom:1px solid rgba(255,255,255,0.06);padding-bottom:3px;">${tr(lg.text, state.lang)}</div>`).join("")}
           </div>
         </div>
         <header class="top-bar">
