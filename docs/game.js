@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v7.6";
+  const BUILD_VERSION = "v7.7";
   const DAILY_OBNAL_LIMIT_USD = 1500;
   let confirmResetArmed = false;
 
@@ -7369,8 +7369,8 @@
                     ${state.oblikScanned ? `
                       <div style="font-size:11px;font-weight:800;color:${hasQrErr ? "#FF8A80" : "#69F0AE"};">
                         ${hasQrErr
-                          ? tr(isFrozen ? "⚠️ ПІДРОБКА: ЗАСТИГЛИЙ СКРІНШОТ!" : "🚨 БАЗА: ВІЙСЬКОВИЙ РОЗШУК (ERR-409)!", isFrozen ? "⚠️ FAKE: FROZEN SCREENSHOT!" : "🚨 REGISTRY: WANTED (ERR-409)!")
-                          : tr("✅ РЕЄСТР: ДІЙСНИЙ (ОНОВЛЕНО)", "✅ REGISTRY: VALID (UPDATED)")}
+                          ? tr(isFrozen ? L("⚠️ ПІДРОБКА: ЗАСТИГЛИЙ СКРІНШОТ!", "⚠️ FAKE: FROZEN SCREENSHOT!") : L("🚨 БАЗА: ВІЙСЬКОВИЙ РОЗШУК (ERR-409)!", "🚨 REGISTRY: WANTED (ERR-409)!"), state.lang)
+                          : tr(L("✅ РЕЄСТР: ДІЙСНИЙ (ОНОВЛЕНО)", "✅ REGISTRY: VALID (UPDATED)"), state.lang)}
                       </div>
                     ` : `
                       <button type="button" id="btn-scan-oblik-qr" class="oblik-scan-btn">
