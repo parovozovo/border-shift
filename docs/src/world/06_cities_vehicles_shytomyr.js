@@ -556,7 +556,7 @@
       coffeeTip: 100,
       arrestFull: L("Ти затримав старого знайомого з Шитомира! Він дивиться на тебе крізь ґрати з повним нерозумінням.", "You detained an old pal from Shytomyr!"),
       arrestToned: L("Мандрівника з м. Шитомир безпідставно затримано.", "The traveler from Shytomyr was detained."),
-      bribeOffer: { amount: 400, isStingTrap: false, syndicateFavor: false, isFriendlyGift: true },
+      bribeOffer: { amount: 500, currency: "UAH", instantOffer: true, isStingTrap: false, syndicateFavor: false, isFriendlyGift: true },
       shouldBeApproved: true,
       storyTag: friendSpec.tag
     });

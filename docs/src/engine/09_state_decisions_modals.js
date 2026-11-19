@@ -42,8 +42,19 @@
     shiftMistakes: 0,
     shiftDetained: 0,
     totalCareerDetained: 0,
+    totalCareerBribes: 0,
     shiftBribesTotal: 0,
+    shiftBribesCount: 0,
     shiftFinesTotal: 0,
+    shiftSalaryEarned: 0,
+    shiftBountiesEarned: 0,
+    shiftExtrasEarned: 0,
+    shiftEarnedUsd: 0,
+    shiftCombo: 0,
+    shiftBestCombo: 0,
+    shiftGrade: null,
+    shiftGradeBonus: 0,
+    openedDocIndices: [],
     ownedAssets: [],
     purchasedExpensesToday: [],
     tonightBills: [],
@@ -197,7 +208,7 @@
       else if (d >= 4) rankScale = 1.10;
       else rankScale = 1.0;
     }
-    const baseAmt = currency === "USD" ? offer.amount : (offer.amount < 500 ? offer.amount * 5 : offer.amount);
+    const baseAmt = (currency === "USD" || offer.isFriendlyGift) ? offer.amount : (offer.amount < 500 ? offer.amount * 5 : offer.amount);
     const amt = Math.round(baseAmt * rankScale * modMult * jacketMult * ringMult * audiMult * prepMult * intimidateMult);
     return {
       amount: amt,
@@ -360,30 +371,9 @@
   function getEscapeTarget() { return state.isSandbox ? 25000 : 15000; }
   function getEscapeTolikRep() { return state.isSandbox ? 65 : 55; }
   function getRank() {
-    if (state.sbkColonelPromoted) {
-      return {
-        id: "SBK_COLONEL",
-        title: L("🕵️ Таємний Полковник СБК («Кордон-7»)", "🕵️ Covert SBK Colonel ('Border-7')"),
-        salary: 1800,
-        perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 🪙 • -8% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 🪙 • -8% NABK/day"),
-        dogCost: 0,
-        freeFirstMistake: true,
-        dailyRiskHeal: 8
-      };
-    }
-    if (state.isUndercoverSbkAgent) {
-      return {
-        id: "SBK_AGENT",
-        title: L("🕵️ Негласний агент СБК («Кордон-7»)", "🕵️ Undercover SBK Agent ('Border-7')"),
-        salary: 900,
-        perkLabel: L("🔓 Перк: +1 500 🪙/арешт • Пес -4с", "🔓 Perk: +1,500 🪙/arrest • Dog -4s"),
-        dogCost: 4,
-        freeFirstMistake: false,
-        dailyRiskHeal: 4
-      };
-    }
+    let base;
     if (!state.isSandbox) {
-      return {
+      base = {
         id: "CAMPAIGN_INSPECTOR",
         title: L("Інспектор ДПСК", "SBGS Inspector"),
         salary: 480,
@@ -392,72 +382,93 @@
         freeFirstMistake: false,
         dailyRiskHeal: 0
       };
+    } else {
+      const d = state.daySpec ? state.daySpec.dayNumber : 1;
+      if (d >= 20) {
+        base = {
+          id: "REGIONAL_CURATOR",
+          title: L("Регіональний куратор ДПСК", "Regional SBGS Curator"),
+          salary: 1800,
+          perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 🪙 • -8% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 🪙 • -8% NABK/day"),
+          dogCost: 0,
+          freeFirstMistake: true,
+          dailyRiskHeal: 8
+        };
+      } else if (d >= 14) {
+        base = {
+          id: "CHECKPOINT_CHIEF",
+          title: L("Начальник КПП", "Checkpoint Chief"),
+          salary: 1400,
+          perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 🪙 • -6% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 🪙 • -6% NABK/day"),
+          dogCost: 0,
+          freeFirstMistake: true,
+          dailyRiskHeal: 6
+        };
+      } else if (d >= 8) {
+        base = {
+          id: "CHIEF_CUSTOMS",
+          title: L("Старший офіцер митниці", "Chief Customs Officer"),
+          salary: 1100,
+          perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 🪙 • -5% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 🪙 • -5% NABK/day"),
+          dogCost: 0,
+          freeFirstMistake: true,
+          dailyRiskHeal: 5
+        };
+      } else if (d >= 5) {
+        base = {
+          id: "DEPUTY_PALYCH",
+          title: L("Заступник Пал Палича", "Palych's Deputy"),
+          salary: 800,
+          perkLabel: L("🔓 Перки: 1-ша помилка 0 🪙 • Пес -4с", "🔓 Perks: 1st Mistake 0 🪙 • Dog -4s"),
+          dogCost: 4,
+          freeFirstMistake: true,
+          dailyRiskHeal: 0
+        };
+      } else if (d >= 3) {
+        base = {
+          id: "SENIOR_SHIFT",
+          title: L("Старший зміни", "Senior Shift Inspector"),
+          salary: 600,
+          perkLabel: L("🔓 Перк: Пес «Бавовна» витрачає 4с замість 8с", "🔓 Perk: Sniffer dog costs 4s instead of 8s"),
+          dogCost: 4,
+          freeFirstMistake: false,
+          dailyRiskHeal: 0
+        };
+      } else {
+        base = {
+          id: "JUNIOR",
+          title: L("Молодший інспектор", "Junior Inspector"),
+          salary: 450,
+          perkLabel: L("Підніміться до Дня 3 для 1-го рангового перку!", "Reach Day 3 to unlock your first Rank Perk!"),
+          dogCost: 8,
+          freeFirstMistake: false,
+          dailyRiskHeal: 0
+        };
+      }
     }
-    const d = state.daySpec.dayNumber;
-    if (d >= 20) {
+    if (state.sbkColonelPromoted) {
       return {
-        id: "REGIONAL_CURATOR",
-        title: L("Регіональний куратор ДПСК", "Regional SBGS Curator"),
-        salary: 1800,
-        perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 🪙 • -8% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 🪙 • -8% NABK/day"),
-        dogCost: 0,
-        freeFirstMistake: true,
-        dailyRiskHeal: 8
-      };
-    }
-    if (d >= 14) {
-      return {
-        id: "CHECKPOINT_CHIEF",
-        title: L("Начальник КПП", "Checkpoint Chief"),
-        salary: 1400,
+        id: "SBK_COLONEL",
+        title: L("🕵️ Таємний Полковник СБК («Кордон-7»)", "🕵️ Covert SBK Colonel ('Border-7')"),
+        salary: Math.max(1300, base.salary),
         perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 🪙 • -6% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 🪙 • -6% NABK/day"),
         dogCost: 0,
         freeFirstMistake: true,
-        dailyRiskHeal: 6
+        dailyRiskHeal: Math.max(6, base.dailyRiskHeal)
       };
     }
-    if (d >= 8) {
+    if (state.isUndercoverSbkAgent) {
       return {
-        id: "CHIEF_CUSTOMS",
-        title: L("Старший офіцер митниці", "Chief Customs Officer"),
-        salary: 1100,
-        perkLabel: L("🔓 Перки: Пес 0с • 1-ша помилка 0 🪙 • -5% НАБК/день", "🔓 Perks: Dog 0s • 1st Mistake 0 🪙 • -5% NABK/day"),
-        dogCost: 0,
-        freeFirstMistake: true,
-        dailyRiskHeal: 5
+        id: "SBK_AGENT",
+        title: L("🕵️ Негласний агент СБК («Кордон-7»)", "🕵️ Undercover SBK Agent ('Border-7')"),
+        salary: Math.max(700, base.salary + 150),
+        perkLabel: L("🔓 Перк: +600 🪙/арешт • Пес -4с", "🔓 Perk: +600 🪙/arrest • Dog -4s"),
+        dogCost: Math.min(4, base.dogCost),
+        freeFirstMistake: base.freeFirstMistake,
+        dailyRiskHeal: Math.max(3, base.dailyRiskHeal)
       };
     }
-    if (d >= 5) {
-      return {
-        id: "DEPUTY_PALYCH",
-        title: L("Заступник Пал Палича", "Palych's Deputy"),
-        salary: 800,
-        perkLabel: L("🔓 Перки: 1-ша помилка 0 🪙 • Пес -4с", "🔓 Perks: 1st Mistake 0 🪙 • Dog -4s"),
-        dogCost: 4,
-        freeFirstMistake: true,
-        dailyRiskHeal: 0
-      };
-    }
-    if (d >= 3) {
-      return {
-        id: "SENIOR_SHIFT",
-        title: L("Старший зміни", "Senior Shift Inspector"),
-        salary: 600,
-        perkLabel: L("🔓 Перк: Пес «Бавовна» витрачає 4с замість 8с", "🔓 Perk: Sniffer dog costs 4s instead of 8s"),
-        dogCost: 4,
-        freeFirstMistake: false,
-        dailyRiskHeal: 0
-      };
-    }
-    return {
-      id: "JUNIOR",
-      title: L("Молодший інспектор", "Junior Inspector"),
-      salary: 450,
-      perkLabel: L("Підніміться до Дня 3 для 1-го рангового перку!", "Reach Day 3 to unlock your first Rank Perk!"),
-      dogCost: 8,
-      freeFirstMistake: false,
-      dailyRiskHeal: 0
-    };
+    return base;
   }
 
   function getEffectiveBossCut() {
@@ -469,7 +480,7 @@
   function getPassiveRent() {
     const assetRent = ASSET_UPGRADES.filter(a => state.ownedAssets.includes(a.id)).reduce((s, a) => s + a.passiveIncome, 0);
     const addonRent = ASSET_ADDONS.filter(a => state.ownedAssets.includes(a.id)).reduce((s, a) => s + a.passiveIncome, 0);
-    const sbkCovertPay = state.isUndercoverSbkAgent ? (state.sbkColonelPromoted ? 12000 : 5500) : 0;
+    const sbkCovertPay = state.isUndercoverSbkAgent ? (state.sbkColonelPromoted ? 4500 : 2200) : 0;
     return assetRent + addonRent + sbkCovertPay;
   }
   function getPassiveUsd() {
@@ -514,7 +525,7 @@
       dayIndex: 0,
       daySpec: baseDay,
       sandboxMod: mod,
-      queue: generateDailyQueue(baseDay, sandbox ? 14 : 12),
+      queue: generateDailyQueue(baseDay, sandbox ? 14 : 12, sandbox),
       travelerIdx: 0,
       selectedDocIdx: 0,
       shiftSec: Math.max(150, baseSec),
@@ -549,8 +560,19 @@
       shiftMistakes: 0,
       shiftDetained: 0,
       totalCareerDetained: 0,
+      totalCareerBribes: 0,
       shiftBribesTotal: 0,
+      shiftBribesCount: 0,
       shiftFinesTotal: 0,
+      shiftSalaryEarned: 0,
+      shiftBountiesEarned: 0,
+      shiftExtrasEarned: 0,
+      shiftEarnedUsd: 0,
+      shiftCombo: 0,
+      shiftBestCombo: 0,
+      shiftGrade: null,
+      shiftGradeBonus: 0,
+      openedDocIndices: [],
       ownedAssets: [],
       purchasedExpensesToday: [],
       tonightBills: pickTonightBills(),
@@ -664,10 +686,15 @@
     state.inspectMode = false;
     state.justUnfoldedDoc = false;
     state.oblikScanned = false;
+    state.openedDocIndices = [];
     const t = state.queue[state.travelerIdx];
     state.oblikIsScreenshot = Boolean(t && t.violations.some(v => v.code === "INVALID_QR_CODE") && Math.random() < 0.5);
     const zones = ["TRUNK", "SPARE", "GLOVE"];
-    state.dogTargetZone = (t && (t.hasContraband || t.storyTag === "DUAL_CITIZEN")) ? pick(zones) : null;
+    if (t && t.storyTag === "NABK_STING") {
+      state.dogTargetZone = "GLOVE";
+    } else {
+      state.dogTargetZone = (t && (t.hasContraband || t.storyTag === "DUAL_CITIZEN")) ? pick(zones) : null;
+    }
     if (t && !t.storyTag) {
       const h = Math.abs((t.id || "TRV").split("").reduce((acc, ch) => acc * 31 + ch.charCodeAt(0), 7));
       state.currentUvEasterEgg = (h % 2 === 0) ? UV_SECRET_STAMPS[h % UV_SECRET_STAMPS.length] : null;
@@ -719,9 +746,25 @@
     state.phase = "SHIFT_SUMMARY";
     state.sirenActive = false;
     state.nextBribeBoost = 0;
-    if (state.shiftBribesTotal === 0 && state.shiftProcessed >= 5) {
+    const noBribes = (state.shiftBribesCount || 0) === 0 && (state.shiftBribesTotal || 0) === 0;
+    if (noBribes && state.shiftProcessed >= 5) {
       unlockAgencyBadge("NABK_CLEAN");
       state.underSurveillance = false;
+    }
+    state.shiftGradeBonus = 0;
+    if (state.shiftProcessed >= 8 && state.shiftMistakes === 0 && noBribes) {
+      state.shiftGrade = "S";
+      state.shiftGradeBonus = 800;
+      state.money += 800;
+      state.shiftExtrasEarned = (state.shiftExtrasEarned || 0) + 800;
+    } else if (state.shiftProcessed >= 6 && state.shiftMistakes <= 1) {
+      state.shiftGrade = "A";
+    } else if (state.shiftMistakes <= 2 && state.shiftCorrect >= Math.ceil(state.shiftProcessed * 0.5)) {
+      state.shiftGrade = "B";
+    } else if (state.shiftMistakes <= 4) {
+      state.shiftGrade = "C";
+    } else {
+      state.shiftGrade = "D";
     }
     state.tonightBills = pickTonightBills();
     saveStateToStorage();
@@ -734,13 +777,14 @@
 
     const isApprove = decisionType === "APPROVE";
     const isDetain = decisionType === "DETAIN";
-    if (state.bribeAccepted && !isApprove && (!t.bribeOffer || !t.bribeOffer.isFriendlyGift)) {
+    const isFriendlyGift = Boolean(t.bribeOffer && t.bribeOffer.isFriendlyGift);
+    if (state.bribeAccepted && !isApprove && !isFriendlyGift) {
       return;
     }
     const bribeOfferInfo = getComputedBribe(t.bribeOffer);
     const criminalBribeOffer = Boolean(
       t.bribeOffer &&
-      !t.bribeOffer.isFriendlyGift &&
+      !isFriendlyGift &&
       !state.bribeAccepted &&
       bribeOfferInfo &&
       (bribeOfferInfo.isInstant || state.vehicleInspected || state.spottedCodes.length > 0 || state.interrogated)
@@ -748,21 +792,24 @@
     const requiresDetain = t.isWantedTarget || t.violations.some(v => v.requiresDetention);
     const canDetain = requiresDetain || criminalBribeOffer;
     const excessiveDetain = isDetain && !t.shouldBeApproved && !canDetain;
+    const missedArrest = decisionType === "DENY" && !t.shouldBeApproved && requiresDetain;
 
     let ruleCorrect = false;
     let usdBonus = 0;
     if (decisionType === "APPROVE") ruleCorrect = t.shouldBeApproved;
-    else if (decisionType === "DENY") ruleCorrect = !t.shouldBeApproved && !t.isWantedTarget;
+    else if (decisionType === "DENY") ruleCorrect = !t.shouldBeApproved && !requiresDetain;
     else if (decisionType === "DETAIN") ruleCorrect = (!t.shouldBeApproved || criminalBribeOffer) && canDetain;
 
-    const bribedPass = state.bribeAccepted && isApprove;
+    const bribedPass = state.bribeAccepted && isApprove && !isFriendlyGift;
     const isStingOrRaid = bribedPass && (t.storyTag === "NABK_STING" || (state.nabkRisk >= 75 && Math.random() < 0.35));
     const rank = getRank();
     const meta = getMetaPerkFlags();
 
     let salaryDelta = 0, fineDelta = 0, detainBonus = 0;
+    let comboMultUsed = 1.0;
     if (bribedPass) {
-      // Bribe pass: no official salary, no cash fine! Only sanctions (reprimand) if caught in a sting/raid!
+      // Bribe pass: resets honest streak, does NOT increment shiftCorrect; sanctions apply if sting/raid!
+      state.shiftCombo = 0;
       if (isStingOrRaid) {
         state.nabkRisk = Math.min(100, state.nabkRisk + 22);
         state.sbkRep = Math.max(0, state.sbkRep - 15);
@@ -778,52 +825,71 @@
         if (state.ownedAssets.includes("laser_plate_reader")) {
           state.shiftSec += 3;
         }
-        state.shiftCorrect += 1;
       }
     } else if (ruleCorrect) {
-      const salMult = (state.sandboxMod && state.sandboxMod.salaryMult ? state.sandboxMod.salaryMult : 1.0) * meta.salaryBonusMult;
+      state.shiftCombo = (state.shiftCombo || 0) + 1;
+      state.shiftBestCombo = Math.max(state.shiftBestCombo || 0, state.shiftCombo);
+      comboMultUsed = state.shiftCombo >= 8 ? 1.5 : (state.shiftCombo >= 5 ? 1.3 : (state.shiftCombo >= 3 ? 1.15 : 1.0));
+      if (state.shiftCombo === 3 || state.shiftCombo === 5 || state.shiftCombo === 8) {
+        audio.playComboChime(state.shiftCombo);
+      }
+      const salMult = (state.sandboxMod && state.sandboxMod.salaryMult ? state.sandboxMod.salaryMult : 1.0) * meta.salaryBonusMult * comboMultUsed;
       const detectorBonus = state.ownedAssets.includes("money_detector") ? 120 : 0;
       salaryDelta = Math.round(rank.salary * salMult) + detectorBonus;
       if (isDetain && canDetain) {
         const badges = loadAgencyBadges();
-        const undercoverBounty = state.isUndercoverSbkAgent ? 1500 : 0;
-        const isHighValueSpyOrVip = t.isWantedTarget || t.storyTag === "FSM_SPY" || t.storyTag === "SABOTEUR" || t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE";
+        const undercoverBounty = state.isUndercoverSbkAgent ? 600 : 0;
+        const isHighValueSpyOrVip = t.isWantedTarget || t.storyTag === "FSM_SPY" || t.storyTag === "SABOTEUR" || t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE" || t.storyTag === "DUAL_CITIZEN";
         const bountyDay = state.daySpec ? state.daySpec.dayNumber : 1;
         const bountyRamp = Math.min(1.4, 0.8 + 0.08 * (bountyDay - 1));
         const baseDetainBounty = Math.round((isHighValueSpyOrVip
-          ? (4500 + Math.floor(Math.random() * 2501))
-          : (1800 + Math.floor(Math.random() * 1201))) * bountyRamp);
-        const badgeBonus = (badges.includes("SBK_SHIELD") ? 800 : 0) + (badges.includes("VSP_GUARD") && (t.storyTag === "DUAL_CITIZEN" || t.storyTag === "VIP_DIVERSE") ? 1200 : 0);
+          ? (2400 + Math.floor(Math.random() * 1201))
+          : (900 + Math.floor(Math.random() * 501))) * bountyRamp);
+        const badgeBonus = (badges.includes("SBK_SHIELD") ? 400 : 0) + (badges.includes("VSP_GUARD") && (t.storyTag === "DUAL_CITIZEN" || t.storyTag === "VIP_DIVERSE") ? 600 : 0);
         const tabletBonus = state.ownedAssets.includes("sbk_database_tablet") ? Math.round(baseDetainBounty * 0.2) : 0;
         const amberBonus = (state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_AMBER_BEETLE")) ? Math.round(baseDetainBounty * 0.15) : 0;
         detainBonus = baseDetainBounty + undercoverBounty + badgeBonus + tabletBonus + amberBonus + (state.sandboxMod ? (state.sandboxMod.detainExtra || 0) : 0);
         if (isHighValueSpyOrVip) {
-          usdBonus = Math.round((120 + Math.floor(Math.random() * 131)) * bountyRamp) + (state.isUndercoverSbkAgent ? 100 : 0);
+          usdBonus = Math.round((60 + Math.floor(Math.random() * 51)) * bountyRamp) + (state.isUndercoverSbkAgent ? 50 : 0);
         } else {
           usdBonus = 0;
         }
         state.usd += usdBonus;
-        state.sbkRep = Math.min(100, state.sbkRep + (isHighValueSpyOrVip ? 14 : 4));
+        state.sbkRep = Math.min(100, state.sbkRep + (isHighValueSpyOrVip ? 12 : 4));
         state.totalCareerDetained += 1;
         if (state.totalCareerDetained >= 3) unlockAgencyBadge("SBK_SHIELD");
         if (t.storyTag === "FSM_SPY") { unlockAgencyBadge("GUR_FALCON"); unlockDiscovery("DISC_FSM_SPY"); }
         if (t.storyTag === "DUAL_CITIZEN") unlockAgencyBadge("VSP_GUARD");
         if (t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE" || t.isWantedTarget) {
-          state.nabkRisk = Math.max(0, state.nabkRisk - 12);
+          state.nabkRisk = Math.max(0, state.nabkRisk - 10);
           unlockDiscovery("DISC_VIP_CORRUPTOR");
         }
-        if (state.isUndercoverSbkAgent) {
+        if (state.isUndercoverSbkAgent && isHighValueSpyOrVip) {
           state.spiesCaughtAsAgent += 1;
-          state.nabkRisk = Math.max(0, state.nabkRisk - 8);
+          state.nabkRisk = Math.max(0, state.nabkRisk - 6);
         }
       }
       if (state.ownedAssets.includes("laser_plate_reader")) {
         state.shiftSec += 3;
       }
       state.shiftCorrect += 1;
+      state.shiftSalaryEarned = (state.shiftSalaryEarned || 0) + salaryDelta;
+      state.shiftBountiesEarned = (state.shiftBountiesEarned || 0) + detainBonus;
+      state.shiftEarnedUsd = (state.shiftEarnedUsd || 0) + usdBonus;
     } else {
+      state.shiftCombo = 0;
       const isHighRiskTarget = t.isWantedTarget || t.storyTag === "FSM_SPY" || t.storyTag === "SABOTEUR" || t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE";
-      if (isDetain && t.shouldBeApproved) {
+      if (missedArrest) {
+        audio.playWarn();
+        fineDelta = 450;
+        if (state.shiftMistakes === 0 && rank.freeFirstMistake) {
+          fineDelta = 0;
+        } else if (state.shiftMistakes === 0 && meta.halfFirstFine) {
+          fineDelta = Math.round(fineDelta * 0.5);
+        }
+        state.sbkRep = Math.max(0, state.sbkRep - 6);
+        state.palychRep = Math.max(0, state.palychRep - 4);
+      } else if (isDetain && t.shouldBeApproved) {
         fineDelta = 1500;
         state.sbkRep = Math.max(0, state.sbkRep - 12);
         state.palychRep = Math.max(0, state.palychRep - 10);
@@ -856,7 +922,7 @@
     state.shiftSec = Math.min(320, state.shiftSec + ((ruleCorrect || (bribedPass && !isStingOrRaid)) ? 8 : 4));
 
     if (state.reprimands >= 3) {
-      triggerEnding("FIRED_LOSER");
+      triggerEnding((isStingOrRaid || state.nabkRisk >= 85) ? "NABK_PRISONER" : "WRITTEN_OFF_RESERVE");
       return;
     }
 
@@ -874,8 +940,8 @@
           state.shytomyrRelics.push(gf.relicId);
           if (gf.relicId === "RELIC_AMBER_BEETLE") state.palychRep = Math.min(100, state.palychRep + 5);
         }
-        if (gf.bonusMoney) detainBonus += gf.bonusMoney;
-        if (gf.bonusUsd) { usdBonus += gf.bonusUsd; state.usd += gf.bonusUsd; }
+        if (gf.bonusMoney) { detainBonus += gf.bonusMoney; state.shiftExtrasEarned = (state.shiftExtrasEarned || 0) + gf.bonusMoney; }
+        if (gf.bonusUsd) { usdBonus += gf.bonusUsd; state.usd += gf.bonusUsd; state.shiftEarnedUsd = (state.shiftEarnedUsd || 0) + gf.bonusUsd; }
         if (gf.bonusSec) state.shiftSec = Math.min(340, state.shiftSec + gf.bonusSec);
         if (gf.bonusSbk) state.sbkRep = Math.min(100, state.sbkRep + gf.bonusSbk);
         if (gf.bonusPalych) state.palychRep = Math.min(100, state.palychRep + gf.bonusPalych);
@@ -890,24 +956,29 @@
       if (globalShytomyr.length >= SHYTOMYR_LEGENDS.length && !state.shytomyrBrotherhoodUnlocked) {
         state.shytomyrBrotherhoodUnlocked = true;
         detainBonus += 1500;
+        state.shiftExtrasEarned = (state.shiftExtrasEarned || 0) + 1500;
         state.nabkRisk = Math.max(0, state.nabkRisk - 30);
         shytomyrBonusToast = L(
-          "🧦 ОРДЕН ШИТОМИРА (12/12): Усі 12 легенд міста в зборі! +1500 🪙 на картку, імунітет і відкрито секретний титул Мера!",
+          "🧦 ОРДЕН ШИТОМИРА (12/12): Усі 12 легенд міста в зборі! +1500 🪙, імунітет і відкрито секретний титул Мера!",
           "🧦 ORDER OF SHYTOMYR (12/12): All 12 city legends welcomed! +1500 🪙 & Secret Mayor title unlocked!"
         );
       } else if (state.shytomyrFriendsMet.length > 0 && state.shytomyrFriendsMet.length % 3 === 0) {
         detainBonus += 300;
-        shytomyrBonusToast = L(
-          `🧦 ЗЕМЛЯЦЬКИЙ ПІДГІН (${globalShytomyr.length}/12): Громада Шитомира передала +300 🪙 на каву!`,
-          `🧦 SHYTOMYR GIFT (${globalShytomyr.length}/12): +300 🪙 for shift coffee!`
-        );
+        state.shiftExtrasEarned = (state.shiftExtrasEarned || 0) + 300;
+        const setMsgUk = `🧦 +300 🪙 бонусу громади (${globalShytomyr.length}/12)`;
+        const setMsgEn = `🧦 +300 🪙 community bonus (${globalShytomyr.length}/12)`;
+        shytomyrBonusToast = shytomyrBonusToast
+          ? L(`${shytomyrBonusToast.uk} + ${setMsgUk}`, `${shytomyrBonusToast.en} + ${setMsgEn}`)
+          : L(setMsgUk, setMsgEn);
       }
     }
 
     if (t.storyTag === "INTEL_ALLY" && isApprove) {
-      detainBonus += 200;
-      usdBonus += 180;
-      state.usd += 180;
+      detainBonus += 500;
+      usdBonus += 75;
+      state.usd += 75;
+      state.shiftBountiesEarned = (state.shiftBountiesEarned || 0) + 500;
+      state.shiftEarnedUsd = (state.shiftEarnedUsd || 0) + 75;
       state.sbkRep = Math.min(100, state.sbkRep + 15);
       unlockAgencyBadge("GUR_FALCON");
     }
@@ -921,13 +992,13 @@
     if (t.storyTag === "DEPUTY_SON" && isApprove) state.campaignFlags.letDeputyPass = true;
     if (t.storyTag === "SABOTEUR" && isDetain && ruleCorrect) state.campaignFlags.caughtSpotter = true;
     if (t.storyTag === "AUNT_HALYA" && isApprove) state.campaignFlags.helpedHalya = true;
-    if (t.storyTag === "NABK_STING" && !isApprove && !state.bribeAccepted) {
+    if (t.storyTag === "NABK_STING" && !isApprove && !bribedPass) {
       state.campaignFlags.refusedNabk = true;
       unlockDiscovery("DISC_NABK_STING");
     }
 
     const netMoney = salaryDelta + detainBonus - fineDelta;
-    state.money += netMoney;
+    state.money = Math.max(0, state.money + netMoney);
     state.shiftProcessed += 1;
     if (isDetain) state.shiftDetained += 1;
     state.shiftFinesTotal += fineDelta;
@@ -951,10 +1022,10 @@
             ? L("ЗАКРИТО ОЧІ (ЗА ХАБАР)", "LOOKED THE OTHER WAY (BRIBED)")
             : (bribeDetainMsg
               ? L("СПРОБУ ХАБАРЯ ЗАТРИМАНО! (+ПРЕМІЯ СБК)", "BRIBE ATTEMPT DETAINED! (+SBK BONUS)")
-              : (ruleCorrect && isDetain ? L("КРИМІНАЛ ЗАТРИМАНО! (+ПРЕМІЯ СБК)", "CRIMINAL DETAINED! (+SBK BONUS)") : (ruleCorrect ? L("РІШЕННЯ ПРАВИЛЬНЕ", "CORRECT DECISION") : (excessiveDetain ? L("ПЕРЕВИЩЕННЯ! Треба ✖ ВІДМОВИТИ", "EXCESSIVE FORCE! Should ✖ DENY") : L("ПОМИЛКА ПРОТОКОЛУ! ШТРАФ", "PROTOCOL VIOLATION! FINE"))))))),
+              : (ruleCorrect && isDetain ? L("КРИМІНАЛ ЗАТРИМАНО! (+ПРЕМІЯ СБК)", "CRIMINAL DETAINED! (+SBK BONUS)") : (ruleCorrect ? L("РІШЕННЯ ПРАВИЛЬНЕ", "CORRECT DECISION") : (missedArrest ? L("⚠️ ПОРУШНИК УТІК! Треба 🚨 СБК / АРЕШТ", "⚠️ CRIMINAL ESCAPED! Should 🚨 DETAIN") : (excessiveDetain ? L("ПЕРЕВИЩЕННЯ! Треба ✖ ВІДМОВИТИ", "EXCESSIVE FORCE! Should ✖ DENY") : L("ПОМИЛКА ПРОТОКОЛУ! ШТРАФ", "PROTOCOL VIOLATION! FINE")))))))),
       detail: shytomyrBonusToast || (isStingOrRaid ? L("Ти впіймався на підставі! За 3 догани звільнять (зникає через день).", "Caught in a sting! 3 reprimands = fired (decays next clean day).") : null) || bribeDetainMsg || (isDetain
         ? (state.contentMode === "FULL_18_PLUS" ? t.arrestFull : t.arrestToned)
-        : (bribedPass ? L("Без штрафу, але ризик НАБК зріс.", "No fine, but NABK risk increased.") : (ruleCorrect ? L("Оформлено за директивою ДПСК.", "Processed per SBGS directive.") : (t.violations[0] ? t.violations[0].title : L("Безпідставна відмова", "Wrongful denial"))))),
+        : (bribedPass ? L("Без штрафу, але ризик НАБК зріс.", "No fine, but NABK risk increased.") : (ruleCorrect ? L("Оформлено за директивою ДПСК.", "Processed per SBGS directive.") : (missedArrest ? L("Порушник із фальшивкою/контрабандою розвернувся і зник у черзі — його слід було затримати!", "Criminal with forgery/contraband bolted from the lane — detention was required!") : (t.violations[0] ? t.violations[0].title : L("Безпідставна відмова", "Wrongful denial")))))),
       moneyDelta: netMoney
     };
     if (!state.shiftLogs) state.shiftLogs = [];
@@ -980,7 +1051,7 @@
     saveStateToStorage();
     render();
 
-    if (state.totalCareerDetained >= 2 && !state.sbkRecruitmentOffered) {
+    if ((state.daySpec ? state.daySpec.dayNumber : 1) >= 3 && state.totalCareerDetained >= 5 && state.sbkRep >= 65 && !state.sbkRecruitmentOffered) {
       state.sbkRecruitmentOffered = true;
       saveStateToStorage();
       openSbkRecruitmentModal();
@@ -1040,11 +1111,11 @@
   }
 
   function advanceToNextDay(forceContinueFromCampaign) {
-    const hasOffshoreShield = state.ownedAssets.includes("cyprus_offshore") || state.sbkColonelPromoted;
+    const hasOffshoreShield = state.ownedAssets.includes("cyprus_offshore");
     if (!hasOffshoreShield && state.nabkRisk >= 75) {
       state.underSurveillance = true;
     }
-    const bustedByCounterIntel = state.nabkRisk >= 100 || (!hasOffshoreShield && state.nabkRisk >= 95 && state.underSurveillance && state.shiftBribesTotal > 0);
+    const bustedByCounterIntel = state.nabkRisk >= 100 || (!hasOffshoreShield && state.nabkRisk >= 95 && state.underSurveillance && (state.shiftBribesCount > 0 || state.shiftBribesTotal > 0));
     if (bustedByCounterIntel) {
       triggerEnding("NABK_PRISONER");
       return;
@@ -1094,13 +1165,22 @@
       state.daySpec = ACT_ONE_DAYS[nextIdx];
     }
 
-    state.queue = generateDailyQueue(state.daySpec, state.isSandbox ? 14 : 12);
+    state.queue = generateDailyQueue(state.daySpec, state.isSandbox ? 14 : 12, state.isSandbox);
     state.shiftProcessed = 0;
     state.shiftCorrect = 0;
     state.shiftMistakes = 0;
     state.shiftDetained = 0;
     state.shiftBribesTotal = 0;
+    state.shiftBribesCount = 0;
     state.shiftFinesTotal = 0;
+    state.shiftSalaryEarned = 0;
+    state.shiftBountiesEarned = 0;
+    state.shiftExtrasEarned = 0;
+    state.shiftEarnedUsd = 0;
+    state.shiftCombo = 0;
+    state.shiftBestCombo = 0;
+    state.shiftGrade = null;
+    state.shiftGradeBonus = 0;
     state.obnalUsedToday = 0;
     state.phase = "MORNING_BRIEFING";
     if (!state.isSandbox) saveCampaignCheckpoint(state.daySpec.dayNumber);
@@ -1371,16 +1451,16 @@
       id: "sbk_undercover_recruitment",
       title: L("🕵️ ВЕРБУВАННЯ СБК: ПОЗИВНИЙ «КОРДОН-7»", "🕵️ SBK RECRUITMENT: CALLSIGN 'BORDER-7'"),
       desc: L(
-        "Майор СБК «Тихий» заходить у будку через службовий вхід і кладе на стіл чорне посвідчення:\n«Інспекторе, ти взяв уже двох серйозних порушників. Нам потрібна своя негласна людина прямо в будці, під носом у Пал Палича та контрабандистів.\n\nПідписуй згоду як Негласний оперативник «Кордон-7»: отримуєш +5 500 🪙 окладу щоранку, +1 500 🪙 премії за кожного шпигуна, імунітет від доган Палича та -35% ціни на «Кришу»! Для легенди можеш брати конверти, але не доводь НАБК до обшуків!»",
-        "SBK Major 'Quiet' enters the booth and places a black folder on your desk:\n'Inspector, you have sharp eyes. Sign on as Undercover Agent Border-7: earn +5,500 🪙 covert pay every morning, +1,500 🪙 extra bounty per spy, protection from Palych's reprimands & -35% Krysha cost!'"
+        "Майор СБК «Тихий» заходить у будку через службовий вхід і кладе на стіл чорне посвідчення:\n«Інспекторе, ти взяв уже не одного серйозного порушника. Нам потрібна своя негласна людина прямо в будці, під носом у Пал Палича та контрабандистів.\n\nПідписуй згоду як Негласний оперативник «Кордон-7»: отримуєш +2 200 🪙 окладу щоранку, +600 🪙 премії за кожного шпигуна, імунітет від доган Палича та -35% ціни на «Кришу»! Для легенди можеш брати конверти, але не доводь НАБК до обшуків!»",
+        "SBK Major 'Quiet' enters the booth and places a black folder on your desk:\n'Inspector, you have sharp eyes. Sign on as Undercover Agent Border-7: earn +2,200 🪙 covert pay every morning, +600 🪙 extra bounty per spy, protection from Palych's reprimands & -35% Krysha cost!'"
       ),
       portrait: { gender: "M", skinTone: 0, faceShape: 2, hairStyle: 4, hairColor: 0, facialHair: 0, glasses: 2, headwear: 4, scarOrDetail: 0, expression: 0, specialId: "NONE" },
       options: [
         {
           id: "accept_sbk_agent",
-          label: L("🕵️ Стати негласним агентом СБК «Кордон-7»! (+2 500 🪙 +350 💵)", "🕵️ Become Undercover Agent 'Border-7'! (+2,500 🪙 +350 💵)"),
-          outcome: L("Ти підписав таємну угоду! Тепер ти негласний агент СБК «Кордон-7» (ціль: 4 агенти)!", "You signed the covert agreement! Hunt 4 enemy operatives!"),
-          moneyDelta: 2500, usdDelta: 350, timeDelta: 15, riskDelta: -15, sbkDelta: 20, tolikDelta: 0, palychDelta: 0, moraleDelta: 10,
+          label: L("🕵️ Стати негласним агентом СБК «Кордон-7»! (+1 800 🪙 +150 💵)", "🕵️ Become Undercover Agent 'Border-7'! (+1,800 🪙 +150 💵)"),
+          outcome: L("Ти підписав таємну угоду! Тепер ти негласний агент СБК «Кордон-7» (ціль: 4 небезпечні цілі)!", "You signed the covert agreement! Hunt 4 high-value operatives!"),
+          moneyDelta: 1800, usdDelta: 150, timeDelta: 15, riskDelta: -15, sbkDelta: 15, tolikDelta: 0, palychDelta: 0, moraleDelta: 10,
           onSelect: () => { state.isUndercoverSbkAgent = true; unlockDiscovery("SERV_SBK_AGENT"); }
         },
         {
@@ -1399,22 +1479,22 @@
       id: "sbk_colonel_climax",
       title: L("🎖️ СПЕЦОПЕРАЦІЯ УСПІШНА: ПОГОНИ ПОЛКОВНИКА СБК!", "🎖️ OPERATION COMPLETE: SBK COLONEL PROMOTION!"),
       desc: L(
-        "Ти ліквідував цілу мережу шпигунів та контрабандистів, працюючи під прикриттям! Майор «Тихий» особисто вручає тобі коробку з погонами Полковника СБК та премію 6 500 🪙:\n\n«Агенте «Кордон-7», штаб у захваті! Ти можеш залишитися на пункті Таємним Куратором кордону (ставка 1 800 🪙/людину + 12 000 🪙 щоранку), або переїхати в Центральний Штаб у Кийграді!»",
-        "You dismantled the spy ring while undercover! Major 'Quiet' hands you Colonel's epaulets and a 6,500 🪙 reward:\n\n'Stay at the checkpoint as Secret Sector Commander (1,800 🪙/traveler + 12,000 🪙/day) or transfer to Central HQ!'"
+        "Ти ліквідував цілу мережу шпигунів та контрабандистів, працюючи під прикриттям! Майор «Тихий» особисто вручає тобі коробку з погонами Полковника СБК та премію 4 000 🪙:\n\n«Агенте «Кордон-7», штаб у захваті! Ти можеш залишитися на пункті Таємним Куратором кордону (ставка від 1 300 🪙/людину + 4 500 🪙 щоранку), або переїхати в Центральний Штаб у Кийграді!»",
+        "You dismantled the spy ring while undercover! Major 'Quiet' hands you Colonel's epaulets and a 4,000 🪙 reward:\n\n'Stay at the checkpoint as Secret Sector Commander (1,300 🪙+/traveler + 4,500 🪙/day) or transfer to Central HQ!'"
       ),
       portrait: { gender: "M", skinTone: 0, faceShape: 2, hairStyle: 4, hairColor: 0, facialHair: 0, glasses: 2, headwear: 4, scarOrDetail: 0, expression: 1, specialId: "NONE" },
       options: [
         {
           id: "stay_undercover_colonel",
-          label: L("🕵️ Залишитися Таємним Полковником і ПРОДОВЖУВАТИ ГРУ! (+6 500 🪙 +1 500 💵)", "🕵️ Stay as Covert Colonel & KEEP PLAYING! (+6,500 🪙 +1,500 💵)"),
+          label: L("🕵️ Залишитися Таємним Полковником і ПРОДОВЖУВАТИ ГРУ! (+4 000 🪙 +400 💵)", "🕵️ Stay as Covert Colonel & KEEP PLAYING! (+4,000 🪙 +400 💵)"),
           outcome: L("Ти сховав погони полковника в сейф і залишився негласним господарем кордону!", "You locked the Colonel's epaulets in the safe and stayed as covert master of the border!"),
-          moneyDelta: 6500, usdDelta: 1500, timeDelta: 30, riskDelta: -40, sbkDelta: 30, tolikDelta: 0, palychDelta: 0, moraleDelta: 25
+          moneyDelta: 4000, usdDelta: 400, timeDelta: 30, riskDelta: -30, sbkDelta: 25, tolikDelta: 0, palychDelta: 0, moraleDelta: 20
         },
         {
           id: "retire_to_sbk_hq",
-          label: L("🏛️ Очолити Центральний Штаб у Кийграді (+1 500 💵 премії — Досьє)", "🏛️ Lead Central HQ in Kyihrad (+1,500 💵 — Epilogue Dossier)"),
+          label: L("🏛️ Очолити Центральний Штаб у Кийграді (+400 💵 премії — Досьє)", "🏛️ Lead Central HQ in Kyihrad (+400 💵 — Epilogue Dossier)"),
           outcome: L("Ти передаєш ключі від будки й від'їжджаєш до столиці!", "You depart for Kyihrad!"),
-          moneyDelta: 6500, usdDelta: 1500, timeDelta: 0, riskDelta: 0, sbkDelta: 30, tolikDelta: 0, palychDelta: 0, moraleDelta: 20,
+          moneyDelta: 4000, usdDelta: 400, timeDelta: 0, riskDelta: 0, sbkDelta: 25, tolikDelta: 0, palychDelta: 0, moraleDelta: 20,
           onSelect: () => { triggerEnding("SBK_SHADOW_COLONEL"); return true; }
         }
       ]
@@ -1527,16 +1607,16 @@
   function openCampaignMilestoneModal() {
     openEncounterModal({
       id: "campaign_day5_milestone",
-      title: L("🏁 П'ЯТИДЕННА ВАХТА ДОБІГЛА КІНЦЯ", "🏁 FIVE-DAY CAMPAIGN COMPLETE"),
+      title: L("🏁 СЕМИДЕННА ВАХТА ДОБІГЛА КІНЦЯ", "🏁 SEVEN-DAY CAMPAIGN COMPLETE"),
       desc: L(
-        "Твій первинний контракт інспектора завершено. Але це далеко не кінець!\n\nМожеш підбити підсумки вже зараз і побачити своє Персональне Досьє Долі — або перейти у Відкриту Кар'єру (День 6+ зі всіма грошима, купленими активами, контактами та підвищеннями) і будувати власну імперію далі!",
-        "Your 5-day campaign contract is complete! You can wrap up now for your Personalized Fate Dossier — or seamlessly transition into Open Career Mode (Day 6+ keeping all your cash, assets, ranks & story)!"
+        "Твій первинний 7-денний контракт інспектора завершено. Але це далеко не кінець!\n\nМожеш підбити підсумки вже зараз і побачити своє Персональне Досьє Долі — або перейти у Відкриту Кар'єру (День 8+ зі всіма грошима, купленими активами, контактами та підвищеннями) і будувати власну імперію далі!",
+        "Your 7-day campaign contract is complete! You can wrap up now for your Personalized Fate Dossier — or seamlessly transition into Open Career Mode (Day 8+ keeping all your cash, assets, ranks & story)!"
       ),
       portrait: { gender: "M", skinTone: 1, faceShape: 3, hairStyle: 0, hairColor: 0, facialHair: 0, glasses: 0, headwear: 4, scarOrDetail: 0, expression: 1, specialId: "PALYCH_BOSS" },
       options: [
         {
           id: "continue_open_career",
-          label: L("♾️ Продовжити службу у Відкритій Кар'єрі (День 6+ з усім майном!)", "♾️ Continue into Open Career Mode (Day 6+ with everything!)"),
+          label: L("♾️ Продовжити службу у Відкритій Кар'єрі (День 8+ з усім майном!)", "♾️ Continue into Open Career Mode (Day 8+ with everything!)"),
           outcome: L("Твоє бронювання продовжено на невизначений термін! Відкривається кар'єра далі.", "Contract extended! Open career awaits."),
           moneyDelta: 0, timeDelta: 0, riskDelta: 0, sbkDelta: 0, tolikDelta: 0, palychDelta: 0, moraleDelta: 5,
           onSelect: () => {
@@ -1547,7 +1627,7 @@
         },
         {
           id: "finish_campaign_now",
-          label: L("🏆 Підбити підсумки 5 днів (Відкрити Персональний Епілог)", "🏆 Finish Campaign (View Personal Epilogue Dossier)"),
+          label: L("🏆 Підбити підсумки 7 днів (Відкрити Персональний Епілог)", "🏆 Finish Campaign (View Personal Epilogue Dossier)"),
           outcome: L("Підбиваємо підсумки твоєї служби на шлагбаумі...", "Compiling your final border dossier..."),
           moneyDelta: 0, timeDelta: 0, riskDelta: 0, sbkDelta: 0, tolikDelta: 0, palychDelta: 0, moraleDelta: 0,
           onSelect: () => { triggerEnding(null); return true; }
@@ -1571,7 +1651,7 @@
           label: L("🚐 Виїхати до Поландії сьогодні вночі (Завершити історію)", "🚐 Cross into Polandia tonight (Trigger Escape Ending)"),
           outcome: L("Через дві години ти вже пив каву на заправці під Варшавкою.", "Two hours later you were sipping coffee outside Varshavka."),
           moneyDelta: 0, timeDelta: 0, riskDelta: 0, sbkDelta: 0, tolikDelta: 10, palychDelta: 0, moraleDelta: 10,
-          onSelect: () => { triggerEnding("ESCAPED_ABROAD"); return true; }
+          onSelect: () => { triggerEnding("ESCAPED_IN_VAN"); return true; }
         },
         {
           id: "stay_for_more",

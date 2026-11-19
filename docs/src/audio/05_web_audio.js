@@ -151,6 +151,19 @@
       setTimeout(() => this.playWarmNote(370, 0.11, 0.01, 750, 0.07, "triangle"), 180);
     }
 
+    playComboChime(combo) {
+      const step = Math.min(8, Math.max(0, (combo || 3) - 3));
+      const root = 523.25 * Math.pow(1.06, step);
+      this.playWarmNote(root, 0.14, 0.008, 1600, 0.055, "triangle");
+      setTimeout(() => this.playWarmNote(root * 1.25, 0.16, 0.01, 1800, 0.05, "sine"), 65);
+      setTimeout(() => this.playWarmNote(root * 1.5, 0.24, 0.01, 2000, 0.05, "sine"), 130);
+    }
+
+    playWarn() {
+      this.playWarmNote(311.13, 0.13, 0.01, 800, 0.065, "triangle");
+      setTimeout(() => this.playWarmNote(233.08, 0.22, 0.01, 650, 0.06, "triangle"), 125);
+    }
+
     playSiren() {
       try {
         this.ensureCtx();

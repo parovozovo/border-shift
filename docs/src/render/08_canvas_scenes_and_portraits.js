@@ -1332,6 +1332,68 @@
     });
 
     // UV Spotlight Beam over booth window + animated scan line!
+    const isEn = opts.lang === "EN";
+    const owned = opts.ownedAssets || [];
+
+    // Owned Booth Gear Props (rendered subtly around frame/counter)!
+    if (owned.includes("uv_spotlight")) {
+      ctx.save();
+      ctx.fillStyle = "#311B92";
+      ctx.fillRect(w * 0.56, 2, 22, 5);
+      ctx.fillStyle = opts.uvActive ? "#B388FF" : "#5E35B1";
+      ctx.fillRect(w * 0.57, 5, 18, 2.5);
+      ctx.restore();
+    }
+    if (owned.includes("parrot_kesha")) {
+      ctx.save();
+      const bob = isLive ? Math.sin(tSec * 3.5) * 1.3 : 0;
+      const px = w * 0.91, py = 14 + bob;
+      const hasGoldCage = owned.includes("addon_gold_cage");
+      ctx.strokeStyle = hasGoldCage ? "#FFD54F" : "#8D6E63";
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(px - 7, py + 7); ctx.lineTo(px + 7, py + 7); ctx.stroke();
+      ctx.fillStyle = "#4CAF50";
+      ctx.beginPath(); ctx.ellipse(px, py + 2, 4.5, 6, -0.15, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#FFEB3B";
+      ctx.beginPath(); ctx.arc(px, py - 4, 3.8, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#FF6D00";
+      ctx.beginPath(); ctx.moveTo(px - 3, py - 4); ctx.lineTo(px - 7, py - 2.5); ctx.lineTo(px - 3, py - 1.5); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = "#111";
+      ctx.beginPath(); ctx.arc(px - 1.2, py - 4.5, 0.9, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    }
+    if (owned.includes("espresso_machine")) {
+      ctx.save();
+      const ex = w * 0.89, ey = h - 22;
+      ctx.fillStyle = "#B0BEC5";
+      ctx.strokeStyle = "#37474F";
+      ctx.lineWidth = 1;
+      ctx.fillRect(ex, ey, 14, 16);
+      ctx.strokeRect(ex, ey, 14, 16);
+      ctx.fillStyle = "#263238";
+      ctx.fillRect(ex + 2, ey + 6, 10, 7);
+      ctx.fillStyle = "#FF5252";
+      ctx.fillRect(ex + 10, ey + 2, 2.2, 2.2);
+      if (isLive) {
+        const sOff = Math.sin(tSec * 4) * 1.5;
+        ctx.strokeStyle = "rgba(255,255,255,0.55)";
+        ctx.beginPath(); ctx.moveTo(ex + 6, ey - 1); ctx.lineTo(ex + 6 + sOff, ey - 7); ctx.stroke();
+      }
+      ctx.restore();
+    }
+    if (owned.includes("sbk_database_tablet")) {
+      ctx.save();
+      const tx = w * 0.84, ty = h - 13;
+      ctx.fillStyle = "#102027";
+      ctx.fillRect(tx, ty, 13, 9);
+      ctx.fillStyle = "#1976D2";
+      ctx.fillRect(tx + 1.5, ty + 1.5, 10, 6);
+      const pulseW = isLive ? 2 + ((tSec * 12) % 8) : 6;
+      ctx.fillStyle = "#64FFDA";
+      ctx.fillRect(tx + 2.5, ty + 3, pulseW, 1.5);
+      ctx.restore();
+    }
+
     if (opts.uvActive) {
       const uvGrad = ctx.createRadialGradient(w * 0.75, h * 0.55, 8, w * 0.75, h * 0.55, w * 0.55);
       uvGrad.addColorStop(0, "rgba(179, 136, 255, 0.34)");
@@ -1364,11 +1426,11 @@
       } else if (opts.storyTag === "FSM_SPY") {
         ctx.fillStyle = "rgba(255, 64, 129, 0.85)";
         ctx.font = "bold 10px monospace";
-        ctx.fillText("ФСМ-UV", w * 0.69, h * 0.82);
+        ctx.fillText(isEn ? "FSM-UV" : "ФСМ-UV", w * 0.69, h * 0.82);
       } else if (opts.storyTag === "INTEL_ALLY") {
         ctx.fillStyle = "#FFD54F";
         ctx.font = "bold 10px monospace";
-        ctx.fillText("🦅 ГУР-М", w * 0.69, h * 0.82);
+        ctx.fillText(isEn ? "🦅 GUR-M" : "🦅 ГУР-М", w * 0.69, h * 0.82);
       }
 
       if (opts.hasContraband) {
@@ -1426,7 +1488,7 @@
       ctx.fillRect(4, h - 42, 62, 14);
       ctx.fillStyle = "#FFF";
       ctx.font = "bold 9px sans-serif";
-      ctx.fillText(opts.hasContraband ? "🐕 ТАЙНИК!" : "🐕 ЧИСТО", 8, h - 32);
+      ctx.fillText(opts.hasContraband ? (isEn ? "🐕 STASH!" : "🐕 ТАЙНИК!") : (isEn ? "🐕 CLEAN" : "🐕 ЧИСТО"), 8, h - 32);
     }
 
     // ★ Shytomyr Unique Encounter Effects ★
@@ -1438,7 +1500,7 @@
       ctx.beginPath(); ctx.roundRect(4, 4, 82, 15, 4); ctx.fill(); ctx.stroke();
       ctx.fillStyle = "#FFE082";
       ctx.font = "bold 9px monospace";
-      ctx.fillText("🧦 М. ШИТОМИР", 8, 14.5);
+      ctx.fillText(isEn ? "🧦 SHYTOMYR" : "🧦 М. ШИТОМИР", 8, 14.5);
 
       if (opts.storyTag === "SHYTOMYR_COSMOS") {
         // Floating green plasma meteor sparks + orbit ring

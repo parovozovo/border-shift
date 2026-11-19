@@ -16,13 +16,13 @@
       idx: 2,
       title: L("⛓️ ФІГУРАНТ ГУЧНОЇ СПРАВИ НАБК", "⛓️ HIGH-PROFILE NABK DETAINEE"),
       subtitle: L("Спецназ із камерами вибив двері будки просто під час перерахунку «чайових».", "Anti-corruption tactical officers raided your booth right as you counted the envelopes."),
-      hint: L("Доведи ризик уваги НАБК до критичного рівня (80%+).", "Let NABK scrutiny climb into the red zone (80%+).")
+      hint: L("Доведи ризик уваги НАБК до критичного рівня (95%+).", "Let NABK scrutiny climb into the red zone (95%+).")
     },
     ALIKANTOVO_OLIGARCH: {
       idx: 3,
       title: L("🏖️ КОРОЛЬ КОРДОНУ — ВІЛЛА В АЛІКАНТОВО", "🏖️ BORDER OLIGARCH — VILLA IN ALIKANTOVO"),
       subtitle: L("Від скромного шлагбаума до власного басейну в Іспанщині з золотим паспортом у кишені.", "From a cold checkpoint booth to your own seafront pool in Spainia."),
-      hint: L("Накопич 3 000 🪙 і купи віллу в Алікантово в магазині активів.", "Save 3,000 🪙 and buy the Alikantovo Villa.")
+      hint: L("Накопич 42 000 💵 і купи віллу в Алікантово в магазині активів.", "Save 42,000 💵 and buy the Alikantovo Villa.")
     },
     ESCAPED_IN_VAN: {
       idx: 4,
@@ -34,7 +34,7 @@
       idx: 5,
       title: L("👑 БАРОН ЗАХІДНОЇ МИТНИЦІ", "👑 BARON OF WESTERN CUSTOMS"),
       subtitle: L("Ти викупив посаду начальника КПП — тепер Пал Палич стоїть на шлагбаумі під дощем.", "You bought out the Checkpoint Chief's chair — now Palych freezes at the barrier."),
-      hint: L("Купи «Беху Х5», квартиру в Кийграді та май 1 500 🪙 кешу.", "Own Beha X5, Kyihrad Penthouse, and 1,500 🪙 cash.")
+      hint: L("Купи «Беху Х5», пентхаус у Кийграді та май запас кешу (25 000 🪙 або 1 500 💵).", "Own Beha X5, Kyihrad Penthouse, and cash reserves (25,000 🪙 or 1,500 💵).")
     },
     BUKOVEL_HETMAN: {
       idx: 6,
@@ -70,7 +70,7 @@
       idx: 11,
       title: L("🚕 КОМЕРЦІЙНИЙ ПАРТНЕР СИНДИКАТУ", "🚕 LOGISTICS PARTNER OF THE SYNDICATE"),
       subtitle: L("Не звільнившись із кордону, ти став тіньовим диспетчером усіх бусів Толіка.", "Still at the gate on paper, you became the shadow dispatcher for Tolik's entire fleet."),
-      hint: L("Підніми репутацію у Толіка до 70+ та накопич 800 🪙.", "Reach 70+ Tolik rep with 800 🪙+ cash.")
+      hint: L("Підніми репутацію у Толіка до 70+ та накопич 1 500 💵 (або 25 000 🪙).", "Reach 70+ Tolik rep with 1,500 💵 (or 25,000 🪙).")
     },
     PALYCH_GODSON: {
       idx: 12,
@@ -214,21 +214,21 @@
     if (st.activeEndingId && ARCHETYPE_CATALOG[st.activeEndingId]) {
       return st.activeEndingId;
     }
-    if (st.nabkRisk >= 80) return "NABK_PRISONER";
+    if (st.nabkRisk >= 95) return "NABK_PRISONER";
     if (st.shytomyrBrotherhoodUnlocked && st.nabkRisk < 85) return "SHYTOMYR_MAYOR";
-    if (st.sbkColonelPromoted || (st.isUndercoverSbkAgent && st.spiesCaughtAsAgent >= 4 && st.nabkRisk < 75)) return "SBK_SHADOW_COLONEL";
     if (st.ownedAssets.includes("spain_villa")) return "ALIKANTOVO_OLIGARCH";
-    if (st.escapeFund >= (st.isSandbox ? 3600 : 2400) && st.tolikRep >= (st.isSandbox ? 65 : 55)) return "ESCAPED_IN_VAN";
-    if (st.ownedAssets.includes("euro_bmw") && st.ownedAssets.includes("kyivhrad_flat") && st.money >= 1500) return "CUSTOMS_BARON";
+    if (st.escapeFund >= getEscapeTarget() && st.tolikRep >= getEscapeTolikRep()) return "ESCAPED_IN_VAN";
+    if (st.isUndercoverSbkAgent && (st.totalCareerBribes || 0) > 0) return "DOUBLE_AGENT_MASTER";
+    if (st.sbkColonelPromoted || (st.isUndercoverSbkAgent && st.spiesCaughtAsAgent >= 4 && st.nabkRisk < 75)) return "SBK_SHADOW_COLONEL";
+    if (st.ownedAssets.includes("euro_bmw") && st.ownedAssets.includes("kyivhrad_flat") && (st.money >= 25000 || st.usd >= 1500)) return "CUSTOMS_BARON";
     if (st.ownedAssets.includes("carpathian_chalet")) return "BUKOVEL_HETMAN";
     if (st.ownedAssets.includes("cyprus_offshore")) return "OFFSHORE_CRYPTO_GHOST";
-    if (st.ownedAssets.includes("shawarma_kiosk") && st.money >= 950) return "SHAWARMA_EMPEROR";
-    if (st.isUndercoverSbkAgent && st.shiftBribesTotal > 0) return "DOUBLE_AGENT_MASTER";
+    if (st.ownedAssets.includes("shawarma_kiosk") && st.money >= 20000) return "SHAWARMA_EMPEROR";
     if (st.totalCareerDetained >= 5 && st.sbkRep >= 68) return "IRON_CERBERUS";
-    if (st.tolikRep >= 70 && st.money >= 800) return "TOLIK_NIGHT_PARTNER";
+    if (st.tolikRep >= 70 && (st.usd >= 1500 || st.money >= 25000)) return "TOLIK_NIGHT_PARTNER";
     if (st.palychRep >= 75 && st.nabkRisk < 65) return "PALYCH_GODSON";
-    if (st.familyMorale >= 82 && st.nabkRisk < 38 && st.shiftBribesTotal === 0) return "BORDER_ROBIN_HOOD";
-    if (st.sbkRep >= 55 && st.nabkRisk < 55 && st.money >= 250) return "HONEST_INSPECTOR";
+    if (st.familyMorale >= 82 && st.nabkRisk < 38 && (st.totalCareerBribes || 0) === 0) return "BORDER_ROBIN_HOOD";
+    if (st.sbkRep >= 55 && st.nabkRisk < 55 && st.money >= 5000) return "HONEST_INSPECTOR";
     return "WRITTEN_OFF_RESERVE";
   }
 
@@ -275,10 +275,10 @@
     } else if (has("espresso_machine") || has("uv_endoscope") || has("sbk_database_tablet")) {
       assetIdx = 5;
       assetText = L(
-        `Уся зарплатня пішла не в люкс, а у професійне спорядження будки: кавомашину «ДеЛонгі», сканери й базу розвідки (${st.money} 🪙 готівки).`,
+        `Уся зарплатня пішла не в люкс, а у професійне спорядження будки: кавомашину «Еспресо-Магнат», сканери й базу розвідки (${st.money} 🪙 готівки).`,
         `You invested in booth tech — espresso gear, scanners, and intel tablets (${st.money} 🪙 left on hand).`
       );
-    } else if (st.money >= 1500) {
+    } else if (st.money >= 35000 || st.usd >= 1500) {
       assetIdx = 6;
       assetText = L(
         `Ти не витрачався на показові понти й назбирав солідний запас готівки (${st.money} 🪙) у банці під підлогою.`,

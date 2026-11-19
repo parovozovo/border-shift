@@ -1,5 +1,5 @@
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v8.7";
+  const BUILD_VERSION = "v8.8";
   const DAILY_OBNAL_LIMIT_USD = 5000;
   let confirmResetArmed = false;
 
@@ -47,7 +47,7 @@
       id: "SBK_SHIELD",
       icon: "🛡️",
       title: L("Медаль СБК «Чистий Рубіж»", "SBK Medal 'Clean Frontier'"),
-      desc: L("Затримай 3+ шпигунів або контрабандистів — назавжди +600 🪙 до премії СБК за кожен арешт!", "Detain 3+ spies/smugglers — permanently +600 🪙 per SBK arrest!")
+      desc: L("Затримай 3+ шпигунів або контрабандистів — назавжди +400 🪙 до премії СБК за кожен арешт!", "Detain 3+ spies/smugglers — permanently +400 🪙 per SBK arrest!")
     },
     {
       id: "GUR_FALCON",
@@ -59,7 +59,7 @@
       id: "VSP_GUARD",
       icon: "🎖️",
       title: L("Подяка ВСП «Залізна Варта»", "VSP 'Iron Guard' Commendation"),
-      desc: L("Викрий та затримай порушника з подвійним громадянством — +800 🪙 за затримання ухилянтів!", "Catch a dual-citizen evader — +800 🪙 bounty on evader arrests!")
+      desc: L("Викрий та затримай порушника з подвійним громадянством — +600 🪙 за затримання ухилянтів!", "Catch a dual-citizen evader — +600 🪙 bounty on evader arrests!")
     },
     {
       id: "NABK_CLEAN",
@@ -75,42 +75,42 @@
       icon: "🕵️",
       title: L("СБК: Таємний агент «Кордон-7»", "SBK: Covert Agent 'Border-7'"),
       desc: L("Підписано контракт негласного оперативника СБК під носом у Палича.", "Signed covert SBK operative contract right under Palych's nose."),
-      hint: L("Затримай 2+ серйозних порушників і прийми пропозицію Майора «Тихого».", "Detain 2+ serious violators and accept Major 'Quiet's offer.")
+      hint: L("З Дня 3+, затримай 5+ порушників при репутації СБК ≥ 65 і прийми пропозицію Майора «Тихого».", "From Day 3+, detain 5+ violators with SBK rep ≥ 65 and accept Major 'Quiet's offer.")
     },
     {
       id: "SERV_SBK_COLONEL",
       icon: "🎖️",
       title: L("СБК: Полковник під прикриттям", "SBK: Undercover Colonel"),
-      desc: L("Викрито 4 агентів на службі «Кордон-7» — отримано погони полковника СБК!", "Caught 4 operatives as 'Border-7' — earned SBK Colonel epaulets!"),
-      hint: L("Будучи агентом «Кордон-7», затримай 4 шпигунів або контрабандистів.", "As Agent 'Border-7', detain 4 spies or smugglers.")
+      desc: L("Викрито 4 небезпечних агентів чи VIP-утікачів на службі «Кордон-7» — отримано погони полковника СБК!", "Caught 4 high-value operatives as 'Border-7' — earned SBK Colonel epaulets!"),
+      hint: L("Будучи агентом «Кордон-7», затримай 4 небезпечних шпигунів, диверсантів або розшукуваних VIP.", "As Agent 'Border-7', detain 4 spies, saboteurs or wanted VIPs.")
     },
     {
       id: "SERV_GUR_FINALE",
       icon: "🦅",
       title: L("ГУР-М: Операція «Перехват-7»", "GUR-M: Operation 'Intercept-7'"),
       desc: L("Успішна спільна спецоперація СБК та ГУР-М проти кортежу резидента ФСМ.", "Joint SBK & GUR-M operation against an armed FSM convoy."),
-      hint: L("Заверши 5-й день із високою репутацією СБК (≥ 70).", "Finish Day 5 with high SBK reputation (≥ 70).")
+      hint: L("Заверши 7-й день із високою репутацією СБК (≥ 70).", "Finish Day 7 with high SBK reputation (≥ 70).")
     },
     {
       id: "SERV_TOLIK_FINALE",
       icon: "🚐",
       title: L("Синдикат Толіка: «Захід-Експрес»", "Tolik Syndicate: 'West-Express'"),
       desc: L("Вирішальна нічна справа контрабандистів на 3 фури до Варшавки.", "Decisive midnight smuggling convoy finale on the Varshavka route."),
-      hint: L("Заверши 5-й день із високою довірою Толіка (≥ 60).", "Finish Day 5 with high Tolik trust (≥ 60).")
+      hint: L("Заверши 7-й день із високою довірою Толіка (≥ 60).", "Finish Day 7 with high Tolik trust (≥ 60).")
     },
     {
       id: "SERV_PALYCH_FINALE",
       icon: "🧢",
       title: L("Пал Палич: «Великий кошторис»", "Palych: 'The Grand Budget'"),
       desc: L("Пройдено фінальну перевірку генераторного бюджету перед ревізією з Києва.", "Cleared the grand generator-fund finale before the Kyiv audit."),
-      hint: L("Заверши 5-й день із довірою Пал Палича (≥ 65).", "Finish Day 5 with Palych reputation (≥ 65).")
+      hint: L("Заверши 7-й день із довірою Пал Палича (≥ 65).", "Finish Day 7 with Palych reputation (≥ 65).")
     },
     {
       id: "SERV_HONEST_FINALE",
       icon: "🏅",
       title: L("ДПСК: Державна подяка «Чесний рубіж»", "SBGS: 'Honorable Service' Commendation"),
       desc: L("Отримано офіційну подяку з Києва за дисципліну та порядок на КПП.", "Received official Kyiv commendation for honor and discipline."),
-      hint: L("Заверши 5-й день без перекосу в кримінал чи корупцію.", "Finish Day 5 without leaning into corruption or smuggling.")
+      hint: L("Заверши 7-й день без перекосу в кримінал чи корупцію.", "Finish Day 7 without leaning into corruption or smuggling.")
     },
     {
       id: "DISC_NABK_STING",
@@ -229,6 +229,12 @@
       requiresDetention: false,
       title: L("Супровід без присутності підопічного в авто", "Guardian exiting without disabled relative present"),
       hint: L("Виявлено: у салоні авто відсутня особа, яку супроводжують!", "Finding: accompanied relative is missing from the vehicle!")
+    },
+    MISSING_DAILY_DOC: {
+      code: "MISSING_DAILY_DOC",
+      requiresDetention: false,
+      title: L("Відсутній обов'язковий документ дня", "Missing Mandatory Daily Document"),
+      hint: L("Виявлено: відсутня обов'язкова страховка або транзитний талон за указом дня.", "Finding: missing required daily insurance or transit permit.")
     }
   };
 
@@ -436,21 +442,21 @@
       reqType: "shytomyr",
       reqCount: 3,
       title: L("🧦 Земляки на старті", "🧦 Shytomyr Welcome Fund"),
-      desc: L("Старт будь-якого нового забігу з +300 🪙 у кишені.", "Start every new run with +300 🪙 cash.")
+      desc: L("Старт будь-якого нового забігу з +1 200 🪙 у кишені.", "Start every new run with +1,200 🪙 cash.")
     },
     {
       id: "SHYTOMYR_THERMOS",
       reqType: "shytomyr",
       reqCount: 6,
       title: L("☕ Термос по-шитомирськи", "☕ Shytomyr Thermos"),
-      desc: L("+25 🪙 до кожних чайових за каву у будці.", "+25 🪙 bonus to every coffee tip in the booth.")
+      desc: L("+50 🪙 до кожних чайових за каву у будці.", "+50 🪙 bonus to every coffee tip in the booth.")
     },
     {
       id: "SHYTOMYR_CROWN",
       reqType: "shytomyr",
       reqCount: 12,
       title: L("👑 Орден Шитомира (12/12)", "👑 Order of Shytomyr (12/12)"),
-      desc: L("Старт забігу з +800 🪙 та -15% стартового ризику НАБК!", "Start every run with +800 🪙 and -15% starting NABK risk!")
+      desc: L("Старт забігу з +3 200 🪙 (додатково) та -15% стартового ризику НАБК!", "Start every run with +3,200 🪙 extra and -15% starting NABK risk!")
     },
     {
       id: "TITLE_VETERAN_1",

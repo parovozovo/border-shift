@@ -1278,3 +1278,83 @@ dialog::backdrop {
   outline: 2px solid #FF5252;
   background-color: rgba(255, 82, 82, 0.12);
 }
+
+/* === V8.8 COMBO, RULE STRIP, DESK BADGES & SHIFT GRADE === */
+.combo-pill {
+  display: inline-block;
+  background: linear-gradient(135deg, #FF6D00 0%, #FFB300 100%);
+  color: #1A1208;
+  font-weight: 900;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(255, 179, 0, 0.45);
+}
+
+.daily-rule-strip {
+  background: rgba(224, 177, 69, 0.14);
+  border: 1px solid rgba(224, 177, 69, 0.55);
+  color: #FFE082;
+  font-size: 10.5px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.desk-doc-badge {
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  font-size: 11px;
+  line-height: 1;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.desk-doc-badge.seen {
+  background: rgba(46, 125, 50, 0.25);
+}
+
+.desk-doc-badge.spot {
+  background: rgba(198, 40, 40, 0.85);
+  color: #FFF;
+}
+
+.desk-doc-item.doc-spotted {
+  box-shadow: 0 0 0 2px #FF5252, 0 6px 14px rgba(255, 82, 82, 0.35);
+}
+
+.desk-doc-item.doc-checked {
+  opacity: 0.94;
+}
+
+.shift-grade-badge {
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: 900;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1.5px solid #E0B145;
+  background: #242C27;
+  color: #FFE082;
+}
+
+.shift-grade-badge.grade-S {
+  background: linear-gradient(135deg, #FF8F00 0%, #FFD54F 100%);
+  color: #1A1208;
+  border-color: #FFF8E1;
+  box-shadow: 0 0 12px rgba(255, 213, 79, 0.5);
+}
+
+.shift-grade-badge.grade-A {
+  background: #1B5E20;
+  border-color: #81C784;
+  color: #E8F5E9;
+}
+
+.shift-grade-badge.grade-D {
+  background: #6A1B1B;
+  border-color: #EF5350;
+  color: #FFCDD2;
+}

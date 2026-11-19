@@ -112,7 +112,7 @@
       icon: "🦺",
       title: L("Тактичний бронежилет ДПСК «Кордон-Про»", "Tactical Armor Vest 'Border-Pro'"),
       subtitle: L("Солідний вигляд: -25% штрафів за помилки (діє найкращий захист) + 10 СБК", "Authority look: -25% protocol fines (best-only) & +10 SBK rep"),
-      cost: 55000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 5
+      cost: 55000, passiveIncome: 0, passiveUsd: 0, dailyRisk: 0, tolikBoost: 0, palychBoost: 5, moraleBoost: 5, sbkBoost: 10
     },
     {
       id: "steppe_ebike",
@@ -656,7 +656,7 @@
         },
         {
           id: "case_peek",
-          label: L("💰 Тихо відкрити кейс (Ризик! +900 💵 або -20с і +15% НАБК)", "💰 Peek inside quietly (+900 💵 or -20s & +15% NABK)"),
+          label: L("💰 Тихо відкрити кейс (+900 💵, -10с, +15% НАБК)", "💰 Peek inside quietly (+900 💵, -10s, +15% NABK)"),
           outcome: L("У кейсі лежало 900 💵 готівкою — ти встиг забрати до приїзду охорони!", "900 💵 cash inside — pocketed before security returned!"),
           moneyDelta: 0, usdDelta: 900, timeDelta: -10, riskDelta: 15, sbkDelta: -5, tolikDelta: 0, palychDelta: 0, moraleDelta: 0
         }

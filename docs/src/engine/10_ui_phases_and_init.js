@@ -248,7 +248,7 @@
             "#AB47BC", "🎖️",
             L("ВСП та Реєстр «Облік+»", "VSP & 'Oblik+' Registry"),
             L("Військовий правопорядок • Виїзд чоловіків • QR-код", "Military Law • Male Exit Rules • QR Scans"),
-            L("Контролює законність виїзду військовозобов'язаних чоловіків та волонтерів.\n• Звіряй QR у «Облік+» кнопкою сканування, перевіряй довідки «Шлях» та документи супроводу.\n• Затримання ухилянтів з подвійним паспортом: подяка ВСП і +800 🪙 бонусу.", "Enforces martial law exit rules.\n• Scan QR in 'Oblik+' manually and check exemption permits.\n• Catching dual-citizen evaders unlocks the VSP Guard bonus (+800 🪙 per evader).")
+            L("Контролює законність виїзду військовозобов'язаних чоловіків та волонтерів.\n• Звіряй QR у «Облік+» кнопкою сканування, перевіряй довідки «Шлях» та документи супроводу.\n• Затримання ухилянтів з подвійним паспортом: подяка ВСП і +600 🪙 бонусу.", "Enforces martial law exit rules.\n• Scan QR in 'Oblik+' manually and check exemption permits.\n• Catching dual-citizen evaders unlocks the VSP Guard bonus (+600 🪙 per evader).")
           ),
           renderOnboardCard(
             "#EF5350", "⚖️",
@@ -674,7 +674,7 @@
             </div>
           </div>
           <div class="row-between" style="font-size:11px;color:#B0BEC5;">
-            <span style="color:${state.nabkRisk >= 60 || state.underSurveillance || state.reprimands > 0 ? "#FF5252" : "#B0BEC5"};">НАБК:${state.nabkRisk}%${state.reprimands > 0 ? ` | ⚠️${state.reprimands}/3` : ""}${state.underSurveillance ? " | 👁️НАГЛЯД" : ""}${state.isUndercoverSbkAgent ? ` | 🕵️(${state.spiesCaughtAsAgent}/4)` : ""}</span>
+            <span style="color:${state.nabkRisk >= 60 || state.underSurveillance || state.reprimands > 0 ? "#FF5252" : "#B0BEC5"};">НАБК:${state.nabkRisk}%${state.reprimands > 0 ? ` | ⚠️${state.reprimands}/3` : ""}${state.underSurveillance ? " | 👁️НАГЛЯД" : ""}${state.isUndercoverSbkAgent ? ` | 🕵️(${state.spiesCaughtAsAgent}/4)` : ""}${(state.shiftCombo || 0) >= 2 ? ` | <span class="combo-pill">🔥 ${state.shiftCombo}${state.shiftCombo >= 8 ? " (x1.5)" : (state.shiftCombo >= 5 ? " (x1.3)" : (state.shiftCombo >= 3 ? " (x1.15)" : ""))}</span>` : ""}</span>
             <span>${tr(L("Палич", "Palych"), state.lang)}:${state.palychRep} | ${tr(L("Толік", "Tolik"), state.lang)}:${state.tolikRep} | СБК:${state.sbkRep}</span>
           </div>
         </header>
@@ -740,7 +740,7 @@
                 const extraStyle = isChecked
                   ? "opacity:0.55;border-color:#546E7A;color:#90A4AE;"
                   : (hintScents ? "border-color:#FF5252;color:#FFE082;" : (uvZoneHit ? "border-color:#00E5FF;color:#80F9FF;box-shadow:0 0 8px rgba(0,229,255,0.28);" : ""));
-                return `<button type="button" class="btn-outline trunk-zone-btn" data-zone="${z.id}" ${isChecked ? "disabled" : ""} style="padding:6px 4px;font-size:11px;${extraStyle}">${z.icon} ${tr(z.name, state.lang)}${badge}</button>`;
+                return `<button type="button" id="trunk-zone-${z.id}" class="btn-outline trunk-zone-btn" data-zone="${z.id}" ${isChecked ? "disabled" : ""} style="padding:6px 4px;font-size:11px;${extraStyle}">${z.icon} ${tr(z.name, state.lang)}${badge}</button>`;
               }).join("")}
             </div>
             ${state.zoneCheckMsg ? `<div style="font-size:11px;color:#FFE082;font-weight:700;">🔎 ${tr(state.zoneCheckMsg, state.lang)}</div>` : ""}
@@ -762,6 +762,16 @@
         })() : ""}
 
         <section class="desk-area ${state.inspectMode ? "inspect-mode" : ""}">
+          ${(() => {
+            const dr = state.daySpec && state.daySpec.dailyRule;
+            const reqQr = state.daySpec && state.daySpec.requireOblikQr;
+            const badges = [];
+            if (dr === "MED_INSURANCE") badges.push(tr(L("🏥 ВИЇЗД: обов'язкова страховка", "🏥 EXIT: Med Insurance required"), state.lang));
+            else if (dr === "TRANSIT_PERMIT") badges.push(tr(L("🛣️ ВИЇЗД: транзитний талон", "🛣️ EXIT: Transit Permit required"), state.lang));
+            else if (dr === "STRICT_CLONES") badges.push(tr(L("🚗 Звіряйте авто й номери!", "🚗 Check cloned cars & plates!"), state.lang));
+            if (reqQr) badges.push(tr(L("📱 Чол. 18–60: QR «Облік+»", "📱 M 18–60: Oblik+ QR"), state.lang));
+            return badges.length > 0 ? `<div class="daily-rule-strip">${badges.join(" • ")}</div>` : "";
+          })()}
           ${(() => {
             const titleStr = (doc.title && doc.title.uk ? doc.title.uk : "").toUpperCase();
             let docTheme = "doc-theme-cert";
@@ -790,6 +800,7 @@
               headerBanner = tr(L("📄 ОФІЦІЙНИЙ БЛАНК ДПСК", "📄 OFFICIAL BORDER FORM"), state.lang);
             }
             if (state.docFolded) {
+              const openedArr = state.openedDocIndices || [];
               return `
                 <div class="desk-table-surface" id="desk-table-grid">
                   ${t.documents.map((dItem, dIdx) => {
@@ -805,8 +816,16 @@
                     } else if (dItem.type === "VEHICLE_CUSTOMS") {
                       bg = "#FFF3CD"; fg = "#3E2723"; bdr = "#B7811E"; tag = "🚘 ДЕКЛАРАЦІЯ";
                     }
+                    const hasSpotted = (dItem.fields && dItem.fields.some(f => f.disc && state.spottedCodes.includes(f.disc.code)))
+                      || (dItem.sealDisc && state.spottedCodes.includes(dItem.sealDisc.code));
+                    const isChecked = openedArr.includes(dIdx);
+                    const stateCls = hasSpotted ? " doc-spotted" : (isChecked ? " doc-checked" : "");
+                    const cornerBadge = hasSpotted
+                      ? `<span class="desk-doc-badge spot">❗</span>`
+                      : (isChecked ? `<span class="desk-doc-badge seen">👁️</span>` : "");
                     return `
-                      <button type="button" id="desk-doc-${dIdx}" class="desk-doc-item" data-doc-idx="${dIdx}" style="background:${bg};color:${fg};border:1.5px solid ${bdr};">
+                      <button type="button" id="desk-doc-${dIdx}" class="desk-doc-item${stateCls}" data-doc-idx="${dIdx}" style="background:${bg};color:${fg};border:1.5px solid ${bdr};">
+                        ${cornerBadge}
                         <span style="font-size:10px;font-weight:900;opacity:0.85;">${tag}</span>
                         <span style="font-size:12px;font-weight:800;line-height:1.2;">${tr(dItem.title, state.lang)}</span>
                         <span style="font-size:10px;opacity:0.75;">${tr(L("Натисни, щоб відкрити →", "Click to open →"), state.lang)}</span>
@@ -981,6 +1000,8 @@
         hasPassenger: t.hasPassenger,
         storyTag: t.storyTag,
         shytomyrRelics: state.shytomyrRelics || [],
+        ownedAssets: state.ownedAssets || [],
+        lang: state.lang,
         hasCloneCar: t.violations.some(v => v.code === "VEHICLE_MISMATCH"),
         isLive: true
       };
@@ -1003,6 +1024,8 @@
           boothSceneOpts.reactionState = state.reactionState;
           boothSceneOpts.snifferActive = state.vehicleInspected;
           boothSceneOpts.shytomyrRelics = state.shytomyrRelics || [];
+          boothSceneOpts.ownedAssets = state.ownedAssets || [];
+          boothSceneOpts.lang = state.lang;
           drawBoothScene(boothCanvasEl, boothSceneOpts);
           const oblikClk = document.getElementById("oblik-live-clock");
           if (oblikClk && !state.oblikIsScreenshot) {
@@ -1171,7 +1194,10 @@
       document.querySelectorAll(".desk-doc-item").forEach(itemBtn => {
         itemBtn.addEventListener("click", () => {
           audio.playTap();
-          state.selectedDocIdx = Number(itemBtn.getAttribute("data-doc-idx")) || 0;
+          const dIdx = Number(itemBtn.getAttribute("data-doc-idx")) || 0;
+          state.selectedDocIdx = dIdx;
+          if (!state.openedDocIndices) state.openedDocIndices = [];
+          if (!state.openedDocIndices.includes(dIdx)) state.openedDocIndices.push(dIdx);
           state.docFolded = false;
           state.justUnfoldedDoc = true;
           render();
@@ -1200,7 +1226,8 @@
         FAKE_ISSUER_SEAL: L("🔦 UV: ФАЛЬШИВИЙ ШТАМП", "🔦 UV: FAKE WATERMARK"),
         AGE_RESTRICTION_NO_PERMIT: L("🔦 UV: ПРАВКА ПІДСТАВИ", "🔦 UV: ALTERED BASIS"),
         CHILDREN_AGE_FRAUD: L("🔦 UV: ПЕРЕПИСАНИЙ ВІК", "🔦 UV: ALTERED AGE"),
-        GUARDIAN_NO_PASSENGER: L("🔦 UV: КУСТАРНИЙ БЛАНК", "🔦 UV: FAKE FORM TRACE")
+        GUARDIAN_NO_PASSENGER: L("🔦 UV: КУСТАРНИЙ БЛАНК", "🔦 UV: FAKE FORM TRACE"),
+        MISSING_DAILY_DOC: L("🔦 UV: ВІДСУТНІЙ ШТАМП УКАЗУ", "🔦 UV: MISSING DECREE STAMP")
       };
 
       const fieldsList = document.getElementById("doc-fields-list");
@@ -1275,8 +1302,8 @@
           if (!uvSecret || state.uvSecretClaimed) return;
           audio.playApprove();
           state.uvSecretClaimed = true;
-          if (uvSecret.uah > 0) state.money += uvSecret.uah;
-          if (uvSecret.usd > 0) state.usd += uvSecret.usd;
+          if (uvSecret.uah > 0) { state.money += uvSecret.uah; state.shiftExtrasEarned = (state.shiftExtrasEarned || 0) + uvSecret.uah; }
+          if (uvSecret.usd > 0) { state.usd += uvSecret.usd; state.shiftEarnedUsd = (state.shiftEarnedUsd || 0) + uvSecret.usd; }
           if (uvSecret.sbkDelta) state.sbkRep = Math.max(0, Math.min(100, state.sbkRep + uvSecret.sbkDelta));
           if (uvSecret.riskDelta) state.nabkRisk = Math.max(0, Math.min(100, state.nabkRisk + uvSecret.riskDelta));
           if (uvSecret.palychDelta) state.palychRep = Math.max(0, Math.min(100, state.palychRep + uvSecret.palychDelta));
@@ -1386,6 +1413,7 @@
           const sockTip = (state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_KEVLAR_SOCKS")) ? 100 : 0;
           const tip = Math.round(t.coffeeTip * 2 * cMult) + (has("thermos_tray") ? 80 : 0) + (has("espresso_machine") ? 150 : 0) + (has("parrot_kesha") ? 150 : 0) + (has("addon_syrup_bar") ? 120 : 0) + (has("addon_gold_cage") ? 100 : 0) + sockTip + (meta.coffeeTipBonus * 2);
           state.money += tip;
+          state.shiftExtrasEarned = (state.shiftExtrasEarned || 0) + tip;
           state.lastFeedback = {
             ok: true,
             title: L("☕ ЧАЙОВІ НА КАВУ", "☕ COFFEE TIP"),
@@ -1491,20 +1519,26 @@
         bribeBtn.addEventListener("click", () => {
           audio.playBribe();
           state.bribeAccepted = true;
-          if (bribeInfo.currency === "USD") {
-            state.usd += bribeInfo.amount;
-            state.shiftBribesTotal += bribeInfo.amount * USD_UAH_RATE;
-          } else {
+          if (t.bribeOffer.isFriendlyGift) {
             state.money += bribeInfo.amount;
-            state.shiftBribesTotal += bribeInfo.amount;
-          }
-          if (!t.bribeOffer.isFriendlyGift) {
+            state.shiftExtrasEarned = (state.shiftExtrasEarned || 0) + bribeInfo.amount;
+            state.familyMorale = Math.min(100, state.familyMorale + 5);
+            pushShiftLog("#81C784", L(`🤝 Земляцький підгін з м. Шитомир: +${bribeInfo.amount} 🪙 на каву (0% НАБК)!`, `🤝 Shytomyr friendly gift: +${bribeInfo.amount} 🪙 for coffee (0% NABK)!`));
+          } else {
+            state.shiftCombo = 0;
+            state.shiftBribesCount = (state.shiftBribesCount || 0) + 1;
+            const bribeUahEq = bribeInfo.currency === "USD" ? bribeInfo.amount * USD_UAH_RATE : bribeInfo.amount;
+            if (bribeInfo.currency === "USD") {
+              state.usd += bribeInfo.amount;
+            } else {
+              state.money += bribeInfo.amount;
+            }
+            state.shiftBribesTotal = (state.shiftBribesTotal || 0) + bribeUahEq;
+            state.totalCareerBribes = (state.totalCareerBribes || 0) + bribeUahEq;
             const baseJump = t.bribeOffer.nabkRiskJump || (t.bribeOffer.isStingTrap ? 35 : (t.bribeOffer.syndicateFavor ? 6 : 8));
             let riskJump = state.underSurveillance ? Math.round(baseJump * 1.5) : baseJump;
             if (state.ownedAssets.includes("addon_osint_app")) riskJump = Math.max(2, Math.round(riskJump * 0.8));
             state.nabkRisk = Math.min(100, state.nabkRisk + riskJump);
-          } else {
-            state.familyMorale = Math.min(100, state.familyMorale + 5);
           }
           if (t.bribeOffer.syndicateFavor) state.tolikRep = Math.min(100, state.tolikRep + 20);
           render();
@@ -1518,38 +1552,58 @@
     }
 
     if (state.phase === "SHIFT_SUMMARY") {
-      const hasShiftBribes = state.shiftBribesTotal > 0;
+      const hasShiftBribes = (state.shiftBribesCount || 0) > 0 || state.shiftBribesTotal > 0;
       const cutUsd = hasShiftBribes ? getEffectiveBossCut() : 0;
-      const salary = state.shiftCorrect * getRank().salary;
+      const cutUahFallback = Math.round(cutUsd * USD_UAH_RATE * 1.1);
+      const salary = state.shiftSalaryEarned || 0;
+      const bounties = state.shiftBountiesEarned || 0;
+      const extras = state.shiftExtrasEarned || 0;
+      const earnedUsd = state.shiftEarnedUsd || 0;
+      const grade = state.shiftGrade || "B";
+      const survAlert = state.underSurveillance || state.nabkRisk >= 75;
       root.innerHTML = `
-        <div style="display:flex;flex-direction:column;gap:12px;flex:1;">
-          <h1 style="color:#E0B145;font-size:22px;">${tr(L(`ЗМІНУ ЗАВЕРШЕНО • ДЕНЬ ${state.daySpec.dayNumber}`, `SHIFT COMPLETE • DAY ${state.daySpec.dayNumber}`), state.lang)}</h1>
-          <section class="card-slate" style="display:flex;flex-direction:column;gap:6px;font-size:14px;">
-            <div>${tr(L("Оформлено мандрівників", "Travelers Processed"), state.lang)}: <strong>${state.shiftProcessed}</strong></div>
-            <div style="color:#81C784;">${tr(L("Без помилок", "Correct Decisions"), state.lang)}: <strong>${state.shiftCorrect} (+${salary} 🪙)</strong></div>
-            <div style="color:#64B5F6;">${tr(L("Затримано порушників", "Detained Targets"), state.lang)}: <strong>${state.shiftDetained}</strong></div>
-            <div style="color:#FF8A80;">${tr(L("Штрафи за помилки", "Protocol Fines"), state.lang)}: <strong>-${state.shiftFinesTotal} 🪙</strong></div>
-            <div style="color:#E0B145;">${tr(L("Конверти та підгони", "Envelopes & Tips"), state.lang)}: <strong>+${state.shiftBribesTotal} 🪙 (екв.)</strong></div>
-            <hr style="border:none;border-top:1px solid #555;margin:4px 0;">
-            <div style="color:#E0B145;font-size:16px;font-weight:800;">${tr(L("У гаманці зараз", "Current Cash"), state.lang)}: ${state.money.toLocaleString("en-US")} 🪙 • <span style="color:#81C784;">${state.usd.toLocaleString("en-US")} 💵</span></div>
+        <div style="display:flex;flex-direction:column;gap:10px;flex:1;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+            <h1 style="color:#E0B145;font-size:20px;">${tr(L(`ЗМІНУ ЗАВЕРШЕНО • ДЕНЬ ${state.daySpec.dayNumber}`, `SHIFT COMPLETE • DAY ${state.daySpec.dayNumber}`), state.lang)}</h1>
+            <div class="shift-grade-badge grade-${grade}">${tr(L("РАНГ", "GRADE"), state.lang)}: ${grade}</div>
+          </div>
+          ${survAlert ? `
+            <div style="background:#3A1216;border:1.5px solid #FF5252;border-radius:6px;padding:7px 9px;font-size:11.5px;color:#FFCDD2;font-weight:700;">
+              👁️ ${tr(L(`УВАГА: Активний нагляд НАБК (${state.nabkRisk}%)! Хабарі вкрай небезпечні — зачистьте хвости ввечері або проведіть чисту зміну!`, `ALERT: Active NABK Surveillance (${state.nabkRisk}%)! Scrub audit tails tonight or work clean!`), state.lang)}
+            </div>
+          ` : ""}
+          <section class="card-slate" style="display:flex;flex-direction:column;gap:5px;font-size:13px;">
+            <div>${tr(L("Оформлено мандрівників", "Travelers Processed"), state.lang)}: <strong>${state.shiftProcessed}</strong>${(state.shiftBestCombo || 0) >= 3 ? ` • <span style="color:#FFB300;font-weight:800;">🔥 ${tr(L("Макс. серія", "Best Streak"), state.lang)}: ${state.shiftBestCombo}</span>` : ""}</div>
+            <div style="color:#81C784;">${tr(L("Зарплата за правильні рішення", "Base Salary (Correct)"), state.lang)}: <strong>${state.shiftCorrect} (+${salary.toLocaleString("en-US")} 🪙)</strong></div>
+            <div style="color:#64B5F6;">${tr(L("Премії СБК / ВСП за арешти", "SBK / VSP Detention Bounties"), state.lang)}: <strong>${state.shiftDetained} (+${bounties.toLocaleString("en-US")} 🪙${earnedUsd > 0 ? ` • +${earnedUsd.toLocaleString("en-US")} 💵` : ""})</strong></div>
+            <div style="color:#FFE082;">${tr(L("Кава, УФ-шифри та бонус рангу", "Coffee, UV & Rank Bonus"), state.lang)}: <strong>+${extras.toLocaleString("en-US")} 🪙</strong>${state.shiftGradeBonus > 0 ? ` (${tr(L("Ідеальна зміна", "Perfect Shift"), state.lang)} +${state.shiftGradeBonus} 🪙!)` : ""}</div>
+            <div style="color:#FF8A80;">${tr(L("Штрафи за помилки", "Protocol Fines"), state.lang)}: <strong>-${(state.shiftFinesTotal || 0).toLocaleString("en-US")} 🪙</strong></div>
+            ${hasShiftBribes ? `<div style="color:#E0B145;">${tr(L("Брудні конверти", "Bribe Envelopes"), state.lang)}: <strong>${state.shiftBribesCount || 1} (+${state.shiftBribesTotal.toLocaleString("en-US")} 🪙 ${tr(L("екв.", "eq."), state.lang)})</strong></div>` : `<div style="color:#A5D6A7;">🛡️ ${tr(L("Чиста зміна: 0 брудних хабарів!", "Clean Shift: 0 dirty bribes!"), state.lang)}</div>`}
+            <hr style="border:none;border-top:1px solid #555;margin:3px 0;">
+            <div style="color:#E0B145;font-size:15.5px;font-weight:800;">${tr(L("У гаманці зараз", "Current Cash"), state.lang)}: ${state.money.toLocaleString("en-US")} 🪙 • <span style="color:#81C784;">${state.usd.toLocaleString("en-US")} 💵</span></div>
           </section>
           <section class="card-slate" style="background:#33291F;">
-            <h2 style="color:#E0B145;font-size:16px;margin-bottom:6px;">${tr(hasShiftBribes ? L("🧢 ПАЛ ПАЛИЧ ЧЕКАЄ НА «ЧАСТКУ» (У 💵)", "🧢 PAL PALYCH EXPECTS HIS CUT (IN 💵)") : L("🧢 ПАЛ ПАЛИЧ: «Сьогодні без конвертів?»", "🧢 PAL PALYCH: 'Clean shift today?'"), state.lang)}</h2>
-            <p style="font-size:13px;line-height:1.4;">${hasShiftBribes
+            <h2 style="color:#E0B145;font-size:15px;margin-bottom:5px;">${tr(hasShiftBribes ? L("🧢 ПАЛ ПАЛИЧ ЧЕКАЄ НА «ЧАСТКУ» (У 💵)", "🧢 PAL PALYCH EXPECTS HIS CUT (IN 💵)") : L("🧢 ПАЛ ПАЛИЧ: «Сьогодні без конвертів?»", "🧢 PAL PALYCH: 'Clean shift today?'"), state.lang)}</h2>
+            <p style="font-size:12.5px;line-height:1.4;">${hasShiftBribes
               ? tr(L(
-                  `«Поклади ${cutUsd} 💵 у шухляду — і я прикрию твої грішки перед штабом та НАБК. Гримники не носіть, тільки баксіки!» ${state.ownedAssets.includes("rolex_watch") ? "(Знижка -50% завдяки твоєму золотому «Кролексу»!)" : ""}`,
-                  `'Put ${cutUsd} 💵 in my drawer and I'll cover your slip-ups. Baksiky only!' ${state.ownedAssets.includes("rolex_watch") ? "(50% discount from your Gold Krolex!)" : ""}`
+                  `«Поклади ${cutUsd} 💵 у шухляду — і я прикрию твої грішки перед штабом та НАБК!» ${state.ownedAssets.includes("rolex_watch") ? "(Знижка -50% завдяки твоєму золотому «Кролексу»!)" : ""}`,
+                  `'Put ${cutUsd} 💵 in my drawer and I'll cover your slip-ups!' ${state.ownedAssets.includes("rolex_watch") ? "(50% discount from your Gold Krolex!)" : ""}`
                 ), state.lang)
               : tr(L(
-                  "«Конвертів сьогодні не брав, тож баксіків у шухляду не вимагаю. Іди додому, але без косяків на наступній зміні!»",
-                  "'No envelopes taken today, so I won't demand baksiky. Go rest, just watch your mistakes!'"
+                  state.shiftMistakes === 0
+                    ? "«Зразкова чиста зміна, інспекторе! Питань не маю, занось журнал та відпочивай!»"
+                    : "«Конвертів сьогодні не брав, тож частки не вимагаю. Іди додому, але стеж за протоколами!»",
+                  state.shiftMistakes === 0
+                    ? "'Spotless clean shift, inspector! No cut needed, file the log and get some rest!'"
+                    : "'No envelopes taken today, so I won't demand a cut. Go rest, just watch those protocols!'"
                 ), state.lang)
             }</p>
           </section>
         </div>
         <div style="display:flex;flex-direction:column;gap:8px;">
           ${hasShiftBribes ? `
-            <button type="button" id="btn-pay-palych" class="btn-primary-green" ${state.usd < cutUsd ? "disabled" : ""}>${tr(L(`Занести Паличу ${cutUsd.toLocaleString("en-US")} 💵 (-ризик НАБК, +дах)`, `Pay Palych ${cutUsd.toLocaleString("en-US")} 💵 (-NABK Risk, +Boss Rep)`), state.lang)}</button>
+            <button type="button" id="btn-pay-palych" class="btn-primary-green" ${state.usd < cutUsd ? "disabled" : ""}>${tr(L(`Занести Паличу ${cutUsd.toLocaleString("en-US")} 💵 (-8% НАБК, +12 Палич)`, `Pay Palych ${cutUsd.toLocaleString("en-US")} 💵 (-8% NABK, +12 Palych)`), state.lang)}</button>
+            ${state.usd < cutUsd ? `<button type="button" id="btn-pay-palych-uah" class="btn-mustard" ${state.money < cutUahFallback ? "disabled" : ""} style="padding:11px;font-size:13px;">${tr(L(`Відкупитися гримниками ${cutUahFallback.toLocaleString("en-US")} 🪙 (з комісією +10%)`, `Pay in Hrymnyky ${cutUahFallback.toLocaleString("en-US")} 🪙 (+10% fee)`), state.lang)}</button>` : ""}
             <button type="button" id="btn-refuse-palych" class="btn-outline" style="width:100%;padding:12px;color:#FF8A80;border-color:#FF8A80;">${tr(L("Не платити Паличу (Ризик догани / нагляду!)", "Refuse Palych (Risk reprimand / surveillance!)"), state.lang)}</button>
           ` : `
             <button type="button" id="btn-refuse-palych" class="btn-primary-green">${tr(L("Завершити зміну (хабарів не брав) →", "Finish Shift (No Bribes) →"), state.lang)}</button>
@@ -1570,19 +1624,38 @@
           render();
         });
       }
+      const payPalychUahBtn = document.getElementById("btn-pay-palych-uah");
+      if (payPalychUahBtn) {
+        payPalychUahBtn.addEventListener("click", () => {
+          if (state.money < cutUahFallback) return;
+          audio.playBribe();
+          state.money -= cutUahFallback;
+          state.palychRep = Math.min(100, state.palychRep + 10);
+          state.nabkRisk = Math.max(0, state.nabkRisk - 6);
+          state.purchasedExpensesToday = [];
+          state.phase = "HOME_EVENING";
+          saveStateToStorage();
+          render();
+        });
+      }
       document.getElementById("btn-refuse-palych").addEventListener("click", () => {
-        audio.playDeny();
-        state.palychRep = Math.max(0, state.palychRep - 15);
-        if (state.shiftBribesTotal > 0 || state.shiftMistakes >= 5) {
-          state.nabkRisk = Math.min(100, state.nabkRisk + 12);
+        if (hasShiftBribes || state.shiftMistakes >= 5) {
+          audio.playDeny();
+          state.palychRep = Math.max(0, state.palychRep - (hasShiftBribes ? 15 : 8));
+          state.nabkRisk = Math.min(100, state.nabkRisk + (hasShiftBribes ? 12 : 4));
           if (!state.isUndercoverSbkAgent || state.nabkRisk >= 60) {
             state.reprimands = (state.reprimands || 0) + 1;
             state.gotReprimandToday = true;
             state.underSurveillance = true;
             if (state.reprimands >= 3) {
-              triggerEnding("FIRED_LOSER");
+              triggerEnding("WRITTEN_OFF_RESERVE");
               return;
             }
+          }
+        } else {
+          audio.playApprove();
+          if (state.shiftMistakes === 0 && state.shiftProcessed >= 5) {
+            state.palychRep = Math.min(100, state.palychRep + 3);
           }
         }
         state.purchasedExpensesToday = [];
@@ -1658,7 +1731,7 @@
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;">
             <button type="button" id="tab-home-0" class="${state.eveningTab === 0 ? "btn-mustard" : "btn-secondary"}" style="padding:8px 4px;font-size:11.5px;">🏠 ${tr(L("Справи", "Choices"), state.lang)}</button>
             <button type="button" id="tab-home-2" class="${state.eveningTab === 2 ? "btn-mustard" : "btn-secondary"}" style="padding:8px 4px;font-size:11.5px;">🤝 ${tr(L("Підкуп", "Bribes"), state.lang)}</button>
-            <button type="button" id="tab-home-1" class="${state.eveningTab === 1 ? "btn-mustard" : "btn-secondary"}" style="padding:8px 4px;font-size:11.5px;">💎 ${tr(L(`Магазин (${state.ownedAssets.length}/${ASSET_UPGRADES.length})`, `Shop (${state.ownedAssets.length}/${ASSET_UPGRADES.length})`), state.lang)}</button>
+            <button type="button" id="tab-home-1" class="${state.eveningTab === 1 ? "btn-mustard" : "btn-secondary"}" style="padding:8px 4px;font-size:11.5px;">💎 ${tr(L(`Магазин (${ASSET_UPGRADES.filter(a => state.ownedAssets.includes(a.id)).length}/${ASSET_UPGRADES.length})`, `Shop (${ASSET_UPGRADES.filter(a => state.ownedAssets.includes(a.id)).length}/${ASSET_UPGRADES.length})`), state.lang)}</button>
           </div>
 
           <div id="evening-items-list" class="evening-scroll-list"></div>
@@ -1768,11 +1841,13 @@
             if (state.nabkRisk >= 70 && Math.random() < 0.25) {
               audio.playDeny();
               state.nabkRisk = Math.min(100, state.nabkRisk + 15);
+              state.eveningToast = { ok: false, text: L("❌ «Криша» зірвалась при високому нагляді НАБК! (+15% ризику)", "❌ 'Krysha' backfired under high NABK heat! (+15% risk)") };
             } else {
               audio.playBribe();
               state.underSurveillance = false;
               state.reprimands = Math.max(0, (state.reprimands || 0) - 1);
               state.nabkRisk = Math.max(0, state.nabkRisk - 25);
+              state.eveningToast = { ok: true, text: L("🤝 За «Кришу» занесено: -25% НАБК, знято нагляд і 1 догану!", "🤝 'Krysha' settled: -25% NABK, surveillance & 1 reprimand cleared!") };
             }
             saveStateToStorage();
             render();
@@ -1867,7 +1942,7 @@
             <div style="flex:1;">
               <div style="font-size:13px;font-weight:800;color:#81C784;">🚐 ${tr(L("Фонд утечі через Толіка (+1 500 💵, +10 Толік)", "Tolik Escape Fund (+1,500 💵, +10 Tolik)"), state.lang)}</div>
               <div style="color:#CFD8DC;font-size:11px;">${tr(L(`Зібрано: ${state.escapeFund.toLocaleString("en-US")} / ${getEscapeTarget().toLocaleString("en-US")} 💵`, `Saved: ${state.escapeFund.toLocaleString("en-US")} / ${getEscapeTarget().toLocaleString("en-US")} 💵`), state.lang)}</div>
-              <div style="color:#E0B145;font-size:12px;font-weight:800;">1 500 💵 (≈ ${(1500 * USD_UAH_RATE).toLocaleString("en-US")} 🪙)</div>
+              <div style="color:#E0B145;font-size:12px;font-weight:800;">1 500 💵</div>
             </div>
           `;
           const eb = document.createElement("button");
@@ -1957,12 +2032,9 @@
           const owned = state.ownedAssets.includes(asset.id);
           const isUsd = asset.currency === "USD";
           const canBuy = !owned && canAffordAsset(asset);
-          const uahEq = getAssetCostUah(asset);
-          const usdEq = Math.ceil(uahEq / USD_UAH_RATE);
-          const strictUah = isStrictUahAsset(asset);
           const priceStr = isUsd
-            ? `${asset.cost.toLocaleString("en-US")} 💵 (≈ ${uahEq.toLocaleString("en-US")} 🪙)`
-            : (strictUah ? `${asset.cost.toLocaleString("en-US")} 🪙` : `${asset.cost.toLocaleString("en-US")} 🪙 (≈ ${usdEq.toLocaleString("en-US")} 💵)`);
+            ? `${asset.cost.toLocaleString("en-US")} 💵`
+            : `${asset.cost.toLocaleString("en-US")} 🪙`;
           const card = document.createElement("div");
           card.className = "card-slate row-between";
           if (owned) card.style.backgroundColor = "#1B5E20";
@@ -1982,9 +2054,10 @@
             audio.playBribe();
             payForAsset(asset);
             state.ownedAssets.push(asset.id);
-            state.tolikRep = Math.min(100, state.tolikRep + asset.tolikBoost);
-            state.palychRep = Math.min(100, state.palychRep + asset.palychBoost);
-            state.familyMorale = Math.min(100, state.familyMorale + asset.moraleBoost);
+            state.tolikRep = Math.min(100, state.tolikRep + (asset.tolikBoost || 0));
+            state.palychRep = Math.min(100, state.palychRep + (asset.palychBoost || 0));
+            state.familyMorale = Math.min(100, state.familyMorale + (asset.moraleBoost || 0));
+            if (asset.sbkBoost) state.sbkRep = Math.min(100, state.sbkRep + asset.sbkBoost);
             saveStateToStorage();
             render();
           });
@@ -1997,11 +2070,9 @@
               const adOwned = state.ownedAssets.includes(addon.id);
               const adIsUsd = addon.currency === "USD";
               const adCanBuy = !adOwned && canAffordAsset(addon);
-              const adUahEq = getAssetCostUah(addon);
-              const adUsdEq = Math.ceil(adUahEq / USD_UAH_RATE);
               const adPriceStr = adIsUsd
-                ? `${addon.cost.toLocaleString("en-US")} 💵 (≈ ${adUahEq.toLocaleString("en-US")} 🪙)`
-                : `${addon.cost.toLocaleString("en-US")} 🪙 (≈ ${adUsdEq.toLocaleString("en-US")} 💵)`;
+                ? `${addon.cost.toLocaleString("en-US")} 💵`
+                : `${addon.cost.toLocaleString("en-US")} 🪙`;
               const adCard = document.createElement("div");
               adCard.className = "card-slate row-between";
               adCard.style.marginLeft = "14px";
@@ -2124,6 +2195,45 @@
       document.getElementById("btn-share-result").addEventListener("click", () => { audio.playTap(); shareResultCard(); });
       document.getElementById("btn-restart").addEventListener("click", () => { audio.playTap(); state.phase = "MAIN_MENU"; render(); });
     }
+  }
+
+  if (typeof document !== "undefined" && typeof document.addEventListener === "function") {
+    document.addEventListener("keydown", (e) => {
+      if (state.phase !== "BOOTH_SHIFT" || state.sirenActive) return;
+      if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
+      const openDlgs = ["rules-dialog", "wanted-dialog", "siren-dialog", "encounter-dialog"]
+        .some(id => { const d = document.getElementById(id); return d && d.open; });
+      if (openDlgs) return;
+      const key = e.key;
+      if (key >= "1" && key <= "4") {
+        const idx = Number(key) - 1;
+        const t = state.queue && state.queue[state.travelerIdx];
+        if (t && t.documents && t.documents[idx]) {
+          audio.playTap();
+          state.selectedDocIdx = idx;
+          if (!state.openedDocIndices) state.openedDocIndices = [];
+          if (!state.openedDocIndices.includes(idx)) state.openedDocIndices.push(idx);
+          state.docFolded = false;
+          state.justUnfoldedDoc = true;
+          render();
+        }
+      } else if (key === "Escape" && !state.docFolded) {
+        const foldBtn = document.getElementById("btn-fold-doc");
+        if (foldBtn) foldBtn.click();
+      } else if (key === "u" || key === "U") {
+        const btn = document.getElementById("react-uv");
+        if (btn) btn.click();
+      } else if (key === "k" || key === "K") {
+        const btn = document.getElementById("react-intimidate");
+        if (btn) btn.click();
+      } else if (key === "c" || key === "C") {
+        const btn = document.getElementById("react-coffee");
+        if (btn) btn.click();
+      } else if (key === "d" || key === "D") {
+        const btn = document.getElementById("react-dog");
+        if (btn && !btn.disabled) btn.click();
+      }
+    });
   }
 
   render();

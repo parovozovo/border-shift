@@ -19,7 +19,7 @@
       declaredCargo: L("Пиріжки, хустки, банка меду", "Pastries, scarves & jar of honey"),
       vehicleSearchResult: L("Під пасажирським сидінням знайдено чоловічу бритву та гель для гоління.", "Found a men's razor and shaving foam under the seat."),
       greeting: L("«Ой, синочку! Їду в Поландію до онуків... трохи голос охрип, бо протягло в автобусі!»", "'Oh sonny! Heading to Polandia to see my grandkids... caught a deep frog in my throat!'"),
-      interrogationReply: L("«Та то я на паспорт фотографувалася ще до перукарні! Візьми 380 🪙 на шоколадку та став зелений штамп!»", "'I just took the photo before my hairdo! Take 380 🪙 for chocolate and stamp green!'"),
+      interrogationReply: L("«Та то я на паспорт фотографувалася ще до перукарні! Візьми 80 💵 на шоколадку та став зелений штамп!»", "'I just took the photo before my hairdo! Take 80 💵 for chocolate and stamp green!'"),
       intimidateReply: L("«*Хрипким басом* Ти шо кричиш?! Хустка ледь не злетіла...»", "'*Deep baritone cough* Why are you shouting?! My headscarf nearly slipped...'"),
       coffeeReply: L("«*Дмухає на каву, перука з'їжджає набік* Ой, гаряченька!»", "'*Blows on coffee, wig shifts slightly* Oh, nice and hot!'"),
       arrestFull: L("Коли хустку й біляву перуку зняли, з'ясувалося що «Тітка Галя» — це Петро Пасічник із Левгорода!", "Once the wig came off, 'Aunt Halya' turned out to be Petro from Levhorod!"),
@@ -219,7 +219,7 @@
       declaredCargo: L("Годинники «Кролекс», готівка в дипломаті", "Krolex watches & briefcase"),
       vehicleSearchResult: L("В багажнику знайдено принтер для друку пластикових посвідчень!", "Found a fake ID card printer in the trunk!"),
       greeting: L("«Термінова дипломатична місія у справах офшорів! Ось посвідчення Почесного Консула Монаківки!»", "'Urgent diplomatic mission! Behold my Honorary Consul pass of Monakivka!'"),
-      interrogationReply: L("«Ти шо, не поважаєш Князівство Монаківка?! Дам 900 🪙 — закрий очі на печатку!»", "'Disrespecting Monakivka?! Here is 900 🪙 — ignore the seal!'"),
+      interrogationReply: L("«Ти шо, не поважаєш Князівство Монаківка?! Дам 450 💵 — закрий очі на печатку!»", "'Disrespecting Monakivka?! Here is 450 💵 — ignore the seal!'"),
       intimidateReply: L("«Ти... ти не смієш! В мене бронь... ну майже бронь...»", "'You... you wouldn't dare!'"),
       coffeeReply: L("«Хм, а непогана кава. У Монаківці така по 20 євро.»", "'Decent espresso. Costs 20 euros in Monakivka.'"),
       arrestFull: L("Контррозвідка СБК затримує псевдо-дипломата з липовим мандатом на «Геліку»!", "SBK arrests the fake diplomat with a bogus Duchy seal!"),
@@ -259,7 +259,7 @@
       declaredCargo: L("Коробки з маскувальними сітками та бронеплитами", "Camouflage nets & armor plates"),
       vehicleSearchResult: L("ПЕС «БАВОВНА» РОЗГРИЗ КОРОБКИ: Жодних сіток — 30 нових смартфонів, брендові сумочки та елітний алкоголь на перепродаж!", "DOG SEARCH: Zero camo nets — 30 new phones, designer handbags & luxury liquor for resale!"),
       greeting: L("«Йоу підписники! Я знімаю сторіз для донатів — їдемо в Поландію, пропускай, шефе!»", "'Yo followers! Shooting a livestream, heading to Polandia, roll us out!'"),
-      interrogationReply: L("«Та все для армії, чесно! Ось 600 🪙 за швидкість оформлення без пса!»", "'All for charity, promise! Take 600 🪙 to skip the sniffer dog!'"),
+      interrogationReply: L("«Та все для армії, чесно! Ось 500 💵 за швидкість оформлення без пса!»", "'All for charity, promise! Take 500 💵 to skip the sniffer dog!'"),
       intimidateReply: L("«Стій, не тряси телефон! У мене прямий ефір зараз впаде!»", "'Stop shaking! My livestream is dropping frames!'"),
       coffeeReply: L("«Класний контент буде — п'ю каву з інспектором!»", "'Great vlog content — coffee with the guard!'"),
       arrestFull: L("Псевдоволонтера пакують у бус СБК під його ж власний стрім!", "The fake charity influencer gets cuffed on his own livestream!"),
@@ -300,7 +300,7 @@
       includeDecl: true,
       declaredCargo: L("Макбук, 2 павербанки, рюкзак", "Laptop, 2 powerbanks, backpack"),
       greeting: L("«Вітаю! Я на електросамокаті до Варшавки — заряджаюся в кожному селі. Ось документи!»", "'Hi! Taking my e-scooter to Varshavka — charging at every village!'"),
-      interrogationReply: isLegit ? L("«Перевіряйте по реєстру — я інженер кіберзахисту!»", "'Verify it — I am a cyber-defense engineer!'") : L("«Можу в USDT на крипто-гаманець кинути 450 🪙 еквівалентом?»", "'Can I send 450 🪙 in USDT to your wallet?'"),
+      interrogationReply: isLegit ? L("«Перевіряйте по реєстру — я інженер кіберзахисту!»", "'Verify it — I am a cyber-defense engineer!'") : L("«Можу в USDT на крипто-гаманець кинути 120 💵 еквівалентом?»", "'Can I send 120 💵 in USDT to your wallet?'"),
       intimidateReply: isLegit ? L("«Ой, акуратно, не впустіть мій ноутбук!»", "'Careful, don't startle me with my laptop!'") : L("«Та ладно, невже печатка не виглядає солідно?!»", "'Come on, doesn't the stamp look legit?!'"),
       coffeeReply: L("«Дякую! Кофеїн + електросамокат = подвійна швидкість!»", "'Thanks! Caffeine + e-scooter = double speed!'"),
       coffeeTip: isLegit ? 60 : 0,
@@ -386,7 +386,7 @@
       declaredCargo: L("Фотоапарат, бінокль туриста", "Camera & binoculars"),
       vehicleSearchResult: L("ПЕС «БАВОВНА» ЗНАЙШОВ СХОВАНКУ: Під запаскою — пачки рублів, чужі SIM-карти та фото підстанцій Кийграда і Левгорода!", "DOG SEARCH: Spare wheel hides rubles, foreign SIM cards & substation coordinates!"),
       greeting: L("«Добрий день... Я фотограф-любитель, фотографую мости й колії та їду до родичів у Поландію.»", "'Hello... Amateur photographer shooting railways, heading to relatives in Polandia.'"),
-      interrogationReply: L("«Не кличте СБК! Ось 900 🪙 просто зараз — тільки не перевіряйте багажник!»", "'Don't call SBK! 900 🪙 right now — just don't search the trunk!'"),
+      interrogationReply: L("«Не кличте СБК! Ось 600 💵 просто зараз — тільки не перевіряйте багажник!»", "'Don't call SBK! 600 💵 right now — just don't search the trunk!'"),
       intimidateReply: L("«*Різко пітніє* Я... я видалив усі фото! Простіше домовитись!»", "'*Sweating heavily* I... deleted the photos!'"),
       coffeeReply: L("«*Тремтячими руками тримає стакан* Д-дякую... а ви швидко штампуєте?»", "'*Hands shaking* Th-thanks... stamp quick?'"),
       arrestFull: L("Група СБК вилітає з будки й пакує коригувальника! Майор «Тихий» виписує тобі премію!", "SBK tackles the spotter and awards you a combat bonus!"),
@@ -417,7 +417,7 @@
       declSealDisc: DISCREPANCY.FAKE_ISSUER_SEAL,
       vehicleSearchResult: L("ПЕС «БАВОВНА» І РЕНТГЕН: Усередині барабанів пралок сховані підсанкційні військові мікрочіпи та гіроскопи!", "DOG & X-RAY: Washing drums conceal sanctioned missile microchips & gyroscopes!"),
       greeting: L("«Вітаю, шефе! Везу транзитом з Офшорії старі пральні машини на розбірку. Там лише металобрухт!»", "'Hey boss! Hauling old washing machines from Ofshoria for scrap!'"),
-      interrogationReply: L("«Тихіше! За ці плати серйозні люди платять золотом! Візьми 850 🪙 і закрий двері!»", "'Quiet! Gold awaits for those chips! Take 850 🪙!'"),
+      interrogationReply: L("«Тихіше! За ці плати серйозні люди платять золотом! Візьми 950 💵 і закрий двері!»", "'Quiet! Gold awaits for those chips! Take 950 💵!'"),
       intimidateReply: L("«*Озирається на кузов* Е-е... пралки звичайні, пломбу не чіпай!»", "'*Glances back nervously* Normal washers, don't break the seal!'"),
       coffeeReply: L("«Дякую за каву. Ось би ще штамп без затримок...»", "'Thanks for the coffee. Could really use a quick stamp...'"),
       arrestFull: L("Контррозвідка СБК арештовує контрабандиста військової електроніки разом із фургоном!", "SBK arrests the military chip smuggler and impounds the van!"),
@@ -1031,11 +1031,16 @@
                 L("Ліцензований водій міжнародних вантажів «Шлях»", "Licensed International Carrier Driver"),
                 L("Бронювання критичної інфраструктури (енергетика)", "Critical Infrastructure Driver Exemption")
               ]
-            : [
-                L("Багатодітний батько (3 дітей до 18 років)", "Father of 3 minor children"),
-                L("Офіційне бронювання енергокомпанії «Кийград-Світло»", "Kyihrad Power Grid Critical Exemption"),
-                L("Супровід особи з інвалідністю І групи", "Accompanying 1st-degree disabled relative")
-              ]);
+            : (trMeta.isCar
+              ? [
+                  L("Багатодітний батько (3 дітей до 18 років)", "Father of 3 minor children"),
+                  L("Офіційне бронювання енергокомпанії «Кийград-Світло»", "Kyihrad Power Grid Critical Exemption"),
+                  L("Супровід особи з інвалідністю І групи", "Accompanying 1st-degree disabled relative")
+                ]
+              : [
+                  L("Багатодітний батько (3 дітей до 18 років)", "Father of 3 minor children"),
+                  L("Офіційне бронювання енергокомпанії «Кийград-Світло»", "Kyihrad Power Grid Critical Exemption")
+                ]));
         const chosenBasis = pick(reasons);
         const certFields = [
           { label: L("Особа", "Holder"), value: fullName, disc: null },
@@ -1106,15 +1111,99 @@
     const trMeta = pickTransportForShapes(["SEDAN", "MINIBUS", "SUV", "RETRO", "PICKUP"], city.code, daySpec && daySpec.twoWheelerBias);
 
     // Procedural Violator (7 distinct schemes — zero text spoilers!)
-    const maxScheme = daySpec.requireOblikQr ? 6 : (daySpec.requireVehicleDecl ? 5 : 3);
-    let scheme = randInt(0, maxScheme);
-    if (daySpec && daySpec.extraCloneChance && daySpec.requireVehicleDecl && Math.random() < 0.45) {
-      scheme = 5;
+    const dayNumber = daySpec ? daySpec.dayNumber : 1;
+    const availSchemes = [0, 2, 3];
+    if (dayNumber >= 2) availSchemes.push(1);
+    if (daySpec.requireVehicleDecl) availSchemes.push(4, 5);
+    if (daySpec.requireOblikQr) availSchemes.push(6);
+
+    let scheme;
+    if (Math.random() < 0.38) {
+      scheme = 0;
+    } else if (daySpec && daySpec.extraCloneChance && daySpec.requireVehicleDecl && Math.random() < 0.45) {
+      scheme = 4;
+    } else {
+      const nonFormal = availSchemes.filter(s => s !== 0);
+      scheme = pick(nonFormal.length ? nonFormal : availSchemes);
     }
 
     if (scheme === 0) {
       // Formal violation (requiresDetention: false — DENY or small bribe!):
-      // Girl / Elderly man with expired doc, Male 18-60 with expired/no permit, OR adult-child / absent-guardian fraud!
+      // Missing Daily Rule Doc (38% when MED_INSURANCE/TRANSIT_PERMIT), Girl/Elderly expired, Male no permit, OR adult-child / absent-guardian!
+      const dailyMissingEligible = daySpec && (daySpec.dailyRule === "MED_INSURANCE" || daySpec.dailyRule === "TRANSIT_PERMIT");
+      if (dailyMissingEligible && Math.random() < 0.38) {
+        const gender = Math.random() < 0.45 ? "F" : "M";
+        const age = gender === "F" ? randInt(22, 54) : pick([randInt(25, 48), randInt(62, 74)]);
+        const fullName = randomFullName(gender);
+        const s0Arch = gender === "F" ? pick(["GLAM_LADY", "MEDIC_RESCUER", "BLOGGER_INFLUENCER"]) : (age > 60 ? "PENSIONER" : pick(["WORKER_DRIVER", "IT_VOLUNTEER", "FARMER_AGRO"]));
+        const portrait = buildArchetypePortrait(s0Arch, gender);
+        const s0Tr = pickTransportForShapes(TRAVELER_ARCHETYPES[s0Arch].shapes, city.code, daySpec && daySpec.twoWheelerBias);
+        const isMed = daySpec.dailyRule === "MED_INSURANCE";
+        const missingLabel = isMed ? L("🏥 Санітарна страховка", "🏥 Medical Insurance") : L("🛣️ Транзитний талон", "🛣️ Transit Permit");
+        const missingVal = isMed ? L("Відсутня (не оформлена)", "Missing (not issued)") : L("Відсутній (не оформлений)", "Missing (not issued)");
+        const offerDailyBribe = Math.random() < 0.55;
+        const dailyBribeObj = offerDailyBribe
+          ? (Math.random() < 0.5
+            ? { amount: randInt(7, 13) * 10, currency: "USD", requiresDiscovery: true, nabkRiskJump: 6, isStingTrap: false, syndicateFavor: false }
+            : { amount: randInt(12, 22) * 100, currency: "UAH", requiresDiscovery: true, nabkRiskJump: 5, isStingTrap: false, syndicateFavor: false })
+          : null;
+        const dailyBribeStr = dailyBribeObj ? (dailyBribeObj.currency === "USD" ? `${dailyBribeObj.amount} 💵` : `${dailyBribeObj.amount} 🪙`) : "";
+        const mExtraDocs = [];
+        if (gender === "M" && age >= 18 && age <= 60) {
+          mExtraDocs.push({
+            type: "EXEMPTION_CERT",
+            title: L("ДОВІДКА ПРО ВІДСТРОЧКУ", "EXEMPTION CERTIFICATE"),
+            subtitle: L(`ЦНАП м. ${city.uk}`, `CNAP ${city.en}`),
+            fields: [
+              { label: L("Особа", "Holder"), value: fullName, disc: null },
+              { label: L("Підстава", "Basis"), value: L("Офіційне бронювання критичної інфраструктури", "Critical Infrastructure Exemption"), disc: null }
+            ],
+            sealText: L(`ЦНАП / ДПСК • ${city.uk.toUpperCase()}`, "CNAP / SBGS • VALID"),
+            sealDisc: null
+          });
+          if (daySpec.requireOblikQr) {
+            mExtraDocs.push({
+              type: "MILITARY_ID",
+              title: L("Е-ДОКУМЕНТ «ОБЛІК+»", "E-MILITARY ID 'OBLIK+'"),
+              subtitle: L("Цифровий реєстр", "Digital Registry"),
+              fields: [
+                { label: L("ПІБ", "Full Name"), value: fullName, disc: null },
+                { label: L("Статус QR", "QR Status"), value: L("QR-OK • ДАТА ОНОВЛЕНА", "QR-OK • UPDATED"), disc: null }
+              ],
+              sealText: L("МІНОБОРОНИ KRAINA • QR-OK", "MOD KRAINA • QR-OK"),
+              sealDisc: null
+            });
+          }
+        }
+        return buildTravelerFromParts({
+          fullName, age, gender, direction: "EXIT", portrait, transport: s0Tr,
+          passportSub: L(`Серія ${city.code}-${randInt(100000, 999999)} • м. ${city.uk}`, `No. ${city.code}-${randInt(100000, 999999)}`),
+          passportFields: [
+            { label: L("ПІБ", "Full Name"), value: fullName, disc: null },
+            { label: L("Вік / Стать", "Age / Sex"), value: L(`${age} р. • ${gender === "M" ? "ЧОЛ" : "ЖІН"}`, `${age} y/o • ${gender}`), disc: null },
+            { label: L("Дійсний до", "Valid Until"), value: L("15.10.2030", "2030-10-15"), disc: null },
+            { label: missingLabel, value: missingVal, disc: DISCREPANCY.MISSING_DAILY_DOC }
+          ],
+          extraDocs: mExtraDocs,
+          includeDecl: daySpec.requireVehicleDecl,
+          declaredCargo: L("Особисті речі, валізи", "Personal luggage"),
+          greeting: L(
+            `«Вітаю! Їду з м. ${city.uk} — паспорт є, усе гаразд... А хіба сьогодні ще якийсь додатковий папірець вимагають?»`,
+            `'Hello! Traveling from ${city.en} — ID clean... Wait, do I really need that extra daily document today?'`
+          ),
+          interrogationReply: offerDailyBribe
+            ? L(`«Та йой, не знав про новий указ дня! Ось ${dailyBribeStr} на каву — випустіть без того бланку!»`, `'Had no idea about today's decree! Take ${dailyBribeStr} and wave me through!'`)
+            : L("«От халепа, ніхто не попередив про обов'язковий документ на сьогодні! Пропустіть по-людськи!»", "'Oh no, nobody warned me about today's extra document! Please let me pass!'"),
+          intimidateReply: L("«*Хапається за папку* То це сьогоднішній указ?! Я просто забув оформити!»", "'*Checks folder* Forgot to get today's required permit!'"),
+          coffeeReply: L("«Дякую за каву... може, закриєте очі на відсутній талон?»", "'Thanks for coffee... skip the missing permit?'"),
+          arrestFull: L("За відсутність обов'язкового бланка дня достатньо було натиснути ✖ ВІДМОВИТИ!", "Should have pressed ✖ DENY for missing daily document!"),
+          arrestToned: L("Перевищення сили — треба було ✖ ВІДМОВИТИ.", "Should have pressed DENY."),
+          bribeOffer: dailyBribeObj,
+          shouldBeApproved: false,
+          violations: [DISCREPANCY.MISSING_DAILY_DOC]
+        });
+      }
+
       const rollType = Math.random();
       const isGirl = rollType < 0.28;
       const isOldMan = !isGirl && rollType < 0.52;
@@ -1138,7 +1227,7 @@
       const smallBribeObj = offersSmallBribe
         ? (Math.random() < 0.5
           ? { amount: randInt(7, 14) * 10, currency: "USD", requiresDiscovery: true, nabkRiskJump: 6, isStingTrap: false, syndicateFavor: false }
-          : { amount: randInt(28, 48) * 10, currency: "UAH", requiresDiscovery: true, nabkRiskJump: 5, isStingTrap: false, syndicateFavor: false })
+          : { amount: randInt(12, 24) * 100, currency: "UAH", requiresDiscovery: true, nabkRiskJump: 5, isStingTrap: false, syndicateFavor: false })
         : null;
       const bribeDisplayStr = smallBribeObj
         ? (smallBribeObj.currency === "USD" ? `${smallBribeObj.amount} 💵` : `${smallBribeObj.amount} 🪙`)
@@ -1697,10 +1786,73 @@
       hasContraband: true,
       bribeOffer: { amount: vp.usd, currency: "USD", instantOffer: true, nabkRiskJump: vp.risk, isStingTrap: false, syndicateFavor: false },
       shouldBeApproved: false,
-      violations: [DISCREPANCY.FAKE_ISSUER_SEAL],
+      violations: [DISCREPANCY.FAKE_ISSUER_SEAL, DISCREPANCY.CONTRABAND_CARGO],
       isWantedTarget: true,
       storyTag: "VIP_DIVERSE"
     });
+  }
+
+  function ensureRequiredDocsForDay(trv, daySpec) {
+    if (!trv || !trv.shouldBeApproved || !daySpec) return;
+    if (daySpec.requireVehicleDecl && !trv.documents.some(d => d.type === "VEHICLE_CUSTOMS")) {
+      trv.documents.push({
+        type: "VEHICLE_CUSTOMS",
+        title: L("ДЕКЛАРАЦІЯ ТРАНСПОРТУ ТА БАГАЖУ", "TRANSPORT & LUGGAGE DECLARATION"),
+        subtitle: trv.vehicleDesc,
+        fields: [
+          { label: L("Власник / Водій", "Owner / Driver"), value: trv.fullName, disc: null },
+          { label: L("Транспорт / Колір / №", "Transport / Color / Plate"), value: trv.vehicleDesc, disc: null },
+          { label: L("Заявлений вантаж", "Declared Cargo"), value: L("Особисті речі", "Personal luggage"), disc: null }
+        ],
+        sealText: L("МИТНИЦЯ KRAINA", "KRAINA CUSTOMS"),
+        sealDisc: null
+      });
+    }
+    const isForeignClean = trv.storyTag === "FOREIGN_CLEAN";
+    if (daySpec.requireOblikQr && !isForeignClean && trv.direction === "EXIT" && trv.gender === "M" && trv.age >= 18 && trv.age <= 60) {
+      if (!trv.documents.some(d => d.type === "MILITARY_ID")) {
+        trv.documents.push({
+          type: "MILITARY_ID",
+          title: L("Е-ДОКУМЕНТ «ОБЛІК+»", "E-MILITARY ID 'OBLIK+'"),
+          subtitle: L("Цифровий реєстр", "Digital Registry"),
+          fields: [
+            { label: L("ПІБ", "Full Name"), value: trv.fullName, disc: null },
+            { label: L("Статус QR", "QR Status"), value: L("QR-OK • ДАТА ОНОВЛЕНА", "QR-OK • UPDATED"), disc: null }
+          ],
+          sealText: L("МІНОБОРОНИ KRAINA • QR-OK", "MOD KRAINA • QR-OK"),
+          sealDisc: null
+        });
+      }
+    }
+    if (daySpec.dailyRule === "MED_INSURANCE" && trv.direction === "EXIT") {
+      if (!trv.documents.some(d => d.title && d.title.uk && d.title.uk.includes("СТРАХОВКА"))) {
+        trv.documents.push({
+          type: "EXEMPTION_CERT",
+          title: L("🏥 САНІТАРНА СТРАХОВКА", "🏥 MEDICAL INSURANCE"),
+          subtitle: L("Міжнародний поліс", "International Policy"),
+          fields: [
+            { label: L("Застрахований", "Insured"), value: trv.fullName, disc: null },
+            { label: L("Дійсний до", "Valid Until"), value: L("18.10.2029", "2029-10-18"), disc: null }
+          ],
+          sealText: L("МЕД-СТРАХ KRAINA • ДІЙСНИЙ", "MED-INSURE KRAINA • VALID"),
+          sealDisc: null
+        });
+      }
+    } else if (daySpec.dailyRule === "TRANSIT_PERMIT" && trv.direction === "EXIT") {
+      if (!trv.documents.some(d => d.title && d.title.uk && d.title.uk.includes("ТРАНЗИТНИЙ ТАЛОН"))) {
+        trv.documents.push({
+          type: "EXEMPTION_CERT",
+          title: L("🛣️ ТРАНЗИТНИЙ ТАЛОН", "🛣️ TRANSIT PERMIT"),
+          subtitle: L("Транзитний дозвіл", "Transit Route"),
+          fields: [
+            { label: L("Водій / Пасажир", "Holder"), value: trv.fullName, disc: null },
+            { label: L("Дійсний до", "Valid Until"), value: L("25.11.2029", "2029-11-25"), disc: null }
+          ],
+          sealText: L("МІНТРАНС KRAINA • ДОЗВІЛ", "TRANSIT AUTH • VALID"),
+          sealDisc: null
+        });
+      }
+    }
   }
 
   // Non-repeating queue builder across all Story + 12 Shytomyr Legends + War/Intel + Combinatorial travelers
@@ -1708,9 +1860,10 @@
   let usedShytomyrRun = new Set();
   let usedEncounterIds = new Set();
 
-  function generateDailyQueue(daySpec, count) {
+  function generateDailyQueue(daySpec, count, isSandbox) {
     const q = [];
     const seenNames = new Set();
+    const dNum = daySpec ? daySpec.dayNumber : 1;
 
     // 1. Prioritize unseen Shytomyr legends (so player discovers all 12 without frustrating repeats!)
     const globalSeen = new Set(loadUnlockedShytomyr());
@@ -1732,55 +1885,69 @@
       q.push(trv);
     }
 
-    // 2. Pick 1-2 unique non-repeating story characters from the 10-character pool (rotates cleanly in endless mode)
+    // 2. Story characters paced to match Campaign Briefings (unrestricted in Sandbox)
     const uniquePool = [
-      { tag: "AUNT_HALYA", fn: () => createAuntHalya() },
-      { tag: "COFFIN", fn: () => createCoffinSneezer() },
-      { tag: "TOLIK", fn: () => createTolikCourier() },
-      { tag: "DEPUTY_SON", fn: () => createDeputySon() },
-      { tag: "STEPAN_2", fn: () => createGrandpaStepan(daySpec.dayNumber) },
-      { tag: "NABK_STING", fn: () => createNabkSting() },
-      { tag: "MONACO_MP", fn: () => createMonacoBattalionMP() },
-      { tag: "FAKE_BLOGGER", fn: () => createFakeVolunteerBlogger() },
-      { tag: "CRYPTO_SCOOTER", fn: () => createCryptoStartupFounder(daySpec.dayNumber) },
-      { tag: "GRANDMA_PICKLES", fn: () => createGrandmaPickles() }
-    ];
-    if (usedStoryTags.size >= uniquePool.length - 1) {
+      { tag: "AUNT_HALYA", minDay: 1, fn: () => createAuntHalya() },
+      { tag: "DEPUTY_SON", minDay: 1, fn: () => createDeputySon() },
+      { tag: "STEPAN_2", minDay: 1, fn: () => createGrandpaStepan(dNum) },
+      { tag: "GRANDMA_PICKLES", minDay: 1, fn: () => createGrandmaPickles() },
+      { tag: "CRYPTO_SCOOTER", minDay: 2, fn: () => createCryptoStartupFounder(dNum) },
+      { tag: "COFFIN", minDay: 3, fn: () => createCoffinSneezer() },
+      { tag: "TOLIK", minDay: 3, fn: () => createTolikCourier() },
+      { tag: "FAKE_BLOGGER", minDay: 3, fn: () => createFakeVolunteerBlogger() },
+      { tag: "NABK_STING", minDay: 4, fn: () => createNabkSting() },
+      { tag: "MONACO_MP", minDay: 4, fn: () => createMonacoBattalionMP() }
+    ].filter(item => isSandbox || item.minDay <= dNum);
+
+    if (uniquePool.filter(item => !usedStoryTags.has(item.tag)).length === 0) {
       usedStoryTags.clear();
     }
+    let addedStory = 0;
     for (const item of shuffle(uniquePool)) {
-      if (!usedStoryTags.has(item.tag) && q.length < count - 3) {
+      if (!usedStoryTags.has(item.tag) && q.length < count - 3 && addedStory < 2) {
         usedStoryTags.add(item.tag);
         const stTrv = item.fn();
         seenNames.add(stTrv.fullName.uk);
         q.push(stTrv);
-        if (q.length >= 4) break;
+        addedStory++;
       }
     }
 
-    // 3. Add 1-2 War/Intelligence encounters (GUR-M courier, Spotter, Microchip smuggler, or Enemy FSM Spy!)
+    // 3. War/Intelligence encounters (paced by Campaign Day, full mix in Sandbox)
     const warCount = daySpec.extraWar ? 2 : 1;
     for (let w = 0; w < warCount && q.length < count - 2; w++) {
-      const rWar = Math.random();
-      const warTrv = (w === 0 && daySpec.extraWar)
-        ? createIntelCovertCourier()
-        : (rWar < 0.25 ? createIntelCovertCourier() : (rWar < 0.5 ? createArtillerySpotter() : (rWar < 0.75 ? createMicrochipSmuggler() : createFsmSleeperSpy())));
+      let warTrv;
+      if (w === 0 && daySpec.extraWar) {
+        warTrv = createIntelCovertCourier();
+      } else if (!isSandbox && dNum === 1) {
+        warTrv = createIntelCovertCourier();
+      } else if (!isSandbox && dNum === 2) {
+        warTrv = Math.random() < 0.35 ? createIntelCovertCourier() : createArtillerySpotter();
+      } else if (!isSandbox && dNum <= 5) {
+        const rWar = Math.random();
+        warTrv = rWar < 0.25 ? createIntelCovertCourier() : (rWar < 0.60 ? createArtillerySpotter() : createMicrochipSmuggler());
+      } else {
+        const rWar = Math.random();
+        warTrv = rWar < 0.25 ? createIntelCovertCourier() : (rWar < 0.5 ? createArtillerySpotter() : (rWar < 0.75 ? createMicrochipSmuggler() : createFsmSleeperSpy()));
+      }
       seenNames.add(warTrv.fullName.uk);
       q.push(warTrv);
     }
 
-    // 3a. Add 1-2 Foreign Travelers (Francia-Lux, Polandia, Britanika, Karpatia, Germania-Shtos — clean or Dual Citizenship!)
-    const fCount = Math.random() < 0.6 ? 2 : 1;
-    for (let f = 0; f < fCount && q.length < count - 1; f++) {
-      const fTrv = createForeignTraveler();
-      if (!seenNames.has(fTrv.fullName.uk)) {
-        seenNames.add(fTrv.fullName.uk);
-        q.push(fTrv);
+    // 3a. Foreign Travelers (Day 6+ in Campaign, always in Sandbox)
+    if (isSandbox || dNum >= 6) {
+      const fCount = Math.random() < 0.6 ? 2 : 1;
+      for (let f = 0; f < fCount && q.length < count - 1; f++) {
+        const fTrv = createForeignTraveler();
+        if (!seenNames.has(fTrv.fullName.uk)) {
+          seenNames.add(fTrv.fullName.uk);
+          q.push(fTrv);
+        }
       }
     }
 
-    // 3b. Rare High-Stakes VIP Escapees (10 diverse categories!) offering serious 💵 with real NABK risk!
-    if (q.length < count - 1 && Math.random() < (daySpec.dayNumber >= 3 ? 0.42 : 0.28)) {
+    // 3b. High-Stakes VIP Escapees (Day 4+ in Campaign, always in Sandbox)
+    if ((isSandbox || dNum >= 4) && q.length < count - 1 && Math.random() < (dNum >= 3 ? 0.42 : 0.28)) {
       const rVip = Math.random();
       const vipTrv = rVip < 0.2 ? createItEvaderVip() : (rVip < 0.38 ? createDeputyEscapee() : (rVip < 0.52 ? createTopCorruptor() : createDiverseVipEscapee()));
       if (!seenNames.has(vipTrv.fullName.uk)) {
@@ -1789,7 +1956,7 @@
       }
     }
 
-    // 4. Fill remaining slots with fresh combinatorial travelers (deduping names within same shift)
+    // 4. Fill remaining slots with fresh combinatorial travelers
     let safety = 0;
     while (q.length < count && safety < 40) {
       safety++;
@@ -1800,5 +1967,7 @@
       }
     }
 
-    return shuffle(q.slice(0, count));
+    const finalQueue = q.slice(0, count);
+    finalQueue.forEach(trv => ensureRequiredDocsForDay(trv, daySpec));
+    return shuffle(finalQueue);
   }
