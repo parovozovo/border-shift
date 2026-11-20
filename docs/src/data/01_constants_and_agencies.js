@@ -1,5 +1,5 @@
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v9.0";
+  const BUILD_VERSION = "v9.1";
   const DAILY_OBNAL_LIMIT_USD = 5000;
   let confirmResetArmed = false;
 
