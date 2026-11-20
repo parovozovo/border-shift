@@ -23,10 +23,38 @@
     }, 680);
   }
 
+  function syncFxFloatHost() {
+    const host = document.getElementById("fx-float-host");
+    if (!host) return;
+    const reduced = isMotionReduced();
+    if (reduced || (state.phase !== "BOOTH_SHIFT" && state.phase !== "SHIFT_SUMMARY" && state.phase !== "HOME_EVENING")) {
+      host.innerHTML = "";
+      return;
+    }
+    if (!state.fxBursts || state.fxBursts.seq === state.fxBurstRenderedSeq) return;
+    const seq = state.fxBursts.seq;
+    state.fxBurstRenderedSeq = seq;
+    if (Date.now() - (state.fxBursts.at || 0) > 1500) return;
+    const chipsHtml = (state.fxBursts.items || []).map((it, idx) => {
+      const label = typeof it.text === "string" ? it.text : tr(it.text, state.lang);
+      return `<div class="fx-float-chip fx-${it.tone || "gold"}" style="--fx-i:${idx};">${label}</div>`;
+    }).join("");
+    host.innerHTML = `<div class="fx-float-stack">${chipsHtml}</div>`;
+    setTimeout(() => {
+      if (state.fxBursts && state.fxBursts.seq === seq && host) {
+        host.innerHTML = "";
+      }
+    }, 1050);
+  }
+
   function render() {
     stopMenuAnimation();
     updateMood();
     syncStampSlamHost();
+    syncFxFloatHost();
+    if (document.body && document.body.classList) {
+      document.body.classList.toggle("reduce-motion", isMotionReduced());
+    }
     document.documentElement.lang = state.lang === "EN" ? "en" : "uk";
     const root = document.getElementById("app-shell");
     if (!root) return;
@@ -60,6 +88,7 @@
                   </span>
                   <div style="display:flex;gap:5px;">
                     <button type="button" id="menu-lang" class="ctrl-pill">${state.lang === "UK" ? "🇺🇦 UA" : "🇬🇧 EN"}</button>
+                    <button type="button" id="menu-motion" class="ctrl-pill" title="${tr(L("Увімкнути або призупинити анімації", "Toggle animations & FX"), state.lang)}">${isMotionReduced() ? "⏸ FX" : "✨ FX"}</button>
                     <button type="button" id="menu-music" class="ctrl-pill" aria-label="Toggle music">${audio.musicEnabled ? "🔊" : "🔇"}</button>
                   </div>
                 </div>
@@ -176,6 +205,7 @@
 
       startMenuPanoramaLoop();
       document.getElementById("menu-lang").addEventListener("click", () => { state.lang = state.lang === "UK" ? "EN" : "UK"; render(); });
+      document.getElementById("menu-motion").addEventListener("click", () => { audio.playTap(); setMotionReduced(!isMotionReduced()); render(); });
       document.getElementById("menu-music").addEventListener("click", () => { audio.ensureCtx(); audio.musicEnabled = !audio.musicEnabled; render(); });
       if (canResume) document.getElementById("btn-resume").addEventListener("click", () => { audio.playApprove(); loadSavedGame(); });
       document.getElementById("btn-start-camp").addEventListener("click", () => { audio.playApprove(); requestGameStart(false); });
@@ -381,8 +411,9 @@
           if (!lastOb || ts - lastOb >= 36) { lastOb = ts; drawOnboardingBanner(obCanvas, tab, (ts || Date.now()) * 0.001); }
           window._phaseBannerRaf = requestAnimationFrame(tickOb);
         };
-        drawOnboardingBanner(obCanvas, tab, Date.now() * 0.001);
-        if (typeof requestAnimationFrame === "function") window._phaseBannerRaf = requestAnimationFrame(tickOb);
+        const reducedOb = isMotionReduced();
+        drawOnboardingBanner(obCanvas, tab, reducedOb ? 0 : Date.now() * 0.001);
+        if (!reducedOb && typeof requestAnimationFrame === "function") window._phaseBannerRaf = requestAnimationFrame(tickOb);
       }
 
       if (tab === 2) {
@@ -623,15 +654,17 @@
       if (window._phaseBannerRaf) { cancelAnimationFrame(window._phaseBannerRaf); window._phaseBannerRaf = null; }
       if (mCanvas) {
         let lastM = 0;
+        const mWeather = state.weather || "CLEAR";
         const tickMorning = (ts) => {
           if (state.phase !== "MORNING_BRIEFING" || document.getElementById("morning-canvas") !== mCanvas) {
             window._phaseBannerRaf = null; return;
           }
-          if (!lastM || ts - lastM >= 36) { lastM = ts; drawMorningBanner(mCanvas, d.dayNumber, (ts || Date.now()) * 0.001); }
+          if (!lastM || ts - lastM >= 36) { lastM = ts; drawMorningBanner(mCanvas, d.dayNumber, (ts || Date.now()) * 0.001, mWeather); }
           window._phaseBannerRaf = requestAnimationFrame(tickMorning);
         };
-        drawMorningBanner(mCanvas, d.dayNumber, Date.now() * 0.001);
-        if (typeof requestAnimationFrame === "function") window._phaseBannerRaf = requestAnimationFrame(tickMorning);
+        const reducedMorning = isMotionReduced();
+        drawMorningBanner(mCanvas, d.dayNumber, reducedMorning ? 0 : Date.now() * 0.001, mWeather);
+        if (!reducedMorning && typeof requestAnimationFrame === "function") window._phaseBannerRaf = requestAnimationFrame(tickMorning);
       }
       document.getElementById("btn-enter-booth").addEventListener("click", () => { audio.playTap(); beginShift(); });
       return;
@@ -731,7 +764,7 @@
         <header class="top-bar">
           <div class="row-between">
             <span id="hud-timer" style="color:${state.shiftSec < 40 ? "#FF8A80" : "#E0B145"};font-weight:700;font-size:12.5px;">${tr(L("День", "Day"), state.lang)} ${state.daySpec.dayNumber} • ⏱ ${state.shiftSec}s</span>
-            <div style="display:flex;flex-direction:column;line-height:1.15;font-weight:800;font-size:12px;text-align:right;">
+            <div class="${(Date.now() - (state.hudPopAt || 0)) < 450 && !isMotionReduced() ? "hud-val-pop" : ""}" style="display:flex;flex-direction:column;line-height:1.15;font-weight:800;font-size:12px;text-align:right;">
               <span style="color:#E0B145;">${state.money.toLocaleString("en-US")} 🪙</span>
               <span style="color:#81C784;">${state.usd.toLocaleString("en-US")} 💵</span>
             </div>
@@ -894,11 +927,12 @@
                       || (dItem.sealDisc && state.spottedCodes.includes(dItem.sealDisc.code));
                     const isChecked = openedArr.includes(dIdx);
                     const stateCls = hasSpotted ? " doc-spotted" : (isChecked ? " doc-checked" : "");
+                    const dealCls = (!isMotionReduced() && (Date.now() - (state.travelerEnteredAt || 0)) < 650) ? " desk-doc-deal" : "";
                     const cornerBadge = hasSpotted
                       ? `<span class="desk-doc-badge spot">❗</span>`
                       : (isChecked ? `<span class="desk-doc-badge seen">👁️</span>` : "");
                     return `
-                      <button type="button" id="desk-doc-${dIdx}" class="desk-doc-item${stateCls}" data-doc-idx="${dIdx}" style="background:${bg};color:${fg};border:1.5px solid ${bdr};">
+                      <button type="button" id="desk-doc-${dIdx}" class="desk-doc-item${stateCls}${dealCls}" data-doc-idx="${dIdx}" style="--doc-delay:${dIdx * 45}ms;background:${bg};color:${fg};border:1.5px solid ${bdr};">
                         ${cornerBadge}
                         <span style="font-size:10px;font-weight:900;opacity:0.85;">${tag}</span>
                         <span style="font-size:12px;font-weight:800;line-height:1.2;">${tr(dItem.title, state.lang)}</span>
@@ -914,6 +948,8 @@
             return `
           <div id="doc-paper-el" class="doc-paper ${unfoldCls} ${docTheme} ${state.uvActive ? "uv-mode" : ""} ${state.uvActive && state.ownedAssets.includes("uv_spotlight") ? "uv-pro" : ""} ${wKey === "STORM" && !state.ownedAssets.includes("diesel_generator") && !state.uvActive ? "storm-flicker" : ""}">
             ${state.uvActive ? `<div class="uv-lens-overlay" id="uv-lens-overlay"></div>` : ""}
+            <div class="doc-watermark-emblem" aria-hidden="true"></div>
+            ${(doc.type === "PASSPORT" || doc.type === "MILITARY_ID") ? `<div class="doc-holo-strip" aria-hidden="true"></div>` : ""}
             <div style="display:flex;justify-content:space-between;align-items:center;font-size:9.5px;font-weight:900;letter-spacing:0.5px;opacity:0.78;border-bottom:1px dashed rgba(0,0,0,0.18);padding-bottom:3px;">
               <span>${headerBanner}</span>
               <button type="button" id="btn-fold-doc" style="background:transparent;color:inherit;padding:0 4px;font-size:10px;opacity:0.75;">📂 ${tr(L("Скласти", "Fold"), state.lang)}</button>
@@ -1058,6 +1094,7 @@
 
       state.justShook = false;
       const boothCanvasEl = document.getElementById("booth-canvas");
+      const reducedBooth = isMotionReduced();
       const boothSceneOpts = {
         portrait: t.portrait,
         transportShape: t.transportShape,
@@ -1079,7 +1116,14 @@
         weather: wKey,
         weatherCleared: Boolean(state.weatherCleared),
         hasCloneCar: t.violations.some(v => v.code === "VEHICLE_MISMATCH"),
-        isLive: true
+        travelerEnteredAt: state.travelerEnteredAt || 0,
+        speechAt: state.speechAt || 0,
+        knockVfxAt: state.knockVfxAt || 0,
+        coffeeVfxAt: state.coffeeVfxAt || 0,
+        dogVfxAt: state.dogVfxAt || 0,
+        reduceMotion: reducedBooth,
+        nowMs: Date.now(),
+        isLive: !reducedBooth
       };
       if (window._boothAnimRaf) {
         cancelAnimationFrame(window._boothAnimRaf);
@@ -1087,13 +1131,15 @@
       }
       let lastBoothDraw = 0;
       function tickBoothAnim(nowTs) {
-        if (state.phase !== "BOOTH_SHIFT" || document.getElementById("booth-canvas") !== boothCanvasEl) {
+        if (state.phase !== "BOOTH_SHIFT" || document.getElementById("booth-canvas") !== boothCanvasEl || isMotionReduced()) {
           window._boothAnimRaf = null;
           return;
         }
         if (!document.hidden && (!lastBoothDraw || nowTs - lastBoothDraw >= 33)) {
           lastBoothDraw = nowTs;
-          boothSceneOpts.timeSec = (nowTs || Date.now()) * 0.001;
+          const nowWall = Date.now();
+          boothSceneOpts.timeSec = (nowTs || nowWall) * 0.001;
+          boothSceneOpts.nowMs = nowWall;
           boothSceneOpts.barrierState = state.barrierState;
           boothSceneOpts.sirenActive = state.sirenActive;
           boothSceneOpts.uvActive = state.uvActive;
@@ -1104,6 +1150,13 @@
           boothSceneOpts.lang = state.lang;
           boothSceneOpts.weather = state.weather || "CLEAR";
           boothSceneOpts.weatherCleared = Boolean(state.weatherCleared);
+          boothSceneOpts.travelerEnteredAt = state.travelerEnteredAt || 0;
+          boothSceneOpts.speechAt = state.speechAt || 0;
+          boothSceneOpts.knockVfxAt = state.knockVfxAt || 0;
+          boothSceneOpts.coffeeVfxAt = state.coffeeVfxAt || 0;
+          boothSceneOpts.dogVfxAt = state.dogVfxAt || 0;
+          boothSceneOpts.reduceMotion = false;
+          boothSceneOpts.isLive = true;
           drawBoothScene(boothCanvasEl, boothSceneOpts);
           const oblikClk = document.getElementById("oblik-live-clock");
           if (oblikClk && !state.oblikIsScreenshot) {
@@ -1112,14 +1165,16 @@
         }
         window._boothAnimRaf = requestAnimationFrame(tickBoothAnim);
       }
-      boothSceneOpts.timeSec = Date.now() * 0.001;
+      boothSceneOpts.timeSec = reducedBooth ? 0 : Date.now() * 0.001;
       drawBoothScene(boothCanvasEl, boothSceneOpts);
-      window._boothAnimRaf = requestAnimationFrame(tickBoothAnim);
+      if (!reducedBooth && typeof requestAnimationFrame === "function") {
+        window._boothAnimRaf = requestAnimationFrame(tickBoothAnim);
+      }
 
       const miniC = document.getElementById("passport-mini-canvas");
       if (miniC) {
-        const mctx = miniC.getContext("2d");
-        drawPortrait(mctx, t.passportPortrait, miniC.width * 0.5, miniC.height * 0.98, 0.44);
+        const miniPrep = prepareHiDpiCanvas(miniC, 60, 60);
+        if (miniPrep) drawPortrait(miniPrep.ctx, t.passportPortrait, 30, 58.8, 0.44);
       }
 
       const qrC = document.getElementById("oblik-qr-canvas");
@@ -1437,6 +1492,8 @@
           if (uvSecret.timeDelta) { rewUk.push(`+${uvSecret.timeDelta}s`); rewEn.push(`+${uvSecret.timeDelta}s`); }
           const sUk = rewUk.length ? ` (${rewUk.join(", ")})` : "";
           const sEn = rewEn.length ? ` (${rewEn.join(", ")})` : "";
+          if (uvSecret.uah > 0 || uvSecret.usd > 0) state.hudPopAt = Date.now();
+          queueFxBurst([{ text: L("🔦 UV БОНУС!", "🔦 UV BONUS!"), tone: "cyan" }]);
           pushShiftLog("#00E5FF", L(`${uvSecret.logText.uk}${sUk}`, `${uvSecret.logText.en}${sEn}`));
           render();
         });
@@ -1446,6 +1503,9 @@
       document.getElementById("react-intimidate").addEventListener("click", () => {
         audio.playKnock();
         state.justShook = true;
+        state.knockVfxAt = Date.now();
+        state.speechAt = Date.now();
+        let knockedBribe = false;
         if (!state.intimidateUsed) {
           state.intimidateUsed = true;
           state.reactionState = "INTIMIDATED";
@@ -1471,6 +1531,7 @@
               state.interrogated = true;
               shookBribe = true;
             }
+            knockedBribe = shookBribe;
 
             let tellPair;
             const codes = (t.violations || []).map(v => v.code);
@@ -1509,11 +1570,16 @@
             pushShiftLog("#FF8A80", L(`📢 ${state.intimidateClueMsg.uk}`, `📢 ${state.intimidateClueMsg.en}`));
           }
         }
+        if (knockedBribe) {
+          queueFxBurst([{ text: L("💸 +30% ВИБИТО!", "💸 +30% SHAKEN!"), tone: "gold" }]);
+        }
         render();
       });
 
       document.getElementById("react-coffee").addEventListener("click", () => {
         audio.playCoffee();
+        state.coffeeVfxAt = Date.now();
+        state.speechAt = Date.now();
         const firstCoffee = state.reactionState !== "COFFEE_GIVEN";
         state.reactionState = "COFFEE_GIVEN";
         if (firstCoffee && state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_GOLD_DERUN")) {
@@ -1533,6 +1599,8 @@
           const tip = Math.round(t.coffeeTip * 2 * cMult) + (has("thermos_tray") ? 80 : 0) + (has("espresso_machine") ? 150 : 0) + (has("parrot_kesha") ? 150 : 0) + (has("addon_syrup_bar") ? 120 : 0) + (has("addon_gold_cage") ? 100 : 0) + sockTip + (meta.coffeeTipBonus * 2);
           state.money += tip;
           state.shiftExtrasEarned = (state.shiftExtrasEarned || 0) + tip;
+          state.hudPopAt = Date.now();
+          queueFxBurst([{ text: `+${tip} 🪙 ☕`, tone: "gold" }]);
           state.lastFeedback = {
             ok: true,
             title: L("☕ ЧАЙОВІ НА КАВУ", "☕ COFFEE TIP"),
@@ -1554,6 +1622,7 @@
 
       document.getElementById("react-dog").addEventListener("click", () => {
         audio.playDogSniff();
+        state.dogVfxAt = Date.now();
         if (state.ownedAssets.includes("uv_endoscope")) {
           state.shiftSec = Math.max(5, state.shiftSec - dogSecCost);
           state.trunkPanelOpen = false;
@@ -1577,6 +1646,7 @@
           const hasEndoscope = state.ownedAssets.includes("uv_endoscope");
           const isUvZoneHit = Boolean(state.uvCompartmentRevealed && state.dogTargetZone === zone);
           audio.playDogSniff();
+          state.dogVfxAt = Date.now();
           if (!state.checkedZones) state.checkedZones = [];
           if (!state.checkedZones.includes(zone)) state.checkedZones.push(zone);
           const stepSec = (hasEndoscope || isUvZoneHit) ? 1 : 2;
@@ -1663,6 +1733,8 @@
             state.nabkRisk = Math.min(100, state.nabkRisk + riskJump);
           }
           if (t.bribeOffer.syndicateFavor) state.tolikRep = Math.min(100, state.tolikRep + 20);
+          state.hudPopAt = Date.now();
+          queueFxBurst([{ text: `+${bribeInfo.display}`, tone: t.bribeOffer.isFriendlyGift ? "gold" : "usd" }]);
           render();
         });
       }
@@ -1676,6 +1748,7 @@
             state.nabkRisk = Math.min(100, state.nabkRisk + 12);
             audio.playHaggleFail();
             triggerHaptic([45, 30, 45]);
+            queueFxBurst([{ text: L("🚨 ПАСТКА +12%", "🚨 TRAP +12%"), tone: "red" }]);
             pushShiftLog("#FF5252", L("🚨 ПАСТКА НАБК! Під час торгу зафіксовано вимагання (+12% НАБК)!", "🚨 NABK TRAP! Shakedown demand caught on wire (+12% NABK)!"));
             render();
             return;
@@ -1693,6 +1766,7 @@
             triggerHaptic([18, 18, 28]);
             unlockDiscovery("DISC_HAGGLE_PRO");
             const pct = Math.round((state.haggleMult - 1) * 100);
+            queueFxBurst([{ text: `📈 +${pct}%!`, tone: "combo" }]);
             pushShiftLog("#FFB300", L(`📈 Торг вдався! Конверт зріс на +${pct}% (+2% НАБК).`, `📈 Haggle won! Bribe raised +${pct}% (+2% NABK).`));
           } else {
             state.haggleState = "FAILED";
@@ -1700,6 +1774,7 @@
             state.nabkRisk = Math.min(100, state.nabkRisk + 3);
             audio.playHaggleFail();
             triggerHaptic([40, 25, 40]);
+            queueFxBurst([{ text: L("😤 СХОВАВ!", "😤 PULLED!"), tone: "red" }]);
             pushShiftLog("#FFAB91", L("😤 Водій сховав конверт після торгу (+3% НАБК)! Можна 🚨 Затримати.", "😤 Driver pulled cash back after haggle (+3% NABK)! Can still 🚨 Detain."));
           }
           render();
@@ -2219,6 +2294,7 @@
             state.palychRep = Math.min(100, state.palychRep + (asset.palychBoost || 0));
             state.familyMorale = Math.min(100, state.familyMorale + (asset.moraleBoost || 0));
             if (asset.sbkBoost) state.sbkRep = Math.min(100, state.sbkRep + asset.sbkBoost);
+            queueFxBurst([{ text: `${asset.icon} ${tr(L("КУПЛЕНО!", "BOUGHT!"), state.lang)}`, tone: "gold" }]);
             saveStateToStorage();
             render();
           });
@@ -2260,6 +2336,7 @@
                 state.tolikRep = Math.min(100, state.tolikRep + addon.tolikBoost);
                 state.palychRep = Math.min(100, state.palychRep + addon.palychBoost);
                 state.familyMorale = Math.min(100, state.familyMorale + addon.moraleBoost);
+                queueFxBurst([{ text: `${addon.icon} ${tr(L("КУПЛЕНО!", "BOUGHT!"), state.lang)}`, tone: "gold" }]);
                 saveStateToStorage();
                 render();
               });
@@ -2275,14 +2352,15 @@
       if (evCanvas) {
         let lastEv = 0;
         const tickEvening = (ts) => {
-          if (state.phase !== "HOME_EVENING" || document.getElementById("evening-canvas") !== evCanvas) {
+          if (state.phase !== "HOME_EVENING" || document.getElementById("evening-canvas") !== evCanvas || isMotionReduced()) {
             window._phaseBannerRaf = null; return;
           }
           if (!lastEv || ts - lastEv >= 40) { lastEv = ts; drawEveningBanner(evCanvas, state, (ts || Date.now()) * 0.001); }
           window._phaseBannerRaf = requestAnimationFrame(tickEvening);
         };
-        drawEveningBanner(evCanvas, state, Date.now() * 0.001);
-        if (typeof requestAnimationFrame === "function") window._phaseBannerRaf = requestAnimationFrame(tickEvening);
+        const reducedEv = isMotionReduced();
+        drawEveningBanner(evCanvas, state, reducedEv ? 0 : Date.now() * 0.001);
+        if (!reducedEv && typeof requestAnimationFrame === "function") window._phaseBannerRaf = requestAnimationFrame(tickEvening);
       }
       document.getElementById("btn-next-day").addEventListener("click", () => { audio.playTap(); advanceToNextDay(false); });
       return;

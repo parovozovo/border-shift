@@ -1,5 +1,5 @@
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v8.9";
+  const BUILD_VERSION = "v9.0";
   const DAILY_OBNAL_LIMIT_USD = 5000;
   let confirmResetArmed = false;
 
@@ -33,6 +33,7 @@
   const AGENCY_BADGES_KEY = "border_shift_agency_badges_v1";
   const GAME_DISCOVERIES_KEY = "border_shift_discoveries_v1";
   const ONBOARDING_SEEN_KEY = "border_shift_onboarding_seen_v1";
+  const MOTION_PREF_KEY = "border_shift_reduce_motion_v1";
   const USD_UAH_RATE = 41;
 
   function hasSeenOnboarding() {
@@ -40,6 +41,20 @@
   }
   function markOnboardingSeen() {
     try { localStorage.setItem(ONBOARDING_SEEN_KEY, "1"); } catch (_) {}
+  }
+  function isMotionReduced() {
+    try {
+      const saved = localStorage.getItem(MOTION_PREF_KEY);
+      if (saved === "1") return true;
+      if (saved === "0") return false;
+      if (typeof window !== "undefined" && typeof window.matchMedia === "function") {
+        return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      }
+    } catch (_) {}
+    return false;
+  }
+  function setMotionReduced(flag) {
+    try { localStorage.setItem(MOTION_PREF_KEY, flag ? "1" : "0"); } catch (_) {}
   }
 
   const AGENCY_BADGE_DEFS = [

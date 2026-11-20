@@ -85,8 +85,25 @@
     stampSlam: null,
     stampSlamSeq: 0,
     stampSlamRenderedSeq: 0,
+    travelerEnteredAt: Date.now(),
+    barrierChangedAt: 0,
+    speechAt: 0,
+    knockVfxAt: 0,
+    coffeeVfxAt: 0,
+    dogVfxAt: 0,
+    hudPopAt: 0,
+    fxBurstSeq: 0,
+    fxBurstRenderedSeq: 0,
+    fxBursts: null,
     recurringArcs: { vasya: { stage: 0, lastOutcome: null, approved: 0, caught: 0, completed: false }, stepanMet: 0 }
   };
+
+  function queueFxBurst(items) {
+    if (!items || !items.length) return;
+    if (typeof isMotionReduced === "function" && isMotionReduced()) return;
+    state.fxBurstSeq = (state.fxBurstSeq || 0) + 1;
+    state.fxBursts = { seq: state.fxBurstSeq, items: items.slice(0, 4), at: Date.now() };
+  }
 
   function triggerHaptic(pattern) {
     try {
@@ -583,6 +600,16 @@
       stampSlam: null,
       stampSlamSeq: 0,
       stampSlamRenderedSeq: 0,
+      travelerEnteredAt: Date.now(),
+      barrierChangedAt: 0,
+      speechAt: 0,
+      knockVfxAt: 0,
+      coffeeVfxAt: 0,
+      dogVfxAt: 0,
+      hudPopAt: 0,
+      fxBurstSeq: 0,
+      fxBurstRenderedSeq: 0,
+      fxBursts: null,
       recurringArcs: freshArcs,
       queue: generateDailyQueue(baseDay, sandbox ? 14 : 12, sandbox, freshArcs),
       travelerIdx: 0,
@@ -822,6 +849,11 @@
     state.haggleExtraRisk = 0;
     state.offeredBribeBeforeHaggleFail = false;
     state.activePhoneCall = null;
+    state.travelerEnteredAt = Date.now();
+    state.speechAt = 0;
+    state.knockVfxAt = 0;
+    state.coffeeVfxAt = 0;
+    state.dogVfxAt = 0;
     if (state.weather === "FOG") {
       state.weatherCleared = Boolean(state.ownedAssets && state.ownedAssets.includes("uv_spotlight"));
     } else if (state.weather === "SNOW") {
@@ -1254,7 +1286,26 @@
     triggerHaptic(slamKind === "error" || slamKind === "warn" ? [45, 30, 45] : (slamKind === "detain" ? [30, 20, 40] : 22));
 
     state.barrierState = isApprove ? "OPEN_APPROVED" : (isDetain ? "SBK_ARREST_FLASH" : "CLOSED");
+    state.barrierChangedAt = Date.now();
     state.lastFeedbackAt = Date.now();
+
+    const fxItems = [];
+    if (netMoney > 0) fxItems.push({ text: `+${netMoney} 🪙`, tone: "gold" });
+    else if (netMoney < 0) fxItems.push({ text: `${netMoney} 🪙`, tone: "red" });
+    if (usdBonus > 0) fxItems.push({ text: `+${usdBonus} 💵`, tone: "usd" });
+    if (ruleCorrect && (state.shiftCombo || 0) >= 3) {
+      fxItems.push({ text: L(`🔥 СЕРІЯ x${state.shiftCombo}`, `🔥 STREAK x${state.shiftCombo}`), tone: "combo" });
+    }
+    if (isDetain && ruleCorrect && (t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE" || t.isWantedTarget)) {
+      fxItems.push({ text: L("-10% НАБК", "-10% NABK"), tone: "cyan" });
+    }
+    if (isStingOrRaid) {
+      fxItems.push({ text: L("🚨 +1 ДОГАНА", "🚨 +1 REPRIMAND"), tone: "red" });
+    }
+    if (fxItems.length > 0) {
+      if (netMoney !== 0 || usdBonus > 0) state.hudPopAt = Date.now();
+      queueFxBurst(fxItems);
+    }
     state.lastFeedback = {
       ok: ruleCorrect || ((bribedPass || phoneFavorPass) && !isStingOrRaid),
       title: shytomyrBonusToast
