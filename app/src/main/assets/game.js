@@ -2,7 +2,7 @@
   "use strict";
 
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v8.8";
+  const BUILD_VERSION = "v8.9";
   const DAILY_OBNAL_LIMIT_USD = 5000;
   let confirmResetArmed = false;
 
@@ -156,8 +156,67 @@
       title: L("Рідкісна нічна пригода", "Rare Night Encounter"),
       desc: L("Пережито й оплачено одну з ексклюзивних випадкових вечірніх справ.", "Unlocked and paid for a rare random night event."),
       hint: L("Увечері впіймай рідкісну подію з фіолетовою рамкою та оплати її.", "Catch a rare purple-bordered night activity and pay for it.")
+    },
+    {
+      id: "DISC_VASYA_ARC",
+      icon: "🎭",
+      title: L("Василь «Хамелеон»: Фінал історії", "Vasyl 'Chameleon': Story Finale"),
+      desc: L("Пройдено всі 4 акти історії маскувальника Василя Підпільного — від перуки до фіналу.", "Completed all 4 chapters of master-of-disguise Vasyl Pidpilnyi."),
+      hint: L("Зустрінь Василя 4 рази за кар'єру чи вільну гру й доведи його історію до кінця.", "Meet Vasyl 4 times in a run to reach his finale.")
+    },
+    {
+      id: "DISC_PHONE_CALL",
+      icon: "☎️",
+      title: L("Дзвінок зверху", "Call from Above"),
+      desc: L("Прийнято та опрацьовано терміновий службовий чи тіньовий дзвінок на пост.", "Answered a live mid-inspection hotline or syndicate phone call."),
+      hint: L("Підійми слухавку, коли телефон на посту задзвонить під час перевірки.", "Answer the desk phone when it rings mid-inspection.")
+    },
+    {
+      id: "DISC_HAGGLE_PRO",
+      icon: "📈",
+      title: L("Майстер торгу", "Master Haggler"),
+      desc: L("Успішно виторговано більшу суму в конверті прямо на КПП.", "Successfully squeezed a bigger bribe out of a nervous traveler."),
+      hint: L("Коли побачиш брудний конверт, натисни «📈 Мало!» й успішно дотисни водія.", "Click '📈 More!' on a dirty bribe offer and win the haggle.")
     }
   ];
+
+  const WEATHER_DEFS = {
+    CLEAR: {
+      id: "CLEAR",
+      icon: "🌙",
+      title: L("Ясна зоряна ніч", "Clear Starry Night"),
+      effect: L("Стандартна видимість — жодних перешкод на смузі.", "Clear visibility — standard booth conditions."),
+      shortTag: L("🌙 Ясно", "🌙 Clear")
+    },
+    RAIN: {
+      id: "RAIN",
+      icon: "🌧️",
+      title: L("Нічна злива", "Heavy Night Rain"),
+      effect: L("Злива б'є по даху будки — гаряча ☕ кава дає +30% чайових!", "Pouring rain — hot ☕ coffee yields +30% extra tips!"),
+      shortTag: L("🌧️ Злива (+30%☕)", "🌧️ Rain (+30%☕)")
+    },
+    FOG: {
+      id: "FOG",
+      icon: "🌫️",
+      title: L("Густий туман", "Dense Highway Fog"),
+      effect: L("Колір і модель авто в тумані! Вмикай 🔦 дальнє світло або УФ, щоб розгледіти машину.", "Vehicles shrouded in mist! Shine high-beams or UV (0s) to clear!"),
+      shortTag: L("🌫️ Туман", "🌫️ Fog")
+    },
+    SNOW: {
+      id: "SNOW",
+      icon: "❄️",
+      title: L("Хуртовина та заметіль", "Snowstorm & Blizzard"),
+      effect: L("Номери заліплює снігом (🧤 протерти -1s або Лазер/Підігрів 0s) • Чайові ☕ +50%!", "License plates frosted (🧤 wipe -1s or Laser/Heated Seat 0s) • ☕ +50% tips!"),
+      shortTag: L("❄️ Сніг (+50%☕)", "❄️ Snow (+50%☕)")
+    },
+    STORM: {
+      id: "STORM",
+      icon: "⛈️",
+      title: L("Гроза та шквал", "Thunderstorm"),
+      effect: L("Світло блимає на паперах без ⛽ генератора «Хонда-КПП» • Доплата +10% до ставки!", "Booth lights flicker without ⛽ generator • +10% hazard salary bonus!"),
+      shortTag: L("⛈️ Гроза (+10%🪙)", "⛈️ Storm (+10%🪙)")
+    }
+  };
 
   // Discrepancy catalog — factual findings only (no button-press spoilers!)
   const DISCREPANCY = {
@@ -2160,6 +2219,43 @@
       setTimeout(() => this.playWarmNote(233.08, 0.22, 0.01, 650, 0.06, "triangle"), 125);
     }
 
+    playStampSlam(kind) {
+      const isBad = kind === "error" || kind === "warn";
+      this.playNoiseBurst(0.055, "lowpass", 360, 1.8, 0.28);
+      this.playWarmNote(isBad ? 72 : 98, 0.09, 0.003, 210, 0.16, "sine");
+      setTimeout(() => this.playNoiseBurst(0.03, "bandpass", 720, 2.2, 0.12), 28);
+    }
+
+    playPhoneRing() {
+      const ringBurst = (offsetMs) => {
+        setTimeout(() => {
+          this.playWarmNote(680, 0.08, 0.004, 1500, 0.055, "triangle");
+          setTimeout(() => this.playWarmNote(820, 0.08, 0.004, 1600, 0.055, "triangle"), 65);
+        }, offsetMs);
+      };
+      ringBurst(0);
+      ringBurst(240);
+    }
+
+    playHaggleWin() {
+      this.playNoiseBurst(0.05, "highpass", 1500, 1.4, 0.12);
+      this.playWarmNote(440.0, 0.14, 0.01, 1300, 0.055, "triangle");
+      setTimeout(() => this.playWarmNote(659.25, 0.22, 0.015, 1600, 0.06, "sine"), 75);
+    }
+
+    playHaggleFail() {
+      this.playWarmNote(280, 0.14, 0.008, 750, 0.06, "triangle");
+      setTimeout(() => this.playWarmNote(190, 0.22, 0.01, 550, 0.06, "triangle"), 95);
+    }
+
+    playWipeSnow() {
+      this.playNoiseBurst(0.11, "bandpass", 1800, 1.4, 0.18);
+    }
+
+    playThunder() {
+      this.playNoiseBurst(0.55, "lowpass", 140, 0.9, 0.22);
+    }
+
     playSiren() {
       try {
         this.ensureCtx();
@@ -3011,7 +3107,8 @@
     });
   }
 
-  function createGrandpaStepan(dayNum) {
+  function createGrandpaStepan(dayNum, stepanMet) {
+    const met = stepanMet || 0;
     const isBike = Math.random() < 0.45;
     const trMeta = isBike
       ? makeTransportMeta({ shape: "BICYCLE", name: L("Велосипед «Україна-Спорт» з мішком", "'Ukraina' Bicycle"), isCar: false }, getColorById("BLUE"), "ПШ-067")
@@ -3028,11 +3125,17 @@
       includeDecl: dayNum >= 3,
       declaredCargo: L("2 мішки картоплі, домашнє сало та ліки онукам", "2 potato sacks, homemade lard & medicine"),
       vehicleSearchResult: L("Пес «Бавовна» облизує діда Степана — в багажнику картопля й банка малинового варення!", "Bavovna wags his tail — only potatoes and raspberry jam!"),
-      greeting: L("«Здоровенькі були, онучку! Бойко Степан, 68 років! Подивися на мої сиві вуса — їду провідати дочку й онуків!»", "'Good day, grandson! Stepan Boiko, 68 years old! Just visiting my grandkids!'"),
-      interrogationReply: L("«Та чого там перевіряти, в мене й вік пенсійний, і документи як у космонавта!»", "'Nothing to worry about, senior age and clean papers!'"),
+      greeting: met >= 1
+        ? L("«О, та це ж мій знайомий інспектор! Здоров будь, онучку! Дякую за минулий теплий прийом — везу знову свіжого варення онукам!»", "'Oh, it's my favorite inspector! Good health, grandson! Thank you for last time — bringing fresh jam to the grandkids again!'")
+        : L("«Здоровенькі були, онучку! Бойко Степан, 68 років! Подивися на мої сиві вуса — їду провідати дочку й онуків!»", "'Good day, grandson! Stepan Boiko, 68 years old! Just visiting my grandkids!'"),
+      interrogationReply: met >= 1
+        ? L("«Та ми ж уже як рідні! І вік пенсійний, і документи ті ж самі, кришталево чисті!»", "'We practically know each other by now! Clean senior papers!'")
+        : L("«Та чого там перевіряти, в мене й вік пенсійний, і документи як у космонавта!»", "'Nothing to worry about, senior age and clean papers!'"),
       intimidateReply: L("«Синочку, не кричи на діда, в мене ж тиск...»", "'Son, don't yell at an old man, my blood pressure...'"),
-      coffeeReply: L("«Ой спасибі за кавусю! Тримай 50 🪙 на пиріжок і банку малинового варення для родини!»", "'Bless you for the coffee! Take 50 🪙 for pastries!'"),
-      coffeeTip: 50,
+      coffeeReply: met >= 1
+        ? L("«От золота людина! Твоя кава як бальзам на душу! Лови 80 🪙 на пиріжки!»", "'Golden heart! Your coffee warms the soul! Take 80 🪙 for pastries!'")
+        : L("«Ой спасибі за кавусю! Тримай 50 🪙 на пиріжок і банку малинового варення для родини!»", "'Bless you for the coffee! Take 50 🪙 for pastries!'"),
+      coffeeTip: met >= 1 ? 80 : 50,
       arrestFull: L("Черга в шоці — ти навіщось затримав доброго дідуся на пенсії!", "The entire queue boos as you detain an innocent 68-year-old grandfather!"),
       arrestToned: L("Пенсіонера помилково затримано.", "Innocent retiree mistakenly detained."),
       shouldBeApproved: true,
@@ -4667,6 +4770,270 @@
     });
   }
 
+  function createRecurringVasya(vasyaArc, daySpec) {
+    const stage = (vasyaArc && vasyaArc.stage) || 0;
+    const lastOutcome = vasyaArc && vasyaArc.lastOutcome;
+    const caught = (vasyaArc && vasyaArc.caught) || 0;
+    const approved = (vasyaArc && vasyaArc.approved) || 0;
+    const needOblik = Boolean(daySpec && daySpec.requireOblikQr);
+
+    if (stage === 0) {
+      const trMeta = makeTransportMeta({ shape: "RETRO", name: L("«Занос 1.5» (У наклейках)", "'Zanos 1.5'"), isCar: true }, getColorById("EMERALD"), "ВН 0101 ХМ");
+      const wigPortrait = { gender: "F", skinTone: 1, faceShape: 1, hairStyle: 1, hairColor: 4, facialHair: 0, glasses: 1, headwear: 2, scarOrDetail: 0, expression: 2, lipColor: 2, earrings: 1, outfitStyle: 0, specialId: "NONE" };
+      const extraDocs = [{
+        type: "EXEMPTION_CERT",
+        title: L("ДОВІДКА ПРО ВІДСТРОЧКУ", "EXEMPTION CERTIFICATE"),
+        subtitle: L("Салон-ательє «Гламур»", "Glamour Hair Studio"),
+        fields: [
+          { label: L("Особа", "Holder"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+          { label: L("Підстава", "Basis"), value: L("Стиліст-візажист першої категорії", "Master Hairstylist"), disc: null },
+          { label: L("Ким видано", "Issued By"), value: L("«Клуб перукарок Карпатії»", "'Carpathian Wigs Club'"), disc: DISCREPANCY.FAKE_ISSUER_SEAL }
+        ],
+        sealText: L("ПЕРУКАР-МАГІСТРАТ", "HAIR-GUILD SEAL"),
+        sealDisc: DISCREPANCY.FAKE_ISSUER_SEAL
+      }];
+      if (needOblik) {
+        extraDocs.push({
+          type: "MILITARY_ID",
+          title: L("Е-ДОКУМЕНТ «ОБЛІК+»", "E-MILITARY ID 'OBLIK+'"),
+          subtitle: L("Цифровий реєстр", "Digital Registry"),
+          fields: [
+            { label: L("ПІБ", "Full Name"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+            { label: L("Статус QR", "QR Status"), value: L("QR-OK • ДАТА ОНОВЛЕНА", "QR-OK • UPDATED"), disc: null }
+          ],
+          sealText: L("МІНОБОРОНИ KRAINA • QR-OK", "MOD KRAINA • QR-OK"),
+          sealDisc: null
+        });
+      }
+      return buildTravelerFromParts({
+        fullName: L("Василь «Тьотя Вася» Підпільний", "Vasyl 'Auntie' Pidpilnyi"),
+        age: 34, gender: "M", portrait: wigPortrait, transport: trMeta,
+        passportFields: [
+          { label: L("ПІБ", "Full Name"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+          { label: L("Вік / Стать", "Age / Sex"), value: L("34 р. • ЧОЛ", "34 y/o • M"), disc: null },
+          { label: L("Дійсний до", "Valid Until"), value: L("14.08.2030", "2030-08-14"), disc: null }
+        ],
+        extraDocs,
+        includeDecl: true,
+        declaredCargo: L("Перуки, лак для волосся, фен (для подруги)", "Wigs, hairspray & hairdryer"),
+        vehicleSearchResult: L("На задньому сидінні запасна руда перука та книга «100 перевтілень».", "Back seat holds a spare ginger wig and '100 Disguises' book."),
+        greeting: L("«Хелоу, красунчику! Я стиліст Василь... ну тобто Вася! Вдягнув перуку на конкурс краси в Кракові, ось довідка!»", "'Hello handsome! Vasyl the stylist... just wearing a wig for a contest in Krakiv!'"),
+        interrogationReply: L("«Тс-с! Не прискіпуйся до печатки перукарні — ось 180 💵 на каву, запам'ятай Васька!»", "'Shh! Ignore the hair-guild stamp — take 180 💵 and remember Vasyl!'"),
+        intimidateReply: L("«Ой! *поправляє перуку басом* Та не гримай, шиньйон сповзає!»", "'Whoa! *adjusts wig in deep voice* Careful, it slips!'"),
+        coffeeReply: L("«Ммм, латте-арт! Як ти ставишся до творчих людей на кордоні?»", "'Love the coffee! Ready to help an artist cross?'"),
+        arrestFull: L("Василь «Тьотя Вася» знімає біляву перуку перед камерою СБК: «Ще побачимося на твоїй зміні, командире!»", "Vasyl pulls off the wig for SBK cameras: 'We will meet again on your shift!'"),
+        arrestToned: L("Мандрівника з підробленою печаткою перукарні затримано.", "Detained for bogus hair-guild seal."),
+        bribeOffer: { amount: 180, currency: "USD", requiresDiscovery: true, nabkRiskJump: 7, isStingTrap: false, syndicateFavor: false },
+        shouldBeApproved: false,
+        violations: [DISCREPANCY.FAKE_ISSUER_SEAL],
+        storyTag: "VASYA_ACT_1"
+      });
+    }
+
+    if (stage === 1) {
+      const trMeta = makeTransportMeta({ shape: "PICKUP", name: L("«Пікап Міцубісі Л200» (Пасіка)", "'Pickup L200' (Apiary)"), isCar: true }, getColorById("YELLOW"), "ВН 0202 ХМ");
+      const beePortrait = { gender: "M", skinTone: 1, faceShape: 1, hairStyle: 3, hairColor: 1, facialHair: 2, glasses: 2, headwear: 1, scarOrDetail: 0, expression: 1, outfitStyle: 3, specialId: "NONE" };
+      const extraDocs = [{
+        type: "EXEMPTION_CERT",
+        title: L("ДОВІДКА АГРАРІЯ", "AGRI EXPORTER PERMIT"),
+        subtitle: L("Облпродспілка", "Regional Agri-Union"),
+        fields: [
+          { label: L("Особа", "Holder"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+          { label: L("Підстава", "Basis"), value: L("Вивезення вуликів на медовий ярмарок", "Honey Fair Beehives Transport"), disc: null }
+        ],
+        sealText: L("МІНАГРО / ДПСК • ДІЙСНИЙ", "AGRI / SBGS • VALID"),
+        sealDisc: null
+      }];
+      if (needOblik) {
+        extraDocs.push({
+          type: "MILITARY_ID",
+          title: L("Е-ДОКУМЕНТ «ОБЛІК+»", "E-MILITARY ID 'OBLIK+'"),
+          subtitle: L("Цифровий реєстр", "Digital Registry"),
+          fields: [
+            { label: L("ПІБ", "Full Name"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+            { label: L("Статус QR", "QR Status"), value: L("QR-OK • ДАТА ОНОВЛЕНА", "QR-OK • UPDATED"), disc: null }
+          ],
+          sealText: L("МІНОБОРОНИ KRAINA • QR-OK", "MOD KRAINA • QR-OK"),
+          sealDisc: null
+        });
+      }
+      const greetCallback = lastOutcome === "APPROVED"
+        ? L("«Бз-з-з! Вітаю знову, бро! Минулого разу в перуці файно спрацювалися, тепер я пасічник Василь! Не чіпай вулики — бджоли злі!»", "'Bzz! Good to see you again, bro! Last time in a wig worked smoothly — now I'm Beekeeper Vasyl!'")
+        : L("«Бз-з-з! Пам'ятаєш «Тьотю Васю»? То був артистичний експеримент! Тепер я поважний пасічник із чистими паперами... але без пса!»", "'Bzz! Remember Auntie Vasyl? That was art! Now I'm a clean beekeeper... just keep the dog away!'");
+      return buildTravelerFromParts({
+        fullName: L("Василь «Пасічник» Підпільний", "Vasyl 'Beekeeper' Pidpilnyi"),
+        age: 34, gender: "M", portrait: beePortrait, transport: trMeta,
+        passportFields: [
+          { label: L("ПІБ", "Full Name"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+          { label: L("Вік / Стать", "Age / Sex"), value: L("34 р. • ЧОЛ", "34 y/o • M"), disc: null },
+          { label: L("Дійсний до", "Valid Until"), value: L("14.08.2030", "2030-08-14"), disc: null }
+        ],
+        extraDocs,
+        includeDecl: true,
+        declaredCargo: L("3 вулики бджіл та діжка липового меду", "3 beehives & barrel of lime honey"),
+        vehicleSearchResult: L("ПЕС «БАВОВНА» РОЗГРИЗ ВУЛИК: Жодної бджоли — під сотами 18 коробок годинників «Кролекс» і блоки контрабанди!", "DOG SEARCH: Zero bees — beehives packed with 18 Krolex boxes & smuggled cartons!"),
+        greeting: greetCallback,
+        interrogationReply: L("«Тихіше, погризе! Не треба розкривати вулики — тримай 280 💵 і липовий медок!»", "'Quiet, they'll sting! Skip the beehive inspection — take 280 💵!'"),
+        intimidateReply: L("«Ай! Бджоли гудять... *із вулика чути цокання швейцарських годинників*!»", "'Careful! *mechanical watch ticking sounds from inside the beehive*!'"),
+        coffeeReply: L("«Ех, до кави б мого меду... але ти ж песa не пустиш, правда?»", "'Honey goes great with coffee... skip the dog, yeah?'"),
+        arrestFull: L("Василя знімають у масці пасічника: «Ти знову знайшов мій тайник! Але третій образ тебе здивує!»", "Vasyl cuffed in beekeeper gear: 'You busted me again! Wait till you see Act 3!'"),
+        arrestToned: L("Контрабанду у фальшивих вуликах викрито.", "Contraband hidden inside fake beehives seized."),
+        hasContraband: true,
+        bribeOffer: { amount: 280, currency: "USD", requiresDiscovery: true, nabkRiskJump: 8, isStingTrap: false, syndicateFavor: false },
+        shouldBeApproved: false,
+        violations: [DISCREPANCY.CONTRABAND_CARGO],
+        storyTag: "VASYA_ACT_2"
+      });
+    }
+
+    if (stage === 2) {
+      const trMeta = makeTransportMeta({ shape: "E_SCOOTER", name: L("Електросамокат «Вжух-Х3»", "'Vzhykh-X3' E-Scooter"), isCar: false }, getColorById("BLUE"), "ПШ-303");
+      const hipPortrait = { gender: "M", skinTone: 0, faceShape: 0, hairStyle: 2, hairColor: 3, facialHair: 1, glasses: 2, headwear: 0, scarOrDetail: 0, expression: 2, outfitStyle: 2, specialId: "NONE" };
+      const stolenPhoto = { gender: "M", skinTone: 2, faceShape: 3, hairStyle: 4, hairColor: 0, facialHair: 4, glasses: 0, headwear: 0, scarOrDetail: 1, expression: 0, outfitStyle: 0, specialId: "NONE" };
+      const extraDocs = [{
+        type: "EXEMPTION_CERT",
+        title: L("ДОВІДКА ІТ-АРХІТЕКТОРА", "IT ARCHITECT PERMIT"),
+        subtitle: L("Державний Техно-Хаб", "National Tech Hub"),
+        fields: [
+          { label: L("Особа", "Holder"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+          { label: L("Підстава", "Basis"), value: L("Розгортання супутникової мережі", "Satellite Network Rollout"), disc: null }
+        ],
+        sealText: L("МІНЦИФРИ / ДПСК • ДІЙСНИЙ", "MINDIGITAL / SBGS • VALID"),
+        sealDisc: null
+      }];
+      if (needOblik) {
+        extraDocs.push({
+          type: "MILITARY_ID",
+          title: L("Е-ДОКУМЕНТ «ОБЛІК+»", "E-MILITARY ID 'OBLIK+'"),
+          subtitle: L("Цифровий реєстр", "Digital Registry"),
+          fields: [
+            { label: L("ПІБ", "Full Name"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+            { label: L("Статус QR", "QR Status"), value: L("QR-OK • ДАТА ОНОВЛЕНА", "QR-OK • UPDATED"), disc: null }
+          ],
+          sealText: L("МІНОБОРОНИ KRAINA • QR-OK", "MOD KRAINA • QR-OK"),
+          sealDisc: null
+        });
+      }
+      const greetTxt = approved >= 2
+        ? L("«Салют, старий партнере! То я, Вася-Хамелеон! Їду вже як ІТ-шник на самокаті — паспорт трохи чужою фоткою блиснув, то фігня, ти ж свій!»", "'Hey old partner! It's Vasyl Chameleon on a scooter! Passport photo looks weird, no big deal right?'")
+        : L("«Вітаю знову, інспекторе! Після перуки й пасіки я пішов в ІТ-стартап на самокаті! Фото в паспорті — то після пластичної операції, не дивись!»", "'Hello again, Inspector! After wigs & bees I went tech on a scooter! Passport photo was pre-makeover!'");
+      return buildTravelerFromParts({
+        fullName: L("Василь «Ілон» Підпільний", "Vasyl 'Elon' Pidpilnyi"),
+        age: 34, gender: "M", portrait: hipPortrait, passportPortrait: stolenPhoto, transport: trMeta,
+        passportFields: [
+          { label: L("ПІБ", "Full Name"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+          { label: L("Фотокартка", "Photo ID"), value: L("Цифровий знімок (вклеєно)", "Digital Photo Match"), disc: DISCREPANCY.PHOTO_MISMATCH },
+          { label: L("Дійсний до", "Valid Until"), value: L("14.08.2030", "2030-08-14"), disc: null }
+        ],
+        extraDocs,
+        includeDecl: true,
+        declaredCargo: L("Макбук-Муляж, окуляри для рейву, рюкзак", "Mock laptop, rave shades, backpack"),
+        vehicleSearchResult: L("У рюкзаку знайдено чужий закордонний паспорт із переклеєною обкладинкою.", "Found a foreign passport with an unglued photo page inside his backpack."),
+        greeting: greetTxt,
+        interrogationReply: L("«Та схуд просто на дієті! Ось 360 💵 — ти ж розумієш, як важко стати стартапером!»", "'Lost weight on a diet! Take 360 💵 — overlook the photo glitch!'"),
+        intimidateReply: L("«Е-е, не світи в очі! Фотку у Фотошопі за п'ять хвилин робили!»", "'Hey! I spent whole minutes photoshopping that mugshot!'"),
+        coffeeReply: L("«Капучино на мигдальному? Справжній європейський сервіс!»", "'Oat cappuccino? Pure European service!'"),
+        arrestFull: L("Василь зітхає біля самоката: «Три рази мене розкусив... Ну вчетверте я прийду вже по-справжньому!»", "Vasyl sighs beside his scooter: 'Three times busted... Next time I come back different!'"),
+        arrestToned: L("Афериста з чужим фото в паспорті затримано.", "Detained for passport photo mismatch."),
+        bribeOffer: { amount: 360, currency: "USD", requiresDiscovery: true, nabkRiskJump: 9, isStingTrap: false, syndicateFavor: false },
+        shouldBeApproved: false,
+        violations: [DISCREPANCY.PHOTO_MISMATCH],
+        storyTag: "VASYA_ACT_3"
+      });
+    }
+
+    // Act 4 Finale (Branches cleanly from your previous treatment of Vasyl!)
+    const isReformed = caught >= 2 || caught >= approved;
+    if (isReformed) {
+      const trMeta = makeTransportMeta({ shape: "MINIBUS", name: L("«Мерс Спрінтер Волонтер»", "'Mers Sprinter Volunteer'"), isCar: true }, getColorById("BLUE"), "ВН 0404 ВЛ");
+      const cleanPortrait = { gender: "M", skinTone: 1, faceShape: 1, hairStyle: 3, hairColor: 1, facialHair: 1, glasses: 0, headwear: 0, scarOrDetail: 0, expression: 1, outfitStyle: 1, specialId: "NONE" };
+      return buildTravelerFromParts({
+        fullName: L("Василь «Волонтер» Підпільний", "Vasyl 'Volunteer' Pidpilnyi"),
+        age: 34, gender: "M", portrait: cleanPortrait, transport: trMeta,
+        passportFields: [
+          { label: L("ПІБ", "Full Name"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+          { label: L("Вік / Стать", "Age / Sex"), value: L("34 р. • ЧОЛ", "34 y/o • M"), disc: null },
+          { label: L("Дійсний до", "Valid Until"), value: L("14.08.2032", "2032-08-14"), disc: null }
+        ],
+        extraDocs: [{
+          type: "EXEMPTION_CERT",
+          title: L("ДОВІДКА ВОЛОНТЕРА", "VOLUNTEER PERMIT"),
+          subtitle: L("Офіційний реєстр «Шлях»", "Official 'Shlyakh' Registry"),
+          fields: [
+            { label: L("Особа", "Holder"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+            { label: L("Підстава", "Basis"), value: L("Доставка FPV-дронів та оптики для фронту", "FPV Drone & Optics Supply"), disc: null }
+          ],
+          sealText: L("ЦНАП / ДПСК • ПЕРЕВІРЕНО", "CNAP / SBGS • VERIFIED"),
+          sealDisc: null
+        }],
+        includeDecl: true,
+        declaredCargo: L("Медичні аптечки IFAK, турнікети, спальники (офіційна накладна)", "IFAK trauma kits, tourniquets & sleeping bags (manifested)"),
+        vehicleSearchResult: L("Огляд псом «Бавовною»: 100% чисто! Все суворо за накладною волонтерського фонду!", "Dog search clean! Everything strictly matches the volunteer manifest!"),
+        greeting: L("«Пане інспекторе! Пам'ятаєш перуку, вулики й самокат? Ти мене тричі навернув на розум — я зав'язав з аферами і тепер чесно возжу допомогу армії. Перевіряй — тут усе як у книзі!»", "'Inspector! Remember the wig, bees & scooter? Your discipline reformed me — now I run real charity supplies legally. Check everything!'"),
+        interrogationReply: L("«Жодних конвертів і жодних махінацій! Кожен папірець справжній, дякую тобі за науку!»", "'Zero bribes, zero tricks! Every seal is 100% legit — thank you for straightening me out!'"),
+        intimidateReply: L("«*Усміхається спокійно* Більше не боюся стуку по склу — совість тепер чиста!»", "'*Smiles calmly* Not afraid of the booth glass anymore — clean conscience!'"),
+        coffeeReply: L("«О, за гарячу каву на трасі низький уклін! Лови 100 🪙 у банку будки!»", "'Bless you for the hot coffee! Take 100 🪙 for the booth fund!'"),
+        coffeeTip: 100,
+        arrestFull: L("Ти затримав Василя саме тоді, коли він чесно став на шлях волонтера — навіть пес розгублено скавчить!", "You detained Reformed Vasyl when his papers were finally 100% spotless!"),
+        arrestToned: L("Чесного волонтера помилково затримано.", "Reformed volunteer wrongly detained."),
+        shouldBeApproved: true,
+        storyTag: "VASYA_FINALE_CLEAN"
+      });
+    } else {
+      const trMeta = makeTransportMeta({ shape: "G_WAGON", name: L("«Гелік-Хамелеон V8»", "'Chameleon G-Wagon V8'"), isCar: true }, getColorById("BLACK"), "КГ 7777 ХМ");
+      const bossPortrait = { gender: "M", skinTone: 1, faceShape: 2, hairStyle: 3, hairColor: 1, facialHair: 2, glasses: 2, headwear: 0, scarOrDetail: 3, expression: 1, outfitStyle: 2, specialId: "NONE" };
+      const extraDocs = [{
+        type: "EXEMPTION_CERT",
+        title: L("ЗОЛОТИЙ МАНДАТ «ХАМЕЛЕОН»", "GOLD 'CHAMELEON' MANDATE"),
+        subtitle: L("Клуб Офшор-Транзит", "Offshore Transit Club"),
+        fields: [
+          { label: L("Особа", "Holder"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+          { label: L("Ким видано", "Issued By"), value: L("«Асоціація Тіньового Імпорту»", "'Shadow Import Syndicate'"), disc: DISCREPANCY.FAKE_ISSUER_SEAL }
+        ],
+        sealText: L("ХАМЕЛЕОН • ОФШОР-VIP", "CHAMELEON • OFFSHORE VIP"),
+        sealDisc: DISCREPANCY.FAKE_ISSUER_SEAL
+      }];
+      if (needOblik) {
+        extraDocs.push({
+          type: "MILITARY_ID",
+          title: L("Е-ДОКУМЕНТ «ОБЛІК+»", "E-MILITARY ID 'OBLIK+'"),
+          subtitle: L("Цифровий реєстр", "Digital Registry"),
+          fields: [
+            { label: L("ПІБ", "Full Name"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+            { label: L("Статус QR", "QR Status"), value: L("QR-OK • ДАТА ОНОВЛЕНА", "QR-OK • UPDATED"), disc: null }
+          ],
+          sealText: L("МІНОБОРОНИ KRAINA • QR-OK", "MOD KRAINA • QR-OK"),
+          sealDisc: null
+        });
+      }
+      return buildTravelerFromParts({
+        fullName: L("Василь «Хамелеон» Підпільний (VIP)", "Vasyl 'Chameleon' Pidpilnyi (VIP)"),
+        age: 34, gender: "M", portrait: bossPortrait, transport: trMeta,
+        passportFields: [
+          { label: L("ПІБ", "Full Name"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+          { label: L("Вік / Стать", "Age / Sex"), value: L("34 р. • ЧОЛ", "34 y/o • M"), disc: null },
+          { label: L("Дійсний до", "Valid Until"), value: L("14.08.2032", "2032-08-14"), disc: null }
+        ],
+        extraDocs,
+        includeDecl: true,
+        declaredCargo: L("Елітний кейс з антикваріатом", "Luxury antique case"),
+        vehicleSearchResult: L("ПЕС «БАВОВНА» ЗНАЙШОВ ДНО БАГАЖНИКА: Сейф із пачками готівки та підробленими паспортами!", "DOG SEARCH: False trunk floor hides cash bricks and blank passports!"),
+        greeting: L("«Братику, пам'ятаєш, як я колись в перуці їхав?! Завдяки тобі я піднявся до «Геліка» і керую караванами! Тримай царську подяку — 950 💵!»", "'Brother! Remember when I wore a wig?! Thanks to you I climbed to a G-Wagon! Take 950 💵 VIP cut!'"),
+        interrogationReply: L("«Навіщо нам ті печатки? Ти зробив мене королем траси — забирай 950 💵 і піднімай шлагбаум!»", "'Forget seals — you made me king of this highway! Grab 950 💵!'"),
+        intimidateReply: L("«Ха-ха, не грайся в суворого — ми ж обоє в темі з першого дня!»", "'Haha relax partner — we've been in business since Act 1!'"),
+        coffeeReply: L("«Конаєш над старим термосом? Купуй свій острів за мої гроші!»", "'Still pouring thermos coffee? Take my cash and buy a yacht!'"),
+        arrestFull: L("Василя «Хамелеона» скрутили прямо біля чорного «Геліка» — фінал великої тіньової кар'єри!", "Vasyl Chameleon cuffed right beside his black G-Wagon — end of a shadow empire!"),
+        arrestToned: L("Голову тіньового трафіку затримано на кордоні.", "Shadow smuggling boss detained."),
+        hasContraband: true,
+        bribeOffer: { amount: 950, currency: "USD", instantOffer: true, nabkRiskJump: 14, isStingTrap: false, syndicateFavor: true },
+        shouldBeApproved: false,
+        violations: [DISCREPANCY.FAKE_ISSUER_SEAL, DISCREPANCY.CONTRABAND_CARGO],
+        isWantedTarget: true,
+        storyTag: "VASYA_FINALE_BOSS"
+      });
+    }
+  }
+
   function ensureRequiredDocsForDay(trv, daySpec) {
     if (!trv || !trv.shouldBeApproved || !daySpec) return;
     if (daySpec.requireVehicleDecl && !trv.documents.some(d => d.type === "VEHICLE_CUSTOMS")) {
@@ -4735,10 +5102,24 @@
   let usedShytomyrRun = new Set();
   let usedEncounterIds = new Set();
 
-  function generateDailyQueue(daySpec, count, isSandbox) {
+  function generateDailyQueue(daySpec, count, isSandbox, recurringArcs) {
     const q = [];
     const seenNames = new Set();
     const dNum = daySpec ? daySpec.dayNumber : 1;
+    const arcs = recurringArcs || null;
+    const stepanMetCount = arcs ? (arcs.stepanMet || 0) : 0;
+
+    // 0. Recurring Multi-Day Client Mini-Arc (Василь «Хамелеон» Підпільний — 4 acts)
+    if (arcs && arcs.vasya && !arcs.vasya.completed && (arcs.vasya.stage || 0) < 4) {
+      const vasyaScheduled = isSandbox
+        ? (dNum >= 2 && dNum % 2 === 0)
+        : (dNum === 2 || dNum === 4 || dNum === 6 || dNum === 7);
+      if (vasyaScheduled) {
+        const vTrv = createRecurringVasya(arcs.vasya, daySpec);
+        seenNames.add(vTrv.fullName.uk);
+        q.push(vTrv);
+      }
+    }
 
     // 1. Prioritize unseen Shytomyr legends (so player discovers all 12 without frustrating repeats!)
     const globalSeen = new Set(loadUnlockedShytomyr());
@@ -4764,7 +5145,7 @@
     const uniquePool = [
       { tag: "AUNT_HALYA", minDay: 1, fn: () => createAuntHalya() },
       { tag: "DEPUTY_SON", minDay: 1, fn: () => createDeputySon() },
-      { tag: "STEPAN_2", minDay: 1, fn: () => createGrandpaStepan(dNum) },
+      { tag: "STEPAN_2", minDay: 1, fn: () => createGrandpaStepan(dNum, stepanMetCount) },
       { tag: "GRANDMA_PICKLES", minDay: 1, fn: () => createGrandmaPickles() },
       { tag: "CRYPTO_SCOOTER", minDay: 2, fn: () => createCryptoStartupFounder(dNum) },
       { tag: "COFFIN", minDay: 3, fn: () => createCoffinSneezer() },
@@ -4786,6 +5167,13 @@
         q.push(stTrv);
         addedStory++;
       }
+    }
+
+    // Warm repeat-visit memory for Grandpa Stepan on Day 6 Campaign if met earlier
+    if (!isSandbox && dNum === 6 && stepanMetCount >= 1 && q.length < count - 2 && !seenNames.has("Степан Петрович Бойко")) {
+      const repStepan = createGrandpaStepan(dNum, stepanMetCount);
+      seenNames.add(repStepan.fullName.uk);
+      q.push(repStepan);
     }
 
     // 3. War/Intelligence encounters (paced by Campaign Day, full mix in Sandbox)
@@ -6071,16 +6459,43 @@
     const barrierState = opts.barrierState || "CLOSED";
     const tSec = opts.timeSec || 0;
     const isLive = !!opts.isLive;
+    const weather = opts.weather || "CLEAR";
+    const weatherCleared = opts.weatherCleared !== false;
+    const hasGenerator = (opts.ownedAssets || []).includes("diesel_generator");
 
-    // Sky gradient + moving clouds
+    // Sky gradient + dynamic weather tint & lightning flashes
+    const skyTopMap = { CLEAR: "#131D26", RAIN: "#1A232A", FOG: "#2A3437", SNOW: "#1E2C3A", STORM: "#101522" };
+    const skyBotMap = { CLEAR: "#2E4352", RAIN: "#37474F", FOG: "#607177", SNOW: "#546E7A", STORM: "#263248" };
     const skyGrad = ctx.createLinearGradient(0, 0, 0, h * 0.44);
-    skyGrad.addColorStop(0, sirenActive ? "#5A1F1E" : (droneWarning ? "#4E342E" : (dayNumber >= 4 ? "#1E282E" : "#2D3C45")));
-    skyGrad.addColorStop(1, sirenActive ? "#7D2C2B" : (droneWarning ? "#6D4C41" : "#546E7A"));
+    skyGrad.addColorStop(0, sirenActive ? "#5A1F1E" : (droneWarning ? "#4E342E" : (skyTopMap[weather] || (dayNumber >= 4 ? "#1E282E" : "#2D3C45"))));
+    skyGrad.addColorStop(1, sirenActive ? "#7D2C2B" : (droneWarning ? "#6D4C41" : (skyBotMap[weather] || "#546E7A")));
     ctx.fillStyle = skyGrad;
     ctx.fillRect(0, 0, w, h * 0.44);
 
+    // Clear starry night sparkles vs Storm lightning bolt
+    if (weather === "CLEAR" && !sirenActive) {
+      for (let si = 0; si < 14; si++) {
+        const sx = (si * 37 + 9) % Math.floor(w * 0.53);
+        const sy = 5 + ((si * 19 + 3) % Math.floor(h * 0.24));
+        const alpha = 0.35 + (isLive ? 0.35 * Math.abs(Math.sin(tSec * 1.8 + si)) : 0.2);
+        ctx.fillStyle = `rgba(255, 250, 220, ${alpha.toFixed(2)})`;
+        ctx.fillRect(sx, sy, 1.4, 1.4);
+      }
+    } else if (weather === "STORM" && isLive && Math.sin(tSec * 1.9 + 0.5) > 0.965) {
+      ctx.fillStyle = "rgba(220, 240, 255, 0.34)";
+      ctx.fillRect(0, 0, w * 0.55, h * 0.44);
+      ctx.strokeStyle = "#FFFDE7";
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(w * 0.19, 2);
+      ctx.lineTo(w * 0.16, h * 0.14);
+      ctx.lineTo(w * 0.21, h * 0.16);
+      ctx.lineTo(w * 0.15, h * 0.31);
+      ctx.stroke();
+    }
+
     // Drifting clouds
-    ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
+    ctx.fillStyle = weather === "STORM" ? "rgba(255, 255, 255, 0.14)" : "rgba(255, 255, 255, 0.08)";
     for (let ci = 0; ci < 3; ci++) {
       const cx = ((tSec * (4 + ci * 1.5) + ci * 75) % (w + 40)) - 20;
       const cy = 12 + ci * 11;
@@ -6123,22 +6538,45 @@
       ctx.fill();
     }
 
-    // Asphalt yard & road marking
-    ctx.fillStyle = "#3A423E";
+    // Asphalt yard & wet/snowy surface accents
+    ctx.fillStyle = weather === "RAIN" || weather === "STORM" ? "#2E3739" : (weather === "SNOW" ? "#455259" : "#3A423E");
     ctx.fillRect(0, h * 0.43, w, h * 0.57);
+    if (weather === "RAIN" || weather === "STORM") {
+      ctx.fillStyle = "rgba(128, 203, 196, 0.12)";
+      ctx.beginPath(); ctx.ellipse(w * 0.28, h * 0.85, 34, 6, 0, 0, Math.PI * 2); ctx.fill();
+    } else if (weather === "SNOW") {
+      ctx.fillStyle = "rgba(240, 248, 255, 0.42)";
+      ctx.fillRect(0, h * 0.43, w * 0.54, 4);
+      ctx.fillRect(0, h - 5, w * 0.54, 5);
+    }
     ctx.strokeStyle = "rgba(255,255,255,0.22)";
     ctx.setLineDash([10, 8]);
     ctx.lineWidth = 1.5;
     ctx.beginPath(); ctx.moveTo(0, h * 0.66); ctx.lineTo(w * 0.54, h * 0.66); ctx.stroke();
     ctx.setLineDash([]);
 
-    // Ambient snow / drizzle particles
-    if (isLive) {
-      ctx.fillStyle = "rgba(220, 235, 245, 0.32)";
-      for (let pi = 0; pi < 12; pi++) {
-        const px = ((pi * 31 + tSec * 12) % (w * 0.54));
-        const py = ((pi * 23 + tSec * 36) % h);
-        ctx.fillRect(px, py, 1.6, 3.2);
+    // Dynamic Precipitation Particles
+    if (weather === "RAIN" || weather === "STORM") {
+      const dropCount = weather === "STORM" ? 28 : 20;
+      const spd = weather === "STORM" ? 135 : 95;
+      ctx.strokeStyle = "rgba(176, 216, 235, 0.48)";
+      ctx.lineWidth = 1.1;
+      for (let pi = 0; pi < dropCount; pi++) {
+        const px = ((pi * 23 + tSec * 34) % (w * 0.54));
+        const py = ((pi * 17 + tSec * spd) % h);
+        ctx.beginPath();
+        ctx.moveTo(px, py);
+        ctx.lineTo(px - 3.5, py + 7.5);
+        ctx.stroke();
+      }
+    } else if (weather === "SNOW") {
+      ctx.fillStyle = "rgba(245, 250, 255, 0.82)";
+      for (let pi = 0; pi < 24; pi++) {
+        const px = ((pi * 19 + tSec * 14 + Math.sin(tSec * 2 + pi) * 4) % (w * 0.54));
+        const py = ((pi * 15 + tSec * 28) % h);
+        ctx.beginPath();
+        ctx.arc(Math.abs(px), py, (pi % 2) + 1.2, 0, Math.PI * 2);
+        ctx.fill();
       }
     }
 
@@ -6167,6 +6605,27 @@
     // Draw detailed animated transport!
     drawTransportInBooth(ctx, w, h, opts.transportShape || "SEDAN", opts.colorHex || "#607D8B", opts.roofHex || "#455A64", { timeSec: tSec, isLive, hasPassenger: !!opts.hasPassenger });
 
+    // Fog occlusion over vehicle lane until cleared (or subtle parted mist when cleared!)
+    if (weather === "FOG") {
+      if (!weatherCleared) {
+        const drift = isLive ? Math.sin(tSec * 0.9) * 8 : 0;
+        ctx.fillStyle = "rgba(195, 210, 214, 0.74)";
+        ctx.beginPath(); ctx.ellipse(w * 0.25 + drift, h * 0.70, w * 0.27, h * 0.20, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "rgba(176, 195, 200, 0.65)";
+        ctx.beginPath(); ctx.ellipse(w * 0.18 - drift, h * 0.56, w * 0.24, h * 0.16, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(w * 0.34 + drift * 0.6, h * 0.84, w * 0.22, h * 0.14, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "rgba(255, 255, 255, 0.88)";
+        ctx.font = "bold 10px sans-serif";
+        ctx.fillText(opts.lang === "EN" ? "🌫️ DENSE FOG" : "🌫️ ТУМАН", 8, h - 10);
+      } else {
+        const beam = ctx.createLinearGradient(w * 0.54, h * 0.45, w * 0.04, h * 0.85);
+        beam.addColorStop(0, "rgba(255, 249, 196, 0.26)");
+        beam.addColorStop(1, "rgba(255, 249, 196, 0.02)");
+        ctx.fillStyle = beam;
+        ctx.fillRect(0, h * 0.42, w * 0.54, h * 0.56);
+      }
+    }
+
     // Booth counter divider & Traveler portrait on RIGHT window!
     ctx.fillStyle = "rgba(18, 22, 20, 0.46)";
     ctx.fillRect(w * 0.55, 0, w * 0.45, h);
@@ -6179,6 +6638,12 @@
       timeSec: tSec,
       isLive
     });
+
+    // Storm booth power flicker unless diesel generator is owned
+    if (weather === "STORM" && !hasGenerator && !opts.uvActive && isLive && Math.sin(tSec * 2.7) > 0.88 && Math.sin(tSec * 23) > 0) {
+      ctx.fillStyle = "rgba(8, 12, 18, 0.34)";
+      ctx.fillRect(w * 0.55, 0, w * 0.45, h);
+    }
 
     // UV Spotlight Beam over booth window + animated scan line!
     const isEn = opts.lang === "EN";
@@ -6529,8 +6994,46 @@
     encounterTriggered: false,
     activeEndingId: null,
     usd: 0,
-    campaignFlags: {}
+    campaignFlags: {},
+    weather: "CLEAR",
+    weatherCleared: true,
+    haggleState: "NONE",
+    haggleMult: 1.0,
+    haggleExtraRisk: 0,
+    offeredBribeBeforeHaggleFail: false,
+    activePhoneCall: null,
+    shiftPhoneCallUsed: false,
+    stampSlam: null,
+    stampSlamSeq: 0,
+    stampSlamRenderedSeq: 0,
+    recurringArcs: { vasya: { stage: 0, lastOutcome: null, approved: 0, caught: 0, completed: false }, stepanMet: 0 }
   };
+
+  function triggerHaptic(pattern) {
+    try {
+      if (typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
+        navigator.vibrate(pattern);
+      }
+    } catch (_) {}
+  }
+
+  function rollDailyWeather(daySpec, sandboxMod, isSandbox) {
+    const dNum = daySpec ? daySpec.dayNumber : 1;
+    const mId = sandboxMod && sandboxMod.id ? sandboxMod.id : "";
+    const hintUk = daySpec && daySpec.wantedHint && daySpec.wantedHint.uk ? daySpec.wantedHint.uk.toLowerCase() : "";
+    if (mId === "FOG_NIGHT") return "FOG";
+    if (mId === "DRONE_BLACKOUT") return "STORM";
+    if (mId === "BORDER_AMNESTY_COFFEE" || hintUk.includes("сніг")) return "SNOW";
+    if (!isSandbox) {
+      if (dNum === 1) return "CLEAR";
+      if (dNum === 2) return "RAIN";
+      if (dNum === 3) return "FOG";
+      if (dNum === 4) return "SNOW";
+      if (dNum === 5 || dNum === 7) return "STORM";
+      if (dNum === 6) return pick(["RAIN", "FOG", "SNOW", "STORM"]);
+    }
+    return pick(["CLEAR", "RAIN", "FOG", "SNOW", "STORM"]);
+  }
 
   function loadCampaignCheckpoints() {
     try { return JSON.parse(localStorage.getItem(CAMPAIGN_CHECKPOINTS_KEY) || "{}"); } catch (_) { return {}; }
@@ -6551,6 +7054,8 @@
       const snap = cps["day_" + dayNum];
       if (!snap) return false;
       state = Object.assign(state, snap);
+      if (!state.recurringArcs) state.recurringArcs = { vasya: { stage: 0, lastOutcome: null, approved: 0, caught: 0, completed: false }, stepanMet: 0 };
+      if (!state.weather) state.weather = "CLEAR";
       state.phase = "MORNING_BRIEFING";
       saveStateToStorage();
       render();
@@ -6665,7 +7170,8 @@
       else rankScale = 1.0;
     }
     const baseAmt = (currency === "USD" || offer.isFriendlyGift) ? offer.amount : (offer.amount < 500 ? offer.amount * 5 : offer.amount);
-    const amt = Math.round(baseAmt * rankScale * modMult * jacketMult * ringMult * audiMult * prepMult * intimidateMult);
+    const haggleMult = (!offer.isFriendlyGift && state.haggleState === "WON" && state.haggleMult) ? state.haggleMult : 1.0;
+    const amt = Math.round(baseAmt * rankScale * modMult * jacketMult * ringMult * audiMult * prepMult * intimidateMult * haggleMult);
     return {
       amount: amt,
       currency,
@@ -6673,7 +7179,9 @@
       display: currency === "USD" ? `${amt.toLocaleString("en-US")} 💵` : `${amt.toLocaleString("en-US")} 🪙`,
       isInstant: Boolean(offer.instantOffer),
       requiresDiscovery: Boolean(offer.requiresDiscovery),
-      boostedByIntimidate: Boolean(state.intimidateBribeBoosted && !offer.isFriendlyGift)
+      boostedByIntimidate: Boolean(state.intimidateBribeBoosted && !offer.isFriendlyGift),
+      boostedByHaggle: Boolean(!offer.isFriendlyGift && state.haggleState === "WON"),
+      hagglePct: Math.round((haggleMult - 1) * 100)
     };
   }
 
@@ -6722,6 +7230,8 @@
       const raw = localStorage.getItem(SAVE_KEY);
       if (!raw) return false;
       state = Object.assign(state, JSON.parse(raw));
+      if (!state.recurringArcs) state.recurringArcs = { vasya: { stage: 0, lastOutcome: null, approved: 0, caught: 0, completed: false }, stepanMet: 0 };
+      if (!state.weather) state.weather = "CLEAR";
       render();
       return true;
     } catch (_) {
@@ -6975,13 +7485,27 @@
       baseDay = built.daySpec;
     }
     const baseSec = (sandbox ? 215 : 195) + (mod.shiftSecDelta || 0) + meta.shiftTimeBonus;
+    const freshArcs = { vasya: { stage: 0, lastOutcome: null, approved: 0, caught: 0, completed: false }, stepanMet: 0 };
+    const startWeather = rollDailyWeather(baseDay, mod, sandbox);
     state = Object.assign(state, {
       phase: "MORNING_BRIEFING",
       isSandbox: sandbox,
       dayIndex: 0,
       daySpec: baseDay,
       sandboxMod: mod,
-      queue: generateDailyQueue(baseDay, sandbox ? 14 : 12, sandbox),
+      weather: startWeather,
+      weatherCleared: true,
+      haggleState: "NONE",
+      haggleMult: 1.0,
+      haggleExtraRisk: 0,
+      offeredBribeBeforeHaggleFail: false,
+      activePhoneCall: null,
+      shiftPhoneCallUsed: false,
+      stampSlam: null,
+      stampSlamSeq: 0,
+      stampSlamRenderedSeq: 0,
+      recurringArcs: freshArcs,
+      queue: generateDailyQueue(baseDay, sandbox ? 14 : 12, sandbox, freshArcs),
       travelerIdx: 0,
       selectedDocIdx: 0,
       shiftSec: Math.max(150, baseSec),
@@ -7102,8 +7626,12 @@
     state.encounterTriggered = false;
     state.gotReprimandToday = false;
     state.radioDispatch = null;
+    state.shiftPhoneCallUsed = false;
+    state.activePhoneCall = null;
+    state.stampSlam = null;
+    const wDef = (typeof WEATHER_DEFS !== "undefined" && WEATHER_DEFS[state.weather || "CLEAR"]) || { shortTag: L("🌙 Ясно", "🌙 Clear") };
     state.shiftLogs = [
-      { color: "#B0BEC5", text: L(`Зміна Дня ${state.daySpec.dayNumber} почалася. Перевіряйте документи й багажник.`, `Day ${state.daySpec.dayNumber} shift started. Inspect docs & trunks.`) }
+      { color: "#B0BEC5", text: L(`Зміна Дня ${state.daySpec.dayNumber} почалася (${wDef.shortTag.uk}). Перевіряйте документи й багажник.`, `Day ${state.daySpec.dayNumber} shift started (${wDef.shortTag.en}). Inspect docs & trunks.`) }
     ];
     state.logsExpanded = false;
     state.barrierState = "CLOSED";
@@ -7117,6 +7645,73 @@
     if (!state.shiftLogs) state.shiftLogs = [];
     state.shiftLogs.unshift({ color, text });
     if (state.shiftLogs.length > 25) state.shiftLogs.length = 25;
+  }
+
+  function maybeSpawnLivePhoneCall(t) {
+    if (state.shiftPhoneCallUsed || !t) return;
+    const dNum = state.daySpec ? state.daySpec.dayNumber : 1;
+    if (!state.isSandbox && dNum < 2) return;
+    if (state.travelerIdx === 0 || state.travelerIdx === 4) return;
+    const tag = t.storyTag || "";
+    if (tag === "NABK_STING" || tag === "INTEL_ALLY" || tag.startsWith("SHYTOMYR_") || tag.startsWith("VASYA_")) return;
+    const chance = state.travelerIdx >= 6 ? 1.0 : 0.38;
+    if (Math.random() >= chance) return;
+
+    const pool = [];
+    const reqDet = Boolean(t.isWantedTarget || (t.violations && t.violations.some(v => v.requiresDetention)));
+    if (!t.shouldBeApproved && tag !== "FSM_SPY" && tag !== "SABOTEUR" && !t.isWantedTarget) {
+      pool.push({
+        type: "PALYCH_FAVOR",
+        caller: L("🧢 Пал Палич (Пряма лінія)", "🧢 Pal Palych (Direct Line)"),
+        message: L(
+          "«Слухай уважно, інспекторе! За цього мандрівника люди зверху попросили. Натискай ✔ ПРОПУСТИТИ без штрафів — матимеш +250 💵 і +18 до моєї поваги!»",
+          "'Listen closely! Brass asked a favor for this traveler. Press ✔ APPROVE — zero fine, +250 💵 & +18 my rep!'"
+        ),
+        rewardHint: L("Умова: ✔ ПРОПУСТИТИ → +250 💵, +18 Палич, без штрафу (+8% НАБК)", "Order: ✔ APPROVE → +250 💵, +18 Palych, zero fine (+8% NABK)"),
+        logLine: L("☎️ Пал Палич (телефон): «Пропусти цього клієнта — +250 💵 і +18 поваги!»", "☎️ Palych (Phone): 'Wave this traveler through — +250 💵 & +18 rep!'")
+      });
+    }
+    if (!t.shouldBeApproved && (t.hasContraband || t.bribeOffer) && tag !== "FSM_SPY" && tag !== "SABOTEUR") {
+      pool.push({
+        type: "TOLIK_FAVOR",
+        caller: L("🚐 Толік «Бусик» (Закритий канал)", "🚐 Tolik 'Busyk' (Encrypted Line)"),
+        message: L(
+          "«Бро, на лінії свій борт! Пропусти цю машину прямо зараз без шмону — скину +400 💵 у бардачок і +22 довіри синдикату!»",
+          "'Bro, that ride is ours! Wave them ✔ APPROVE right now — +400 💵 & +22 Syndicate trust!'"
+        ),
+        rewardHint: L("Умова: ✔ ПРОПУСТИТИ → +400 💵, +22 Толік, -10 СБК (+10% НАБК)", "Order: ✔ APPROVE → +400 💵, +22 Tolik, -10 SBK (+10% NABK)"),
+        logLine: L("☎️ Толік (телефон): «Мій борт на смузі — пропусти за +400 💵 і +22 довіри!»", "☎️ Tolik (Phone): 'My crew at gate — approve for +400 💵 & +22 trust!'")
+      });
+    }
+    if (!t.shouldBeApproved && reqDet) {
+      pool.push({
+        type: "SBK_URGENT",
+        caller: L("🦅 Майор СБК «Тихий» (Терміново)", "🦅 SBK Major 'Quiet' (Urgent)"),
+        message: L(
+          "«КПП, тримайте суб'єкта на смузі! Оперативна група вже поруч — оформлюй 🚨 СБК / АРЕШТ негайно: зверху +1 800 🪙 і +10 СБК!»",
+          "'Gate, hold this subject! Quick-response squad inbound — hit 🚨 DETAIN for +1,800 🪙 & +10 SBK!'"
+        ),
+        rewardHint: L("Умова: 🚨 СБК / АРЕШТ → +1 800 🪙 премії та +10 СБК", "Order: 🚨 DETAIN → +1,800 🪙 extra bounty & +10 SBK"),
+        logLine: L("☎️ СБК (телефон): «Терміновий арешт фігуранта — +1 800 🪙 і +10 СБК!»", "☎️ SBK (Phone): 'Urgent arrest order — +1,800 🪙 & +10 SBK!'")
+      });
+    }
+    pool.push({
+      type: "NABK_AUDIT",
+      caller: L("🕵️ Гаряча лінія ДПСК / НАБК", "🕵️ SBGS / NABK Spot Audit Line"),
+      message: L(
+        "«Контрольний аудит поста по камерах! Оформіть цього мандрівника суворо за статутом (без хабарів) — знімемо -10% ризику НАБК і дамо +800 🪙 премії!»",
+        "'Live camera audit! Process this traveler strictly per protocol — removes -10% NABK risk & awards +800 🪙!'"
+      ),
+      rewardHint: L("Умова: Правильно за статутом (без конвертів) → -10% НАБК, +800 🪙", "Order: Strict protocol (no bribes) → -10% NABK, +800 🪙"),
+      logLine: L("☎️ Аудит НАБК (телефон): «Оформіть суворо за законом — -10% НАБК і +800 🪙!»", "☎️ NABK Audit (Phone): 'Process strictly by rules — -10% NABK & +800 🪙!'")
+    });
+
+    const chosen = pick(pool);
+    state.shiftPhoneCallUsed = true;
+    state.activePhoneCall = Object.assign({}, chosen, { answered: false, dismissed: false });
+    audio.playPhoneRing();
+    triggerHaptic([35, 50, 35]);
+    pushShiftLog("#FFD54F", L("☎️ Вхідний дзвінок на пост! Підійми слухавку біля вікна!", "☎️ Desk phone ringing! Answer the line at the booth!"));
   }
 
   function prepareCurrentTraveler() {
@@ -7143,6 +7738,18 @@
     state.justUnfoldedDoc = false;
     state.oblikScanned = false;
     state.openedDocIndices = [];
+    state.haggleState = "NONE";
+    state.haggleMult = 1.0;
+    state.haggleExtraRisk = 0;
+    state.offeredBribeBeforeHaggleFail = false;
+    state.activePhoneCall = null;
+    if (state.weather === "FOG") {
+      state.weatherCleared = Boolean(state.ownedAssets && state.ownedAssets.includes("uv_spotlight"));
+    } else if (state.weather === "SNOW") {
+      state.weatherCleared = Boolean(state.ownedAssets && (state.ownedAssets.includes("laser_plate_reader") || state.ownedAssets.includes("heated_booth_seat")));
+    } else {
+      state.weatherCleared = true;
+    }
     const t = state.queue[state.travelerIdx];
     state.oblikIsScreenshot = Boolean(t && t.violations.some(v => v.code === "INVALID_QR_CODE") && Math.random() < 0.5);
     const zones = ["TRUNK", "SPARE", "GLOVE"];
@@ -7157,6 +7764,7 @@
     } else {
       state.currentUvEasterEgg = null;
     }
+    maybeSpawnLivePhoneCall(t);
   }
 
   setInterval(() => {
@@ -7165,6 +7773,9 @@
     if (encDialog && encDialog.open) return;
 
     state.shiftSec = Math.max(0, state.shiftSec - 1);
+    if (state.weather === "STORM" && state.shiftSec > 0 && state.shiftSec % 23 === 0) {
+      audio.playThunder();
+    }
     if (state.shiftHasSiren && !state.sirenResolved && !state.sirenActive && state.shiftSec <= state.sirenTriggerSec) {
       state.sirenActive = true;
       audio.playSiren();
@@ -7201,6 +7812,7 @@
   function finishShift() {
     state.phase = "SHIFT_SUMMARY";
     state.sirenActive = false;
+    state.activePhoneCall = null;
     state.nextBribeBoost = 0;
     const noBribes = (state.shiftBribesCount || 0) === 0 && (state.shiftBribesTotal || 0) === 0;
     if (noBribes && state.shiftProcessed >= 5) {
@@ -7243,7 +7855,7 @@
       !isFriendlyGift &&
       !state.bribeAccepted &&
       bribeOfferInfo &&
-      (bribeOfferInfo.isInstant || state.vehicleInspected || state.spottedCodes.length > 0 || state.interrogated)
+      (bribeOfferInfo.isInstant || state.vehicleInspected || state.spottedCodes.length > 0 || state.interrogated || state.offeredBribeBeforeHaggleFail)
     );
     const requiresDetain = t.isWantedTarget || t.violations.some(v => v.requiresDetention);
     const canDetain = requiresDetain || criminalBribeOffer;
@@ -7258,6 +7870,8 @@
 
     const bribedPass = state.bribeAccepted && isApprove && !isFriendlyGift;
     const isStingOrRaid = bribedPass && (t.storyTag === "NABK_STING" || (state.nabkRisk >= 75 && Math.random() < 0.35));
+    const answeredCall = (state.activePhoneCall && state.activePhoneCall.answered) ? state.activePhoneCall : null;
+    const phoneFavorPass = Boolean(answeredCall && (answeredCall.type === "PALYCH_FAVOR" || answeredCall.type === "TOLIK_FAVOR") && isApprove);
     const rank = getRank();
     const meta = getMetaPerkFlags();
 
@@ -7289,7 +7903,8 @@
       if (state.shiftCombo === 3 || state.shiftCombo === 5 || state.shiftCombo === 8) {
         audio.playComboChime(state.shiftCombo);
       }
-      const salMult = (state.sandboxMod && state.sandboxMod.salaryMult ? state.sandboxMod.salaryMult : 1.0) * meta.salaryBonusMult * comboMultUsed;
+      const weatherSalMult = state.weather === "STORM" ? 1.10 : 1.0;
+      const salMult = (state.sandboxMod && state.sandboxMod.salaryMult ? state.sandboxMod.salaryMult : 1.0) * meta.salaryBonusMult * comboMultUsed * weatherSalMult;
       const detectorBonus = state.ownedAssets.includes("money_detector") ? 120 : 0;
       salaryDelta = Math.round(rank.salary * salMult) + detectorBonus;
       if (isDetain && canDetain) {
@@ -7332,6 +7947,9 @@
       state.shiftSalaryEarned = (state.shiftSalaryEarned || 0) + salaryDelta;
       state.shiftBountiesEarned = (state.shiftBountiesEarned || 0) + detainBonus;
       state.shiftEarnedUsd = (state.shiftEarnedUsd || 0) + usdBonus;
+    } else if (phoneFavorPass) {
+      // Mid-inspection Phone Directive favor: waives fine safely in exchange for rep/NABK risk
+      state.shiftCombo = 0;
     } else {
       state.shiftCombo = 0;
       const isHighRiskTarget = t.isWantedTarget || t.storyTag === "FSM_SPY" || t.storyTag === "SABOTEUR" || t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE";
@@ -7374,8 +7992,51 @@
       state.shiftMistakes += 1;
     }
 
+    // Apply answered Live Desk Phone Call outcomes
+    let phoneCallToast = null;
+    if (answeredCall) {
+      if (answeredCall.type === "PALYCH_FAVOR") {
+        if (isApprove && !isStingOrRaid) {
+          state.usd += 250;
+          usdBonus += 250;
+          state.shiftEarnedUsd = (state.shiftEarnedUsd || 0) + 250;
+          state.palychRep = Math.min(100, state.palychRep + 18);
+          state.nabkRisk = Math.min(100, state.nabkRisk + 8);
+          phoneCallToast = L("☎️ НАКАЗ ПАЛИЧА ВИКОНАНО: +250 💵, +18 Палич!", "☎️ PALYCH FAVOR DONE: +250 💵, +18 Palych!");
+        } else if (!isApprove) {
+          state.palychRep = Math.max(0, state.palychRep - 8);
+        }
+      } else if (answeredCall.type === "TOLIK_FAVOR") {
+        if (isApprove && !isStingOrRaid) {
+          state.usd += 400;
+          usdBonus += 400;
+          state.shiftEarnedUsd = (state.shiftEarnedUsd || 0) + 400;
+          state.tolikRep = Math.min(100, state.tolikRep + 22);
+          state.sbkRep = Math.max(0, state.sbkRep - 10);
+          state.nabkRisk = Math.min(100, state.nabkRisk + 10);
+          phoneCallToast = L("☎️ РЕЙС ТОЛІКА ПРОЙШОВ: +400 💵, +22 Толік!", "☎️ TOLIK FAVOR DONE: +400 💵, +22 Tolik!");
+        } else if (!isApprove) {
+          state.tolikRep = Math.max(0, state.tolikRep - 10);
+        }
+      } else if (answeredCall.type === "SBK_URGENT" && isDetain && ruleCorrect) {
+        detainBonus += 1800;
+        state.shiftBountiesEarned = (state.shiftBountiesEarned || 0) + 1800;
+        state.sbkRep = Math.min(100, state.sbkRep + 10);
+        phoneCallToast = L("☎️ ОПЕРАТИВНИЙ АРЕШТ СБК: +1 800 🪙, +10 СБК!", "☎️ SBK HOTLINE ARREST: +1,800 🪙, +10 SBK!");
+      } else if (answeredCall.type === "NABK_AUDIT") {
+        if (ruleCorrect && !bribedPass) {
+          detainBonus += 800;
+          state.shiftExtrasEarned = (state.shiftExtrasEarned || 0) + 800;
+          state.nabkRisk = Math.max(0, state.nabkRisk - 10);
+          phoneCallToast = L("☎️ АУДИТ НАБК ПРОЙДЕНО: -10% НАБК, +800 🪙!", "☎️ NABK AUDIT PASSED: -10% NABK, +800 🪙!");
+        } else if (bribedPass) {
+          state.nabkRisk = Math.min(100, state.nabkRisk + 15);
+        }
+      }
+    }
+
     // Add time per processed traveler so dynamic shifts reward pace!
-    state.shiftSec = Math.min(320, state.shiftSec + ((ruleCorrect || (bribedPass && !isStingOrRaid)) ? 8 : 4));
+    state.shiftSec = Math.min(320, state.shiftSec + ((ruleCorrect || ((bribedPass || phoneFavorPass) && !isStingOrRaid)) ? 8 : 4));
 
     if (state.reprimands >= 3) {
       triggerEnding((isStingOrRaid || state.nabkRisk >= 85) ? "NABK_PRISONER" : "WRITTEN_OFF_RESERVE");
@@ -7453,6 +8114,39 @@
       unlockDiscovery("DISC_NABK_STING");
     }
 
+    // Track Recurring Client Mini-Arcs (Vasyl 'Chameleon' 4-act arc + Grandpa Stepan memory)
+    if (!state.recurringArcs) {
+      state.recurringArcs = { vasya: { stage: 0, lastOutcome: null, approved: 0, caught: 0, completed: false }, stepanMet: 0 };
+    }
+    let vasyaToast = null;
+    if (t.storyTag && t.storyTag.startsWith("VASYA_")) {
+      const vArc = state.recurringArcs.vasya || (state.recurringArcs.vasya = { stage: 0, lastOutcome: null, approved: 0, caught: 0, completed: false });
+      vArc.lastOutcome = isApprove ? "APPROVED" : (isDetain ? "DETAINED" : "DENIED");
+      if (t.storyTag !== "VASYA_FINALE_CLEAN" && t.storyTag !== "VASYA_FINALE_BOSS") {
+        if (isApprove) vArc.approved = (vArc.approved || 0) + 1;
+        else vArc.caught = (vArc.caught || 0) + 1;
+        vArc.stage = Math.min(3, (vArc.stage || 0) + 1);
+      } else {
+        vArc.stage = 4;
+        vArc.completed = true;
+        unlockDiscovery("DISC_VASYA_ARC");
+        if (t.storyTag === "VASYA_FINALE_CLEAN" && isApprove) {
+          detainBonus += 1200;
+          state.shiftExtrasEarned = (state.shiftExtrasEarned || 0) + 1200;
+          state.familyMorale = Math.min(100, state.familyMorale + 12);
+          state.sbkRep = Math.min(100, state.sbkRep + 8);
+          vasyaToast = L("🎭 ФІНАЛ ВАСИЛЯ: Твоя строгість виправила афериста — тепер він чесний волонтер! (+1 200 🪙, +12% сім'я)", "🎭 VASYL FINALE: Reformed trickster is now an honest volunteer! (+1,200 🪙, +12% family)");
+        } else if (t.storyTag === "VASYA_FINALE_BOSS" && isDetain && ruleCorrect) {
+          detainBonus += 1500;
+          state.shiftBountiesEarned = (state.shiftBountiesEarned || 0) + 1500;
+          vasyaToast = L("🎭 ФІНАЛ ВАСИЛЯ: Спіймано VIP-контрабандиста Хамелеона! (+1 500 🪙 премії)", "🎭 VASYL FINALE: Captured Chameleon Kingpin! (+1,500 🪙 bounty)");
+        }
+      }
+    }
+    if (t.storyTag && t.storyTag.startsWith("STEPAN_") && isApprove) {
+      state.recurringArcs.stepanMet = (state.recurringArcs.stepanMet || 0) + 1;
+    }
+
     const netMoney = salaryDelta + detainBonus - fineDelta;
     state.money = Math.max(0, state.money + netMoney);
     state.shiftProcessed += 1;
@@ -7466,22 +8160,42 @@
         : L("Водій запропонував хабар службовій особі — оформлено кримінальний протокол (ст. 369)!", "Driver offered a bribe to an officer — criminal protocol filed!"))
       : null;
 
+    let slamKind = "error";
+    let slamLabel = L("❌ ПОМИЛКА!", "❌ MISTAKE!");
+    if (isStingOrRaid) { slamKind = "error"; slamLabel = L("🚨 СПАЛЕНО!", "🚨 BUSTED!"); }
+    else if (phoneFavorPass) { slamKind = "bribe"; slamLabel = L("☎️ ДЗВІНОК ЗВЕРХУ", "☎️ DIRECT ORDER"); }
+    else if (bribedPass) { slamKind = "bribe"; slamLabel = L("✉️ ДОМОВЛЕНО", "✉️ BRIBED"); }
+    else if (ruleCorrect && isDetain) { slamKind = "detain"; slamLabel = L("🚨 СБК АРЕШТ", "🚨 SBK ARREST"); }
+    else if (ruleCorrect && isApprove) { slamKind = "approve"; slamLabel = L("✔ ПРОПУЩЕНО", "✔ APPROVED"); }
+    else if (ruleCorrect) { slamKind = "deny"; slamLabel = L("✖ ВІДМОВЛЕНО", "✖ DENIED"); }
+    else if (missedArrest) { slamKind = "warn"; slamLabel = L("⚠️ УТІК!", "⚠️ ESCAPED!"); }
+    state.stampSlamSeq = (state.stampSlamSeq || 0) + 1;
+    state.stampSlam = { kind: slamKind, label: slamLabel, at: Date.now(), seq: state.stampSlamSeq };
+    audio.playStampSlam(slamKind);
+    triggerHaptic(slamKind === "error" || slamKind === "warn" ? [45, 30, 45] : (slamKind === "detain" ? [30, 20, 40] : 22));
+
     state.barrierState = isApprove ? "OPEN_APPROVED" : (isDetain ? "SBK_ARREST_FLASH" : "CLOSED");
     state.lastFeedbackAt = Date.now();
     state.lastFeedback = {
-      ok: ruleCorrect || (bribedPass && !isStingOrRaid),
+      ok: ruleCorrect || ((bribedPass || phoneFavorPass) && !isStingOrRaid),
       title: shytomyrBonusToast
         ? L("🧦 БРАТЕРСТВО М. ШИТОМИР!", "🧦 ORDER OF SHYTOMYR!")
-        : (isStingOrRaid
-          ? L("🚨 СПАЛИЛИ НА ХАБАРІ! (+1 ДОГАНА)", "🚨 BUSTED ON BRIBE! (+1 REPRIMAND)")
-          : (bribedPass
-            ? L("ЗАКРИТО ОЧІ (ЗА ХАБАР)", "LOOKED THE OTHER WAY (BRIBED)")
-            : (bribeDetainMsg
-              ? L("СПРОБУ ХАБАРЯ ЗАТРИМАНО! (+ПРЕМІЯ СБК)", "BRIBE ATTEMPT DETAINED! (+SBK BONUS)")
-              : (ruleCorrect && isDetain ? L("КРИМІНАЛ ЗАТРИМАНО! (+ПРЕМІЯ СБК)", "CRIMINAL DETAINED! (+SBK BONUS)") : (ruleCorrect ? L("РІШЕННЯ ПРАВИЛЬНЕ", "CORRECT DECISION") : (missedArrest ? L("⚠️ ПОРУШНИК УТІК! Треба 🚨 СБК / АРЕШТ", "⚠️ CRIMINAL ESCAPED! Should 🚨 DETAIN") : (excessiveDetain ? L("ПЕРЕВИЩЕННЯ! Треба ✖ ВІДМОВИТИ", "EXCESSIVE FORCE! Should ✖ DENY") : L("ПОМИЛКА ПРОТОКОЛУ! ШТРАФ", "PROTOCOL VIOLATION! FINE")))))))),
-      detail: shytomyrBonusToast || (isStingOrRaid ? L("Ти впіймався на підставі! За 3 догани звільнять (зникає через день).", "Caught in a sting! 3 reprimands = fired (decays next clean day).") : null) || bribeDetainMsg || (isDetain
+        : (vasyaToast
+          ? L("🎭 ІСТОРІЯ ВАСИЛЯ ХАМЕЛЕОНА", "🎭 VASYL CHAMELEON ARC")
+          : (phoneCallToast && (phoneFavorPass || (ruleCorrect && !bribedPass))
+            ? L("☎️ ВКАЗІВКУ ПО ТЕЛЕФОНУ ВИКОНАНО", "☎️ PHONE DIRECTIVE COMPLETED")
+            : (isStingOrRaid
+              ? L("🚨 СПАЛИЛИ НА ХАБАРІ! (+1 ДОГАНА)", "🚨 BUSTED ON BRIBE! (+1 REPRIMAND)")
+              : (phoneFavorPass
+                ? L("☎️ ПРОПУЩЕНО ЗА ДЗВІНКОМ", "☎️ WAVED BY PHONE ORDER")
+                : (bribedPass
+                  ? L("ЗАКРИТО ОЧІ (ЗА ХАБАР)", "LOOKED THE OTHER WAY (BRIBED)")
+                  : (bribeDetainMsg
+                    ? L("СПРОБУ ХАБАРЯ ЗАТРИМАНО! (+ПРЕМІЯ СБК)", "BRIBE ATTEMPT DETAINED! (+SBK BONUS)")
+                    : (ruleCorrect && isDetain ? L("КРИМІНАЛ ЗАТРИМАНО! (+ПРЕМІЯ СБК)", "CRIMINAL DETAINED! (+SBK BONUS)") : (ruleCorrect ? L("РІШЕННЯ ПРАВИЛЬНЕ", "CORRECT DECISION") : (missedArrest ? L("⚠️ ПОРУШНИК УТІК! Треба 🚨 СБК / АРЕШТ", "⚠️ CRIMINAL ESCAPED! Should 🚨 DETAIN") : (excessiveDetain ? L("ПЕРЕВИЩЕННЯ! Треба ✖ ВІДМОВИТИ", "EXCESSIVE FORCE! Should ✖ DENY") : L("ПОМИЛКА ПРОТОКОЛУ! ШТРАФ", "PROTOCOL VIOLATION! FINE"))))))))))),
+      detail: shytomyrBonusToast || vasyaToast || phoneCallToast || (isStingOrRaid ? L("Ти впіймався на підставі! За 3 догани звільнять (зникає через день).", "Caught in a sting! 3 reprimands = fired (decays next clean day).") : null) || bribeDetainMsg || (isDetain
         ? (state.contentMode === "FULL_18_PLUS" ? t.arrestFull : t.arrestToned)
-        : (bribedPass ? L("Без штрафу, але ризик НАБК зріс.", "No fine, but NABK risk increased.") : (ruleCorrect ? L("Оформлено за директивою ДПСК.", "Processed per SBGS directive.") : (missedArrest ? L("Порушник із фальшивкою/контрабандою розвернувся і зник у черзі — його слід було затримати!", "Criminal with forgery/contraband bolted from the lane — detention was required!") : (t.violations[0] ? t.violations[0].title : L("Безпідставна відмова", "Wrongful denial")))))),
+        : (phoneFavorPass ? L("Без штрафу за розпорядженням по телефону.", "No fine per direct phone directive.") : (bribedPass ? L("Без штрафу, але ризик НАБК зріс.", "No fine, but NABK risk increased.") : (ruleCorrect ? L("Оформлено за директивою ДПСК.", "Processed per SBGS directive.") : (missedArrest ? L("Порушник із фальшивкою/контрабандою розвернувся і зник у черзі — його слід було затримати!", "Criminal with forgery/contraband bolted from the lane — detention was required!") : (t.violations[0] ? t.violations[0].title : L("Безпідставна відмова", "Wrongful denial"))))))),
       moneyDelta: netMoney
     };
     if (!state.shiftLogs) state.shiftLogs = [];
@@ -7621,7 +8335,11 @@
       state.daySpec = ACT_ONE_DAYS[nextIdx];
     }
 
-    state.queue = generateDailyQueue(state.daySpec, state.isSandbox ? 14 : 12, state.isSandbox);
+    if (!state.recurringArcs) {
+      state.recurringArcs = { vasya: { stage: 0, lastOutcome: null, approved: 0, caught: 0, completed: false }, stepanMet: 0 };
+    }
+    state.weather = rollDailyWeather(state.daySpec, state.sandboxMod, state.isSandbox);
+    state.queue = generateDailyQueue(state.daySpec, state.isSandbox ? 14 : 12, state.isSandbox, state.recurringArcs);
     state.shiftProcessed = 0;
     state.shiftCorrect = 0;
     state.shiftMistakes = 0;
@@ -8192,9 +8910,35 @@
     });
   }
 
+  function maskPlateInVehicleDesc(descStr) {
+    if (!descStr) return descStr;
+    return String(descStr).replace(/\([А-ЯІЇЄҐA-Z]{1,3}[\s-]\d{3,4}(?:[\s-][А-ЯІЇЄҐA-Z]{2})?\)\s*$/u, "(❄️❄️❄️ ❄️❄️❄️)");
+  }
+
+  function syncStampSlamHost() {
+    const host = document.getElementById("stamp-slam-host");
+    if (!host) return;
+    if (state.phase !== "BOOTH_SHIFT" && state.phase !== "SHIFT_SUMMARY") {
+      host.innerHTML = "";
+      return;
+    }
+    if (!state.stampSlam || state.stampSlam.seq === state.stampSlamRenderedSeq) return;
+    const ageMs = Date.now() - (state.stampSlam.at || 0);
+    const slamSeq = state.stampSlam.seq;
+    state.stampSlamRenderedSeq = slamSeq;
+    if (ageMs > 1200) return;
+    host.innerHTML = `<div id="stamp-slam-overlay" class="stamp-slam-overlay"><div class="stamp-slam-badge stamp-${state.stampSlam.kind}">${tr(state.stampSlam.label, state.lang)}</div></div>`;
+    setTimeout(() => {
+      if (state.stampSlam && state.stampSlam.seq === slamSeq && host) {
+        host.innerHTML = "";
+      }
+    }, 680);
+  }
+
   function render() {
     stopMenuAnimation();
     updateMood();
+    syncStampSlamHost();
     document.documentElement.lang = state.lang === "EN" ? "en" : "uk";
     const root = document.getElementById("app-shell");
     if (!root) return;
@@ -8753,6 +9497,16 @@
             <h2 style="color:#E0B145;font-size:12px;margin-bottom:4px;">${tr(L("📻 РАДІОЕФІР РАНКУ", "📻 MORNING RADIO BROADCAST"), state.lang)}</h2>
             <p style="font-size:13px;color:#CFD8DC;">${tr(d.radioNews, state.lang)}</p>
           </section>
+          ${(() => {
+            const wKey = state.weather || "CLEAR";
+            const wDef = (typeof WEATHER_DEFS !== "undefined" && WEATHER_DEFS[wKey]) || { icon: "🌙", title: L("Ясна ніч", "Clear Night"), effect: L("Стандартна видимість", "Standard visibility") };
+            return `
+              <section id="morning-weather-card" class="weather-briefing-card">
+                <div style="font-size:12px;font-weight:800;color:#81D4FA;">${wDef.icon} ${tr(L("МЕТЕОЗВЕДЕННЯ ЗМІНИ:", "SHIFT WEATHER FORECAST:"), state.lang)} ${tr(wDef.title, state.lang)}</div>
+                <div style="font-size:11.5px;color:#CFD8DC;margin-top:2px;">${tr(wDef.effect, state.lang)}</div>
+              </section>
+            `;
+          })()}
           ${warNotes.length > 0 ? `
             <section class="card-slate" style="border-left:4px solid #E0B145;">
               <h2 style="color:#E0B145;font-size:12.5px;margin-bottom:4px;">${tr(L("📌 ВІЙНА І ЗМІНИ — НАСЛІДКИ РІШЕНЬ:", "📌 WAR & SHIFTS — CONSEQUENCES:"), state.lang)}</h2>
@@ -8812,15 +9566,48 @@
       const bribeVisible = Boolean(
         bribeInfo &&
         !state.bribeAccepted &&
+        state.haggleState !== "FAILED" &&
         (bribeInfo.isInstant || state.vehicleInspected || state.spottedCodes.length > 0 || state.interrogated)
       );
       const bribeLocked = Boolean(state.bribeAccepted && (!t.bribeOffer || !t.bribeOffer.isFriendlyGift));
       const hasSbkTablet = state.ownedAssets.includes("sbk_database_tablet");
+      const wKey = state.weather || "CLEAR";
+      const wDef = (typeof WEATHER_DEFS !== "undefined" && WEATHER_DEFS[wKey]) || { icon: "🌙", shortTag: L("🌙 Ясно", "🌙 Clear") };
+      const rawVehDesc = tr(t.vehicleDesc, state.lang);
+      const maskedVehDesc = wKey === "SNOW" && !state.weatherCleared ? maskPlateInVehicleDesc(rawVehDesc) : rawVehDesc;
+      const snowPlateMasked = Boolean(wKey === "SNOW" && !state.weatherCleared && maskedVehDesc !== rawVehDesc);
+      const fogVehMasked = Boolean(wKey === "FOG" && !state.weatherCleared);
+      const deskJustSlammed = Boolean(state.stampSlam && (Date.now() - (state.stampSlam.at || 0)) < 360);
 
       let tabletBadge = "";
       if (hasSbkTablet && t.storyTag === "INTEL_ALLY") {
         tabletBadge = `<div style="background:#1565C0;color:#FFF;padding:3px 7px;border-radius:4px;font-size:10.5px;font-weight:700;">💻 ТЕРМІНАЛ «ОБЕРІГ»: 🦅 Спецборт ГУР/СБК (пароль підтверджено)</div>`;
       }
+
+      const phoneCallHtml = (state.activePhoneCall && !state.activePhoneCall.dismissed)
+        ? (state.activePhoneCall.answered
+          ? `<div id="phone-call-card" class="phone-call-bar active">
+               <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+                 <strong style="font-size:11.5px;color:#FFE082;">☎️ ${tr(state.activePhoneCall.caller, state.lang)}</strong>
+                 <button type="button" id="btn-ignore-phone" class="btn-outline" style="padding:1px 6px;font-size:10px;">✕</button>
+               </div>
+               <p style="font-size:11px;line-height:1.3;color:#ECEFF1;margin:3px 0;">${tr(state.activePhoneCall.message, state.lang)}</p>
+               <div style="font-size:10px;font-weight:800;color:#81C784;">📌 ${tr(state.activePhoneCall.rewardHint, state.lang)}</div>
+             </div>`
+          : `<div id="phone-call-card" class="phone-call-bar ringing">
+               <div style="display:flex;align-items:center;gap:7px;flex:1;min-width:0;">
+                 <span class="phone-ring-icon">☎️</span>
+                 <div style="min-width:0;">
+                   <div style="font-size:11.5px;font-weight:900;color:#FFE082;">${tr(L("ВХІДНИЙ ДЗВІНОК НА ПОСТ!", "INCOMING BOOTH CALL!"), state.lang)}</div>
+                   <div style="font-size:10px;color:#CFD8DC;">${tr(state.activePhoneCall.caller, state.lang)}</div>
+                 </div>
+               </div>
+               <div style="display:flex;gap:5px;flex-shrink:0;">
+                 <button type="button" id="btn-answer-phone" class="btn-primary-green" style="padding:5px 9px;font-size:11px;">📞 ${tr(L("Відповісти", "Answer"), state.lang)}</button>
+                 <button type="button" id="btn-ignore-phone" class="btn-outline" style="padding:5px 7px;font-size:11px;">🔇</button>
+               </div>
+             </div>`)
+        : "";
 
       let activeSpeech = t.greeting;
       if (state.reactionState === "INTIMIDATED") activeSpeech = t.intimidateReply || t.interrogationReply;
@@ -8869,11 +9656,12 @@
           </div>
           <div class="row-between" style="font-size:11px;color:#B0BEC5;">
             <span style="color:${state.nabkRisk >= 60 || state.underSurveillance || state.reprimands > 0 ? "#FF5252" : "#B0BEC5"};">НАБК:${state.nabkRisk}%${state.reprimands > 0 ? ` | ⚠️${state.reprimands}/3` : ""}${state.underSurveillance ? " | 👁️НАГЛЯД" : ""}${state.isUndercoverSbkAgent ? ` | 🕵️(${state.spiesCaughtAsAgent}/4)` : ""}${(state.shiftCombo || 0) >= 2 ? ` | <span class="combo-pill">🔥 ${state.shiftCombo}${state.shiftCombo >= 8 ? " (x1.5)" : (state.shiftCombo >= 5 ? " (x1.3)" : (state.shiftCombo >= 3 ? " (x1.15)" : ""))}</span>` : ""}</span>
-            <span>${tr(L("Палич", "Palych"), state.lang)}:${state.palychRep} | ${tr(L("Толік", "Tolik"), state.lang)}:${state.tolikRep} | СБК:${state.sbkRep}</span>
+            <span style="display:flex;align-items:center;gap:5px;"><span id="hud-weather" class="weather-pill">${tr(wDef.shortTag, state.lang)}</span><span>${tr(L("Палич", "Palych"), state.lang)}:${state.palychRep} | ${tr(L("Толік", "Tolik"), state.lang)}:${state.tolikRep} | СБК:${state.sbkRep}</span></span>
           </div>
         </header>
 
         ${tabletBadge}
+        ${phoneCallHtml}
 
         <section class="booth-row">
           <div id="booth-wrap" class="booth-canvas-wrap ${state.justShook ? "booth-shake" : ""}" title="${tr(L("Натисни, щоб звірити авто/обличчя", "Click to inspect vehicle & face"), state.lang)}">
@@ -8887,15 +9675,19 @@
                   ${t.direction === "ENTRY" ? tr(L("🟢 В'ЇЗД (Додому)", "🟢 ENTRY (Home)"), state.lang) : tr(L("🔴 ВИЇЗД (За кордон)", "🔴 EXIT (Abroad)"), state.lang)}
                 </span>
               </div>
-              <button type="button" id="booth-vehicle-info" class="booth-vehicle-tag" title="${tr(L("Натисни, щоб звірити авто", "Click to verify vehicle"), state.lang)}">🚘 ${tr(t.vehicleDesc, state.lang)}</button>
+              <button type="button" id="booth-vehicle-info" class="booth-vehicle-tag" title="${tr(L("Натисни, щоб звірити авто", "Click to verify vehicle"), state.lang)}">${fogVehMasked ? `🌫️ ${tr(L("У тумані не видно колір/модель авто...", "Vehicle hidden in dense fog..."), state.lang)}` : `🚘 ${maskedVehDesc}`}</button>
+              ${fogVehMasked ? `<button type="button" id="btn-weather-clear" class="weather-clear-btn">🔦 ${tr(L("Розвіяти туман (0s)", "Shine High-Beams (0s)"), state.lang)}</button>` : (snowPlateMasked ? `<button type="button" id="btn-weather-clear" class="weather-clear-btn">🧤 ${tr(L("Протерти засніжений номер (-1s)", "Wipe Frosted Plate (-1s)"), state.lang)}</button>` : "")}
               <p style="font-size:11.5px;line-height:1.35;">${tr(activeSpeech, state.lang)}</p>
             </div>
             ${bribeVisible ? `
-              <button type="button" id="btn-take-bribe" style="background:${t.bribeOffer.isFriendlyGift ? "#1B5E20" : "#6D4C41"};color:#E0B145;padding:5px 8px;font-size:11px;width:100%;margin-top:4px;">
-                ${t.bribeOffer.isFriendlyGift ? tr(L(`🤝 ВЗЯТИ ПІДГОН НА КАВУ (+${bribeInfo.display})`, `🤝 ACCEPT GIFT (+${bribeInfo.display})`), state.lang) : tr(L(`✉️ ВЗЯТИ КОНВЕРТ (+${bribeInfo.display})`, `✉️ TAKE ENVELOPE (+${bribeInfo.display})`), state.lang)}${bribeInfo.boostedByIntimidate ? ` <span style="background:#FF8F00;color:#111;padding:1px 5px;border-radius:4px;font-size:9.5px;font-weight:900;">${tr(L("📢 +30% ВИБИТО", "📢 +30% SHAKEN"), state.lang)}</span>` : ""}
-              </button>
+              <div class="haggle-row">
+                <button type="button" id="btn-take-bribe" style="background:${t.bribeOffer.isFriendlyGift ? "#1B5E20" : "#6D4C41"};color:#E0B145;padding:5px 8px;font-size:11px;flex:1;">
+                  ${t.bribeOffer.isFriendlyGift ? tr(L(`🤝 ВЗЯТИ ПІДГОН НА КАВУ (+${bribeInfo.display})`, `🤝 ACCEPT GIFT (+${bribeInfo.display})`), state.lang) : tr(L(`✉️ ВЗЯТИ КОНВЕРТ (+${bribeInfo.display})`, `✉️ TAKE ENVELOPE (+${bribeInfo.display})`), state.lang)}${bribeInfo.boostedByIntimidate ? ` <span style="background:#FF8F00;color:#111;padding:1px 5px;border-radius:4px;font-size:9.5px;font-weight:900;">${tr(L("📢 +30% ВИБИТО", "📢 +30% SHAKEN"), state.lang)}</span>` : ""}${bribeInfo.boostedByHaggle ? ` <span style="background:#7B1FA2;color:#FFF;padding:1px 5px;border-radius:4px;font-size:9.5px;font-weight:900;">📈 +${bribeInfo.hagglePct}%</span>` : ""}
+                </button>
+                ${(!t.bribeOffer.isFriendlyGift && state.haggleState === "NONE") ? `<button type="button" id="btn-haggle-bribe" class="btn-haggle">📈 ${tr(L("Мало!", "More!"), state.lang)}</button>` : ""}
+              </div>
               ${!t.bribeOffer.isFriendlyGift ? `<div style="font-size:10px;color:${state.nabkRisk >= 65 || state.underSurveillance ? "#FF5252" : "#FFAB91"};margin-top:2px;">${state.nabkRisk >= 65 || state.underSurveillance ? tr(L(`⚠️ НАБК ${state.nabkRisk}% — дуже небезпечно брати! Краще 🚨 Затримати`, `⚠️ NABK ${state.nabkRisk}% — risky! Better 🚨 Detain`), state.lang) : tr(L("⚖️ Пропозиція хабаря — кримінал (можна 🚨 Затримати)", "Offering a bribe is a crime (can 🚨 Detain)"), state.lang)}</div>` : ""}
-            ` : (state.bribeAccepted ? `<div style="color:#81C784;font-size:11px;font-weight:700;margin-top:4px;">${tr(L("✔ У кишені (тисни ✔ ПРОПУСТИТИ)", "✔ Pocketed (press ✔ APPROVE)"), state.lang)}</div>` : "")}
+            ` : (state.haggleState === "FAILED" && !state.bribeAccepted ? `<div id="haggle-failed-note" style="color:#FF8A80;font-size:10.5px;font-weight:800;margin-top:4px;">${tr(L("😤 Конверт сховано після торгу (спробу підкупу зафіксовано — можна 🚨 Затримати)", "😤 Driver pulled cash back after haggle (can 🚨 Detain)"), state.lang)}</div>` : (state.bribeAccepted ? `<div style="color:#81C784;font-size:11px;font-weight:700;margin-top:4px;">${tr(L("✔ У кишені (тисни ✔ ПРОПУСТИТИ)", "✔ Pocketed (press ✔ APPROVE)"), state.lang)}</div>` : ""))}
           </div>
         </section>
 
@@ -8955,7 +9747,7 @@
           `;
         })() : ""}
 
-        <section class="desk-area ${state.inspectMode ? "inspect-mode" : ""}">
+        <section class="desk-area ${state.inspectMode ? "inspect-mode" : ""} ${deskJustSlammed ? "desk-slam-shake" : ""}">
           ${(() => {
             const dr = state.daySpec && state.daySpec.dailyRule;
             const reqQr = state.daySpec && state.daySpec.requireOblikQr;
@@ -9032,7 +9824,7 @@
             const unfoldCls = state.justUnfoldedDoc ? "doc-unfold" : "";
             state.justUnfoldedDoc = false;
             return `
-          <div id="doc-paper-el" class="doc-paper ${unfoldCls} ${docTheme} ${state.uvActive ? "uv-mode" : ""} ${state.uvActive && state.ownedAssets.includes("uv_spotlight") ? "uv-pro" : ""}">
+          <div id="doc-paper-el" class="doc-paper ${unfoldCls} ${docTheme} ${state.uvActive ? "uv-mode" : ""} ${state.uvActive && state.ownedAssets.includes("uv_spotlight") ? "uv-pro" : ""} ${wKey === "STORM" && !state.ownedAssets.includes("diesel_generator") && !state.uvActive ? "storm-flicker" : ""}">
             ${state.uvActive ? `<div class="uv-lens-overlay" id="uv-lens-overlay"></div>` : ""}
             <div style="display:flex;justify-content:space-between;align-items:center;font-size:9.5px;font-weight:900;letter-spacing:0.5px;opacity:0.78;border-bottom:1px dashed rgba(0,0,0,0.18);padding-bottom:3px;">
               <span>${headerBanner}</span>
@@ -9196,6 +9988,8 @@
         shytomyrRelics: state.shytomyrRelics || [],
         ownedAssets: state.ownedAssets || [],
         lang: state.lang,
+        weather: wKey,
+        weatherCleared: Boolean(state.weatherCleared),
         hasCloneCar: t.violations.some(v => v.code === "VEHICLE_MISMATCH"),
         isLive: true
       };
@@ -9220,6 +10014,8 @@
           boothSceneOpts.shytomyrRelics = state.shytomyrRelics || [];
           boothSceneOpts.ownedAssets = state.ownedAssets || [];
           boothSceneOpts.lang = state.lang;
+          boothSceneOpts.weather = state.weather || "CLEAR";
+          boothSceneOpts.weatherCleared = Boolean(state.weatherCleared);
           drawBoothScene(boothCanvasEl, boothSceneOpts);
           const oblikClk = document.getElementById("oblik-live-clock");
           if (oblikClk && !state.oblikIsScreenshot) {
@@ -9355,6 +10151,12 @@
       }
 
       function handleVehicleOrFaceCheck() {
+        if (wKey === "FOG" && !state.weatherCleared && !state.inspectMode) {
+          audio.playUvSwitch();
+          state.weatherCleared = true;
+          render();
+          return;
+        }
         audio.playTap();
         let foundVisual = false;
         let alreadyHadVisual = false;
@@ -9382,6 +10184,40 @@
       boothWrapEl.addEventListener("click", handleVehicleOrFaceCheck);
       const vehInfoBtn = document.getElementById("booth-vehicle-info");
       if (vehInfoBtn) vehInfoBtn.addEventListener("click", handleVehicleOrFaceCheck);
+
+      const weatherClearBtn = document.getElementById("btn-weather-clear");
+      if (weatherClearBtn) {
+        weatherClearBtn.addEventListener("click", () => {
+          if (wKey === "SNOW") {
+            audio.playWipeSnow();
+            state.shiftSec = Math.max(5, state.shiftSec - 1);
+            state.weatherCleared = true;
+          } else {
+            audio.playUvSwitch();
+            state.weatherCleared = true;
+          }
+          render();
+        });
+      }
+
+      const answerPhoneBtn = document.getElementById("btn-answer-phone");
+      if (answerPhoneBtn && state.activePhoneCall) {
+        answerPhoneBtn.addEventListener("click", () => {
+          audio.playTap();
+          state.activePhoneCall.answered = true;
+          unlockDiscovery("DISC_PHONE_CALL");
+          pushShiftLog("#FFD54F", state.activePhoneCall.logLine);
+          render();
+        });
+      }
+      const ignorePhoneBtn = document.getElementById("btn-ignore-phone");
+      if (ignorePhoneBtn && state.activePhoneCall) {
+        ignorePhoneBtn.addEventListener("click", () => {
+          audio.playTap();
+          state.activePhoneCall.dismissed = true;
+          render();
+        });
+      }
 
       const foldBtn = document.getElementById("btn-fold-doc");
       if (foldBtn) foldBtn.addEventListener("click", () => { audio.playTap(); state.docFolded = true; render(); });
@@ -9603,7 +10439,8 @@
           state.coffeeTipGiven = true;
           const meta = getMetaPerkFlags();
           const has = id => state.ownedAssets.includes(id);
-          const cMult = (state.sandboxMod ? (state.sandboxMod.coffeeMult || 1) : 1) * (has("balenci_jacket") ? 1.35 : 1);
+          const weatherCoffeeMult = wKey === "SNOW" ? 1.50 : (wKey === "RAIN" ? 1.30 : 1.0);
+          const cMult = (state.sandboxMod ? (state.sandboxMod.coffeeMult || 1) : 1) * (has("balenci_jacket") ? 1.35 : 1) * weatherCoffeeMult;
           const sockTip = (state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_KEVLAR_SOCKS")) ? 100 : 0;
           const tip = Math.round(t.coffeeTip * 2 * cMult) + (has("thermos_tray") ? 80 : 0) + (has("espresso_machine") ? 150 : 0) + (has("parrot_kesha") ? 150 : 0) + (has("addon_syrup_bar") ? 120 : 0) + (has("addon_gold_cage") ? 100 : 0) + sockTip + (meta.coffeeTipBonus * 2);
           state.money += tip;
@@ -9621,6 +10458,9 @@
       document.getElementById("react-uv").addEventListener("click", () => {
         audio.playUvSwitch();
         state.uvActive = !state.uvActive;
+        if (state.uvActive && wKey === "FOG" && !state.weatherCleared) {
+          state.weatherCleared = true;
+        }
         render();
       });
 
@@ -9729,12 +10569,51 @@
             }
             state.shiftBribesTotal = (state.shiftBribesTotal || 0) + bribeUahEq;
             state.totalCareerBribes = (state.totalCareerBribes || 0) + bribeUahEq;
-            const baseJump = t.bribeOffer.nabkRiskJump || (t.bribeOffer.isStingTrap ? 35 : (t.bribeOffer.syndicateFavor ? 6 : 8));
+            const baseJump = (t.bribeOffer.nabkRiskJump || (t.bribeOffer.isStingTrap ? 35 : (t.bribeOffer.syndicateFavor ? 6 : 8))) + (state.haggleExtraRisk || 0);
             let riskJump = state.underSurveillance ? Math.round(baseJump * 1.5) : baseJump;
             if (state.ownedAssets.includes("addon_osint_app")) riskJump = Math.max(2, Math.round(riskJump * 0.8));
             state.nabkRisk = Math.min(100, state.nabkRisk + riskJump);
           }
           if (t.bribeOffer.syndicateFavor) state.tolikRep = Math.min(100, state.tolikRep + 20);
+          render();
+        });
+      }
+
+      const haggleBtn = document.getElementById("btn-haggle-bribe");
+      if (haggleBtn && bribeInfo && t.bribeOffer && !t.bribeOffer.isFriendlyGift && state.haggleState === "NONE") {
+        haggleBtn.addEventListener("click", () => {
+          if (t.storyTag === "NABK_STING" || t.bribeOffer.isStingTrap) {
+            state.haggleState = "FAILED";
+            state.offeredBribeBeforeHaggleFail = true;
+            state.nabkRisk = Math.min(100, state.nabkRisk + 12);
+            audio.playHaggleFail();
+            triggerHaptic([45, 30, 45]);
+            pushShiftLog("#FF5252", L("🚨 ПАСТКА НАБК! Під час торгу зафіксовано вимагання (+12% НАБК)!", "🚨 NABK TRAP! Shakedown demand caught on wire (+12% NABK)!"));
+            render();
+            return;
+          }
+          const has = id => state.ownedAssets.includes(id);
+          const winChance = Math.max(0.35, Math.min(0.85,
+            0.62 + (has("balenci_jacket") ? 0.08 : 0) + (has("customs_seal_ring") ? 0.08 : 0) + (state.intimidateUsed ? 0.06 : 0) - (state.nabkRisk >= 60 ? 0.10 : 0)
+          ));
+          if (Math.random() < winChance) {
+            state.haggleState = "WON";
+            state.haggleMult = 1.30 + Math.floor(Math.random() * 16) / 100;
+            state.haggleExtraRisk = 4;
+            state.nabkRisk = Math.min(100, state.nabkRisk + 2);
+            audio.playHaggleWin();
+            triggerHaptic([18, 18, 28]);
+            unlockDiscovery("DISC_HAGGLE_PRO");
+            const pct = Math.round((state.haggleMult - 1) * 100);
+            pushShiftLog("#FFB300", L(`📈 Торг вдався! Конверт зріс на +${pct}% (+2% НАБК).`, `📈 Haggle won! Bribe raised +${pct}% (+2% NABK).`));
+          } else {
+            state.haggleState = "FAILED";
+            state.offeredBribeBeforeHaggleFail = true;
+            state.nabkRisk = Math.min(100, state.nabkRisk + 3);
+            audio.playHaggleFail();
+            triggerHaptic([40, 25, 40]);
+            pushShiftLog("#FFAB91", L("😤 Водій сховав конверт після торгу (+3% НАБК)! Можна 🚨 Затримати.", "😤 Driver pulled cash back after haggle (+3% NABK)! Can still 🚨 Detain."));
+          }
           render();
         });
       }

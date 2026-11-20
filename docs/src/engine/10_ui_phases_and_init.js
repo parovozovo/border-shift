@@ -1,6 +1,32 @@
+  function maskPlateInVehicleDesc(descStr) {
+    if (!descStr) return descStr;
+    return String(descStr).replace(/\([А-ЯІЇЄҐA-Z]{1,3}[\s-]\d{3,4}(?:[\s-][А-ЯІЇЄҐA-Z]{2})?\)\s*$/u, "(❄️❄️❄️ ❄️❄️❄️)");
+  }
+
+  function syncStampSlamHost() {
+    const host = document.getElementById("stamp-slam-host");
+    if (!host) return;
+    if (state.phase !== "BOOTH_SHIFT" && state.phase !== "SHIFT_SUMMARY") {
+      host.innerHTML = "";
+      return;
+    }
+    if (!state.stampSlam || state.stampSlam.seq === state.stampSlamRenderedSeq) return;
+    const ageMs = Date.now() - (state.stampSlam.at || 0);
+    const slamSeq = state.stampSlam.seq;
+    state.stampSlamRenderedSeq = slamSeq;
+    if (ageMs > 1200) return;
+    host.innerHTML = `<div id="stamp-slam-overlay" class="stamp-slam-overlay"><div class="stamp-slam-badge stamp-${state.stampSlam.kind}">${tr(state.stampSlam.label, state.lang)}</div></div>`;
+    setTimeout(() => {
+      if (state.stampSlam && state.stampSlam.seq === slamSeq && host) {
+        host.innerHTML = "";
+      }
+    }, 680);
+  }
+
   function render() {
     stopMenuAnimation();
     updateMood();
+    syncStampSlamHost();
     document.documentElement.lang = state.lang === "EN" ? "en" : "uk";
     const root = document.getElementById("app-shell");
     if (!root) return;
@@ -559,6 +585,16 @@
             <h2 style="color:#E0B145;font-size:12px;margin-bottom:4px;">${tr(L("📻 РАДІОЕФІР РАНКУ", "📻 MORNING RADIO BROADCAST"), state.lang)}</h2>
             <p style="font-size:13px;color:#CFD8DC;">${tr(d.radioNews, state.lang)}</p>
           </section>
+          ${(() => {
+            const wKey = state.weather || "CLEAR";
+            const wDef = (typeof WEATHER_DEFS !== "undefined" && WEATHER_DEFS[wKey]) || { icon: "🌙", title: L("Ясна ніч", "Clear Night"), effect: L("Стандартна видимість", "Standard visibility") };
+            return `
+              <section id="morning-weather-card" class="weather-briefing-card">
+                <div style="font-size:12px;font-weight:800;color:#81D4FA;">${wDef.icon} ${tr(L("МЕТЕОЗВЕДЕННЯ ЗМІНИ:", "SHIFT WEATHER FORECAST:"), state.lang)} ${tr(wDef.title, state.lang)}</div>
+                <div style="font-size:11.5px;color:#CFD8DC;margin-top:2px;">${tr(wDef.effect, state.lang)}</div>
+              </section>
+            `;
+          })()}
           ${warNotes.length > 0 ? `
             <section class="card-slate" style="border-left:4px solid #E0B145;">
               <h2 style="color:#E0B145;font-size:12.5px;margin-bottom:4px;">${tr(L("📌 ВІЙНА І ЗМІНИ — НАСЛІДКИ РІШЕНЬ:", "📌 WAR & SHIFTS — CONSEQUENCES:"), state.lang)}</h2>
@@ -618,15 +654,48 @@
       const bribeVisible = Boolean(
         bribeInfo &&
         !state.bribeAccepted &&
+        state.haggleState !== "FAILED" &&
         (bribeInfo.isInstant || state.vehicleInspected || state.spottedCodes.length > 0 || state.interrogated)
       );
       const bribeLocked = Boolean(state.bribeAccepted && (!t.bribeOffer || !t.bribeOffer.isFriendlyGift));
       const hasSbkTablet = state.ownedAssets.includes("sbk_database_tablet");
+      const wKey = state.weather || "CLEAR";
+      const wDef = (typeof WEATHER_DEFS !== "undefined" && WEATHER_DEFS[wKey]) || { icon: "🌙", shortTag: L("🌙 Ясно", "🌙 Clear") };
+      const rawVehDesc = tr(t.vehicleDesc, state.lang);
+      const maskedVehDesc = wKey === "SNOW" && !state.weatherCleared ? maskPlateInVehicleDesc(rawVehDesc) : rawVehDesc;
+      const snowPlateMasked = Boolean(wKey === "SNOW" && !state.weatherCleared && maskedVehDesc !== rawVehDesc);
+      const fogVehMasked = Boolean(wKey === "FOG" && !state.weatherCleared);
+      const deskJustSlammed = Boolean(state.stampSlam && (Date.now() - (state.stampSlam.at || 0)) < 360);
 
       let tabletBadge = "";
       if (hasSbkTablet && t.storyTag === "INTEL_ALLY") {
         tabletBadge = `<div style="background:#1565C0;color:#FFF;padding:3px 7px;border-radius:4px;font-size:10.5px;font-weight:700;">💻 ТЕРМІНАЛ «ОБЕРІГ»: 🦅 Спецборт ГУР/СБК (пароль підтверджено)</div>`;
       }
+
+      const phoneCallHtml = (state.activePhoneCall && !state.activePhoneCall.dismissed)
+        ? (state.activePhoneCall.answered
+          ? `<div id="phone-call-card" class="phone-call-bar active">
+               <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+                 <strong style="font-size:11.5px;color:#FFE082;">☎️ ${tr(state.activePhoneCall.caller, state.lang)}</strong>
+                 <button type="button" id="btn-ignore-phone" class="btn-outline" style="padding:1px 6px;font-size:10px;">✕</button>
+               </div>
+               <p style="font-size:11px;line-height:1.3;color:#ECEFF1;margin:3px 0;">${tr(state.activePhoneCall.message, state.lang)}</p>
+               <div style="font-size:10px;font-weight:800;color:#81C784;">📌 ${tr(state.activePhoneCall.rewardHint, state.lang)}</div>
+             </div>`
+          : `<div id="phone-call-card" class="phone-call-bar ringing">
+               <div style="display:flex;align-items:center;gap:7px;flex:1;min-width:0;">
+                 <span class="phone-ring-icon">☎️</span>
+                 <div style="min-width:0;">
+                   <div style="font-size:11.5px;font-weight:900;color:#FFE082;">${tr(L("ВХІДНИЙ ДЗВІНОК НА ПОСТ!", "INCOMING BOOTH CALL!"), state.lang)}</div>
+                   <div style="font-size:10px;color:#CFD8DC;">${tr(state.activePhoneCall.caller, state.lang)}</div>
+                 </div>
+               </div>
+               <div style="display:flex;gap:5px;flex-shrink:0;">
+                 <button type="button" id="btn-answer-phone" class="btn-primary-green" style="padding:5px 9px;font-size:11px;">📞 ${tr(L("Відповісти", "Answer"), state.lang)}</button>
+                 <button type="button" id="btn-ignore-phone" class="btn-outline" style="padding:5px 7px;font-size:11px;">🔇</button>
+               </div>
+             </div>`)
+        : "";
 
       let activeSpeech = t.greeting;
       if (state.reactionState === "INTIMIDATED") activeSpeech = t.intimidateReply || t.interrogationReply;
@@ -675,11 +744,12 @@
           </div>
           <div class="row-between" style="font-size:11px;color:#B0BEC5;">
             <span style="color:${state.nabkRisk >= 60 || state.underSurveillance || state.reprimands > 0 ? "#FF5252" : "#B0BEC5"};">НАБК:${state.nabkRisk}%${state.reprimands > 0 ? ` | ⚠️${state.reprimands}/3` : ""}${state.underSurveillance ? " | 👁️НАГЛЯД" : ""}${state.isUndercoverSbkAgent ? ` | 🕵️(${state.spiesCaughtAsAgent}/4)` : ""}${(state.shiftCombo || 0) >= 2 ? ` | <span class="combo-pill">🔥 ${state.shiftCombo}${state.shiftCombo >= 8 ? " (x1.5)" : (state.shiftCombo >= 5 ? " (x1.3)" : (state.shiftCombo >= 3 ? " (x1.15)" : ""))}</span>` : ""}</span>
-            <span>${tr(L("Палич", "Palych"), state.lang)}:${state.palychRep} | ${tr(L("Толік", "Tolik"), state.lang)}:${state.tolikRep} | СБК:${state.sbkRep}</span>
+            <span style="display:flex;align-items:center;gap:5px;"><span id="hud-weather" class="weather-pill">${tr(wDef.shortTag, state.lang)}</span><span>${tr(L("Палич", "Palych"), state.lang)}:${state.palychRep} | ${tr(L("Толік", "Tolik"), state.lang)}:${state.tolikRep} | СБК:${state.sbkRep}</span></span>
           </div>
         </header>
 
         ${tabletBadge}
+        ${phoneCallHtml}
 
         <section class="booth-row">
           <div id="booth-wrap" class="booth-canvas-wrap ${state.justShook ? "booth-shake" : ""}" title="${tr(L("Натисни, щоб звірити авто/обличчя", "Click to inspect vehicle & face"), state.lang)}">
@@ -693,15 +763,19 @@
                   ${t.direction === "ENTRY" ? tr(L("🟢 В'ЇЗД (Додому)", "🟢 ENTRY (Home)"), state.lang) : tr(L("🔴 ВИЇЗД (За кордон)", "🔴 EXIT (Abroad)"), state.lang)}
                 </span>
               </div>
-              <button type="button" id="booth-vehicle-info" class="booth-vehicle-tag" title="${tr(L("Натисни, щоб звірити авто", "Click to verify vehicle"), state.lang)}">🚘 ${tr(t.vehicleDesc, state.lang)}</button>
+              <button type="button" id="booth-vehicle-info" class="booth-vehicle-tag" title="${tr(L("Натисни, щоб звірити авто", "Click to verify vehicle"), state.lang)}">${fogVehMasked ? `🌫️ ${tr(L("У тумані не видно колір/модель авто...", "Vehicle hidden in dense fog..."), state.lang)}` : `🚘 ${maskedVehDesc}`}</button>
+              ${fogVehMasked ? `<button type="button" id="btn-weather-clear" class="weather-clear-btn">🔦 ${tr(L("Розвіяти туман (0s)", "Shine High-Beams (0s)"), state.lang)}</button>` : (snowPlateMasked ? `<button type="button" id="btn-weather-clear" class="weather-clear-btn">🧤 ${tr(L("Протерти засніжений номер (-1s)", "Wipe Frosted Plate (-1s)"), state.lang)}</button>` : "")}
               <p style="font-size:11.5px;line-height:1.35;">${tr(activeSpeech, state.lang)}</p>
             </div>
             ${bribeVisible ? `
-              <button type="button" id="btn-take-bribe" style="background:${t.bribeOffer.isFriendlyGift ? "#1B5E20" : "#6D4C41"};color:#E0B145;padding:5px 8px;font-size:11px;width:100%;margin-top:4px;">
-                ${t.bribeOffer.isFriendlyGift ? tr(L(`🤝 ВЗЯТИ ПІДГОН НА КАВУ (+${bribeInfo.display})`, `🤝 ACCEPT GIFT (+${bribeInfo.display})`), state.lang) : tr(L(`✉️ ВЗЯТИ КОНВЕРТ (+${bribeInfo.display})`, `✉️ TAKE ENVELOPE (+${bribeInfo.display})`), state.lang)}${bribeInfo.boostedByIntimidate ? ` <span style="background:#FF8F00;color:#111;padding:1px 5px;border-radius:4px;font-size:9.5px;font-weight:900;">${tr(L("📢 +30% ВИБИТО", "📢 +30% SHAKEN"), state.lang)}</span>` : ""}
-              </button>
+              <div class="haggle-row">
+                <button type="button" id="btn-take-bribe" style="background:${t.bribeOffer.isFriendlyGift ? "#1B5E20" : "#6D4C41"};color:#E0B145;padding:5px 8px;font-size:11px;flex:1;">
+                  ${t.bribeOffer.isFriendlyGift ? tr(L(`🤝 ВЗЯТИ ПІДГОН НА КАВУ (+${bribeInfo.display})`, `🤝 ACCEPT GIFT (+${bribeInfo.display})`), state.lang) : tr(L(`✉️ ВЗЯТИ КОНВЕРТ (+${bribeInfo.display})`, `✉️ TAKE ENVELOPE (+${bribeInfo.display})`), state.lang)}${bribeInfo.boostedByIntimidate ? ` <span style="background:#FF8F00;color:#111;padding:1px 5px;border-radius:4px;font-size:9.5px;font-weight:900;">${tr(L("📢 +30% ВИБИТО", "📢 +30% SHAKEN"), state.lang)}</span>` : ""}${bribeInfo.boostedByHaggle ? ` <span style="background:#7B1FA2;color:#FFF;padding:1px 5px;border-radius:4px;font-size:9.5px;font-weight:900;">📈 +${bribeInfo.hagglePct}%</span>` : ""}
+                </button>
+                ${(!t.bribeOffer.isFriendlyGift && state.haggleState === "NONE") ? `<button type="button" id="btn-haggle-bribe" class="btn-haggle">📈 ${tr(L("Мало!", "More!"), state.lang)}</button>` : ""}
+              </div>
               ${!t.bribeOffer.isFriendlyGift ? `<div style="font-size:10px;color:${state.nabkRisk >= 65 || state.underSurveillance ? "#FF5252" : "#FFAB91"};margin-top:2px;">${state.nabkRisk >= 65 || state.underSurveillance ? tr(L(`⚠️ НАБК ${state.nabkRisk}% — дуже небезпечно брати! Краще 🚨 Затримати`, `⚠️ NABK ${state.nabkRisk}% — risky! Better 🚨 Detain`), state.lang) : tr(L("⚖️ Пропозиція хабаря — кримінал (можна 🚨 Затримати)", "Offering a bribe is a crime (can 🚨 Detain)"), state.lang)}</div>` : ""}
-            ` : (state.bribeAccepted ? `<div style="color:#81C784;font-size:11px;font-weight:700;margin-top:4px;">${tr(L("✔ У кишені (тисни ✔ ПРОПУСТИТИ)", "✔ Pocketed (press ✔ APPROVE)"), state.lang)}</div>` : "")}
+            ` : (state.haggleState === "FAILED" && !state.bribeAccepted ? `<div id="haggle-failed-note" style="color:#FF8A80;font-size:10.5px;font-weight:800;margin-top:4px;">${tr(L("😤 Конверт сховано після торгу (спробу підкупу зафіксовано — можна 🚨 Затримати)", "😤 Driver pulled cash back after haggle (can 🚨 Detain)"), state.lang)}</div>` : (state.bribeAccepted ? `<div style="color:#81C784;font-size:11px;font-weight:700;margin-top:4px;">${tr(L("✔ У кишені (тисни ✔ ПРОПУСТИТИ)", "✔ Pocketed (press ✔ APPROVE)"), state.lang)}</div>` : ""))}
           </div>
         </section>
 
@@ -761,7 +835,7 @@
           `;
         })() : ""}
 
-        <section class="desk-area ${state.inspectMode ? "inspect-mode" : ""}">
+        <section class="desk-area ${state.inspectMode ? "inspect-mode" : ""} ${deskJustSlammed ? "desk-slam-shake" : ""}">
           ${(() => {
             const dr = state.daySpec && state.daySpec.dailyRule;
             const reqQr = state.daySpec && state.daySpec.requireOblikQr;
@@ -838,7 +912,7 @@
             const unfoldCls = state.justUnfoldedDoc ? "doc-unfold" : "";
             state.justUnfoldedDoc = false;
             return `
-          <div id="doc-paper-el" class="doc-paper ${unfoldCls} ${docTheme} ${state.uvActive ? "uv-mode" : ""} ${state.uvActive && state.ownedAssets.includes("uv_spotlight") ? "uv-pro" : ""}">
+          <div id="doc-paper-el" class="doc-paper ${unfoldCls} ${docTheme} ${state.uvActive ? "uv-mode" : ""} ${state.uvActive && state.ownedAssets.includes("uv_spotlight") ? "uv-pro" : ""} ${wKey === "STORM" && !state.ownedAssets.includes("diesel_generator") && !state.uvActive ? "storm-flicker" : ""}">
             ${state.uvActive ? `<div class="uv-lens-overlay" id="uv-lens-overlay"></div>` : ""}
             <div style="display:flex;justify-content:space-between;align-items:center;font-size:9.5px;font-weight:900;letter-spacing:0.5px;opacity:0.78;border-bottom:1px dashed rgba(0,0,0,0.18);padding-bottom:3px;">
               <span>${headerBanner}</span>
@@ -1002,6 +1076,8 @@
         shytomyrRelics: state.shytomyrRelics || [],
         ownedAssets: state.ownedAssets || [],
         lang: state.lang,
+        weather: wKey,
+        weatherCleared: Boolean(state.weatherCleared),
         hasCloneCar: t.violations.some(v => v.code === "VEHICLE_MISMATCH"),
         isLive: true
       };
@@ -1026,6 +1102,8 @@
           boothSceneOpts.shytomyrRelics = state.shytomyrRelics || [];
           boothSceneOpts.ownedAssets = state.ownedAssets || [];
           boothSceneOpts.lang = state.lang;
+          boothSceneOpts.weather = state.weather || "CLEAR";
+          boothSceneOpts.weatherCleared = Boolean(state.weatherCleared);
           drawBoothScene(boothCanvasEl, boothSceneOpts);
           const oblikClk = document.getElementById("oblik-live-clock");
           if (oblikClk && !state.oblikIsScreenshot) {
@@ -1161,6 +1239,12 @@
       }
 
       function handleVehicleOrFaceCheck() {
+        if (wKey === "FOG" && !state.weatherCleared && !state.inspectMode) {
+          audio.playUvSwitch();
+          state.weatherCleared = true;
+          render();
+          return;
+        }
         audio.playTap();
         let foundVisual = false;
         let alreadyHadVisual = false;
@@ -1188,6 +1272,40 @@
       boothWrapEl.addEventListener("click", handleVehicleOrFaceCheck);
       const vehInfoBtn = document.getElementById("booth-vehicle-info");
       if (vehInfoBtn) vehInfoBtn.addEventListener("click", handleVehicleOrFaceCheck);
+
+      const weatherClearBtn = document.getElementById("btn-weather-clear");
+      if (weatherClearBtn) {
+        weatherClearBtn.addEventListener("click", () => {
+          if (wKey === "SNOW") {
+            audio.playWipeSnow();
+            state.shiftSec = Math.max(5, state.shiftSec - 1);
+            state.weatherCleared = true;
+          } else {
+            audio.playUvSwitch();
+            state.weatherCleared = true;
+          }
+          render();
+        });
+      }
+
+      const answerPhoneBtn = document.getElementById("btn-answer-phone");
+      if (answerPhoneBtn && state.activePhoneCall) {
+        answerPhoneBtn.addEventListener("click", () => {
+          audio.playTap();
+          state.activePhoneCall.answered = true;
+          unlockDiscovery("DISC_PHONE_CALL");
+          pushShiftLog("#FFD54F", state.activePhoneCall.logLine);
+          render();
+        });
+      }
+      const ignorePhoneBtn = document.getElementById("btn-ignore-phone");
+      if (ignorePhoneBtn && state.activePhoneCall) {
+        ignorePhoneBtn.addEventListener("click", () => {
+          audio.playTap();
+          state.activePhoneCall.dismissed = true;
+          render();
+        });
+      }
 
       const foldBtn = document.getElementById("btn-fold-doc");
       if (foldBtn) foldBtn.addEventListener("click", () => { audio.playTap(); state.docFolded = true; render(); });
@@ -1409,7 +1527,8 @@
           state.coffeeTipGiven = true;
           const meta = getMetaPerkFlags();
           const has = id => state.ownedAssets.includes(id);
-          const cMult = (state.sandboxMod ? (state.sandboxMod.coffeeMult || 1) : 1) * (has("balenci_jacket") ? 1.35 : 1);
+          const weatherCoffeeMult = wKey === "SNOW" ? 1.50 : (wKey === "RAIN" ? 1.30 : 1.0);
+          const cMult = (state.sandboxMod ? (state.sandboxMod.coffeeMult || 1) : 1) * (has("balenci_jacket") ? 1.35 : 1) * weatherCoffeeMult;
           const sockTip = (state.shytomyrRelics && state.shytomyrRelics.includes("RELIC_KEVLAR_SOCKS")) ? 100 : 0;
           const tip = Math.round(t.coffeeTip * 2 * cMult) + (has("thermos_tray") ? 80 : 0) + (has("espresso_machine") ? 150 : 0) + (has("parrot_kesha") ? 150 : 0) + (has("addon_syrup_bar") ? 120 : 0) + (has("addon_gold_cage") ? 100 : 0) + sockTip + (meta.coffeeTipBonus * 2);
           state.money += tip;
@@ -1427,6 +1546,9 @@
       document.getElementById("react-uv").addEventListener("click", () => {
         audio.playUvSwitch();
         state.uvActive = !state.uvActive;
+        if (state.uvActive && wKey === "FOG" && !state.weatherCleared) {
+          state.weatherCleared = true;
+        }
         render();
       });
 
@@ -1535,12 +1657,51 @@
             }
             state.shiftBribesTotal = (state.shiftBribesTotal || 0) + bribeUahEq;
             state.totalCareerBribes = (state.totalCareerBribes || 0) + bribeUahEq;
-            const baseJump = t.bribeOffer.nabkRiskJump || (t.bribeOffer.isStingTrap ? 35 : (t.bribeOffer.syndicateFavor ? 6 : 8));
+            const baseJump = (t.bribeOffer.nabkRiskJump || (t.bribeOffer.isStingTrap ? 35 : (t.bribeOffer.syndicateFavor ? 6 : 8))) + (state.haggleExtraRisk || 0);
             let riskJump = state.underSurveillance ? Math.round(baseJump * 1.5) : baseJump;
             if (state.ownedAssets.includes("addon_osint_app")) riskJump = Math.max(2, Math.round(riskJump * 0.8));
             state.nabkRisk = Math.min(100, state.nabkRisk + riskJump);
           }
           if (t.bribeOffer.syndicateFavor) state.tolikRep = Math.min(100, state.tolikRep + 20);
+          render();
+        });
+      }
+
+      const haggleBtn = document.getElementById("btn-haggle-bribe");
+      if (haggleBtn && bribeInfo && t.bribeOffer && !t.bribeOffer.isFriendlyGift && state.haggleState === "NONE") {
+        haggleBtn.addEventListener("click", () => {
+          if (t.storyTag === "NABK_STING" || t.bribeOffer.isStingTrap) {
+            state.haggleState = "FAILED";
+            state.offeredBribeBeforeHaggleFail = true;
+            state.nabkRisk = Math.min(100, state.nabkRisk + 12);
+            audio.playHaggleFail();
+            triggerHaptic([45, 30, 45]);
+            pushShiftLog("#FF5252", L("🚨 ПАСТКА НАБК! Під час торгу зафіксовано вимагання (+12% НАБК)!", "🚨 NABK TRAP! Shakedown demand caught on wire (+12% NABK)!"));
+            render();
+            return;
+          }
+          const has = id => state.ownedAssets.includes(id);
+          const winChance = Math.max(0.35, Math.min(0.85,
+            0.62 + (has("balenci_jacket") ? 0.08 : 0) + (has("customs_seal_ring") ? 0.08 : 0) + (state.intimidateUsed ? 0.06 : 0) - (state.nabkRisk >= 60 ? 0.10 : 0)
+          ));
+          if (Math.random() < winChance) {
+            state.haggleState = "WON";
+            state.haggleMult = 1.30 + Math.floor(Math.random() * 16) / 100;
+            state.haggleExtraRisk = 4;
+            state.nabkRisk = Math.min(100, state.nabkRisk + 2);
+            audio.playHaggleWin();
+            triggerHaptic([18, 18, 28]);
+            unlockDiscovery("DISC_HAGGLE_PRO");
+            const pct = Math.round((state.haggleMult - 1) * 100);
+            pushShiftLog("#FFB300", L(`📈 Торг вдався! Конверт зріс на +${pct}% (+2% НАБК).`, `📈 Haggle won! Bribe raised +${pct}% (+2% NABK).`));
+          } else {
+            state.haggleState = "FAILED";
+            state.offeredBribeBeforeHaggleFail = true;
+            state.nabkRisk = Math.min(100, state.nabkRisk + 3);
+            audio.playHaggleFail();
+            triggerHaptic([40, 25, 40]);
+            pushShiftLog("#FFAB91", L("😤 Водій сховав конверт після торгу (+3% НАБК)! Можна 🚨 Затримати.", "😤 Driver pulled cash back after haggle (+3% NABK)! Can still 🚨 Detain."));
+          }
           render();
         });
       }

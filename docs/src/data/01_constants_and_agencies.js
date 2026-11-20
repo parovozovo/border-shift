@@ -1,5 +1,5 @@
   const SAVE_KEY = "border_shift_save_v3";
-  const BUILD_VERSION = "v8.8";
+  const BUILD_VERSION = "v8.9";
   const DAILY_OBNAL_LIMIT_USD = 5000;
   let confirmResetArmed = false;
 
@@ -153,8 +153,67 @@
       title: L("Рідкісна нічна пригода", "Rare Night Encounter"),
       desc: L("Пережито й оплачено одну з ексклюзивних випадкових вечірніх справ.", "Unlocked and paid for a rare random night event."),
       hint: L("Увечері впіймай рідкісну подію з фіолетовою рамкою та оплати її.", "Catch a rare purple-bordered night activity and pay for it.")
+    },
+    {
+      id: "DISC_VASYA_ARC",
+      icon: "🎭",
+      title: L("Василь «Хамелеон»: Фінал історії", "Vasyl 'Chameleon': Story Finale"),
+      desc: L("Пройдено всі 4 акти історії маскувальника Василя Підпільного — від перуки до фіналу.", "Completed all 4 chapters of master-of-disguise Vasyl Pidpilnyi."),
+      hint: L("Зустрінь Василя 4 рази за кар'єру чи вільну гру й доведи його історію до кінця.", "Meet Vasyl 4 times in a run to reach his finale.")
+    },
+    {
+      id: "DISC_PHONE_CALL",
+      icon: "☎️",
+      title: L("Дзвінок зверху", "Call from Above"),
+      desc: L("Прийнято та опрацьовано терміновий службовий чи тіньовий дзвінок на пост.", "Answered a live mid-inspection hotline or syndicate phone call."),
+      hint: L("Підійми слухавку, коли телефон на посту задзвонить під час перевірки.", "Answer the desk phone when it rings mid-inspection.")
+    },
+    {
+      id: "DISC_HAGGLE_PRO",
+      icon: "📈",
+      title: L("Майстер торгу", "Master Haggler"),
+      desc: L("Успішно виторговано більшу суму в конверті прямо на КПП.", "Successfully squeezed a bigger bribe out of a nervous traveler."),
+      hint: L("Коли побачиш брудний конверт, натисни «📈 Мало!» й успішно дотисни водія.", "Click '📈 More!' on a dirty bribe offer and win the haggle.")
     }
   ];
+
+  const WEATHER_DEFS = {
+    CLEAR: {
+      id: "CLEAR",
+      icon: "🌙",
+      title: L("Ясна зоряна ніч", "Clear Starry Night"),
+      effect: L("Стандартна видимість — жодних перешкод на смузі.", "Clear visibility — standard booth conditions."),
+      shortTag: L("🌙 Ясно", "🌙 Clear")
+    },
+    RAIN: {
+      id: "RAIN",
+      icon: "🌧️",
+      title: L("Нічна злива", "Heavy Night Rain"),
+      effect: L("Злива б'є по даху будки — гаряча ☕ кава дає +30% чайових!", "Pouring rain — hot ☕ coffee yields +30% extra tips!"),
+      shortTag: L("🌧️ Злива (+30%☕)", "🌧️ Rain (+30%☕)")
+    },
+    FOG: {
+      id: "FOG",
+      icon: "🌫️",
+      title: L("Густий туман", "Dense Highway Fog"),
+      effect: L("Колір і модель авто в тумані! Вмикай 🔦 дальнє світло або УФ, щоб розгледіти машину.", "Vehicles shrouded in mist! Shine high-beams or UV (0s) to clear!"),
+      shortTag: L("🌫️ Туман", "🌫️ Fog")
+    },
+    SNOW: {
+      id: "SNOW",
+      icon: "❄️",
+      title: L("Хуртовина та заметіль", "Snowstorm & Blizzard"),
+      effect: L("Номери заліплює снігом (🧤 протерти -1s або Лазер/Підігрів 0s) • Чайові ☕ +50%!", "License plates frosted (🧤 wipe -1s or Laser/Heated Seat 0s) • ☕ +50% tips!"),
+      shortTag: L("❄️ Сніг (+50%☕)", "❄️ Snow (+50%☕)")
+    },
+    STORM: {
+      id: "STORM",
+      icon: "⛈️",
+      title: L("Гроза та шквал", "Thunderstorm"),
+      effect: L("Світло блимає на паперах без ⛽ генератора «Хонда-КПП» • Доплата +10% до ставки!", "Booth lights flicker without ⛽ generator • +10% hazard salary bonus!"),
+      shortTag: L("⛈️ Гроза (+10%🪙)", "⛈️ Storm (+10%🪙)")
+    }
+  };
 
   // Discrepancy catalog — factual findings only (no button-press spoilers!)
   const DISCREPANCY = {

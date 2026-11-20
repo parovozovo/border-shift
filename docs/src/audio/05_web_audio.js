@@ -164,6 +164,43 @@
       setTimeout(() => this.playWarmNote(233.08, 0.22, 0.01, 650, 0.06, "triangle"), 125);
     }
 
+    playStampSlam(kind) {
+      const isBad = kind === "error" || kind === "warn";
+      this.playNoiseBurst(0.055, "lowpass", 360, 1.8, 0.28);
+      this.playWarmNote(isBad ? 72 : 98, 0.09, 0.003, 210, 0.16, "sine");
+      setTimeout(() => this.playNoiseBurst(0.03, "bandpass", 720, 2.2, 0.12), 28);
+    }
+
+    playPhoneRing() {
+      const ringBurst = (offsetMs) => {
+        setTimeout(() => {
+          this.playWarmNote(680, 0.08, 0.004, 1500, 0.055, "triangle");
+          setTimeout(() => this.playWarmNote(820, 0.08, 0.004, 1600, 0.055, "triangle"), 65);
+        }, offsetMs);
+      };
+      ringBurst(0);
+      ringBurst(240);
+    }
+
+    playHaggleWin() {
+      this.playNoiseBurst(0.05, "highpass", 1500, 1.4, 0.12);
+      this.playWarmNote(440.0, 0.14, 0.01, 1300, 0.055, "triangle");
+      setTimeout(() => this.playWarmNote(659.25, 0.22, 0.015, 1600, 0.06, "sine"), 75);
+    }
+
+    playHaggleFail() {
+      this.playWarmNote(280, 0.14, 0.008, 750, 0.06, "triangle");
+      setTimeout(() => this.playWarmNote(190, 0.22, 0.01, 550, 0.06, "triangle"), 95);
+    }
+
+    playWipeSnow() {
+      this.playNoiseBurst(0.11, "bandpass", 1800, 1.4, 0.18);
+    }
+
+    playThunder() {
+      this.playNoiseBurst(0.55, "lowpass", 140, 0.9, 0.22);
+    }
+
     playSiren() {
       try {
         this.ensureCtx();

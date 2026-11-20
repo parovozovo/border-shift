@@ -73,8 +73,46 @@
     encounterTriggered: false,
     activeEndingId: null,
     usd: 0,
-    campaignFlags: {}
+    campaignFlags: {},
+    weather: "CLEAR",
+    weatherCleared: true,
+    haggleState: "NONE",
+    haggleMult: 1.0,
+    haggleExtraRisk: 0,
+    offeredBribeBeforeHaggleFail: false,
+    activePhoneCall: null,
+    shiftPhoneCallUsed: false,
+    stampSlam: null,
+    stampSlamSeq: 0,
+    stampSlamRenderedSeq: 0,
+    recurringArcs: { vasya: { stage: 0, lastOutcome: null, approved: 0, caught: 0, completed: false }, stepanMet: 0 }
   };
+
+  function triggerHaptic(pattern) {
+    try {
+      if (typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
+        navigator.vibrate(pattern);
+      }
+    } catch (_) {}
+  }
+
+  function rollDailyWeather(daySpec, sandboxMod, isSandbox) {
+    const dNum = daySpec ? daySpec.dayNumber : 1;
+    const mId = sandboxMod && sandboxMod.id ? sandboxMod.id : "";
+    const hintUk = daySpec && daySpec.wantedHint && daySpec.wantedHint.uk ? daySpec.wantedHint.uk.toLowerCase() : "";
+    if (mId === "FOG_NIGHT") return "FOG";
+    if (mId === "DRONE_BLACKOUT") return "STORM";
+    if (mId === "BORDER_AMNESTY_COFFEE" || hintUk.includes("сніг")) return "SNOW";
+    if (!isSandbox) {
+      if (dNum === 1) return "CLEAR";
+      if (dNum === 2) return "RAIN";
+      if (dNum === 3) return "FOG";
+      if (dNum === 4) return "SNOW";
+      if (dNum === 5 || dNum === 7) return "STORM";
+      if (dNum === 6) return pick(["RAIN", "FOG", "SNOW", "STORM"]);
+    }
+    return pick(["CLEAR", "RAIN", "FOG", "SNOW", "STORM"]);
+  }
 
   function loadCampaignCheckpoints() {
     try { return JSON.parse(localStorage.getItem(CAMPAIGN_CHECKPOINTS_KEY) || "{}"); } catch (_) { return {}; }
@@ -95,6 +133,8 @@
       const snap = cps["day_" + dayNum];
       if (!snap) return false;
       state = Object.assign(state, snap);
+      if (!state.recurringArcs) state.recurringArcs = { vasya: { stage: 0, lastOutcome: null, approved: 0, caught: 0, completed: false }, stepanMet: 0 };
+      if (!state.weather) state.weather = "CLEAR";
       state.phase = "MORNING_BRIEFING";
       saveStateToStorage();
       render();
@@ -209,7 +249,8 @@
       else rankScale = 1.0;
     }
     const baseAmt = (currency === "USD" || offer.isFriendlyGift) ? offer.amount : (offer.amount < 500 ? offer.amount * 5 : offer.amount);
-    const amt = Math.round(baseAmt * rankScale * modMult * jacketMult * ringMult * audiMult * prepMult * intimidateMult);
+    const haggleMult = (!offer.isFriendlyGift && state.haggleState === "WON" && state.haggleMult) ? state.haggleMult : 1.0;
+    const amt = Math.round(baseAmt * rankScale * modMult * jacketMult * ringMult * audiMult * prepMult * intimidateMult * haggleMult);
     return {
       amount: amt,
       currency,
@@ -217,7 +258,9 @@
       display: currency === "USD" ? `${amt.toLocaleString("en-US")} 💵` : `${amt.toLocaleString("en-US")} 🪙`,
       isInstant: Boolean(offer.instantOffer),
       requiresDiscovery: Boolean(offer.requiresDiscovery),
-      boostedByIntimidate: Boolean(state.intimidateBribeBoosted && !offer.isFriendlyGift)
+      boostedByIntimidate: Boolean(state.intimidateBribeBoosted && !offer.isFriendlyGift),
+      boostedByHaggle: Boolean(!offer.isFriendlyGift && state.haggleState === "WON"),
+      hagglePct: Math.round((haggleMult - 1) * 100)
     };
   }
 
@@ -266,6 +309,8 @@
       const raw = localStorage.getItem(SAVE_KEY);
       if (!raw) return false;
       state = Object.assign(state, JSON.parse(raw));
+      if (!state.recurringArcs) state.recurringArcs = { vasya: { stage: 0, lastOutcome: null, approved: 0, caught: 0, completed: false }, stepanMet: 0 };
+      if (!state.weather) state.weather = "CLEAR";
       render();
       return true;
     } catch (_) {
@@ -519,13 +564,27 @@
       baseDay = built.daySpec;
     }
     const baseSec = (sandbox ? 215 : 195) + (mod.shiftSecDelta || 0) + meta.shiftTimeBonus;
+    const freshArcs = { vasya: { stage: 0, lastOutcome: null, approved: 0, caught: 0, completed: false }, stepanMet: 0 };
+    const startWeather = rollDailyWeather(baseDay, mod, sandbox);
     state = Object.assign(state, {
       phase: "MORNING_BRIEFING",
       isSandbox: sandbox,
       dayIndex: 0,
       daySpec: baseDay,
       sandboxMod: mod,
-      queue: generateDailyQueue(baseDay, sandbox ? 14 : 12, sandbox),
+      weather: startWeather,
+      weatherCleared: true,
+      haggleState: "NONE",
+      haggleMult: 1.0,
+      haggleExtraRisk: 0,
+      offeredBribeBeforeHaggleFail: false,
+      activePhoneCall: null,
+      shiftPhoneCallUsed: false,
+      stampSlam: null,
+      stampSlamSeq: 0,
+      stampSlamRenderedSeq: 0,
+      recurringArcs: freshArcs,
+      queue: generateDailyQueue(baseDay, sandbox ? 14 : 12, sandbox, freshArcs),
       travelerIdx: 0,
       selectedDocIdx: 0,
       shiftSec: Math.max(150, baseSec),
@@ -646,8 +705,12 @@
     state.encounterTriggered = false;
     state.gotReprimandToday = false;
     state.radioDispatch = null;
+    state.shiftPhoneCallUsed = false;
+    state.activePhoneCall = null;
+    state.stampSlam = null;
+    const wDef = (typeof WEATHER_DEFS !== "undefined" && WEATHER_DEFS[state.weather || "CLEAR"]) || { shortTag: L("🌙 Ясно", "🌙 Clear") };
     state.shiftLogs = [
-      { color: "#B0BEC5", text: L(`Зміна Дня ${state.daySpec.dayNumber} почалася. Перевіряйте документи й багажник.`, `Day ${state.daySpec.dayNumber} shift started. Inspect docs & trunks.`) }
+      { color: "#B0BEC5", text: L(`Зміна Дня ${state.daySpec.dayNumber} почалася (${wDef.shortTag.uk}). Перевіряйте документи й багажник.`, `Day ${state.daySpec.dayNumber} shift started (${wDef.shortTag.en}). Inspect docs & trunks.`) }
     ];
     state.logsExpanded = false;
     state.barrierState = "CLOSED";
@@ -661,6 +724,73 @@
     if (!state.shiftLogs) state.shiftLogs = [];
     state.shiftLogs.unshift({ color, text });
     if (state.shiftLogs.length > 25) state.shiftLogs.length = 25;
+  }
+
+  function maybeSpawnLivePhoneCall(t) {
+    if (state.shiftPhoneCallUsed || !t) return;
+    const dNum = state.daySpec ? state.daySpec.dayNumber : 1;
+    if (!state.isSandbox && dNum < 2) return;
+    if (state.travelerIdx === 0 || state.travelerIdx === 4) return;
+    const tag = t.storyTag || "";
+    if (tag === "NABK_STING" || tag === "INTEL_ALLY" || tag.startsWith("SHYTOMYR_") || tag.startsWith("VASYA_")) return;
+    const chance = state.travelerIdx >= 6 ? 1.0 : 0.38;
+    if (Math.random() >= chance) return;
+
+    const pool = [];
+    const reqDet = Boolean(t.isWantedTarget || (t.violations && t.violations.some(v => v.requiresDetention)));
+    if (!t.shouldBeApproved && tag !== "FSM_SPY" && tag !== "SABOTEUR" && !t.isWantedTarget) {
+      pool.push({
+        type: "PALYCH_FAVOR",
+        caller: L("🧢 Пал Палич (Пряма лінія)", "🧢 Pal Palych (Direct Line)"),
+        message: L(
+          "«Слухай уважно, інспекторе! За цього мандрівника люди зверху попросили. Натискай ✔ ПРОПУСТИТИ без штрафів — матимеш +250 💵 і +18 до моєї поваги!»",
+          "'Listen closely! Brass asked a favor for this traveler. Press ✔ APPROVE — zero fine, +250 💵 & +18 my rep!'"
+        ),
+        rewardHint: L("Умова: ✔ ПРОПУСТИТИ → +250 💵, +18 Палич, без штрафу (+8% НАБК)", "Order: ✔ APPROVE → +250 💵, +18 Palych, zero fine (+8% NABK)"),
+        logLine: L("☎️ Пал Палич (телефон): «Пропусти цього клієнта — +250 💵 і +18 поваги!»", "☎️ Palych (Phone): 'Wave this traveler through — +250 💵 & +18 rep!'")
+      });
+    }
+    if (!t.shouldBeApproved && (t.hasContraband || t.bribeOffer) && tag !== "FSM_SPY" && tag !== "SABOTEUR") {
+      pool.push({
+        type: "TOLIK_FAVOR",
+        caller: L("🚐 Толік «Бусик» (Закритий канал)", "🚐 Tolik 'Busyk' (Encrypted Line)"),
+        message: L(
+          "«Бро, на лінії свій борт! Пропусти цю машину прямо зараз без шмону — скину +400 💵 у бардачок і +22 довіри синдикату!»",
+          "'Bro, that ride is ours! Wave them ✔ APPROVE right now — +400 💵 & +22 Syndicate trust!'"
+        ),
+        rewardHint: L("Умова: ✔ ПРОПУСТИТИ → +400 💵, +22 Толік, -10 СБК (+10% НАБК)", "Order: ✔ APPROVE → +400 💵, +22 Tolik, -10 SBK (+10% NABK)"),
+        logLine: L("☎️ Толік (телефон): «Мій борт на смузі — пропусти за +400 💵 і +22 довіри!»", "☎️ Tolik (Phone): 'My crew at gate — approve for +400 💵 & +22 trust!'")
+      });
+    }
+    if (!t.shouldBeApproved && reqDet) {
+      pool.push({
+        type: "SBK_URGENT",
+        caller: L("🦅 Майор СБК «Тихий» (Терміново)", "🦅 SBK Major 'Quiet' (Urgent)"),
+        message: L(
+          "«КПП, тримайте суб'єкта на смузі! Оперативна група вже поруч — оформлюй 🚨 СБК / АРЕШТ негайно: зверху +1 800 🪙 і +10 СБК!»",
+          "'Gate, hold this subject! Quick-response squad inbound — hit 🚨 DETAIN for +1,800 🪙 & +10 SBK!'"
+        ),
+        rewardHint: L("Умова: 🚨 СБК / АРЕШТ → +1 800 🪙 премії та +10 СБК", "Order: 🚨 DETAIN → +1,800 🪙 extra bounty & +10 SBK"),
+        logLine: L("☎️ СБК (телефон): «Терміновий арешт фігуранта — +1 800 🪙 і +10 СБК!»", "☎️ SBK (Phone): 'Urgent arrest order — +1,800 🪙 & +10 SBK!'")
+      });
+    }
+    pool.push({
+      type: "NABK_AUDIT",
+      caller: L("🕵️ Гаряча лінія ДПСК / НАБК", "🕵️ SBGS / NABK Spot Audit Line"),
+      message: L(
+        "«Контрольний аудит поста по камерах! Оформіть цього мандрівника суворо за статутом (без хабарів) — знімемо -10% ризику НАБК і дамо +800 🪙 премії!»",
+        "'Live camera audit! Process this traveler strictly per protocol — removes -10% NABK risk & awards +800 🪙!'"
+      ),
+      rewardHint: L("Умова: Правильно за статутом (без конвертів) → -10% НАБК, +800 🪙", "Order: Strict protocol (no bribes) → -10% NABK, +800 🪙"),
+      logLine: L("☎️ Аудит НАБК (телефон): «Оформіть суворо за законом — -10% НАБК і +800 🪙!»", "☎️ NABK Audit (Phone): 'Process strictly by rules — -10% NABK & +800 🪙!'")
+    });
+
+    const chosen = pick(pool);
+    state.shiftPhoneCallUsed = true;
+    state.activePhoneCall = Object.assign({}, chosen, { answered: false, dismissed: false });
+    audio.playPhoneRing();
+    triggerHaptic([35, 50, 35]);
+    pushShiftLog("#FFD54F", L("☎️ Вхідний дзвінок на пост! Підійми слухавку біля вікна!", "☎️ Desk phone ringing! Answer the line at the booth!"));
   }
 
   function prepareCurrentTraveler() {
@@ -687,6 +817,18 @@
     state.justUnfoldedDoc = false;
     state.oblikScanned = false;
     state.openedDocIndices = [];
+    state.haggleState = "NONE";
+    state.haggleMult = 1.0;
+    state.haggleExtraRisk = 0;
+    state.offeredBribeBeforeHaggleFail = false;
+    state.activePhoneCall = null;
+    if (state.weather === "FOG") {
+      state.weatherCleared = Boolean(state.ownedAssets && state.ownedAssets.includes("uv_spotlight"));
+    } else if (state.weather === "SNOW") {
+      state.weatherCleared = Boolean(state.ownedAssets && (state.ownedAssets.includes("laser_plate_reader") || state.ownedAssets.includes("heated_booth_seat")));
+    } else {
+      state.weatherCleared = true;
+    }
     const t = state.queue[state.travelerIdx];
     state.oblikIsScreenshot = Boolean(t && t.violations.some(v => v.code === "INVALID_QR_CODE") && Math.random() < 0.5);
     const zones = ["TRUNK", "SPARE", "GLOVE"];
@@ -701,6 +843,7 @@
     } else {
       state.currentUvEasterEgg = null;
     }
+    maybeSpawnLivePhoneCall(t);
   }
 
   setInterval(() => {
@@ -709,6 +852,9 @@
     if (encDialog && encDialog.open) return;
 
     state.shiftSec = Math.max(0, state.shiftSec - 1);
+    if (state.weather === "STORM" && state.shiftSec > 0 && state.shiftSec % 23 === 0) {
+      audio.playThunder();
+    }
     if (state.shiftHasSiren && !state.sirenResolved && !state.sirenActive && state.shiftSec <= state.sirenTriggerSec) {
       state.sirenActive = true;
       audio.playSiren();
@@ -745,6 +891,7 @@
   function finishShift() {
     state.phase = "SHIFT_SUMMARY";
     state.sirenActive = false;
+    state.activePhoneCall = null;
     state.nextBribeBoost = 0;
     const noBribes = (state.shiftBribesCount || 0) === 0 && (state.shiftBribesTotal || 0) === 0;
     if (noBribes && state.shiftProcessed >= 5) {
@@ -787,7 +934,7 @@
       !isFriendlyGift &&
       !state.bribeAccepted &&
       bribeOfferInfo &&
-      (bribeOfferInfo.isInstant || state.vehicleInspected || state.spottedCodes.length > 0 || state.interrogated)
+      (bribeOfferInfo.isInstant || state.vehicleInspected || state.spottedCodes.length > 0 || state.interrogated || state.offeredBribeBeforeHaggleFail)
     );
     const requiresDetain = t.isWantedTarget || t.violations.some(v => v.requiresDetention);
     const canDetain = requiresDetain || criminalBribeOffer;
@@ -802,6 +949,8 @@
 
     const bribedPass = state.bribeAccepted && isApprove && !isFriendlyGift;
     const isStingOrRaid = bribedPass && (t.storyTag === "NABK_STING" || (state.nabkRisk >= 75 && Math.random() < 0.35));
+    const answeredCall = (state.activePhoneCall && state.activePhoneCall.answered) ? state.activePhoneCall : null;
+    const phoneFavorPass = Boolean(answeredCall && (answeredCall.type === "PALYCH_FAVOR" || answeredCall.type === "TOLIK_FAVOR") && isApprove);
     const rank = getRank();
     const meta = getMetaPerkFlags();
 
@@ -833,7 +982,8 @@
       if (state.shiftCombo === 3 || state.shiftCombo === 5 || state.shiftCombo === 8) {
         audio.playComboChime(state.shiftCombo);
       }
-      const salMult = (state.sandboxMod && state.sandboxMod.salaryMult ? state.sandboxMod.salaryMult : 1.0) * meta.salaryBonusMult * comboMultUsed;
+      const weatherSalMult = state.weather === "STORM" ? 1.10 : 1.0;
+      const salMult = (state.sandboxMod && state.sandboxMod.salaryMult ? state.sandboxMod.salaryMult : 1.0) * meta.salaryBonusMult * comboMultUsed * weatherSalMult;
       const detectorBonus = state.ownedAssets.includes("money_detector") ? 120 : 0;
       salaryDelta = Math.round(rank.salary * salMult) + detectorBonus;
       if (isDetain && canDetain) {
@@ -876,6 +1026,9 @@
       state.shiftSalaryEarned = (state.shiftSalaryEarned || 0) + salaryDelta;
       state.shiftBountiesEarned = (state.shiftBountiesEarned || 0) + detainBonus;
       state.shiftEarnedUsd = (state.shiftEarnedUsd || 0) + usdBonus;
+    } else if (phoneFavorPass) {
+      // Mid-inspection Phone Directive favor: waives fine safely in exchange for rep/NABK risk
+      state.shiftCombo = 0;
     } else {
       state.shiftCombo = 0;
       const isHighRiskTarget = t.isWantedTarget || t.storyTag === "FSM_SPY" || t.storyTag === "SABOTEUR" || t.storyTag === "TOP_CORRUPTOR" || t.storyTag === "DEPUTY_ESCAPEE";
@@ -918,8 +1071,51 @@
       state.shiftMistakes += 1;
     }
 
+    // Apply answered Live Desk Phone Call outcomes
+    let phoneCallToast = null;
+    if (answeredCall) {
+      if (answeredCall.type === "PALYCH_FAVOR") {
+        if (isApprove && !isStingOrRaid) {
+          state.usd += 250;
+          usdBonus += 250;
+          state.shiftEarnedUsd = (state.shiftEarnedUsd || 0) + 250;
+          state.palychRep = Math.min(100, state.palychRep + 18);
+          state.nabkRisk = Math.min(100, state.nabkRisk + 8);
+          phoneCallToast = L("☎️ НАКАЗ ПАЛИЧА ВИКОНАНО: +250 💵, +18 Палич!", "☎️ PALYCH FAVOR DONE: +250 💵, +18 Palych!");
+        } else if (!isApprove) {
+          state.palychRep = Math.max(0, state.palychRep - 8);
+        }
+      } else if (answeredCall.type === "TOLIK_FAVOR") {
+        if (isApprove && !isStingOrRaid) {
+          state.usd += 400;
+          usdBonus += 400;
+          state.shiftEarnedUsd = (state.shiftEarnedUsd || 0) + 400;
+          state.tolikRep = Math.min(100, state.tolikRep + 22);
+          state.sbkRep = Math.max(0, state.sbkRep - 10);
+          state.nabkRisk = Math.min(100, state.nabkRisk + 10);
+          phoneCallToast = L("☎️ РЕЙС ТОЛІКА ПРОЙШОВ: +400 💵, +22 Толік!", "☎️ TOLIK FAVOR DONE: +400 💵, +22 Tolik!");
+        } else if (!isApprove) {
+          state.tolikRep = Math.max(0, state.tolikRep - 10);
+        }
+      } else if (answeredCall.type === "SBK_URGENT" && isDetain && ruleCorrect) {
+        detainBonus += 1800;
+        state.shiftBountiesEarned = (state.shiftBountiesEarned || 0) + 1800;
+        state.sbkRep = Math.min(100, state.sbkRep + 10);
+        phoneCallToast = L("☎️ ОПЕРАТИВНИЙ АРЕШТ СБК: +1 800 🪙, +10 СБК!", "☎️ SBK HOTLINE ARREST: +1,800 🪙, +10 SBK!");
+      } else if (answeredCall.type === "NABK_AUDIT") {
+        if (ruleCorrect && !bribedPass) {
+          detainBonus += 800;
+          state.shiftExtrasEarned = (state.shiftExtrasEarned || 0) + 800;
+          state.nabkRisk = Math.max(0, state.nabkRisk - 10);
+          phoneCallToast = L("☎️ АУДИТ НАБК ПРОЙДЕНО: -10% НАБК, +800 🪙!", "☎️ NABK AUDIT PASSED: -10% NABK, +800 🪙!");
+        } else if (bribedPass) {
+          state.nabkRisk = Math.min(100, state.nabkRisk + 15);
+        }
+      }
+    }
+
     // Add time per processed traveler so dynamic shifts reward pace!
-    state.shiftSec = Math.min(320, state.shiftSec + ((ruleCorrect || (bribedPass && !isStingOrRaid)) ? 8 : 4));
+    state.shiftSec = Math.min(320, state.shiftSec + ((ruleCorrect || ((bribedPass || phoneFavorPass) && !isStingOrRaid)) ? 8 : 4));
 
     if (state.reprimands >= 3) {
       triggerEnding((isStingOrRaid || state.nabkRisk >= 85) ? "NABK_PRISONER" : "WRITTEN_OFF_RESERVE");
@@ -997,6 +1193,39 @@
       unlockDiscovery("DISC_NABK_STING");
     }
 
+    // Track Recurring Client Mini-Arcs (Vasyl 'Chameleon' 4-act arc + Grandpa Stepan memory)
+    if (!state.recurringArcs) {
+      state.recurringArcs = { vasya: { stage: 0, lastOutcome: null, approved: 0, caught: 0, completed: false }, stepanMet: 0 };
+    }
+    let vasyaToast = null;
+    if (t.storyTag && t.storyTag.startsWith("VASYA_")) {
+      const vArc = state.recurringArcs.vasya || (state.recurringArcs.vasya = { stage: 0, lastOutcome: null, approved: 0, caught: 0, completed: false });
+      vArc.lastOutcome = isApprove ? "APPROVED" : (isDetain ? "DETAINED" : "DENIED");
+      if (t.storyTag !== "VASYA_FINALE_CLEAN" && t.storyTag !== "VASYA_FINALE_BOSS") {
+        if (isApprove) vArc.approved = (vArc.approved || 0) + 1;
+        else vArc.caught = (vArc.caught || 0) + 1;
+        vArc.stage = Math.min(3, (vArc.stage || 0) + 1);
+      } else {
+        vArc.stage = 4;
+        vArc.completed = true;
+        unlockDiscovery("DISC_VASYA_ARC");
+        if (t.storyTag === "VASYA_FINALE_CLEAN" && isApprove) {
+          detainBonus += 1200;
+          state.shiftExtrasEarned = (state.shiftExtrasEarned || 0) + 1200;
+          state.familyMorale = Math.min(100, state.familyMorale + 12);
+          state.sbkRep = Math.min(100, state.sbkRep + 8);
+          vasyaToast = L("🎭 ФІНАЛ ВАСИЛЯ: Твоя строгість виправила афериста — тепер він чесний волонтер! (+1 200 🪙, +12% сім'я)", "🎭 VASYL FINALE: Reformed trickster is now an honest volunteer! (+1,200 🪙, +12% family)");
+        } else if (t.storyTag === "VASYA_FINALE_BOSS" && isDetain && ruleCorrect) {
+          detainBonus += 1500;
+          state.shiftBountiesEarned = (state.shiftBountiesEarned || 0) + 1500;
+          vasyaToast = L("🎭 ФІНАЛ ВАСИЛЯ: Спіймано VIP-контрабандиста Хамелеона! (+1 500 🪙 премії)", "🎭 VASYL FINALE: Captured Chameleon Kingpin! (+1,500 🪙 bounty)");
+        }
+      }
+    }
+    if (t.storyTag && t.storyTag.startsWith("STEPAN_") && isApprove) {
+      state.recurringArcs.stepanMet = (state.recurringArcs.stepanMet || 0) + 1;
+    }
+
     const netMoney = salaryDelta + detainBonus - fineDelta;
     state.money = Math.max(0, state.money + netMoney);
     state.shiftProcessed += 1;
@@ -1010,22 +1239,42 @@
         : L("Водій запропонував хабар службовій особі — оформлено кримінальний протокол (ст. 369)!", "Driver offered a bribe to an officer — criminal protocol filed!"))
       : null;
 
+    let slamKind = "error";
+    let slamLabel = L("❌ ПОМИЛКА!", "❌ MISTAKE!");
+    if (isStingOrRaid) { slamKind = "error"; slamLabel = L("🚨 СПАЛЕНО!", "🚨 BUSTED!"); }
+    else if (phoneFavorPass) { slamKind = "bribe"; slamLabel = L("☎️ ДЗВІНОК ЗВЕРХУ", "☎️ DIRECT ORDER"); }
+    else if (bribedPass) { slamKind = "bribe"; slamLabel = L("✉️ ДОМОВЛЕНО", "✉️ BRIBED"); }
+    else if (ruleCorrect && isDetain) { slamKind = "detain"; slamLabel = L("🚨 СБК АРЕШТ", "🚨 SBK ARREST"); }
+    else if (ruleCorrect && isApprove) { slamKind = "approve"; slamLabel = L("✔ ПРОПУЩЕНО", "✔ APPROVED"); }
+    else if (ruleCorrect) { slamKind = "deny"; slamLabel = L("✖ ВІДМОВЛЕНО", "✖ DENIED"); }
+    else if (missedArrest) { slamKind = "warn"; slamLabel = L("⚠️ УТІК!", "⚠️ ESCAPED!"); }
+    state.stampSlamSeq = (state.stampSlamSeq || 0) + 1;
+    state.stampSlam = { kind: slamKind, label: slamLabel, at: Date.now(), seq: state.stampSlamSeq };
+    audio.playStampSlam(slamKind);
+    triggerHaptic(slamKind === "error" || slamKind === "warn" ? [45, 30, 45] : (slamKind === "detain" ? [30, 20, 40] : 22));
+
     state.barrierState = isApprove ? "OPEN_APPROVED" : (isDetain ? "SBK_ARREST_FLASH" : "CLOSED");
     state.lastFeedbackAt = Date.now();
     state.lastFeedback = {
-      ok: ruleCorrect || (bribedPass && !isStingOrRaid),
+      ok: ruleCorrect || ((bribedPass || phoneFavorPass) && !isStingOrRaid),
       title: shytomyrBonusToast
         ? L("🧦 БРАТЕРСТВО М. ШИТОМИР!", "🧦 ORDER OF SHYTOMYR!")
-        : (isStingOrRaid
-          ? L("🚨 СПАЛИЛИ НА ХАБАРІ! (+1 ДОГАНА)", "🚨 BUSTED ON BRIBE! (+1 REPRIMAND)")
-          : (bribedPass
-            ? L("ЗАКРИТО ОЧІ (ЗА ХАБАР)", "LOOKED THE OTHER WAY (BRIBED)")
-            : (bribeDetainMsg
-              ? L("СПРОБУ ХАБАРЯ ЗАТРИМАНО! (+ПРЕМІЯ СБК)", "BRIBE ATTEMPT DETAINED! (+SBK BONUS)")
-              : (ruleCorrect && isDetain ? L("КРИМІНАЛ ЗАТРИМАНО! (+ПРЕМІЯ СБК)", "CRIMINAL DETAINED! (+SBK BONUS)") : (ruleCorrect ? L("РІШЕННЯ ПРАВИЛЬНЕ", "CORRECT DECISION") : (missedArrest ? L("⚠️ ПОРУШНИК УТІК! Треба 🚨 СБК / АРЕШТ", "⚠️ CRIMINAL ESCAPED! Should 🚨 DETAIN") : (excessiveDetain ? L("ПЕРЕВИЩЕННЯ! Треба ✖ ВІДМОВИТИ", "EXCESSIVE FORCE! Should ✖ DENY") : L("ПОМИЛКА ПРОТОКОЛУ! ШТРАФ", "PROTOCOL VIOLATION! FINE")))))))),
-      detail: shytomyrBonusToast || (isStingOrRaid ? L("Ти впіймався на підставі! За 3 догани звільнять (зникає через день).", "Caught in a sting! 3 reprimands = fired (decays next clean day).") : null) || bribeDetainMsg || (isDetain
+        : (vasyaToast
+          ? L("🎭 ІСТОРІЯ ВАСИЛЯ ХАМЕЛЕОНА", "🎭 VASYL CHAMELEON ARC")
+          : (phoneCallToast && (phoneFavorPass || (ruleCorrect && !bribedPass))
+            ? L("☎️ ВКАЗІВКУ ПО ТЕЛЕФОНУ ВИКОНАНО", "☎️ PHONE DIRECTIVE COMPLETED")
+            : (isStingOrRaid
+              ? L("🚨 СПАЛИЛИ НА ХАБАРІ! (+1 ДОГАНА)", "🚨 BUSTED ON BRIBE! (+1 REPRIMAND)")
+              : (phoneFavorPass
+                ? L("☎️ ПРОПУЩЕНО ЗА ДЗВІНКОМ", "☎️ WAVED BY PHONE ORDER")
+                : (bribedPass
+                  ? L("ЗАКРИТО ОЧІ (ЗА ХАБАР)", "LOOKED THE OTHER WAY (BRIBED)")
+                  : (bribeDetainMsg
+                    ? L("СПРОБУ ХАБАРЯ ЗАТРИМАНО! (+ПРЕМІЯ СБК)", "BRIBE ATTEMPT DETAINED! (+SBK BONUS)")
+                    : (ruleCorrect && isDetain ? L("КРИМІНАЛ ЗАТРИМАНО! (+ПРЕМІЯ СБК)", "CRIMINAL DETAINED! (+SBK BONUS)") : (ruleCorrect ? L("РІШЕННЯ ПРАВИЛЬНЕ", "CORRECT DECISION") : (missedArrest ? L("⚠️ ПОРУШНИК УТІК! Треба 🚨 СБК / АРЕШТ", "⚠️ CRIMINAL ESCAPED! Should 🚨 DETAIN") : (excessiveDetain ? L("ПЕРЕВИЩЕННЯ! Треба ✖ ВІДМОВИТИ", "EXCESSIVE FORCE! Should ✖ DENY") : L("ПОМИЛКА ПРОТОКОЛУ! ШТРАФ", "PROTOCOL VIOLATION! FINE"))))))))))),
+      detail: shytomyrBonusToast || vasyaToast || phoneCallToast || (isStingOrRaid ? L("Ти впіймався на підставі! За 3 догани звільнять (зникає через день).", "Caught in a sting! 3 reprimands = fired (decays next clean day).") : null) || bribeDetainMsg || (isDetain
         ? (state.contentMode === "FULL_18_PLUS" ? t.arrestFull : t.arrestToned)
-        : (bribedPass ? L("Без штрафу, але ризик НАБК зріс.", "No fine, but NABK risk increased.") : (ruleCorrect ? L("Оформлено за директивою ДПСК.", "Processed per SBGS directive.") : (missedArrest ? L("Порушник із фальшивкою/контрабандою розвернувся і зник у черзі — його слід було затримати!", "Criminal with forgery/contraband bolted from the lane — detention was required!") : (t.violations[0] ? t.violations[0].title : L("Безпідставна відмова", "Wrongful denial")))))),
+        : (phoneFavorPass ? L("Без штрафу за розпорядженням по телефону.", "No fine per direct phone directive.") : (bribedPass ? L("Без штрафу, але ризик НАБК зріс.", "No fine, but NABK risk increased.") : (ruleCorrect ? L("Оформлено за директивою ДПСК.", "Processed per SBGS directive.") : (missedArrest ? L("Порушник із фальшивкою/контрабандою розвернувся і зник у черзі — його слід було затримати!", "Criminal with forgery/contraband bolted from the lane — detention was required!") : (t.violations[0] ? t.violations[0].title : L("Безпідставна відмова", "Wrongful denial"))))))),
       moneyDelta: netMoney
     };
     if (!state.shiftLogs) state.shiftLogs = [];
@@ -1165,7 +1414,11 @@
       state.daySpec = ACT_ONE_DAYS[nextIdx];
     }
 
-    state.queue = generateDailyQueue(state.daySpec, state.isSandbox ? 14 : 12, state.isSandbox);
+    if (!state.recurringArcs) {
+      state.recurringArcs = { vasya: { stage: 0, lastOutcome: null, approved: 0, caught: 0, completed: false }, stepanMet: 0 };
+    }
+    state.weather = rollDailyWeather(state.daySpec, state.sandboxMod, state.isSandbox);
+    state.queue = generateDailyQueue(state.daySpec, state.isSandbox ? 14 : 12, state.isSandbox, state.recurringArcs);
     state.shiftProcessed = 0;
     state.shiftCorrect = 0;
     state.shiftMistakes = 0;

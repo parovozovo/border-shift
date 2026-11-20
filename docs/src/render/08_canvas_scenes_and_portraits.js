@@ -1222,16 +1222,43 @@
     const barrierState = opts.barrierState || "CLOSED";
     const tSec = opts.timeSec || 0;
     const isLive = !!opts.isLive;
+    const weather = opts.weather || "CLEAR";
+    const weatherCleared = opts.weatherCleared !== false;
+    const hasGenerator = (opts.ownedAssets || []).includes("diesel_generator");
 
-    // Sky gradient + moving clouds
+    // Sky gradient + dynamic weather tint & lightning flashes
+    const skyTopMap = { CLEAR: "#131D26", RAIN: "#1A232A", FOG: "#2A3437", SNOW: "#1E2C3A", STORM: "#101522" };
+    const skyBotMap = { CLEAR: "#2E4352", RAIN: "#37474F", FOG: "#607177", SNOW: "#546E7A", STORM: "#263248" };
     const skyGrad = ctx.createLinearGradient(0, 0, 0, h * 0.44);
-    skyGrad.addColorStop(0, sirenActive ? "#5A1F1E" : (droneWarning ? "#4E342E" : (dayNumber >= 4 ? "#1E282E" : "#2D3C45")));
-    skyGrad.addColorStop(1, sirenActive ? "#7D2C2B" : (droneWarning ? "#6D4C41" : "#546E7A"));
+    skyGrad.addColorStop(0, sirenActive ? "#5A1F1E" : (droneWarning ? "#4E342E" : (skyTopMap[weather] || (dayNumber >= 4 ? "#1E282E" : "#2D3C45"))));
+    skyGrad.addColorStop(1, sirenActive ? "#7D2C2B" : (droneWarning ? "#6D4C41" : (skyBotMap[weather] || "#546E7A")));
     ctx.fillStyle = skyGrad;
     ctx.fillRect(0, 0, w, h * 0.44);
 
+    // Clear starry night sparkles vs Storm lightning bolt
+    if (weather === "CLEAR" && !sirenActive) {
+      for (let si = 0; si < 14; si++) {
+        const sx = (si * 37 + 9) % Math.floor(w * 0.53);
+        const sy = 5 + ((si * 19 + 3) % Math.floor(h * 0.24));
+        const alpha = 0.35 + (isLive ? 0.35 * Math.abs(Math.sin(tSec * 1.8 + si)) : 0.2);
+        ctx.fillStyle = `rgba(255, 250, 220, ${alpha.toFixed(2)})`;
+        ctx.fillRect(sx, sy, 1.4, 1.4);
+      }
+    } else if (weather === "STORM" && isLive && Math.sin(tSec * 1.9 + 0.5) > 0.965) {
+      ctx.fillStyle = "rgba(220, 240, 255, 0.34)";
+      ctx.fillRect(0, 0, w * 0.55, h * 0.44);
+      ctx.strokeStyle = "#FFFDE7";
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(w * 0.19, 2);
+      ctx.lineTo(w * 0.16, h * 0.14);
+      ctx.lineTo(w * 0.21, h * 0.16);
+      ctx.lineTo(w * 0.15, h * 0.31);
+      ctx.stroke();
+    }
+
     // Drifting clouds
-    ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
+    ctx.fillStyle = weather === "STORM" ? "rgba(255, 255, 255, 0.14)" : "rgba(255, 255, 255, 0.08)";
     for (let ci = 0; ci < 3; ci++) {
       const cx = ((tSec * (4 + ci * 1.5) + ci * 75) % (w + 40)) - 20;
       const cy = 12 + ci * 11;
@@ -1274,22 +1301,45 @@
       ctx.fill();
     }
 
-    // Asphalt yard & road marking
-    ctx.fillStyle = "#3A423E";
+    // Asphalt yard & wet/snowy surface accents
+    ctx.fillStyle = weather === "RAIN" || weather === "STORM" ? "#2E3739" : (weather === "SNOW" ? "#455259" : "#3A423E");
     ctx.fillRect(0, h * 0.43, w, h * 0.57);
+    if (weather === "RAIN" || weather === "STORM") {
+      ctx.fillStyle = "rgba(128, 203, 196, 0.12)";
+      ctx.beginPath(); ctx.ellipse(w * 0.28, h * 0.85, 34, 6, 0, 0, Math.PI * 2); ctx.fill();
+    } else if (weather === "SNOW") {
+      ctx.fillStyle = "rgba(240, 248, 255, 0.42)";
+      ctx.fillRect(0, h * 0.43, w * 0.54, 4);
+      ctx.fillRect(0, h - 5, w * 0.54, 5);
+    }
     ctx.strokeStyle = "rgba(255,255,255,0.22)";
     ctx.setLineDash([10, 8]);
     ctx.lineWidth = 1.5;
     ctx.beginPath(); ctx.moveTo(0, h * 0.66); ctx.lineTo(w * 0.54, h * 0.66); ctx.stroke();
     ctx.setLineDash([]);
 
-    // Ambient snow / drizzle particles
-    if (isLive) {
-      ctx.fillStyle = "rgba(220, 235, 245, 0.32)";
-      for (let pi = 0; pi < 12; pi++) {
-        const px = ((pi * 31 + tSec * 12) % (w * 0.54));
-        const py = ((pi * 23 + tSec * 36) % h);
-        ctx.fillRect(px, py, 1.6, 3.2);
+    // Dynamic Precipitation Particles
+    if (weather === "RAIN" || weather === "STORM") {
+      const dropCount = weather === "STORM" ? 28 : 20;
+      const spd = weather === "STORM" ? 135 : 95;
+      ctx.strokeStyle = "rgba(176, 216, 235, 0.48)";
+      ctx.lineWidth = 1.1;
+      for (let pi = 0; pi < dropCount; pi++) {
+        const px = ((pi * 23 + tSec * 34) % (w * 0.54));
+        const py = ((pi * 17 + tSec * spd) % h);
+        ctx.beginPath();
+        ctx.moveTo(px, py);
+        ctx.lineTo(px - 3.5, py + 7.5);
+        ctx.stroke();
+      }
+    } else if (weather === "SNOW") {
+      ctx.fillStyle = "rgba(245, 250, 255, 0.82)";
+      for (let pi = 0; pi < 24; pi++) {
+        const px = ((pi * 19 + tSec * 14 + Math.sin(tSec * 2 + pi) * 4) % (w * 0.54));
+        const py = ((pi * 15 + tSec * 28) % h);
+        ctx.beginPath();
+        ctx.arc(Math.abs(px), py, (pi % 2) + 1.2, 0, Math.PI * 2);
+        ctx.fill();
       }
     }
 
@@ -1318,6 +1368,27 @@
     // Draw detailed animated transport!
     drawTransportInBooth(ctx, w, h, opts.transportShape || "SEDAN", opts.colorHex || "#607D8B", opts.roofHex || "#455A64", { timeSec: tSec, isLive, hasPassenger: !!opts.hasPassenger });
 
+    // Fog occlusion over vehicle lane until cleared (or subtle parted mist when cleared!)
+    if (weather === "FOG") {
+      if (!weatherCleared) {
+        const drift = isLive ? Math.sin(tSec * 0.9) * 8 : 0;
+        ctx.fillStyle = "rgba(195, 210, 214, 0.74)";
+        ctx.beginPath(); ctx.ellipse(w * 0.25 + drift, h * 0.70, w * 0.27, h * 0.20, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "rgba(176, 195, 200, 0.65)";
+        ctx.beginPath(); ctx.ellipse(w * 0.18 - drift, h * 0.56, w * 0.24, h * 0.16, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(w * 0.34 + drift * 0.6, h * 0.84, w * 0.22, h * 0.14, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "rgba(255, 255, 255, 0.88)";
+        ctx.font = "bold 10px sans-serif";
+        ctx.fillText(opts.lang === "EN" ? "🌫️ DENSE FOG" : "🌫️ ТУМАН", 8, h - 10);
+      } else {
+        const beam = ctx.createLinearGradient(w * 0.54, h * 0.45, w * 0.04, h * 0.85);
+        beam.addColorStop(0, "rgba(255, 249, 196, 0.26)");
+        beam.addColorStop(1, "rgba(255, 249, 196, 0.02)");
+        ctx.fillStyle = beam;
+        ctx.fillRect(0, h * 0.42, w * 0.54, h * 0.56);
+      }
+    }
+
     // Booth counter divider & Traveler portrait on RIGHT window!
     ctx.fillStyle = "rgba(18, 22, 20, 0.46)";
     ctx.fillRect(w * 0.55, 0, w * 0.45, h);
@@ -1330,6 +1401,12 @@
       timeSec: tSec,
       isLive
     });
+
+    // Storm booth power flicker unless diesel generator is owned
+    if (weather === "STORM" && !hasGenerator && !opts.uvActive && isLive && Math.sin(tSec * 2.7) > 0.88 && Math.sin(tSec * 23) > 0) {
+      ctx.fillStyle = "rgba(8, 12, 18, 0.34)";
+      ctx.fillRect(w * 0.55, 0, w * 0.45, h);
+    }
 
     // UV Spotlight Beam over booth window + animated scan line!
     const isEn = opts.lang === "EN";

@@ -136,7 +136,8 @@
     });
   }
 
-  function createGrandpaStepan(dayNum) {
+  function createGrandpaStepan(dayNum, stepanMet) {
+    const met = stepanMet || 0;
     const isBike = Math.random() < 0.45;
     const trMeta = isBike
       ? makeTransportMeta({ shape: "BICYCLE", name: L("Велосипед «Україна-Спорт» з мішком", "'Ukraina' Bicycle"), isCar: false }, getColorById("BLUE"), "ПШ-067")
@@ -153,11 +154,17 @@
       includeDecl: dayNum >= 3,
       declaredCargo: L("2 мішки картоплі, домашнє сало та ліки онукам", "2 potato sacks, homemade lard & medicine"),
       vehicleSearchResult: L("Пес «Бавовна» облизує діда Степана — в багажнику картопля й банка малинового варення!", "Bavovna wags his tail — only potatoes and raspberry jam!"),
-      greeting: L("«Здоровенькі були, онучку! Бойко Степан, 68 років! Подивися на мої сиві вуса — їду провідати дочку й онуків!»", "'Good day, grandson! Stepan Boiko, 68 years old! Just visiting my grandkids!'"),
-      interrogationReply: L("«Та чого там перевіряти, в мене й вік пенсійний, і документи як у космонавта!»", "'Nothing to worry about, senior age and clean papers!'"),
+      greeting: met >= 1
+        ? L("«О, та це ж мій знайомий інспектор! Здоров будь, онучку! Дякую за минулий теплий прийом — везу знову свіжого варення онукам!»", "'Oh, it's my favorite inspector! Good health, grandson! Thank you for last time — bringing fresh jam to the grandkids again!'")
+        : L("«Здоровенькі були, онучку! Бойко Степан, 68 років! Подивися на мої сиві вуса — їду провідати дочку й онуків!»", "'Good day, grandson! Stepan Boiko, 68 years old! Just visiting my grandkids!'"),
+      interrogationReply: met >= 1
+        ? L("«Та ми ж уже як рідні! І вік пенсійний, і документи ті ж самі, кришталево чисті!»", "'We practically know each other by now! Clean senior papers!'")
+        : L("«Та чого там перевіряти, в мене й вік пенсійний, і документи як у космонавта!»", "'Nothing to worry about, senior age and clean papers!'"),
       intimidateReply: L("«Синочку, не кричи на діда, в мене ж тиск...»", "'Son, don't yell at an old man, my blood pressure...'"),
-      coffeeReply: L("«Ой спасибі за кавусю! Тримай 50 🪙 на пиріжок і банку малинового варення для родини!»", "'Bless you for the coffee! Take 50 🪙 for pastries!'"),
-      coffeeTip: 50,
+      coffeeReply: met >= 1
+        ? L("«От золота людина! Твоя кава як бальзам на душу! Лови 80 🪙 на пиріжки!»", "'Golden heart! Your coffee warms the soul! Take 80 🪙 for pastries!'")
+        : L("«Ой спасибі за кавусю! Тримай 50 🪙 на пиріжок і банку малинового варення для родини!»", "'Bless you for the coffee! Take 50 🪙 for pastries!'"),
+      coffeeTip: met >= 1 ? 80 : 50,
       arrestFull: L("Черга в шоці — ти навіщось затримав доброго дідуся на пенсії!", "The entire queue boos as you detain an innocent 68-year-old grandfather!"),
       arrestToned: L("Пенсіонера помилково затримано.", "Innocent retiree mistakenly detained."),
       shouldBeApproved: true,
@@ -1792,6 +1799,270 @@
     });
   }
 
+  function createRecurringVasya(vasyaArc, daySpec) {
+    const stage = (vasyaArc && vasyaArc.stage) || 0;
+    const lastOutcome = vasyaArc && vasyaArc.lastOutcome;
+    const caught = (vasyaArc && vasyaArc.caught) || 0;
+    const approved = (vasyaArc && vasyaArc.approved) || 0;
+    const needOblik = Boolean(daySpec && daySpec.requireOblikQr);
+
+    if (stage === 0) {
+      const trMeta = makeTransportMeta({ shape: "RETRO", name: L("«Занос 1.5» (У наклейках)", "'Zanos 1.5'"), isCar: true }, getColorById("EMERALD"), "ВН 0101 ХМ");
+      const wigPortrait = { gender: "F", skinTone: 1, faceShape: 1, hairStyle: 1, hairColor: 4, facialHair: 0, glasses: 1, headwear: 2, scarOrDetail: 0, expression: 2, lipColor: 2, earrings: 1, outfitStyle: 0, specialId: "NONE" };
+      const extraDocs = [{
+        type: "EXEMPTION_CERT",
+        title: L("ДОВІДКА ПРО ВІДСТРОЧКУ", "EXEMPTION CERTIFICATE"),
+        subtitle: L("Салон-ательє «Гламур»", "Glamour Hair Studio"),
+        fields: [
+          { label: L("Особа", "Holder"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+          { label: L("Підстава", "Basis"), value: L("Стиліст-візажист першої категорії", "Master Hairstylist"), disc: null },
+          { label: L("Ким видано", "Issued By"), value: L("«Клуб перукарок Карпатії»", "'Carpathian Wigs Club'"), disc: DISCREPANCY.FAKE_ISSUER_SEAL }
+        ],
+        sealText: L("ПЕРУКАР-МАГІСТРАТ", "HAIR-GUILD SEAL"),
+        sealDisc: DISCREPANCY.FAKE_ISSUER_SEAL
+      }];
+      if (needOblik) {
+        extraDocs.push({
+          type: "MILITARY_ID",
+          title: L("Е-ДОКУМЕНТ «ОБЛІК+»", "E-MILITARY ID 'OBLIK+'"),
+          subtitle: L("Цифровий реєстр", "Digital Registry"),
+          fields: [
+            { label: L("ПІБ", "Full Name"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+            { label: L("Статус QR", "QR Status"), value: L("QR-OK • ДАТА ОНОВЛЕНА", "QR-OK • UPDATED"), disc: null }
+          ],
+          sealText: L("МІНОБОРОНИ KRAINA • QR-OK", "MOD KRAINA • QR-OK"),
+          sealDisc: null
+        });
+      }
+      return buildTravelerFromParts({
+        fullName: L("Василь «Тьотя Вася» Підпільний", "Vasyl 'Auntie' Pidpilnyi"),
+        age: 34, gender: "M", portrait: wigPortrait, transport: trMeta,
+        passportFields: [
+          { label: L("ПІБ", "Full Name"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+          { label: L("Вік / Стать", "Age / Sex"), value: L("34 р. • ЧОЛ", "34 y/o • M"), disc: null },
+          { label: L("Дійсний до", "Valid Until"), value: L("14.08.2030", "2030-08-14"), disc: null }
+        ],
+        extraDocs,
+        includeDecl: true,
+        declaredCargo: L("Перуки, лак для волосся, фен (для подруги)", "Wigs, hairspray & hairdryer"),
+        vehicleSearchResult: L("На задньому сидінні запасна руда перука та книга «100 перевтілень».", "Back seat holds a spare ginger wig and '100 Disguises' book."),
+        greeting: L("«Хелоу, красунчику! Я стиліст Василь... ну тобто Вася! Вдягнув перуку на конкурс краси в Кракові, ось довідка!»", "'Hello handsome! Vasyl the stylist... just wearing a wig for a contest in Krakiv!'"),
+        interrogationReply: L("«Тс-с! Не прискіпуйся до печатки перукарні — ось 180 💵 на каву, запам'ятай Васька!»", "'Shh! Ignore the hair-guild stamp — take 180 💵 and remember Vasyl!'"),
+        intimidateReply: L("«Ой! *поправляє перуку басом* Та не гримай, шиньйон сповзає!»", "'Whoa! *adjusts wig in deep voice* Careful, it slips!'"),
+        coffeeReply: L("«Ммм, латте-арт! Як ти ставишся до творчих людей на кордоні?»", "'Love the coffee! Ready to help an artist cross?'"),
+        arrestFull: L("Василь «Тьотя Вася» знімає біляву перуку перед камерою СБК: «Ще побачимося на твоїй зміні, командире!»", "Vasyl pulls off the wig for SBK cameras: 'We will meet again on your shift!'"),
+        arrestToned: L("Мандрівника з підробленою печаткою перукарні затримано.", "Detained for bogus hair-guild seal."),
+        bribeOffer: { amount: 180, currency: "USD", requiresDiscovery: true, nabkRiskJump: 7, isStingTrap: false, syndicateFavor: false },
+        shouldBeApproved: false,
+        violations: [DISCREPANCY.FAKE_ISSUER_SEAL],
+        storyTag: "VASYA_ACT_1"
+      });
+    }
+
+    if (stage === 1) {
+      const trMeta = makeTransportMeta({ shape: "PICKUP", name: L("«Пікап Міцубісі Л200» (Пасіка)", "'Pickup L200' (Apiary)"), isCar: true }, getColorById("YELLOW"), "ВН 0202 ХМ");
+      const beePortrait = { gender: "M", skinTone: 1, faceShape: 1, hairStyle: 3, hairColor: 1, facialHair: 2, glasses: 2, headwear: 1, scarOrDetail: 0, expression: 1, outfitStyle: 3, specialId: "NONE" };
+      const extraDocs = [{
+        type: "EXEMPTION_CERT",
+        title: L("ДОВІДКА АГРАРІЯ", "AGRI EXPORTER PERMIT"),
+        subtitle: L("Облпродспілка", "Regional Agri-Union"),
+        fields: [
+          { label: L("Особа", "Holder"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+          { label: L("Підстава", "Basis"), value: L("Вивезення вуликів на медовий ярмарок", "Honey Fair Beehives Transport"), disc: null }
+        ],
+        sealText: L("МІНАГРО / ДПСК • ДІЙСНИЙ", "AGRI / SBGS • VALID"),
+        sealDisc: null
+      }];
+      if (needOblik) {
+        extraDocs.push({
+          type: "MILITARY_ID",
+          title: L("Е-ДОКУМЕНТ «ОБЛІК+»", "E-MILITARY ID 'OBLIK+'"),
+          subtitle: L("Цифровий реєстр", "Digital Registry"),
+          fields: [
+            { label: L("ПІБ", "Full Name"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+            { label: L("Статус QR", "QR Status"), value: L("QR-OK • ДАТА ОНОВЛЕНА", "QR-OK • UPDATED"), disc: null }
+          ],
+          sealText: L("МІНОБОРОНИ KRAINA • QR-OK", "MOD KRAINA • QR-OK"),
+          sealDisc: null
+        });
+      }
+      const greetCallback = lastOutcome === "APPROVED"
+        ? L("«Бз-з-з! Вітаю знову, бро! Минулого разу в перуці файно спрацювалися, тепер я пасічник Василь! Не чіпай вулики — бджоли злі!»", "'Bzz! Good to see you again, bro! Last time in a wig worked smoothly — now I'm Beekeeper Vasyl!'")
+        : L("«Бз-з-з! Пам'ятаєш «Тьотю Васю»? То був артистичний експеримент! Тепер я поважний пасічник із чистими паперами... але без пса!»", "'Bzz! Remember Auntie Vasyl? That was art! Now I'm a clean beekeeper... just keep the dog away!'");
+      return buildTravelerFromParts({
+        fullName: L("Василь «Пасічник» Підпільний", "Vasyl 'Beekeeper' Pidpilnyi"),
+        age: 34, gender: "M", portrait: beePortrait, transport: trMeta,
+        passportFields: [
+          { label: L("ПІБ", "Full Name"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+          { label: L("Вік / Стать", "Age / Sex"), value: L("34 р. • ЧОЛ", "34 y/o • M"), disc: null },
+          { label: L("Дійсний до", "Valid Until"), value: L("14.08.2030", "2030-08-14"), disc: null }
+        ],
+        extraDocs,
+        includeDecl: true,
+        declaredCargo: L("3 вулики бджіл та діжка липового меду", "3 beehives & barrel of lime honey"),
+        vehicleSearchResult: L("ПЕС «БАВОВНА» РОЗГРИЗ ВУЛИК: Жодної бджоли — під сотами 18 коробок годинників «Кролекс» і блоки контрабанди!", "DOG SEARCH: Zero bees — beehives packed with 18 Krolex boxes & smuggled cartons!"),
+        greeting: greetCallback,
+        interrogationReply: L("«Тихіше, погризе! Не треба розкривати вулики — тримай 280 💵 і липовий медок!»", "'Quiet, they'll sting! Skip the beehive inspection — take 280 💵!'"),
+        intimidateReply: L("«Ай! Бджоли гудять... *із вулика чути цокання швейцарських годинників*!»", "'Careful! *mechanical watch ticking sounds from inside the beehive*!'"),
+        coffeeReply: L("«Ех, до кави б мого меду... але ти ж песa не пустиш, правда?»", "'Honey goes great with coffee... skip the dog, yeah?'"),
+        arrestFull: L("Василя знімають у масці пасічника: «Ти знову знайшов мій тайник! Але третій образ тебе здивує!»", "Vasyl cuffed in beekeeper gear: 'You busted me again! Wait till you see Act 3!'"),
+        arrestToned: L("Контрабанду у фальшивих вуликах викрито.", "Contraband hidden inside fake beehives seized."),
+        hasContraband: true,
+        bribeOffer: { amount: 280, currency: "USD", requiresDiscovery: true, nabkRiskJump: 8, isStingTrap: false, syndicateFavor: false },
+        shouldBeApproved: false,
+        violations: [DISCREPANCY.CONTRABAND_CARGO],
+        storyTag: "VASYA_ACT_2"
+      });
+    }
+
+    if (stage === 2) {
+      const trMeta = makeTransportMeta({ shape: "E_SCOOTER", name: L("Електросамокат «Вжух-Х3»", "'Vzhykh-X3' E-Scooter"), isCar: false }, getColorById("BLUE"), "ПШ-303");
+      const hipPortrait = { gender: "M", skinTone: 0, faceShape: 0, hairStyle: 2, hairColor: 3, facialHair: 1, glasses: 2, headwear: 0, scarOrDetail: 0, expression: 2, outfitStyle: 2, specialId: "NONE" };
+      const stolenPhoto = { gender: "M", skinTone: 2, faceShape: 3, hairStyle: 4, hairColor: 0, facialHair: 4, glasses: 0, headwear: 0, scarOrDetail: 1, expression: 0, outfitStyle: 0, specialId: "NONE" };
+      const extraDocs = [{
+        type: "EXEMPTION_CERT",
+        title: L("ДОВІДКА ІТ-АРХІТЕКТОРА", "IT ARCHITECT PERMIT"),
+        subtitle: L("Державний Техно-Хаб", "National Tech Hub"),
+        fields: [
+          { label: L("Особа", "Holder"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+          { label: L("Підстава", "Basis"), value: L("Розгортання супутникової мережі", "Satellite Network Rollout"), disc: null }
+        ],
+        sealText: L("МІНЦИФРИ / ДПСК • ДІЙСНИЙ", "MINDIGITAL / SBGS • VALID"),
+        sealDisc: null
+      }];
+      if (needOblik) {
+        extraDocs.push({
+          type: "MILITARY_ID",
+          title: L("Е-ДОКУМЕНТ «ОБЛІК+»", "E-MILITARY ID 'OBLIK+'"),
+          subtitle: L("Цифровий реєстр", "Digital Registry"),
+          fields: [
+            { label: L("ПІБ", "Full Name"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+            { label: L("Статус QR", "QR Status"), value: L("QR-OK • ДАТА ОНОВЛЕНА", "QR-OK • UPDATED"), disc: null }
+          ],
+          sealText: L("МІНОБОРОНИ KRAINA • QR-OK", "MOD KRAINA • QR-OK"),
+          sealDisc: null
+        });
+      }
+      const greetTxt = approved >= 2
+        ? L("«Салют, старий партнере! То я, Вася-Хамелеон! Їду вже як ІТ-шник на самокаті — паспорт трохи чужою фоткою блиснув, то фігня, ти ж свій!»", "'Hey old partner! It's Vasyl Chameleon on a scooter! Passport photo looks weird, no big deal right?'")
+        : L("«Вітаю знову, інспекторе! Після перуки й пасіки я пішов в ІТ-стартап на самокаті! Фото в паспорті — то після пластичної операції, не дивись!»", "'Hello again, Inspector! After wigs & bees I went tech on a scooter! Passport photo was pre-makeover!'");
+      return buildTravelerFromParts({
+        fullName: L("Василь «Ілон» Підпільний", "Vasyl 'Elon' Pidpilnyi"),
+        age: 34, gender: "M", portrait: hipPortrait, passportPortrait: stolenPhoto, transport: trMeta,
+        passportFields: [
+          { label: L("ПІБ", "Full Name"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+          { label: L("Фотокартка", "Photo ID"), value: L("Цифровий знімок (вклеєно)", "Digital Photo Match"), disc: DISCREPANCY.PHOTO_MISMATCH },
+          { label: L("Дійсний до", "Valid Until"), value: L("14.08.2030", "2030-08-14"), disc: null }
+        ],
+        extraDocs,
+        includeDecl: true,
+        declaredCargo: L("Макбук-Муляж, окуляри для рейву, рюкзак", "Mock laptop, rave shades, backpack"),
+        vehicleSearchResult: L("У рюкзаку знайдено чужий закордонний паспорт із переклеєною обкладинкою.", "Found a foreign passport with an unglued photo page inside his backpack."),
+        greeting: greetTxt,
+        interrogationReply: L("«Та схуд просто на дієті! Ось 360 💵 — ти ж розумієш, як важко стати стартапером!»", "'Lost weight on a diet! Take 360 💵 — overlook the photo glitch!'"),
+        intimidateReply: L("«Е-е, не світи в очі! Фотку у Фотошопі за п'ять хвилин робили!»", "'Hey! I spent whole minutes photoshopping that mugshot!'"),
+        coffeeReply: L("«Капучино на мигдальному? Справжній європейський сервіс!»", "'Oat cappuccino? Pure European service!'"),
+        arrestFull: L("Василь зітхає біля самоката: «Три рази мене розкусив... Ну вчетверте я прийду вже по-справжньому!»", "Vasyl sighs beside his scooter: 'Three times busted... Next time I come back different!'"),
+        arrestToned: L("Афериста з чужим фото в паспорті затримано.", "Detained for passport photo mismatch."),
+        bribeOffer: { amount: 360, currency: "USD", requiresDiscovery: true, nabkRiskJump: 9, isStingTrap: false, syndicateFavor: false },
+        shouldBeApproved: false,
+        violations: [DISCREPANCY.PHOTO_MISMATCH],
+        storyTag: "VASYA_ACT_3"
+      });
+    }
+
+    // Act 4 Finale (Branches cleanly from your previous treatment of Vasyl!)
+    const isReformed = caught >= 2 || caught >= approved;
+    if (isReformed) {
+      const trMeta = makeTransportMeta({ shape: "MINIBUS", name: L("«Мерс Спрінтер Волонтер»", "'Mers Sprinter Volunteer'"), isCar: true }, getColorById("BLUE"), "ВН 0404 ВЛ");
+      const cleanPortrait = { gender: "M", skinTone: 1, faceShape: 1, hairStyle: 3, hairColor: 1, facialHair: 1, glasses: 0, headwear: 0, scarOrDetail: 0, expression: 1, outfitStyle: 1, specialId: "NONE" };
+      return buildTravelerFromParts({
+        fullName: L("Василь «Волонтер» Підпільний", "Vasyl 'Volunteer' Pidpilnyi"),
+        age: 34, gender: "M", portrait: cleanPortrait, transport: trMeta,
+        passportFields: [
+          { label: L("ПІБ", "Full Name"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+          { label: L("Вік / Стать", "Age / Sex"), value: L("34 р. • ЧОЛ", "34 y/o • M"), disc: null },
+          { label: L("Дійсний до", "Valid Until"), value: L("14.08.2032", "2032-08-14"), disc: null }
+        ],
+        extraDocs: [{
+          type: "EXEMPTION_CERT",
+          title: L("ДОВІДКА ВОЛОНТЕРА", "VOLUNTEER PERMIT"),
+          subtitle: L("Офіційний реєстр «Шлях»", "Official 'Shlyakh' Registry"),
+          fields: [
+            { label: L("Особа", "Holder"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+            { label: L("Підстава", "Basis"), value: L("Доставка FPV-дронів та оптики для фронту", "FPV Drone & Optics Supply"), disc: null }
+          ],
+          sealText: L("ЦНАП / ДПСК • ПЕРЕВІРЕНО", "CNAP / SBGS • VERIFIED"),
+          sealDisc: null
+        }],
+        includeDecl: true,
+        declaredCargo: L("Медичні аптечки IFAK, турнікети, спальники (офіційна накладна)", "IFAK trauma kits, tourniquets & sleeping bags (manifested)"),
+        vehicleSearchResult: L("Огляд псом «Бавовною»: 100% чисто! Все суворо за накладною волонтерського фонду!", "Dog search clean! Everything strictly matches the volunteer manifest!"),
+        greeting: L("«Пане інспекторе! Пам'ятаєш перуку, вулики й самокат? Ти мене тричі навернув на розум — я зав'язав з аферами і тепер чесно возжу допомогу армії. Перевіряй — тут усе як у книзі!»", "'Inspector! Remember the wig, bees & scooter? Your discipline reformed me — now I run real charity supplies legally. Check everything!'"),
+        interrogationReply: L("«Жодних конвертів і жодних махінацій! Кожен папірець справжній, дякую тобі за науку!»", "'Zero bribes, zero tricks! Every seal is 100% legit — thank you for straightening me out!'"),
+        intimidateReply: L("«*Усміхається спокійно* Більше не боюся стуку по склу — совість тепер чиста!»", "'*Smiles calmly* Not afraid of the booth glass anymore — clean conscience!'"),
+        coffeeReply: L("«О, за гарячу каву на трасі низький уклін! Лови 100 🪙 у банку будки!»", "'Bless you for the hot coffee! Take 100 🪙 for the booth fund!'"),
+        coffeeTip: 100,
+        arrestFull: L("Ти затримав Василя саме тоді, коли він чесно став на шлях волонтера — навіть пес розгублено скавчить!", "You detained Reformed Vasyl when his papers were finally 100% spotless!"),
+        arrestToned: L("Чесного волонтера помилково затримано.", "Reformed volunteer wrongly detained."),
+        shouldBeApproved: true,
+        storyTag: "VASYA_FINALE_CLEAN"
+      });
+    } else {
+      const trMeta = makeTransportMeta({ shape: "G_WAGON", name: L("«Гелік-Хамелеон V8»", "'Chameleon G-Wagon V8'"), isCar: true }, getColorById("BLACK"), "КГ 7777 ХМ");
+      const bossPortrait = { gender: "M", skinTone: 1, faceShape: 2, hairStyle: 3, hairColor: 1, facialHair: 2, glasses: 2, headwear: 0, scarOrDetail: 3, expression: 1, outfitStyle: 2, specialId: "NONE" };
+      const extraDocs = [{
+        type: "EXEMPTION_CERT",
+        title: L("ЗОЛОТИЙ МАНДАТ «ХАМЕЛЕОН»", "GOLD 'CHAMELEON' MANDATE"),
+        subtitle: L("Клуб Офшор-Транзит", "Offshore Transit Club"),
+        fields: [
+          { label: L("Особа", "Holder"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+          { label: L("Ким видано", "Issued By"), value: L("«Асоціація Тіньового Імпорту»", "'Shadow Import Syndicate'"), disc: DISCREPANCY.FAKE_ISSUER_SEAL }
+        ],
+        sealText: L("ХАМЕЛЕОН • ОФШОР-VIP", "CHAMELEON • OFFSHORE VIP"),
+        sealDisc: DISCREPANCY.FAKE_ISSUER_SEAL
+      }];
+      if (needOblik) {
+        extraDocs.push({
+          type: "MILITARY_ID",
+          title: L("Е-ДОКУМЕНТ «ОБЛІК+»", "E-MILITARY ID 'OBLIK+'"),
+          subtitle: L("Цифровий реєстр", "Digital Registry"),
+          fields: [
+            { label: L("ПІБ", "Full Name"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+            { label: L("Статус QR", "QR Status"), value: L("QR-OK • ДАТА ОНОВЛЕНА", "QR-OK • UPDATED"), disc: null }
+          ],
+          sealText: L("МІНОБОРОНИ KRAINA • QR-OK", "MOD KRAINA • QR-OK"),
+          sealDisc: null
+        });
+      }
+      return buildTravelerFromParts({
+        fullName: L("Василь «Хамелеон» Підпільний (VIP)", "Vasyl 'Chameleon' Pidpilnyi (VIP)"),
+        age: 34, gender: "M", portrait: bossPortrait, transport: trMeta,
+        passportFields: [
+          { label: L("ПІБ", "Full Name"), value: L("Підпільний Василь Тарасович", "Pidpilnyi Vasyl"), disc: null },
+          { label: L("Вік / Стать", "Age / Sex"), value: L("34 р. • ЧОЛ", "34 y/o • M"), disc: null },
+          { label: L("Дійсний до", "Valid Until"), value: L("14.08.2032", "2032-08-14"), disc: null }
+        ],
+        extraDocs,
+        includeDecl: true,
+        declaredCargo: L("Елітний кейс з антикваріатом", "Luxury antique case"),
+        vehicleSearchResult: L("ПЕС «БАВОВНА» ЗНАЙШОВ ДНО БАГАЖНИКА: Сейф із пачками готівки та підробленими паспортами!", "DOG SEARCH: False trunk floor hides cash bricks and blank passports!"),
+        greeting: L("«Братику, пам'ятаєш, як я колись в перуці їхав?! Завдяки тобі я піднявся до «Геліка» і керую караванами! Тримай царську подяку — 950 💵!»", "'Brother! Remember when I wore a wig?! Thanks to you I climbed to a G-Wagon! Take 950 💵 VIP cut!'"),
+        interrogationReply: L("«Навіщо нам ті печатки? Ти зробив мене королем траси — забирай 950 💵 і піднімай шлагбаум!»", "'Forget seals — you made me king of this highway! Grab 950 💵!'"),
+        intimidateReply: L("«Ха-ха, не грайся в суворого — ми ж обоє в темі з першого дня!»", "'Haha relax partner — we've been in business since Act 1!'"),
+        coffeeReply: L("«Конаєш над старим термосом? Купуй свій острів за мої гроші!»", "'Still pouring thermos coffee? Take my cash and buy a yacht!'"),
+        arrestFull: L("Василя «Хамелеона» скрутили прямо біля чорного «Геліка» — фінал великої тіньової кар'єри!", "Vasyl Chameleon cuffed right beside his black G-Wagon — end of a shadow empire!"),
+        arrestToned: L("Голову тіньового трафіку затримано на кордоні.", "Shadow smuggling boss detained."),
+        hasContraband: true,
+        bribeOffer: { amount: 950, currency: "USD", instantOffer: true, nabkRiskJump: 14, isStingTrap: false, syndicateFavor: true },
+        shouldBeApproved: false,
+        violations: [DISCREPANCY.FAKE_ISSUER_SEAL, DISCREPANCY.CONTRABAND_CARGO],
+        isWantedTarget: true,
+        storyTag: "VASYA_FINALE_BOSS"
+      });
+    }
+  }
+
   function ensureRequiredDocsForDay(trv, daySpec) {
     if (!trv || !trv.shouldBeApproved || !daySpec) return;
     if (daySpec.requireVehicleDecl && !trv.documents.some(d => d.type === "VEHICLE_CUSTOMS")) {
@@ -1860,10 +2131,24 @@
   let usedShytomyrRun = new Set();
   let usedEncounterIds = new Set();
 
-  function generateDailyQueue(daySpec, count, isSandbox) {
+  function generateDailyQueue(daySpec, count, isSandbox, recurringArcs) {
     const q = [];
     const seenNames = new Set();
     const dNum = daySpec ? daySpec.dayNumber : 1;
+    const arcs = recurringArcs || null;
+    const stepanMetCount = arcs ? (arcs.stepanMet || 0) : 0;
+
+    // 0. Recurring Multi-Day Client Mini-Arc (Василь «Хамелеон» Підпільний — 4 acts)
+    if (arcs && arcs.vasya && !arcs.vasya.completed && (arcs.vasya.stage || 0) < 4) {
+      const vasyaScheduled = isSandbox
+        ? (dNum >= 2 && dNum % 2 === 0)
+        : (dNum === 2 || dNum === 4 || dNum === 6 || dNum === 7);
+      if (vasyaScheduled) {
+        const vTrv = createRecurringVasya(arcs.vasya, daySpec);
+        seenNames.add(vTrv.fullName.uk);
+        q.push(vTrv);
+      }
+    }
 
     // 1. Prioritize unseen Shytomyr legends (so player discovers all 12 without frustrating repeats!)
     const globalSeen = new Set(loadUnlockedShytomyr());
@@ -1889,7 +2174,7 @@
     const uniquePool = [
       { tag: "AUNT_HALYA", minDay: 1, fn: () => createAuntHalya() },
       { tag: "DEPUTY_SON", minDay: 1, fn: () => createDeputySon() },
-      { tag: "STEPAN_2", minDay: 1, fn: () => createGrandpaStepan(dNum) },
+      { tag: "STEPAN_2", minDay: 1, fn: () => createGrandpaStepan(dNum, stepanMetCount) },
       { tag: "GRANDMA_PICKLES", minDay: 1, fn: () => createGrandmaPickles() },
       { tag: "CRYPTO_SCOOTER", minDay: 2, fn: () => createCryptoStartupFounder(dNum) },
       { tag: "COFFIN", minDay: 3, fn: () => createCoffinSneezer() },
@@ -1911,6 +2196,13 @@
         q.push(stTrv);
         addedStory++;
       }
+    }
+
+    // Warm repeat-visit memory for Grandpa Stepan on Day 6 Campaign if met earlier
+    if (!isSandbox && dNum === 6 && stepanMetCount >= 1 && q.length < count - 2 && !seenNames.has("Степан Петрович Бойко")) {
+      const repStepan = createGrandpaStepan(dNum, stepanMetCount);
+      seenNames.add(repStepan.fullName.uk);
+      q.push(repStepan);
     }
 
     // 3. War/Intelligence encounters (paced by Campaign Day, full mix in Sandbox)
